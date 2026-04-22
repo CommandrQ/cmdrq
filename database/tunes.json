@@ -1,58 +1,70 @@
 {
   "stations": [
     {
-      "name": "CH_01_SYNTH",
+      "name": "Vi-bration Radio",
       "playlists": [
         {
-          "id": "PLjFk9lX_3k21zZ4yO78sUfVb1yZ8N-m2y",
-          "title": "Night City Drive"
+          "id": "PLwX0pb3GEremC1vfOY7jLfNqdfR2cTVi7",
+          "title": "Beyond The Pen"
         },
         {
-          "id": "PL3-sRm8xAzY-EPbE-KqUa1A13XJ_R4XfV",
-          "title": "Cyberpunk Ambience"
+          "id": "PLwX0pb3GErenzlrerMLur84f2JfArD1fK",
+          "title": "Dreamscape"
         },
         {
-          "id": "PLe8jmEHFkvsb2R8Zg6zQoF_Qp8jW1P6x4",
-          "title": "Darkwave Intel"
+          "id": "PLwX0pb3GErek3NOvUZzKMk5hp1G_USaHW",
+          "title": "The Fall Of Cain"
         }
       ]
     },
     {
-      "name": "CH_02_FOCUS",
+      "name": "Ki-netic Radio",
       "playlists": [
         {
-          "id": "PLofht4NTcUK4Hts_Sj5QW-VbU3r-vQh9q",
-          "title": "Tactical Chill"
+          "id": "PLwX0pb3GErekhqHtx2E2WMrB4DhdDJhlu-VbU3r-vQh9q",
+          "title": "Blaze's Cool Mixtape"
         },
         {
-          "id": "PLOzDu-MXXLliO9fBNZOQTBDddoA3FzZUo",
-          "title": "Coding Flow"
+          "id": "PLwX0pb3GErekChtYZB_HejDEP3FWZ6o-l",
+          "title": "Bmore Brick City"
+        },
+        {
+          "id": "PLwX0pb3GEreniBp2uNyHbV7Eh4euCbQQS",
+          "title": "Drift Central"
+        },
+        {
+          "id": "PLwX0pb3GErel9qOq9jOVVscX_mxXzkGOK",
+          "title": "Redline FM"
+        },
+        {
+          "id": "PLwX0pb3GEren9SyOR122ezYC8jkDeBQVB",
+          "title": "Stylish Threadarts"
         }
       ]
     },
     {
-      "name": "CH_03_DRIFT",
+      "name": "Chi-rful Radio",
       "playlists": [
         {
-          "id": "PLWv8Wj9x3G0z6K6rV_T8xZ7o8t8U0P_q9",
-          "title": "NFS Underground"
+          "id": "PLwX0pb3GErekzDDrb9BzpjtrI5XdR6tU9",
+          "title": "Freevibes FM"
         },
         {
-          "id": "PLrE_B2g4jZ5CqE8R7w2xG6c_R1Kz5b_w",
-          "title": "High Velocity"
+          "id": "PLwX0pb3GErensoCj0ooRyGbTXRvenbolF",
+          "title": "Neon Cities"
+        },
+        {
+          "id": "PLwX0pb3GErengziTGztMV5k6jypR6mwkf",
+          "title": "Starship FM"
         }
       ]
     },
     {
-      "name": "CH_04_ARCHIVE",
+      "name": "Fox 1 Radio",
       "playlists": [
         {
-          "id": "PLMC9KNkIncKvYin_USF1qoJQnIyMAfRxl",
-          "title": "Classic Recon"
-        },
-        {
-          "id": "PL8F6B0753B2FFAA28",
-          "title": "Acoustic Retreat"
+          "id": "",
+          "title": "Freevibes FM"
         }
       ]
     }
