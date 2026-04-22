@@ -54,30 +54,23 @@
             font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; background: rgba(0, 0, 0, 0.5);
             backdrop-filter: var(--apple-blur); border: 1px solid var(--cyan); padding: 10px 18px; border-radius: 4px; transition: 0.3s;
         }
+        .back-btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px var(--cyan); }
 
         /* --- CENTER INTERFACE --- */
         .interface-container {
-            flex: 1; 
-            width: 100%;
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 20px;
-            z-index: 10;
+            flex: 1; width: 100%;
+            display: flex; align-items: center; justify-content: center; 
+            padding: 20px; z-index: 10;
         }
 
         .glass-window {
-            width: 100%;
-            max-width: 800px;
+            width: 100%; max-width: 800px;
             background: var(--glass);
             backdrop-filter: var(--apple-blur); -webkit-backdrop-filter: var(--apple-blur);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 15px;
-            padding: 20px;
-            text-align: center; 
+            padding: 20px; text-align: center; 
             box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; flex-direction: column; align-items: center;
         }
 
         .player-wrapper {
@@ -87,13 +80,21 @@
         }
         iframe { width: 100%; height: 100%; border: none; }
 
+        /* --- TITLES --- */
+        .header-tag { font-size: 0.5rem; color: var(--cyan); letter-spacing: 2px; margin-bottom: 5px; }
+        .video-title { font-size: 0.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; }
+
+        /* DESKTOP TYPOGRAPHY INCREASE */
+        @media (min-width: 1024px) {
+            .header-tag { font-size: 0.65rem; }
+            .video-title { font-size: 1.1rem; letter-spacing: 3px; }
+            .footer-content { font-size: 0.85rem !important; }
+        }
+
         /* --- VERTICAL OPTION NEXUS --- */
         .video-list-nexus {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 400px;
+            display: flex; flex-direction: column; align-items: center;
+            width: 100%; max-width: 400px;
         }
 
         .scroll-arrow {
@@ -108,29 +109,21 @@
             50% { opacity: 1; transform: translateY(3px); }
         }
 
-        /* THE VIEWPORT: Fixed height to show exactly 2 rows (4 options) */
         .list-viewport {
-            width: 100%;
-            height: 120px; /* Adjust based on button height + gap */
-            overflow: hidden;
-            position: relative;
-            margin: 5px 0;
+            width: 100%; height: 120px; overflow: hidden;
+            position: relative; margin: 5px 0;
         }
 
         .session-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* 2 options per row */
-            gap: 10px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
             transition: transform 0.5s cubic-bezier(0.8, 0, 0.2, 1);
         }
 
         .session-btn {
-            height: 55px; /* Fixed height for precise scrolling */
-            background: rgba(255,255,255,0.05); border: 1px solid var(--purple);
+            height: 55px; background: rgba(255,255,255,0.05); border: 1px solid var(--purple);
             color: #fff; font-family: 'Orbitron', sans-serif;
             font-size: 0.6rem; cursor: pointer; border-radius: 4px; transition: 0.3s;
-            display: flex; align-items: center; justify-content: center;
-            text-transform: uppercase;
+            display: flex; align-items: center; justify-content: center; text-transform: uppercase;
         }
         .session-btn.active { background: var(--purple); box-shadow: 0 0 10px var(--purple); border-color: #fff; }
 
@@ -156,9 +149,9 @@
 
     <main class="interface-container">
         <div class="glass-window">
-            <header style="margin-bottom: 8px;">
-                <p style="font-size: 0.5rem; color: var(--cyan); letter-spacing: 2px;">// DRIFT_VERTICAL_LINK</p>
-                <h2 id="video-title" style="font-size: 0.8rem; font-weight: 900; text-transform: uppercase;">INITIALIZING...</h2>
+            <header>
+                <p class="header-tag">// DREAMSCAPE_DRIFT_INTERFACE</p>
+                <h2 id="video-title" class="video-title">INITIALIZING...</h2>
             </header>
 
             <div class="player-wrapper">
@@ -168,12 +161,9 @@
 
             <div class="video-list-nexus">
                 <button class="scroll-arrow" id="prev-btn">▲</button>
-                
                 <div class="list-viewport">
-                    <div id="session-grid" class="session-grid">
-                        </div>
+                    <div id="session-grid" class="session-grid"></div>
                 </div>
-
                 <button class="scroll-arrow" id="next-btn">▼</button>
             </div>
 
@@ -194,7 +184,7 @@
             const nextBtn = document.getElementById('next-btn');
 
             let currentRow = 0;
-            const rowHeight = 65; // button height (55) + gap (10)
+            const rowHeight = 65; 
 
             // --- VFX ---
             for(let i=0; i<30; i++) {
@@ -224,10 +214,9 @@
                     }
                 });
 
-            // --- SCROLL LOGIC: 2 OPTIONS (1 ROW) AT A TIME ---
             nextBtn.addEventListener('click', () => {
                 const maxRows = Math.ceil(grid.children.length / 2);
-                if (currentRow < maxRows - 2) { // -2 because 2 rows are visible
+                if (currentRow < maxRows - 2) { 
                     currentRow++;
                     grid.style.transform = `translateY(-${currentRow * rowHeight}px)`;
                 }
