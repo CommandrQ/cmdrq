@@ -2,99 +2,93 @@
     --capcom-yellow: #FFCC00;
     --capcom-blue: #0033CC;
     --neon-pink: #FF00FF;
-    --font-arcade: 'Press Start 2P', cursive;
+    --matrix-cyan: #00F3FF;
+    --arcade-font: 'Press Start 2P', cursive;
 }
 
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
 body, html {
-    height: 100%; width: 100%; margin: 0;
-    background: #050505; color: #fff;
-    font-family: var(--font-arcade);
+    height: 100%; width: 100%;
+    background: #050505;
+    color: #fff;
+    font-family: var(--arcade-font);
     overflow: hidden;
 }
 
-/* Centering Logic */
-.centered-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Vertical Center */
-    align-items: center;     /* Horizontal Center */
-    height: 100vh;
-    text-align: center;
-    position: relative;
-    z-index: 5;
+/* --- STARFIELD --- */
+#starfield {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+        radial-gradient(white, rgba(255,255,255,.1) 1px, transparent 2px);
+    background-size: 550px 550px, 350px 350px;
+    animation: starfield_pan 100s linear infinite;
+    opacity: 0.5; z-index: 1;
 }
 
-/* Title Styling */
+@keyframes starfield_pan {
+    from { background-position: 0 0, 40px 60px; }
+    to { background-position: 550px 550px, 390px 410px; }
+}
+
+/* --- CENTERING & LAYOUT --- */
+.attract-mode {
+    position: relative; z-index: 5;
+    height: 100vh; display: flex;
+    flex-direction: column; justify-content: center; align-items: center;
+}
+
+.top-meta { position: absolute; top: 20px; width: 100%; display: flex; justify-content: space-between; padding: 0 40px; font-size: 0.8rem; color: var(--neon-pink); }
+
+/* --- CAPCOM LOGO --- */
 .capcom-title {
     font-size: clamp(2rem, 10vw, 5rem);
     color: var(--capcom-yellow);
-    font-style: italic;
+    font-style: italic; letter-spacing: -4px;
     text-shadow: 6px 6px 0 var(--capcom-blue), 10px 10px 0 var(--neon-pink);
-    letter-spacing: -4px;
+    margin-bottom: 10px;
 }
 
-/* The Button Container */
+/* --- THE SWORD SLICE BUTTON --- */
 .start-btn {
     background: transparent; border: none;
-    position: relative;
-    width: 400px; height: 100px;
-    cursor: pointer;
-    margin-top: 50px;
-    outline: none;
+    position: relative; width: 400px; height: 100px;
+    cursor: pointer; margin-top: 50px; outline: none;
 }
 
-/* The Slice Layers */
 .slice {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     display: flex; align-items: center; justify-content: center;
     font-size: 2rem; color: #fff;
     text-shadow: 0 0 15px var(--capcom-yellow);
     transition: transform 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67), opacity 0.4s;
 }
 
-/* Diagonal Slicing via Clip-Path */
-.top {
-    clip-path: polygon(0 0, 100% 0, 0 100%); /* Top-left triangle */
+/* Diagonal Masking */
+.top { clip-path: polygon(0 0, 100% 0, 0 100%); }
+.bottom { clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+
+/* Sliced Animation State */
+.sliced .top { transform: translate(-80px, -80px) rotate(-10deg); opacity: 0; }
+.sliced .bottom { transform: translate(80px, 80px) rotate(10deg); opacity: 0; }
+
+/* The "Sword Streak" effect */
+.slash-line {
+    position: absolute; top: 50%; left: -100%; width: 300%; height: 4px;
+    background: #fff; box-shadow: 0 0 20px #fff, 0 0 40px var(--matrix-cyan);
+    transform: rotate(-45deg); opacity: 0; z-index: 10;
+}
+.sliced .slash-line { animation: slash_move 0.4s ease-out forwards; }
+
+@keyframes slash_move {
+    0% { left: -100%; opacity: 1; }
+    100% { left: 100%; opacity: 0; }
 }
 
-.bottom {
-    clip-path: polygon(100% 0, 100% 100%, 0 100%); /* Bottom-right triangle */
-}
-
-/* Sliced State - The actual animation */
-.sliced .top {
-    transform: translate(-50px, -50px) rotate(-5deg);
-    opacity: 0;
-}
-
-.sliced .bottom {
-    transform: translate(50px, 50px) rotate(5deg);
-    opacity: 0;
-}
-
-/* Blinking Prompt */
-.blink-hint {
-    margin-top: 20px;
-    font-size: 0.8rem;
-    animation: blink 0.8s steps(2, start) infinite;
-    color: var(--capcom-blue);
-}
-
-@keyframes blink { to { visibility: hidden; } }
-
-/* Fading Logic */
-.fade-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: #000; opacity: 0; pointer-events: none; z-index: 100;
-    transition: opacity 0.8s ease-in;
-}
-
+/* --- FX --- */
+.crt-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%); background-size: 100% 3px; pointer-events: none; z-index: 10; }
+.fade-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; opacity: 0; pointer-events: none; z-index: 100; transition: opacity 0.8s ease-in; }
 .faded-out { opacity: 1; }
-
-/* Starfield Background (simplified for flow) */
-#starfield {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(white, rgba(255,255,255,0) 2px) 0 0/50px 50px;
-    opacity: 0.3;
-}
+.blink-hint { margin-top: 20px; animation: blink 0.8s steps(2) infinite; color: var(--capcom-blue); }
+@keyframes blink { to { visibility: hidden; } }
