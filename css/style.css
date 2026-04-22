@@ -1,0 +1,28 @@
+.log-entry {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* The blinking cursor effect */
+.log-entry::after {
+    content: "_";
+    animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Optional: Add a slight shake/flicker to the screen */
+.boot-sequence {
+    animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+    0% { opacity: 0.99; }
+    100% { opacity: 1; }
+}
