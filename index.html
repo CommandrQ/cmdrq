@@ -1,9 +1,64 @@
-<section class="terminal-window">
-    <div id="terminal-output"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vanguard_OS | Initializing...</title>
     
-    <div class="auth-box" style="opacity: 0; transition: opacity 1s;">
-        <div class="scan-line"></div>
-        <input type="password" placeholder="ENTER ACCESS KEY" id="access-key">
-        <button onclick="window.location.href='Menu.html'">INITIALIZE LINK</button>
+    <link rel="stylesheet" href="css/style.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body class="boot-sequence">
+
+    <div class="terminal-overlay"></div>
+
+    <main class="login-container">
+        <header class="os-header">
+            <h1 class="glitch" data-text="VANGUARD_OS">VANGUARD_OS</h1>
+            <p class="system-subtext">KERNEL v4.2.0-STABLE // NEURAL_LINK_READY</p>
+        </header>
+
+        <section class="terminal-window">
+            <div id="terminal-output"></div>
+        </section>
+
+        <section class="auth-box" id="login-module" style="opacity: 0;">
+            <div class="scan-line"></div>
+            
+            <div class="input-wrapper">
+                <span class="prompt">KEY:</span>
+                <input type="password" id="access-key" autofocus placeholder="********">
+            </div>
+
+            <div class="button-group">
+                <button class="btn-initialize" onclick="window.location.href='Menu.html'">
+                    INITIALIZE LINK
+                </button>
+            </div>
+            
+            <footer class="auth-footer">
+                <small>UNAUTHORIZED ACCESS IS A VIOLATION OF NETWORK LAW</small>
+            </footer>
+        </section>
+    </main>
+
+    <div class="os-metadata">
+        <span>LOC: [REDACTED]</span>
+        <span>LATENCY: 14ms</span>
+        <span>ENCRYPTION: AES-256</span>
     </div>
-</section>
+
+    <script src="js/main.js"></script>
+    
+    <script>
+        // Quick Focus Hack: Keeps the input selected so the user can just start typing
+        document.addEventListener('click', () => {
+            const input = document.getElementById('access-key');
+            if(input) input.focus();
+        });
+    </script>
+
+</body>
+</html>
