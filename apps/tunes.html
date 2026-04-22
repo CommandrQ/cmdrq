@@ -84,7 +84,6 @@
 
         #yt-player { width: 100%; height: 100%; border: none; }
         
-        /* Blocks accidental YT UI touches without blocking our custom bar */
         .touch-shield { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
 
         /* Unified Control Bar */
@@ -130,7 +129,7 @@
         .scroll-arrow:hover { color: #fff; }
 
         .list-viewport {
-            width: 100%; height: 100px; /* Adjusted for SF Pro sizing */
+            width: 100%; height: 100px; 
             overflow: hidden; position: relative; margin: 4px 0;
         }
         .session-grid {
@@ -150,14 +149,15 @@
         .session-btn .pl-title { font-size: 0.65rem; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 700; }
         .session-btn .pl-code { font-size: 0.5rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
 
-        /* --- DESKTOP ENHANCEMENTS --- */
+        /* --- DESKTOP ENHANCEMENTS (REDUCED PLAYER SIZE) --- */
         @media (min-width: 1024px) {
-            .glass-window { max-width: 1000px; padding: 30px; }
+            .glass-window { max-width: 900px; padding: 30px; }
             .now-playing { font-size: 1.3rem; margin-bottom: 20px; }
             
-            /* Increase Video Size & Bake controls into the wrapper */
+            /* Reduced Player Size for Desktop Audio App feel */
             .player-wrapper { 
-                max-width: 750px; border-radius: 16px; margin-bottom: 25px; 
+                max-width: 550px; /* Reduced from 750px */
+                border-radius: 16px; margin-bottom: 25px; 
             }
             .media-controls-bar {
                 position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%);
@@ -238,7 +238,7 @@
         const titleDisplay = document.getElementById('now-playing');
         
         let currentRow = 0;
-        let rowHeight = window.innerWidth >= 1024 ? 59 : 54; // Button height + gap
+        let rowHeight = window.innerWidth >= 1024 ? 59 : 54; 
         let currentPlaylistCount = 0;
 
         window.addEventListener('resize', () => {
@@ -321,7 +321,6 @@
         }
 
         window.selectStation = (stationIndex, btnEle, isInitialLoad = false) => {
-            // Apply Aura Protocol Color
             document.documentElement.style.setProperty('--theme-color', stationColors[stationIndex]);
             
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -340,12 +339,10 @@
                 </button>
             `).join('');
 
-            // On initial load, prep the first playlist title
             if (isInitialLoad && station.playlists.length > 0) {
                 titleDisplay.innerText = station.playlists[0].title;
                 const firstBtn = document.querySelector('.session-btn');
                 if(firstBtn) firstBtn.classList.add('active');
-                // Load without playing until user hits play
                 ytPlayer.cuePlaylist({ list: station.playlists[0].id, listType: 'playlist' });
             }
         };
@@ -374,7 +371,6 @@
             glitch.classList.add('active-glitch');
             setTimeout(() => glitch.classList.remove('active-glitch'), 200);
 
-            // Dynamically change header
             titleDisplay.innerText = title;
             ytPlayer.loadPlaylist({ list: playlistId, listType: 'playlist' });
         };
