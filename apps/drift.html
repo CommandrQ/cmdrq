@@ -22,11 +22,12 @@
             background: #030008;
             color: #fff;
             font-family: 'Orbitron', sans-serif;
-            min-height: 100vh;
+            /* Use dvh to account for mobile browser UI */
+            height: 100dvh; 
+            width: 100vw;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
-            align-items: center;
+            overflow: hidden;
         }
 
         /* --- VFX BACKGROUND --- */
@@ -44,66 +45,70 @@
         @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
         @keyframes moveLine { 0% { transform: translateY(-110vh) rotate(15deg); } 100% { transform: translateY(110vh) rotate(15deg); } }
 
-        /* --- NAVIGATION --- */
-        .top-nav { padding: 15px 20px; width: 100%; z-index: 110; display: flex; justify-content: flex-start; }
+        /* --- TOP NAVIGATION (FIXED) --- */
+        .top-nav { 
+            position: absolute; top: 0; left: 0; width: 100%;
+            padding: 15px 20px; z-index: 110; 
+        }
         .back-btn {
             display: inline-flex; align-items: center; text-decoration: none; color: var(--cyan);
             font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; background: rgba(0, 0, 0, 0.5);
             backdrop-filter: var(--apple-blur); -webkit-backdrop-filter: var(--apple-blur);
             border: 1px solid var(--cyan); padding: 10px 18px; border-radius: 4px; transition: 0.3s;
         }
-        .back-btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px var(--cyan); transform: translateX(-5px); }
+        .back-btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px var(--cyan); }
 
-        /* --- MAIN INTERFACE --- */
+        /* --- THE MIDDLE WINDOW PROTOCOL --- */
         .interface-container {
+            flex: 1; 
             width: 100%;
             display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 0 15px;
+            align-items: center; /* Vertical Center */
+            justify-content: center; /* Horizontal Center */
+            padding: 20px;
             z-index: 10;
         }
 
         .glass-window {
-            width: 96%;
-            max-width: 1400px;
+            width: 100%;
+            max-width: 1200px;
+            max-height: 90vh; /* Prevents overflow on very small screens */
             background: var(--glass);
             backdrop-filter: var(--apple-blur); -webkit-backdrop-filter: var(--apple-blur);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 15px;
-            padding: 20px; text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            padding: clamp(15px, 5vw, 30px);
+            text-align: center; 
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .player-wrapper {
-            position: relative; width: 100%; max-width: 700px;
+            position: relative; width: 100%; max-width: 650px;
             aspect-ratio: 16 / 9; background: #000; border-radius: 8px;
             overflow: hidden; margin: 0 auto 15px; border: 1px solid rgba(255,255,255,0.1);
+            flex-shrink: 0; /* Keeps player size stable */
         }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* --- PAGING SYSTEM WITH ARROWS --- */
+        /* --- PAGING SYSTEM --- */
         .carousel-nexus {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
+            display: flex; align-items: center; gap: 5px; width: 100%;
         }
-
         .nav-arrow {
             background: none; border: none; color: var(--cyan);
-            font-size: 1.5rem; cursor: pointer; padding: 10px;
+            font-size: 1.8rem; cursor: pointer; padding: 5px;
             transition: 0.3s; animation: arrowPulse 2s infinite;
         }
-        .nav-arrow:hover { color: #fff; text-shadow: 0 0 10px var(--cyan); }
-        
         @keyframes arrowPulse {
-            0%, 100% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
         }
 
         .session-carousel {
             display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-            gap: 15px; width: 100%; padding-bottom: 8px;
-            scrollbar-width: none; /* Hide scrollbar for cleaner look with arrows */
+            gap: 10px; width: 100%; scrollbar-width: none;
         }
         .session-carousel::-webkit-scrollbar { display: none; }
 
@@ -116,38 +121,31 @@
 
         @media (min-width: 1024px) {
             .session-page {
-                flex: 0 0 auto;
-                grid-template-columns: repeat(6, 1fr);
-                grid-template-rows: none;
-                width: 100%;
+                flex: 0 0 auto; grid-template-columns: repeat(6, 1fr);
+                grid-template-rows: none; width: 100%;
             }
-            .nav-arrow { display: none; } /* Arrows hidden if desktop shows all */
+            .nav-arrow { display: none; }
         }
 
         .session-btn {
             background: rgba(255,255,255,0.05); border: 1px solid var(--purple);
-            color: #fff; padding: 10px; font-family: 'Orbitron', sans-serif;
+            color: #fff; padding: 12px; font-family: 'Orbitron', sans-serif;
             font-size: 0.6rem; cursor: pointer; border-radius: 4px; transition: 0.3s;
-            letter-spacing: 1px; text-transform: uppercase;
+            text-transform: uppercase;
         }
-        .session-btn:hover, .session-btn.active {
-            background: var(--purple); box-shadow: 0 0 10px var(--purple); transform: translateY(-2px);
-        }
+        .session-btn.active { background: var(--purple); box-shadow: 0 0 10px var(--purple); }
 
-        /* --- FOOTER MOVED UP --- */
+        /* --- INTEGRATED FOOTER --- */
         .vanguard-footer { 
-            margin-top: 20px; /* Pulls it right under the window */
-            padding-bottom: 20px;
-            text-align: center; 
-            z-index: 20; 
+            margin-top: 15px; text-align: center; flex-shrink: 0;
         }
-        .footer-content { font-size: 0.6rem; letter-spacing: 3px; color: #fff; text-transform: uppercase; transition: 0.5s; }
+        .footer-content { font-size: 0.55rem; letter-spacing: 3px; color: #fff; text-transform: uppercase; }
         .pulse { animation: pulseWhite 2s infinite ease-in-out; }
-        @keyframes pulseWhite { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; text-shadow: 0 0 10px #fff; } }
+        @keyframes pulseWhite { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
         .glitch-flash { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--cyan); opacity: 0; pointer-events: none; z-index: 5; }
-        .active-glitch { animation: glitchEffect 0.3s ease-out; }
-        @keyframes glitchEffect { 0% { opacity: 0; } 50% { opacity: 0.3; transform: skewX(10deg); } 100% { opacity: 0; } }
+        .active-glitch { animation: glitchEffect 0.2s ease-out; }
+        @keyframes glitchEffect { 0% { opacity: 0; } 50% { opacity: 0.3; } 100% { opacity: 0; } }
 
     </style>
 </head>
@@ -156,14 +154,14 @@
     <div class="vfx-layer" id="vfx-bg"></div>
 
     <nav class="top-nav">
-        <a href="../menu.html" class="back-btn"> &LT; RETURN_TO_COMMAND </a>
+        <a href="../menu.html" class="back-btn"> &LT; RETURN </a>
     </nav>
 
     <main class="interface-container">
         <div class="glass-window">
-            <header style="margin-bottom: 8px;">
-                <p style="font-size: 0.5rem; color: var(--cyan); letter-spacing: 2px;">// DRIFT_HUB_V4</p>
-                <h2 id="video-title" style="font-size: 0.9rem; font-weight: 900; text-transform: uppercase;">INITIALIZING...</h2>
+            <header style="margin-bottom: 10px;">
+                <p style="font-size: 0.5rem; color: var(--cyan); letter-spacing: 2px;">// DRIFT_HUB_NEURAL_LINK</p>
+                <h2 id="video-title" style="font-size: 0.85rem; font-weight: 900; text-transform: uppercase;">LOADING...</h2>
             </header>
 
             <div class="player-wrapper">
@@ -173,15 +171,14 @@
 
             <div class="carousel-nexus">
                 <button class="nav-arrow" id="prev-btn">&lt;</button>
-                <div id="session-carousel" class="session-carousel">
-                    </div>
+                <div id="session-carousel" class="session-carousel"></div>
                 <button class="nav-arrow" id="next-btn">&gt;</button>
             </div>
-        </div>
 
-        <footer class="vanguard-footer">
-            <div id="footer-text" class="footer-content pulse">Built by Commander Q 2026</div>
-        </footer>
+            <footer class="vanguard-footer">
+                <div id="footer-text" class="footer-content pulse">Built by Commander Q 2026</div>
+            </footer>
+        </div>
     </main>
 
     <script>
@@ -213,10 +210,9 @@
                     
                     if (isMobile) {
                         for (let i = 0; i < sessions.length; i += 4) {
-                            const pageArr = sessions.slice(i, i + 4);
                             const pageDiv = document.createElement('div');
                             pageDiv.className = 'session-page';
-                            pageDiv.innerHTML = pageArr.map((s, idx) => `
+                            pageDiv.innerHTML = sessions.slice(i, i + 4).map((s, idx) => `
                                 <button class="session-btn" onclick="switchSession('${s.id}', '${s.title}', this)">
                                     SESS_${(i + idx + 1).toString().padStart(2, '0')}
                                 </button>
@@ -241,19 +237,14 @@
                     }
                 });
 
-            // --- ARROW NAVIGATION LOGIC ---
-            nextBtn.addEventListener('click', () => {
-                carousel.scrollBy({ left: carousel.clientWidth, behavior: 'smooth' });
-            });
-            prevBtn.addEventListener('click', () => {
-                carousel.scrollBy({ left: -carousel.clientWidth, behavior: 'smooth' });
-            });
+            nextBtn.addEventListener('click', () => carousel.scrollBy({ left: carousel.clientWidth, behavior: 'smooth' }));
+            prevBtn.addEventListener('click', () => carousel.scrollBy({ left: -carousel.clientWidth, behavior: 'smooth' }));
 
             window.switchSession = (id, title, btn) => {
                 document.querySelectorAll('.session-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 glitch.classList.add('active-glitch');
-                setTimeout(() => glitch.classList.remove('active-glitch'), 300);
+                setTimeout(() => glitch.classList.remove('active-glitch'), 200);
                 loadVideo({id, title});
             };
 
@@ -262,7 +253,6 @@
                 titleDisplay.innerText = video.title;
             }
 
-            // --- FOOTER ---
             const ft = document.getElementById('footer-text');
             let showM = false;
             setInterval(() => {
