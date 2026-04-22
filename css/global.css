@@ -1,94 +1,49 @@
-/* VANGUARD_OS // TRINITY KERNEL V2.1 */
-@font-face {
-    font-family: 'ArcadeClassic';
-    src: url('../fonts/arcade.woff2') format('woff2'); /* Ensure you have this font or use the fallback */
-}
-
+/* VANGUARD_OS // GLOBAL KERNEL V2.2 */
 :root {
     --bright-teal: #01cdfe;
     --light-pink: #ff71ce;
     --gold: #ffd700;
     --void-black: #000000;
-    --main-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif;
-    --title-font: "ArcadeClassic", "Courier New", monospace;
-    --glass-bg: rgba(255, 255, 255, 0.04);
-    --glass-border: rgba(255, 255, 255, 0.12);
-}
-
-/* LAYER 0: THE VOID (Background) */
-#starfield-canvas {
-    position: fixed; top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    z-index: 0; background: #000;
-    pointer-events: none;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --main-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    --title-font: "ArcadeClassic", monospace;
 }
 
 html, body {
+    background: var(--void-black);
     margin: 0; padding: 0;
     width: 100%; height: 100%;
     overflow: hidden !important;
-    background: #000;
     font-family: var(--main-font);
     color: #fff;
-    -webkit-font-smoothing: antialiased;
 }
 
-/* LAYER 1: THE WINDOWS */
+/* THE MASTER WRAPPER */
 .vanguard-page {
     position: relative; z-index: 100;
     display: flex; flex-direction: column;
     width: 100%; height: 100dvh;
     box-sizing: border-box;
-    /* Clearance for Layer 2 Taskbar */
-    padding-top: calc(80px + env(safe-area-inset-top)) !important;
-    padding-bottom: 30px;
+    /* FIX: Increased padding to prevent scrunching under header */
+    padding-top: calc(110px + env(safe-area-inset-top)) !important;
+    padding-bottom: 60px; /* Space for the bottom footer */
     padding-left: 20px; padding-right: 20px;
     animation: smoothGlide 0.8s cubic-bezier(0.2, 1, 0.3, 1) both;
 }
 
-.window-manager {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 25px;
-    width: 100%; max-width: 1400px;
-    margin: 0 auto;
-    flex: 1; min-height: 0;
-}
-
+/* SHARED GLASS CLASS */
 .apple-glass {
     background: var(--glass-bg);
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
-    border: 1px solid var(--glass-border);
-    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.1);
     border-radius: 24px;
-    padding: 25px;
-    box-sizing: border-box;
-    overflow-y: auto;
-    transition: transform 0.3s ease;
 }
-
-/* LAYER 2: INTERACTIVE ELEMENTS */
-.top-nav {
-    display: flex; justify-content: space-between; align-items: center;
-    width: 100%; max-width: 1200px; margin: 0 auto 20px auto;
-    z-index: 9000; position: relative;
-}
-
-.back-btn {
-    color: var(--bright-teal); text-decoration: none; font-family: var(--title-font);
-    border: 2px solid var(--bright-teal); padding: 10px 20px; border-radius: 12px;
-    background: rgba(0,0,0,0.6); transition: all 0.3s;
-    letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem;
-}
-.back-btn:hover { background: var(--bright-teal); color: #000; box-shadow: 0 0 20px var(--bright-teal); transform: scale(1.05); }
 
 @keyframes smoothGlide {
-    0% { opacity: 0; transform: translateY(30px) scale(0.98); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Scrollbar Customization */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
+/* Layer 0 Canvas */
+#starfield-canvas { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
