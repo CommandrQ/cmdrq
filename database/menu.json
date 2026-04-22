@@ -2,25 +2,25 @@
     {
         "title": "Drift",
         "url": "apps/drift.html",
-        "icon": "🌌",
+        "icon": "images/icons/drift_icon.png",
         "color": "#01cdfe"
     },
     {
         "title": "Tunes",
         "url": "apps/tunes.html",
-        "icon": "🎵",
+        "icon": "images/icons/tunes_icon.png",
         "color": "#ff71ce"
     },
     {
         "title": "Archive",
         "url": "apps/aboutme.html",
-        "icon": "🎖️",
+        "icon": "images/icons/archive_icon.png",
         "color": "#ffd700"
     },
     {
         "title": "Status",
         "url": "apps/diagnostics.html",
-        "icon": "⚙️",
+        "icon": "images/icons/status_icon.png",
         "color": "#01cdfe"
     }
 ]
