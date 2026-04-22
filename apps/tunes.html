@@ -103,7 +103,7 @@
         .ctrl-btn:active { transform: scale(0.8); color: var(--theme-color); }
         .ctrl-btn.play-pause { font-size: 1.8rem; }
 
-        /* --- TABS (FLUID FIX) --- */
+        /* --- TABS --- */
         .station-tabs {
             display: flex; justify-content: space-between; width: 100%; margin-bottom: 10px; flex-shrink: 0;
             background: rgba(0,0,0,0.3); border-radius: 10px; padding: 5px;
@@ -141,23 +141,20 @@
             height: 46px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
             color: #fff; font-family: inherit; cursor: pointer; border-radius: 8px; transition: 0.3s;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 0 5px;
+            padding: 0 10px;
         }
         .session-btn:hover, .session-btn.active { 
             background: rgba(255,255,255,0.15); border-color: var(--theme-color); 
         }
-        .session-btn .pl-title { font-size: 0.65rem; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 700; }
-        .session-btn .pl-code { font-size: 0.5rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+        .session-btn .pl-title { font-size: 0.65rem; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 700; text-align: center; }
 
-        /* --- DESKTOP ENHANCEMENTS (REDUCED PLAYER SIZE) --- */
+        /* --- DESKTOP ENHANCEMENTS --- */
         @media (min-width: 1024px) {
             .glass-window { max-width: 900px; padding: 30px; }
             .now-playing { font-size: 1.3rem; margin-bottom: 20px; }
             
-            /* Reduced Player Size for Desktop Audio App feel */
             .player-wrapper { 
-                max-width: 550px; /* Reduced from 750px */
-                border-radius: 16px; margin-bottom: 25px; 
+                max-width: 550px; border-radius: 16px; margin-bottom: 25px; 
             }
             .media-controls-bar {
                 position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%);
@@ -166,6 +163,8 @@
             .session-grid { grid-template-columns: repeat(3, 1fr); }
             .list-viewport { height: 110px; }
             .session-btn { height: 51px; }
+            
+            .session-btn .pl-title { font-size: 0.8rem; }
         }
 
         /* --- FOOTER --- */
@@ -332,10 +331,10 @@
             currentRow = 0;
             grid.style.transform = `translateY(0px)`;
 
+            // INJECTED HTML: Code span removed, leaving only the title
             grid.innerHTML = station.playlists.map(pl => `
                 <button class="session-btn" onclick="loadPlaylist('${pl.id}', '${pl.title}', this)">
                     <span class="pl-title">${pl.title}</span>
-                    <span class="pl-code">PL_${pl.id.slice(0, 4)}</span>
                 </button>
             `).join('');
 
