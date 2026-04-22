@@ -25,7 +25,7 @@
       "name": "Music Player",
       "iconValue": "images/icons/tunes.png",
       "iconType": "image",
-      "link": "apps/tunes.html",
+      "link": "apps/music player/index.html",
       "external": false
     }
   ]
