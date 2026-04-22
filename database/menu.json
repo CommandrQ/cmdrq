@@ -1,32 +1,32 @@
 {
-    "apps": [
-        {
-            "id": "exp_01",
-            "name": "DEPLOYMENTS",
-            "description": "GitHub Repository: cmdrq0",
-            "icon": "⚔️",
-            "link": "https://github.com/cmdrq0"
-        },
-        {
-            "id": "exp_02",
-            "name": "APPLE_INTEL",
-            "description": "Service & Software Standards",
-            "icon": "🍎",
-            "link": "#"
-        },
-        {
-            "id": "exp_03",
-            "name": "VETERAN_LOG",
-            "description": "Armed Forces Experience",
-            "icon": "🎖️",
-            "link": "#"
-        },
-        {
-            "id": "exp_04",
-            "name": "BEST_BUY_OPS",
-            "description": "Client Solutions & Tech Support",
-            "icon": "🏷️",
-            "link": "#"
-        }
-    ]
+  "apps": [
+    {
+      "name": "GITHUB_REPOS",
+      "iconValue": "⚔️",
+      "iconType": "emoji",
+      "link": "https://github.com/cmdrq0",
+      "external": true
+    },
+    {
+      "name": "TACTICAL_ASSETS",
+      "iconValue": "images/icons/folder.png",
+      "iconType": "image",
+      "link": "assets.html",
+      "external": false
+    },
+    {
+      "name": "COMMUNICATIONS",
+      "iconValue": "📡",
+      "iconType": "emoji",
+      "link": "mailto:q@vanguard.com",
+      "external": true
+    },
+    {
+      "name": "SYSTEM_HOME",
+      "iconValue": "images/icons/home.png",
+      "iconType": "image",
+      "link": "index.html",
+      "external": false
+    }
+  ]
 }
