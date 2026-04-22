@@ -1,69 +1,233 @@
+/**
+ * VANGUARD_OS | Arcade-Cyberpunk Theme
+ * Ready Player One x SAO x 90s Capcom
+ */
+
 :root {
-    --capcom-yellow: #ffcc00;
-    --capcom-blue: #0033cc;
-    --neon-pink: #ff00ff;
-    --crt-bg: #0c001c;
+    --capcom-yellow: #FFCC00;
+    --capcom-blue: #0033CC;
+    --neon-pink: #FF00FF;
+    --matrix-cyan: #00F3FF;
+    --deep-bg: #0C001C;
+    --font-arcade: 'Press Start 2P', cursive;
+    --font-matrix: 'Share Tech Mono', monospace;
 }
 
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
 body {
-    background-color: var(--crt-bg);
+    background-color: var(--deep-bg);
+    font-family: var(--font-arcade);
     color: #fff;
-    font-family: 'Press Start 2P', cursive;
+    height: 100vh;
+    width: 100vw;
     overflow: hidden;
     text-transform: uppercase;
 }
 
-/* 90s Title Style */
-.capcom-title {
-    font-size: 5rem;
-    color: var(--capcom-yellow);
-    text-shadow: 6px 6px 0px var(--capcom-blue), 10px 10px 0px var(--neon-pink);
-    font-style: italic;
-    letter-spacing: -5px;
-    margin-bottom: 0;
+/* =========================================
+   BACKGROUND ELEMENTS (Starfield & CRT)
+   ========================================= */
+
+#starfield {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    /* CSS Starfield generation using radial gradients */
+    background-image: 
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
+        radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
+    background-size: 550px 550px, 350px 350px, 250px 250px;
+    background-position: 0 0, 40px 60px, 130px 270px;
+    animation: starfield_pan 100s linear infinite;
+    z-index: 1;
 }
 
-/* Dialogue Box (SAO style window + Capcom borders) */
-.dialog-box {
-    background: rgba(0, 0, 51, 0.8);
-    border: 4px solid #fff;
-    box-shadow: 8px 8px 0px var(--capcom-blue);
-    padding: 20px;
-    margin: 40px auto;
-    width: 80%;
-    min-height: 100px;
-    position: relative;
+@keyframes starfield_pan {
+    from { background-position: 0 0, 40px 60px, 130px 270px; }
+    to { background-position: 550px 550px, 390px 410px, 380px 820px; }
 }
 
-.dialog-box::after {
-    content: "▼";
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    animation: bounce 0.5s infinite;
-}
-
-/* Flash Prompt for the Ready Player One "Start" feel */
-.flash-prompt {
-    font-size: 1.5rem;
-    color: #fff;
-    cursor: pointer;
-    animation: blink 0.6s steps(2, start) infinite;
-    margin-top: 30px;
-    text-shadow: 0 0 10px var(--capcom-yellow);
-}
-
-@keyframes blink { to { visibility: hidden; } }
-@keyframes bounce { 
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-
-/* CRT Screen Grime */
 .crt-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.4) 100%);
+    /* Heavy CRT scanlines and glare */
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), 
+                radial-gradient(circle, transparent 40%, rgba(0,0,0,0.5) 100%);
+    background-size: 100% 3px, 100% 100%;
     pointer-events: none;
     z-index: 10;
+}
+
+/* Full Screen Fade Overlay */
+.fade-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: black;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+    transition: opacity 1s ease-out;
+}
+
+.faded-out { opacity: 1; pointer-events: auto; }
+
+/* =========================================
+   UI LAYOUT
+   ========================================= */
+
+.attract-mode {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    z-index: 5;
+}
+
+.top-meta {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--neon-pink);
+    margin-bottom: 30px;
+}
+
+/* =========================================
+   TITLE LOGO (Capcom Style)
+   ========================================= */
+
+.logo-area { text-align: center; margin-bottom: 20px; }
+
+.capcom-title {
+    font-size: 5rem;
+    color: var(--capcom-yellow);
+    font-style: italic;
+    letter-spacing: -5px;
+    position: relative;
+    margin-bottom: 10px;
+    /* Chunky 3D text shadow */
+    text-shadow: 
+        6px 6px 0 var(--capcom-blue), 
+        9px 9px 0 var(--neon-pink);
+}
+
+.sub-title { font-size: 1rem; color: #fff; letter-spacing: 2px; }
+
+/* =========================================
+   THE 'MATRIX' DIALOG BOX (SAO Style)
+   ========================================= */
+
+.dialog-box {
+    background: rgba(0, 0, 51, 0.9);
+    border: 4px solid #fff;
+    /* Deep blue Capcom border */
+    box-shadow: 10px 10px 0 var(--capcom-blue);
+    width: 80%;
+    padding: 15px;
+    font-family: var(--font-matrix);
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.dialog-header {
+    border-bottom: 1px solid #fff;
+    font-size: 0.8rem;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.dialog-content { font-size: 1.1rem; line-height: 1.4; color: var(--matrix-cyan); }
+
+/* Dialog complete blinker ▼ */
+.dialog-box::after {
+    content: "▼";
+    position: absolute;
+    bottom: 5px; right: 10px;
+    animation: bounce 0.5s infinite;
+    color: #fff;
+}
+
+/* =========================================
+   PRESS START // SLICE ANIMATION
+   ========================================= */
+
+.start-action { text-align: center; cursor: pointer; }
+
+#slice-container {
+    position: relative;
+    padding: 10px;
+    transition: transform 0.1s ease;
+}
+
+/* Make container shake when hovering start */
+#slice-container:hover { transform: scale(1.05); }
+
+.start-text {
+    display: block;
+    font-size: 2rem;
+    color: #fff;
+    text-shadow: 0 0 10px var(--capcom-yellow);
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* The Blinking effect when active */
+#slice-container:not(.sliced) {
+    animation: blinking 0.8s steps(2, start) infinite;
+}
+
+/* Slicing masks using clip-path */
+.top-half {
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    position: relative; top: 1px; /* Align mask */
+}
+
+.bottom-half {
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    position: absolute; top: 10px; left: 10px; /* Align mask */
+}
+
+/* THE SLICE INTERACTION (Triggered by JS) */
+.sliced .top-half {
+    transform: translate(-30px, -30px) rotate(-10deg);
+    opacity: 0;
+    filter: brightness(3); /* Bright flash */
+}
+
+.sliced .bottom-half {
+    transform: translate(30px, 30px) rotate(10deg);
+    opacity: 0;
+    filter: brightness(3); /* Bright flash */
+}
+
+.prompt-hint { font-size: 0.7rem; color: var(--capcom-blue); margin-top: 10px; }
+
+/* =========================================
+   DECORATIVE ANIMATIONS
+   ========================================= */
+
+@keyframes blinking { to { visibility: hidden; } }
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+/* Footer Marquee */
+.bottom-scroll {
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    background: rgba(0,0,0,0.9);
+    border-top: 1px solid var(--neon-pink);
+    overflow: hidden; z-index: 5; padding: 5px;
+    font-size: 0.6rem; color: #aaa;
+}
+
+.marquee {
+    white-space: nowrap;
+    animation: scroll_text 30s linear infinite;
+    display: inline-block;
+}
+
+@keyframes scroll_text {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
 }
