@@ -1,1 +1,26 @@
-
+[
+    {
+        "title": "Drift",
+        "url": "apps/drift.html",
+        "icon": "🌌",
+        "color": "#01cdfe"
+    },
+    {
+        "title": "Tunes",
+        "url": "apps/tunes.html",
+        "icon": "🎵",
+        "color": "#ff71ce"
+    },
+    {
+        "title": "Archive",
+        "url": "apps/aboutme.html",
+        "icon": "🎖️",
+        "color": "#ffd700"
+    },
+    {
+        "title": "Status",
+        "url": "apps/diagnostics.html",
+        "icon": "⚙️",
+        "color": "#01cdfe"
+    }
+]
