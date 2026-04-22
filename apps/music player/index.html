@@ -1,1 +1,35 @@
-k
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>My Music Player</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <h1>Radio Hub</h1>
+      <div class="custom-select">
+        <select id="station-select">
+          </select>
+      </div>
+    </header>
+
+    <main id="playlist-container" class="playlist-container">
+      </main>
+
+    <footer class="player-container">
+      <iframe 
+        id="yt-player" 
+        src="" 
+        frameborder="0" 
+        allow="autoplay; encrypted-media" 
+        allowfullscreen>
+      </iframe>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
