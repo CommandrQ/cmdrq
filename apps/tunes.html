@@ -8,245 +8,272 @@
     <style>
         :root {
             --glass: rgba(255, 255, 255, 0.05);
-            --apple-blur: blur(20px);
-            --theme-color: #0a84ff; 
+            --apple-blur: blur(25px);
+            --theme-color: #0a84ff; /* Initial System Blue */
         }
 
-        /* --- SYSTEM LOCKDOWN --- */
+        /* --- CORE RESET --- */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
 
         body {
             background: #030008; color: #fff; 
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
             height: 100dvh; width: 100vw; display: flex; flex-direction: column; overflow: hidden;
         }
 
-        /* --- VFX PROTOCOL --- */
+        /* --- BACKGROUND VFX --- */
         .vfx-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: radial-gradient(circle at center, #0a001a 0%, #030008 100%); overflow: hidden;
+            background: radial-gradient(circle at center, #0a001a 0%, #030008 100%); 
         }
         .data-stream {
             position: absolute; width: 1px; background: linear-gradient(to bottom, transparent, var(--theme-color), transparent);
-            opacity: 0.2; animation: streamDrop linear infinite; transition: background 0.5s;
+            opacity: 0.15; animation: streamDrop linear infinite; transition: background 0.5s;
         }
         @keyframes streamDrop { 0% { transform: translateY(-100vh); } 100% { transform: translateY(100vh); } }
 
-        /* --- NAVIGATION --- */
-        .top-nav { position: absolute; top: 0; left: 0; width: 100%; padding: 15px 20px; z-index: 110; }
+        /* --- TOP NAV --- */
+        .top-nav { position: absolute; top: 0; left: 0; width: 100%; padding: 20px; z-index: 100; }
         .back-btn {
             display: inline-flex; align-items: center; text-decoration: none; color: #fff;
-            font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: var(--apple-blur); border: 1px solid rgba(255,255,255,0.2); 
-            padding: 10px 18px; border-radius: 8px; transition: 0.3s;
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: var(--apple-blur); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 10px 20px; border-radius: 50px; transition: 0.3s;
         }
 
-        /* --- INTERFACE CORE --- */
-        .interface-container {
-            flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; 
-            padding: 15px; z-index: 10;
+        /* --- PLAYER INTERFACE --- */
+        .main-stage {
+            flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 10;
         }
 
-        .glass-window {
-            width: 100%; max-width: 700px; max-height: 95dvh;
+        .glass-chassis {
+            width: 100%; max-width: 800px; max-height: 92dvh;
             background: var(--glass); backdrop-filter: var(--apple-blur); -webkit-backdrop-filter: var(--apple-blur);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
-            padding: clamp(15px, 4vw, 25px); text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 24px;
+            padding: clamp(20px, 5vw, 30px); text-align: center;
             display: flex; flex-direction: column; align-items: center;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.5);
         }
 
-        .header-tag { font-size: 0.6rem; color: rgba(255,255,255,0.5); letter-spacing: 2px; margin-bottom: 5px; font-weight: 600; text-transform: uppercase; }
+        .header-meta { margin-bottom: 20px; }
+        .header-tag { font-size: 0.6rem; color: var(--theme-color); letter-spacing: 3px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
         .now-playing { 
-            font-size: 0.9rem; font-weight: 800; text-transform: uppercase; color: #fff; 
-            letter-spacing: 0.5px; margin-bottom: 15px; text-shadow: 0 0 10px var(--theme-color);
-            transition: text-shadow 0.3s;
+            font-size: 1rem; font-weight: 900; text-transform: uppercase; color: #fff; 
+            letter-spacing: 0.5px; text-shadow: 0 0 15px var(--theme-color);
         }
 
-        /* --- THE AURA PLAYER (DYNAMIC GLOW) --- */
-        .player-wrapper {
-            position: relative; width: 100%; max-width: 400px; aspect-ratio: 16 / 9;
-            background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 15px; 
-            border: 2px solid var(--theme-color); flex-shrink: 0;
-            animation: dynamicPulse 3s infinite ease-in-out;
-            transition: border-color 0.3s ease;
+        /* --- THE AURA VIDEO CORE --- */
+        .player-aura-wrapper {
+            position: relative; width: 100%; max-width: 480px; aspect-ratio: 16 / 9;
+            background: #000; border-radius: 15px; overflow: hidden; margin-bottom: 20px; 
+            border: 2.5px solid var(--theme-color); flex-shrink: 0;
+            animation: auraPulse 4s infinite ease-in-out;
+            transition: border-color 0.4s ease;
         }
-        @keyframes dynamicPulse {
-            0%, 100% { box-shadow: 0 0 15px var(--theme-color); }
-            50% { box-shadow: 0 0 35px var(--theme-color), 0 0 10px var(--theme-color) inset; }
+        @keyframes auraPulse {
+            0%, 100% { box-shadow: 0 0 20px var(--theme-color); }
+            50% { box-shadow: 0 0 45px var(--theme-color), 0 0 15px var(--theme-color) inset; }
         }
-        #yt-player { width: 100%; height: 100%; border: none; }
+        #yt-player { width: 100%; height: 100%; border: none; pointer-events: none; }
         
-        /* Glitch Layer */
-        .glitch-flash { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fff; opacity: 0; pointer-events: none; z-index: 10; }
-        .active-glitch { animation: glitchEffect 0.2s ease-out; }
-        @keyframes glitchEffect { 0% { opacity: 0; } 50% { opacity: 0.5; } 100% { opacity: 0; } }
+        .glitch-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fff; opacity: 0; pointer-events: none; z-index: 5; }
+        .active-glitch { animation: flashEffect 0.15s ease-out; }
+        @keyframes flashEffect { 0% { opacity: 0; } 50% { opacity: 0.4; } 100% { opacity: 0; } }
 
-        /* --- CONTROLS --- */
-        .media-controls-bar {
-            display: flex; align-items: center; justify-content: center; gap: 20px;
-            background: rgba(0,0,0,0.6); border-radius: 30px; padding: 10px 25px; margin-bottom: 15px;
-            border: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 5;
+        /* --- CONTROL HUB --- */
+        .transport-bar {
+            display: flex; align-items: center; justify-content: center; gap: 25px;
+            background: rgba(0,0,0,0.5); border-radius: 40px; padding: 12px 30px; margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .ctrl-btn { background: none; border: none; color: #fff; cursor: pointer; transition: 0.2s; }
-        .ctrl-btn svg { width: 24px; height: 24px; }
-        .ctrl-btn.play-pause svg { width: 36px; height: 36px; }
+        .btn-ctrl { background: none; border: none; color: #fff; cursor: pointer; transition: 0.2s; display: flex; align-items: center; }
+        .btn-ctrl:active { transform: scale(0.9); opacity: 0.7; }
+        .btn-ctrl svg { width: 22px; height: 22px; fill: currentColor; }
+        .btn-ctrl.play-pause svg { width: 32px; height: 32px; color: var(--theme-color); }
 
         /* --- STATION TABS --- */
-        .station-tabs {
-            display: flex; justify-content: space-between; width: 100%; margin-bottom: 10px;
-            background: rgba(0,0,0,0.3); border-radius: 10px; padding: 5px; gap: 4px;
+        .station-navigator {
+            display: flex; width: 100%; gap: 6px; margin-bottom: 15px;
+            background: rgba(0,0,0,0.2); padding: 5px; border-radius: 12px;
         }
-        .tab-btn {
-            flex: 1; background: transparent; border: none; border-radius: 6px;
-            color: rgba(255,255,255,0.5); font-size: 0.65rem; font-weight: 600; 
-            cursor: pointer; transition: 0.2s; text-transform: uppercase; height: 38px;
+        .station-btn {
+            flex: 1; background: transparent; border: none; border-radius: 8px;
+            color: rgba(255,255,255,0.4); font-size: 0.6rem; font-weight: 700; 
+            cursor: pointer; transition: 0.3s; text-transform: uppercase; height: 35px;
         }
-        .tab-btn.active { background: var(--theme-color); color: #fff; font-weight: 800; }
+        .station-btn.active { background: var(--theme-color); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
 
         /* --- PLAYLIST GRID --- */
-        .video-list-nexus { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 450px; }
-        .list-viewport { width: 100%; height: 112px; overflow: hidden; position: relative; margin: 5px 0; }
-        .session-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; transition: transform 0.3s ease; }
-        
-        .session-btn {
-            height: 52px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            color: #fff; border-radius: 8px; font-size: 0.65rem; font-weight: 700; padding: 0 5px;
+        .playlist-view { width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; }
+        .grid-viewport { width: 100%; height: 125px; overflow: hidden; position: relative; }
+        .playlist-grid { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; 
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .session-btn.active { border-color: var(--theme-color); background: rgba(255,255,255,0.1); }
 
-        /* --- DESKTOP OPTIMIZATION --- */
+        .tune-card {
+            height: 55px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+            color: #fff; border-radius: 10px; font-size: 0.7rem; font-weight: 600; 
+            display: flex; align-items: center; justify-content: center; padding: 0 10px;
+            cursor: pointer; transition: 0.2s; text-align: center; line-height: 1.2;
+        }
+        .tune-card.active { border-color: var(--theme-color); background: rgba(255,255,255,0.1); }
+
+        /* --- DESKTOP ADAPTATION --- */
         @media (min-width: 1024px) {
-            .glass-window { max-width: 900px; }
-            .player-wrapper { max-width: 500px; }
-            .session-grid { grid-template-columns: repeat(3, 1fr); }
-            .list-viewport { height: 116px; }
+            .glass-chassis { max-width: 850px; padding: 40px; }
+            .playlist-grid { grid-template-columns: repeat(3, 1fr); }
+            .tune-card { font-size: 0.75rem; height: 60px; }
+            .grid-viewport { height: 135px; }
         }
 
-        .scroll-arrow { background: none; border: none; color: rgba(255,255,255,0.3); cursor: pointer; padding: 5px; }
-        .vanguard-footer { margin-top: auto; padding-top: 10px; font-size: 0.5rem; color: rgba(255,255,255,0.3); letter-spacing: 2px; }
+        .scroll-indicator { color: rgba(255,255,255,0.2); font-size: 0.8rem; margin: 5px 0; cursor: pointer; }
+        .footer-sig { margin-top: auto; padding-top: 15px; font-size: 0.5rem; color: rgba(255,255,255,0.2); letter-spacing: 4px; }
     </style>
 </head>
 <body>
 
-    <div class="vfx-layer" id="vfx-bg"></div>
+    <div class="vfx-layer" id="bg-vfx"></div>
 
     <nav class="top-nav">
-        <a href="../menu.html" class="back-btn"> &LT; RETURN </a>
+        <a href="../menu.html" class="back-btn">SYSTEM_EXIT</a>
     </nav>
 
-    <main class="interface-container">
-        <div class="glass-window">
-            <header>
-                <p class="header-tag">// TOWER_OF_TUNES</p>
-                <h2 id="now-playing" class="now-playing">AWAITING SIGNAL...</h2>
+    <main class="main-stage">
+        <div class="glass-chassis">
+            <header class="header-meta">
+                <p class="header-tag">Quantum Audio Stream</p>
+                <h2 id="display-title" class="now-playing">LINKING TO TOWER...</h2>
             </header>
 
-            <div class="player-wrapper">
-                <div id="glitch" class="glitch-flash"></div>
+            <div class="player-aura-wrapper">
+                <div id="glitch-vfx" class="glitch-overlay"></div>
                 <div id="yt-player"></div>
             </div>
             
-            <div class="media-controls-bar">
-                <button class="ctrl-btn" onclick="ytPlayer.previousVideo()">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            <div class="transport-bar">
+                <button class="btn-ctrl" onclick="ytPlayer.previousVideo()">
+                    <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
                 </button>
-                <button class="ctrl-btn play-pause" id="btn-play">
-                    <svg id="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                    <svg id="icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                <button class="btn-ctrl play-pause" id="master-play">
+                    <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <svg id="pause-icon" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                 </button>
-                <button class="ctrl-btn" onclick="ytPlayer.nextVideo()">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                <button class="btn-ctrl" onclick="ytPlayer.nextVideo()">
+                    <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
                 </button>
             </div>
 
-            <div class="station-tabs" id="station-tabs"></div>
+            <div class="station-navigator" id="station-tabs"></div>
 
-            <div class="video-list-nexus">
-                <button class="scroll-arrow" id="prev-btn">▲</button>
-                <div class="list-viewport">
-                    <div id="playlist-grid" class="session-grid"></div>
+            <div class="playlist-view">
+                <div class="scroll-indicator" id="scroll-up">▲</div>
+                <div class="grid-viewport">
+                    <div id="tune-grid" class="playlist-grid"></div>
                 </div>
-                <button class="scroll-arrow" id="next-btn">▼</button>
+                <div class="scroll-indicator" id="scroll-down">▼</div>
             </div>
 
-            <footer class="vanguard-footer">COMMANDER Q // 2026</footer>
+            <footer class="footer-sig">DESIGNED BY COMMANDER Q // 2026</footer>
         </div>
     </main>
 
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         let ytPlayer, database, isPlaying = false;
-        const stationColors = ['#0a84ff', '#ff453a', '#ffd60a', '#bf5af2', '#32d74b'];
-        let lastTapTime = 0, lastTappedBtn = null, currentRow = 0;
+        const stationColors = ['#0a84ff', '#ff3b30', '#ffcc00', '#af52de', '#34c759'];
+        let lastTap = 0, lastBtn = null, scrollPos = 0;
+
+        // Visual Background Logic
+        const bg = document.getElementById('bg-vfx');
+        for(let i=0; i<20; i++) {
+            const s = document.createElement('div');
+            s.className = 'data-stream';
+            s.style.left = Math.random() * 100 + '%';
+            s.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            s.style.animationDelay = Math.random() * 5 + 's';
+            bg.appendChild(s);
+        }
 
         function onYouTubeIframeAPIReady() {
             ytPlayer = new YT.Player('yt-player', {
                 height: '100%', width: '100%',
-                playerVars: { 'controls': 0, 'playsinline': 1 },
+                playerVars: { 'controls': 0, 'modestbranding': 1, 'rel': 0, 'playsinline': 1 },
                 events: {
                     'onReady': () => {
                         fetch('../database/tunes.json')
                             .then(res => res.json())
-                            .then(data => { database = data; renderStations(); });
+                            .then(data => { database = data; initApp(); });
                     },
                     'onStateChange': (e) => {
                         isPlaying = (e.data == YT.PlayerState.PLAYING);
-                        document.getElementById('icon-play').style.display = isPlaying ? 'none' : 'block';
-                        document.getElementById('icon-pause').style.display = isPlaying ? 'block' : 'none';
+                        document.getElementById('play-icon').style.display = isPlaying ? 'none' : 'block';
+                        document.getElementById('pause-icon').style.display = isPlaying ? 'block' : 'none';
                     }
                 }
             });
         }
 
-        document.getElementById('btn-play').addEventListener('click', () => {
+        document.getElementById('master-play').addEventListener('click', () => {
             isPlaying ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
         });
 
-        function renderStations() {
+        function initApp() {
             const tabs = document.getElementById('station-tabs');
             tabs.innerHTML = database.stations.map((s, i) => `
-                <button class="tab-btn ${i===0?'active':''}" onclick="selectStation(${i}, this)">${s.name}</button>
+                <button class="station-btn ${i===0?'active':''}" onclick="setStation(${i}, this)">${s.name}</button>
             `).join('');
-            selectStation(0, tabs.firstElementChild, true);
+            setStation(0, tabs.firstElementChild, true);
         }
 
-        window.selectStation = (idx, btn, init = false) => {
-            document.documentElement.style.setProperty('--theme-color', stationColors[idx % stationColors.length]);
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        window.setStation = (idx, btn, firstLoad = false) => {
+            const color = stationColors[idx % stationColors.length];
+            document.documentElement.style.setProperty('--theme-color', color);
+            document.querySelectorAll('.station-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             
             const station = database.stations[idx];
-            const grid = document.getElementById('playlist-grid');
+            const grid = document.getElementById('tune-grid');
+            scrollPos = 0;
+            grid.style.transform = `translateY(0px)`;
+            
             grid.innerHTML = station.playlists.map(p => `
-                <button class="session-btn" onclick="handleTap('${p.id}', '${p.title}', this)">${p.title}</button>
+                <div class="tune-card" onclick="handleTuneAction('${p.id}', '${p.title}', this)">
+                    ${p.title}
+                </div>
             `).join('');
-            if(init) document.getElementById('now-playing').innerText = "READY: " + station.playlists[0].title;
+
+            if(firstLoad) document.getElementById('display-title').innerText = "STANDBY // " + station.playlists[0].title;
         };
 
-        window.handleTap = (id, title, btn) => {
+        window.handleTuneAction = (id, title, el) => {
             const now = Date.now();
-            document.querySelectorAll('.session-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            document.querySelectorAll('.tune-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
 
-            if (lastTappedBtn === btn && (now - lastTapTime) < 400) {
-                document.getElementById('glitch').classList.add('active-glitch');
-                setTimeout(() => document.getElementById('glitch').classList.remove('active-glitch'), 200);
-                ytPlayer.loadPlaylist({ list: id, listType: 'playlist' });
-                document.getElementById('now-playing').innerText = title;
+            if (lastBtn === el && (now - lastTap) < 400) {
+                // Double Tap Success
+                const g = document.getElementById('glitch-vfx');
+                g.classList.add('active-glitch');
+                setTimeout(() => g.classList.remove('active-glitch'), 150);
+                
+                ytPlayer.loadPlaylist({ list: id, listType: 'playlist', index: 0 });
+                document.getElementById('display-title').innerText = title;
             } else {
-                document.getElementById('now-playing').innerText = "SELECTED: " + title;
+                // Single Tap - Preview
+                document.getElementById('display-title').innerText = "LINK: " + title;
             }
-            lastTapTime = now; lastTappedBtn = btn;
+            lastTap = now; lastBtn = el;
         };
 
-        // Basic Scroll
-        document.getElementById('next-btn').addEventListener('click', () => {
-            currentRow++;
-            document.getElementById('playlist-grid').style.transform = `translateY(-${currentRow * 60}px)`;
+        // Scroll Logic
+        document.getElementById('scroll-down').addEventListener('click', () => {
+            scrollPos += 65;
+            document.getElementById('tune-grid').style.transform = `translateY(-${scrollPos}px)`;
         });
-        document.getElementById('prev-btn').addEventListener('click', () => {
-            if(currentRow > 0) currentRow--;
-            document.getElementById('playlist-grid').style.transform = `translateY(-${currentRow * 60}px)`;
+        document.getElementById('scroll-up').addEventListener('click', () => {
+            if(scrollPos > 0) scrollPos -= 65;
+            document.getElementById('tune-grid').style.transform = `translateY(-${scrollPos}px)`;
         });
     </script>
 </body>
