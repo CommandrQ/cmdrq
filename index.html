@@ -2,45 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>VANGUARD_OS | PRESS START</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VANGUARD_OS // CITIZEN_LINK</title>
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
-<body class="arcade-boot">
+<body class="arcade-start">
 
+    <div id="starfield"></div>
     <div class="crt-overlay"></div>
-    <div class="scanlines"></div>
+    <div class="fade-overlay" id="fade-overlay"></div>
 
     <main class="attract-mode">
-        <div class="top-meta">
+        <header class="top-meta">
             <span>CREDIT 00</span>
-            <span class="location">SERVER: KY_NODE_07</span>
-        </div>
+            <span class="center">PRESS_START_SCREEN</span>
+            <span>V_OS [S_07]</span>
+        </header>
 
-        <div class="logo-area">
-            <h1 class="capcom-title">VANGUARD</h1>
-            <h2 class="sub-title">CITIZEN OPERATOR LINK</h2>
-        </div>
-
-        <section class="dialog-box">
-            <div id="terminal-output" class="pixel-text">
-                </div>
+        <section class="logo-area">
+            <h1 class="capcom-title" data-text="VANGUARD">VANGUARD</h1>
+            <h2 class="sub-title">CITIZEN_OPERATOR LINK</h2>
         </section>
 
-        <section class="auth-module" id="login-module" style="display: none;">
-            <div class="input-frame">
-                <label>ID_ENTRY:</label>
-                <input type="text" id="access-key" maxlength="12" placeholder="CITIZEN_NAME">
+        <section class="dialog-box">
+            <header class="dialog-header">VANGUARD_CORP // ID_AUTH_07</header>
+            <p id="terminal-output" class="dialog-content">
+                </p>
+        </section>
+
+        <section class="start-action">
+            <div id="slice-container" onclick="initiateFullDive()">
+                <span class="start-text top-half" data-text="PRESS START">PRESS START</span>
+                <span class="start-text bottom-half" data-text="PRESS START">PRESS START</span>
             </div>
-            
-            <div class="flash-prompt" onclick="authorizeUser()">
-                [ PRESS START / CLICK TO LINK ]
-            </div>
+            <p class="prompt-hint">[CLICK MOUSE]</p>
         </section>
     </main>
 
-    <footer class="bottom-bar">
-        <div class="scroll-text">THE WORLD IS A STAGE. SELECT YOUR REALITY. VANGUARD_CORP (C) 199X-2026</div>
+    <footer class="bottom-scroll">
+        <div class="marquee">
+            VANGUARD_OS // THE MATRIX SAYS: 'WHY RETURN TO THE VOID?' // FULL DIVE STATUS: PENDING // © 199X-2026 //
+        </div>
     </footer>
 
     <script src="js/main.js"></script>
