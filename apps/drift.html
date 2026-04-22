@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Drift Mix Center | Commander Q</title>
+    <title>Drift Hub | Commander Q</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
 
@@ -15,6 +15,7 @@
             --apple-blur: blur(20px);
         }
 
+        /* --- SYSTEM RESET --- */
         * {
             margin: 0; padding: 0; box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
@@ -25,61 +26,86 @@
             color: #fff;
             font-family: 'Orbitron', sans-serif;
             min-height: 100vh;
-            overflow-x: hidden;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
 
-        /* --- NEON STARS & SPEED LINES --- */
+        /* --- NEON STARS & SPEED LINES VFX --- */
         .vfx-layer {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, #0a001a 0%, #030008 100%);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; background: radial-gradient(circle at center, #0a001a 0%, #030008 100%);
             overflow: hidden;
         }
 
         .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.5;
+            position: absolute; background: white; border-radius: 50%;
             animation: twinkle var(--d) infinite ease-in-out;
         }
 
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
-
         .speed-line {
-            position: absolute;
-            width: 2px;
-            height: 100px;
+            position: absolute; width: 2px; height: 120px;
             background: linear-gradient(to bottom, transparent, var(--cyan));
-            opacity: 0.3;
-            animation: moveLine 0.5s linear infinite;
+            opacity: 0.2; animation: moveLine 0.6s linear infinite;
         }
 
-        @keyframes moveLine {
-            0% { transform: translateY(-110vh) rotate(15deg); }
-            100% { transform: translateY(110vh) rotate(15deg); }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+        @keyframes moveLine { 
+            0% { transform: translateY(-110vh) rotate(15deg); } 
+            100% { transform: translateY(110vh) rotate(15deg); } 
         }
 
-        /* --- UI CONTAINER --- */
         .scanlines {
             position: fixed; top: 0; width: 100%; height: 100%;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
             background-size: 100% 3px; pointer-events: none; z-index: 100;
         }
 
-        .drift-interface {
+        /* --- NAVIGATION --- */
+        .top-nav {
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            z-index: 110;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--cyan);
+            font-size: 0.7rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: var(--apple-blur);
+            -webkit-backdrop-filter: var(--apple-blur);
+            border: 1px solid var(--cyan);
+            padding: 12px 20px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            min-height: 44px; /* Apple Touch Target Standard */
+        }
+
+        .back-btn:hover {
+            background: var(--cyan);
+            color: #000;
+            box-shadow: 0 0 20px var(--cyan);
+            transform: translateX(-5px);
+        }
+
+        /* --- MAIN UI WINDOW --- */
+        .interface-container {
             flex: 1;
-            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 0 20px 40px;
             z-index: 10;
         }
 
-        .player-window {
+        .glass-window {
             width: 100%;
             max-width: 900px;
             background: var(--glass);
@@ -87,47 +113,39 @@
             -webkit-backdrop-filter: var(--apple-blur);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 15px;
-            padding: clamp(1rem, 4vw, 2rem);
+            padding: clamp(1rem, 5vw, 2.5rem);
             box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-            position: relative;
+            text-align: center;
         }
 
-        .video-wrapper {
+        .video-title {
+            font-size: clamp(0.9rem, 4vw, 1.3rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .player-wrapper {
             position: relative;
             width: 100%;
             aspect-ratio: 16 / 9;
             background: #000;
             border-radius: 8px;
             overflow: hidden;
+            margin-bottom: 25px;
             border: 1px solid rgba(255,255,255,0.05);
         }
 
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Glitch Animation for switching videos */
-        .glitch-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--cyan);
-            opacity: 0;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        .glitching { animation: glitchFlash 0.3s ease-out; }
-        @keyframes glitchFlash {
-            0% { opacity: 0; }
-            20% { opacity: 0.4; transform: skewX(20deg); }
-            40% { opacity: 0.2; transform: skewX(-20deg); }
-            100% { opacity: 0; }
-        }
-
-        /* --- MIX CONTROLS --- */
-        .mix-controls {
-            margin-top: 25px;
-            width: 100%;
+        /* Session Select Grid */
+        .session-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 15px;
+            width: 100%;
         }
 
         .session-btn {
@@ -136,12 +154,11 @@
             color: #fff;
             padding: 12px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
             border-radius: 4px;
+            transition: 0.3s;
+            letter-spacing: 1px;
         }
 
         .session-btn:hover, .session-btn.active {
@@ -150,11 +167,31 @@
             transform: translateY(-2px);
         }
 
-        /* --- FOOTER --- */
-        .vanguard-footer { padding: 25px; text-align: center; }
-        .footer-content { font-size: 0.7rem; letter-spacing: 3px; color: #fff; text-transform: uppercase; }
+        /* --- ANIMATED FOOTER --- */
+        .vanguard-footer {
+            padding: 25px;
+            text-align: center;
+            z-index: 20;
+        }
+
+        .footer-content {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: #fff;
+            text-transform: uppercase;
+            transition: opacity 0.5s ease;
+        }
+
         .pulse { animation: pulseWhite 2s infinite ease-in-out; }
         @keyframes pulseWhite { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; text-shadow: 0 0 10px #fff; } }
+
+        /* Glitch VFX for switches */
+        .glitch-flash {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--cyan); opacity: 0; pointer-events: none; z-index: 5;
+        }
+        .active-glitch { animation: glitchEffect 0.3s ease-out; }
+        @keyframes glitchEffect { 0% { opacity: 0; } 50% { opacity: 0.3; transform: skewX(10deg); } 100% { opacity: 0; } }
 
     </style>
 </head>
@@ -163,19 +200,25 @@
     <div class="scanlines"></div>
     <div class="vfx-layer" id="vfx-bg"></div>
 
-    <main class="drift-interface">
-        <div class="player-window">
-            <header style="margin-bottom: 15px;">
-                <p style="font-size: 0.6rem; color: var(--cyan); letter-spacing: 3px;">// DRIFT_MIX_SESSION</p>
-                <h2 id="video-title" style="font-size: 1.2rem; font-weight: 900;">LOADING SESSION...</h2>
+    <nav class="top-nav">
+        <a href="../menu.html" class="back-btn">
+            &LT; RETURN_TO_COMMAND
+        </a>
+    </nav>
+
+    <main class="interface-container">
+        <div class="glass-window">
+            <header>
+                <p style="font-size: 0.6rem; color: var(--cyan); letter-spacing: 3px; margin-bottom: 5px;">// DRIFT_SESSION_READY</p>
+                <h2 id="video-title" class="video-title">INITIALIZING...</h2>
             </header>
 
-            <div class="video-wrapper">
-                <div id="glitch" class="glitch-overlay"></div>
-                <iframe id="main-player" src="" allowfullscreen></iframe>
+            <div class="player-wrapper">
+                <div id="glitch" class="glitch-flash"></div>
+                <iframe id="main-player" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
 
-            <div id="session-grid" class="mix-controls">
+            <div id="session-grid" class="session-grid">
                 </div>
         </div>
     </main>
@@ -190,10 +233,11 @@
             const titleDisplay = document.getElementById('video-title');
             const sessionGrid = document.getElementById('session-grid');
             const glitch = document.getElementById('glitch');
+            const footerText = document.getElementById('footer-text');
             const bg = document.getElementById('vfx-bg');
 
-            // --- 1. GENERATE VFX (Stars & Lines) ---
-            for(let i=0; i<50; i++) {
+            // --- 1. VFX GENERATOR ---
+            for(let i=0; i<40; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.left = Math.random() * 100 + '%';
@@ -202,8 +246,7 @@
                 star.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
                 bg.appendChild(star);
             }
-
-            for(let i=0; i<15; i++) {
+            for(let i=0; i<12; i++) {
                 const line = document.createElement('div');
                 line.className = 'speed-line';
                 line.style.left = Math.random() * 100 + '%';
@@ -211,33 +254,34 @@
                 bg.appendChild(line);
             }
 
-            // --- 2. DATA LOAD ---
-            // Note: Path is ../ because we are in the /apps folder
+            // --- 2. DATA LOAD (JUMP BACK TO DATABASE) ---
             fetch('../database/drift.json')
                 .then(res => res.json())
                 .then(data => {
                     renderSessions(data.sessions);
-                    loadVideo(data.sessions[0]); // Load first mix
+                    if(data.sessions.length > 0) loadVideo(data.sessions[0]);
                 })
-                .catch(err => console.error("Signal Lost: Cannot reach drift.json", err));
+                .catch(err => {
+                    titleDisplay.innerText = "SIGNAL LOST: CHECK JSON PATH";
+                    console.error("404: Ensure drift.json is in /database/", err);
+                });
 
             function renderSessions(sessions) {
                 sessionGrid.innerHTML = sessions.map((s, index) => `
-                    <button class="session-btn" onclick="switchVideo('${s.id}', '${s.title}', this)">
-                        SESSION_${index + 1}
+                    <button class="session-btn" onclick="switchSession('${s.id}', '${s.title}', this)">
+                        SESSION_0${index + 1}
                     </button>
                 `).join('');
+                if(sessionGrid.firstElementChild) sessionGrid.firstElementChild.classList.add('active');
             }
 
-            window.switchVideo = (id, title, btn) => {
-                // Remove active state from others
+            window.switchSession = (id, title, btn) => {
                 document.querySelectorAll('.session-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-
-                // Trigger Glitch Effect
-                glitch.classList.add('glitching');
-                setTimeout(() => glitch.classList.remove('glitching'), 300);
-
+                
+                glitch.classList.add('active-glitch');
+                setTimeout(() => glitch.classList.remove('active-glitch'), 300);
+                
                 loadVideo({id, title});
             };
 
@@ -246,8 +290,7 @@
                 titleDisplay.innerText = video.title;
             }
 
-            // --- 3. FOOTER ROTATION ---
-            const footerText = document.getElementById('footer-text');
+            // --- 3. ANIMATED FOOTER ROTATION ---
             let showMission = false;
             setInterval(() => {
                 footerText.style.opacity = 0;
