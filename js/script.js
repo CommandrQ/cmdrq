@@ -1,17 +1,19 @@
-const btn = document.getElementById('start-btn');
-const overlay = document.getElementById('overlay');
+document.addEventListener('DOMContentLoaded', () => {
+    const startBtn = document.getElementById('start-btn');
+    const fadeOverlay = document.getElementById('fade-overlay');
 
-btn.addEventListener('click', () => {
-    // 1. Trigger the slice animation
-    btn.classList.add('sliced');
-    
-    // 2. Short delay for the "slice" to be seen
-    setTimeout(() => {
-        overlay.classList.add('fade-out');
-    }, 300);
+    startBtn.addEventListener('click', () => {
+        // 1. Trigger the Slice Animation
+        startBtn.classList.add('slicing');
 
-    // 3. Redirect to menu.html after the screen is black
-    setTimeout(() => {
-        window.location.href = 'menu.html';
-    }, 1100);
+        // 2. Short delay before the screen fades
+        setTimeout(() => {
+            fadeOverlay.classList.add('active');
+        }, 300);
+
+        // 3. Logic to redirect to menu.html after animations
+        setTimeout(() => {
+            window.location.href = 'menu.html';
+        }, 1200);
+    });
 });
