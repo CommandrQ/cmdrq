@@ -1,34 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Commander Q | Vanguard Knights</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+document.addEventListener('DOMContentLoaded', () => {
+    const startBtn = document.getElementById('start-btn');
+    const uiWindow = document.getElementById('ui-window');
+    const footerText = document.getElementById('footer-text');
+    const fadeOverlay = document.getElementById('fade-overlay');
 
-    <div class="scanlines"></div>
+    // 1. FOOTER LOGIC: Wipe & Pulse
+    let isMissionStatement = false;
+    setInterval(() => {
+        footerText.style.opacity = 0;
+        
+        setTimeout(() => {
+            if (!isMissionStatement) {
+                footerText.innerText = "Empower.Educate.Elevate";
+            } else {
+                footerText.innerText = "Built by Commander Q 2026";
+            }
+            footerText.style.opacity = 1;
+            isMissionStatement = !isMissionStatement;
+        }, 500);
+    }, 3000);
 
-    <div class="grid-container">
-        <div class="grid"></div>
-    </div>
+    // 2. INTERACTION LOGIC: Slice & Shake
+    startBtn.addEventListener('click', () => {
+        // Physical Action
+        startBtn.classList.add('slicing');
+        uiWindow.classList.add('window-shake');
 
-    <main class="ui-viewport">
-        <div class="glass-window" id="main-ui">
-            <p class="sub-text">A VANGUARD KNIGHTS PRESENTATION</p>
-            <h1 class="main-title">COMMANDER Q:<br><span class="glow">DEFENDER OF ETERNITY</span></h1>
-            
-            <button id="start-btn" class="btn-slice">
-                <div class="btn-top"><span>PRESS START</span></div>
-                <div class="btn-bottom"><span>PRESS START</span></div>
-            </button>
-        </div>
-    </main>
+        // Transition Logic
+        setTimeout(() => {
+            fadeOverlay.classList.add('active');
+        }, 400);
 
-    <div id="fade-overlay"></div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+        setTimeout(() => {
+            window.location.href = 'menu.html';
+        }, 1500);
+    });
+});
