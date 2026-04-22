@@ -1,23 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const startBtn = document.getElementById('start-btn');
-    const mainUI = document.getElementById('main-ui');
-    const fadeOverlay = document.getElementById('fade-overlay');
+    const intelBtn = document.getElementById('intel-trigger');
+    const aboutModal = document.getElementById('about-modal');
+    const closeBtn = document.getElementById('close-modal');
 
-    startBtn.addEventListener('click', () => {
-        // Discipline: Execute the sequence precisely
-        
-        // 1. Add shake to the window and slice to the button
-        mainUI.classList.add('shaking');
-        startBtn.classList.add('slicing');
+    // Open Intel Window
+    intelBtn.addEventListener('click', () => {
+        aboutModal.classList.add('open');
+    });
 
-        // 2. Physical Feedback: Brief delay before the void consumes the screen
-        setTimeout(() => {
-            fadeOverlay.classList.add('active');
-        }, 400);
+    // Close Intel Window
+    closeBtn.addEventListener('click', () => {
+        aboutModal.classList.remove('open');
+    });
 
-        // 3. System Redirect
-        setTimeout(() => {
-            window.location.href = 'menu.html';
-        }, 1400);
+    // Close if clicking outside the glass
+    window.addEventListener('click', (e) => {
+        if (e.target === aboutModal) {
+            aboutModal.classList.remove('open');
+        }
     });
 });
