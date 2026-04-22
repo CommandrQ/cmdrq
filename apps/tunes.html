@@ -207,6 +207,8 @@
         
         const grid = document.getElementById('playlist-grid');
         const titleDisplay = document.getElementById('now-playing');
+        const iconPlay = document.getElementById('icon-play');
+        const iconPause = document.getElementById('icon-pause');
         
         // Grid Math
         let currentRow = 0;
@@ -230,13 +232,12 @@
             bg.appendChild(stream);
         }
 
-        // Initialize Player with explicit Autoplay
+        // Initialize Player (Autoplay explicitly disabled)
         function onYouTubeIframeAPIReady() {
             ytPlayer = new YT.Player('yt-player', {
                 height: '100%',
                 width: '100%',
                 playerVars: {
-                    'autoplay': 1, /* Crucial for 1-tap mobile play */
                     'controls': 0, 
                     'disablekb': 1,
                     'modestbranding': 1,
@@ -258,8 +259,6 @@
         }
 
         function onPlayerStateChange(event) {
-            const iconPlay = document.getElementById('icon-play');
-            const iconPause = document.getElementById('icon-pause');
             if (event.data == YT.PlayerState.PLAYING) {
                 iconPlay.style.display = 'none';
                 iconPause.style.display = 'block';
@@ -299,16 +298,16 @@
             currentRow = 0;
             grid.style.transform = `translateY(0px)`;
 
-            grid.innerHTML = station.playlists.map(pl => `
-                <button class="session-btn" onclick="directFirePlaylist('${pl.id}', '${pl.title}', this)">
+            grid.innerHTML = station.playlists.map((pl, idx) => `
+                <button class="session-btn" onclick="cuePlaylistCommand('${pl.id}', '${pl.title}', this)">
                     <span class="pl-title">${pl.title}</span>
                 </button>
             `).join('');
 
-            if (isInitialLoad && station.playlists.length > 0) {
-                titleDisplay.innerText = "STANDBY: " + station.playlists[0].title;
-                const firstBtn = document.querySelector('.session-btn');
-                if(firstBtn) firstBtn.classList.add('active');
+            // Automatically cue the first playlist of the station when switching tabs
+            if (station.playlists.length > 0) {
+                const firstBtn = grid.firstElementChild;
+                if(firstBtn) cuePlaylistCommand(station.playlists[0].id, station.playlists[0].title, firstBtn);
             }
         };
 
@@ -330,20 +329,29 @@
         });
 
         // ==========================================
-        // DIRECT-FIRE API COMMAND (1-TAP FIX)
+        // MANUAL ENGAGEMENT PROTOCOL
         // ==========================================
-        window.directFirePlaylist = (playlistId, title, btnEle) => {
-            // Update UI
+        window.cuePlaylistCommand = (playlistId, title, btnEle) => {
+            // 1. Update UI Selection
             document.querySelectorAll('.session-btn').forEach(b => b.classList.remove('active'));
-            btnEle.classList.add('active');
+            if (btnEle) btnEle.classList.add('active');
+            
+            // 2. Set the Title to notify the user it's ready
             titleDisplay.innerText = title;
 
-            // Direct, synchronous command to YouTube iframe
-            ytPlayer.loadPlaylist({
-                list: playlistId,
-                listType: 'playlist',
-                index: 0
-            });
+            // 3. Reset the play button to the "Play" icon state just in case it was playing
+            isPlaying = false;
+            iconPlay.style.display = 'block';
+            iconPause.style.display = 'none';
+
+            // 4. Cue the playlist in YouTube (Loads it into memory, but stays paused)
+            if(ytPlayer && typeof ytPlayer.cuePlaylist === 'function') {
+                ytPlayer.cuePlaylist({
+                    list: playlistId,
+                    listType: 'playlist',
+                    index: 0
+                });
+            }
         };
     </script>
 </body>
