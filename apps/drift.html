@@ -26,6 +26,7 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            align-items: center;
         }
 
         /* --- VFX BACKGROUND --- */
@@ -44,7 +45,7 @@
         @keyframes moveLine { 0% { transform: translateY(-110vh) rotate(15deg); } 100% { transform: translateY(110vh) rotate(15deg); } }
 
         /* --- NAVIGATION --- */
-        .top-nav { padding: 15px 20px; width: 100%; z-index: 110; }
+        .top-nav { padding: 15px 20px; width: 100%; z-index: 110; display: flex; justify-content: flex-start; }
         .back-btn {
             display: inline-flex; align-items: center; text-decoration: none; color: var(--cyan);
             font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; background: rgba(0, 0, 0, 0.5);
@@ -55,11 +56,11 @@
 
         /* --- MAIN INTERFACE --- */
         .interface-container {
-            flex: 1; 
+            width: 100%;
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            padding: 0 15px; /* TIGHTENED BOTTOM PADDING */
+            padding: 0 15px;
             z-index: 10;
         }
 
@@ -70,7 +71,6 @@
             backdrop-filter: var(--apple-blur); -webkit-backdrop-filter: var(--apple-blur);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 15px;
             padding: 20px; text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-            margin-bottom: 10px; /* REDUCED FOR MOBILE */
         }
 
         .player-wrapper {
@@ -80,15 +80,32 @@
         }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* --- PAGING CAROUSEL --- */
+        /* --- PAGING SYSTEM WITH ARROWS --- */
+        .carousel-nexus {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .nav-arrow {
+            background: none; border: none; color: var(--cyan);
+            font-size: 1.5rem; cursor: pointer; padding: 10px;
+            transition: 0.3s; animation: arrowPulse 2s infinite;
+        }
+        .nav-arrow:hover { color: #fff; text-shadow: 0 0 10px var(--cyan); }
+        
+        @keyframes arrowPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
         .session-carousel {
             display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
             gap: 15px; width: 100%; padding-bottom: 8px;
-            scrollbar-width: thin; scrollbar-color: var(--purple) transparent;
+            scrollbar-width: none; /* Hide scrollbar for cleaner look with arrows */
         }
-
-        .session-carousel::-webkit-scrollbar { height: 4px; }
-        .session-carousel::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 10px; }
+        .session-carousel::-webkit-scrollbar { display: none; }
 
         .session-page {
             flex: 0 0 100%; 
@@ -104,7 +121,7 @@
                 grid-template-rows: none;
                 width: 100%;
             }
-            .session-carousel { overflow-x: hidden; }
+            .nav-arrow { display: none; } /* Arrows hidden if desktop shows all */
         }
 
         .session-btn {
@@ -117,16 +134,13 @@
             background: var(--purple); box-shadow: 0 0 10px var(--purple); transform: translateY(-2px);
         }
 
-        /* --- MOBILE DEAD SPACE REDUCTION --- */
-        @media (max-width: 480px) {
-            .vanguard-footer { padding: 8px 15px; } /* CRITICAL: Reduced from 15px+ */
-            .interface-container { padding-bottom: 0; }
-            .glass-window { padding: 15px 10px; margin-bottom: 5px; }
-            .player-wrapper { margin-bottom: 10px; }
+        /* --- FOOTER MOVED UP --- */
+        .vanguard-footer { 
+            margin-top: 20px; /* Pulls it right under the window */
+            padding-bottom: 20px;
+            text-align: center; 
+            z-index: 20; 
         }
-
-        /* --- ANIMATED FOOTER --- */
-        .vanguard-footer { padding: 15px; text-align: center; z-index: 20; }
         .footer-content { font-size: 0.6rem; letter-spacing: 3px; color: #fff; text-transform: uppercase; transition: 0.5s; }
         .pulse { animation: pulseWhite 2s infinite ease-in-out; }
         @keyframes pulseWhite { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; text-shadow: 0 0 10px #fff; } }
@@ -148,7 +162,7 @@
     <main class="interface-container">
         <div class="glass-window">
             <header style="margin-bottom: 8px;">
-                <p style="font-size: 0.5rem; color: var(--cyan); letter-spacing: 2px;">// DRIFT_HUB_V3</p>
+                <p style="font-size: 0.5rem; color: var(--cyan); letter-spacing: 2px;">// DRIFT_HUB_V4</p>
                 <h2 id="video-title" style="font-size: 0.9rem; font-weight: 900; text-transform: uppercase;">INITIALIZING...</h2>
             </header>
 
@@ -157,14 +171,18 @@
                 <iframe id="main-player" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
 
-            <div id="session-carousel" class="session-carousel">
-                </div>
+            <div class="carousel-nexus">
+                <button class="nav-arrow" id="prev-btn">&lt;</button>
+                <div id="session-carousel" class="session-carousel">
+                    </div>
+                <button class="nav-arrow" id="next-btn">&gt;</button>
+            </div>
         </div>
-    </main>
 
-    <footer class="vanguard-footer">
-        <div id="footer-text" class="footer-content pulse">Built by Commander Q 2026</div>
-    </footer>
+        <footer class="vanguard-footer">
+            <div id="footer-text" class="footer-content pulse">Built by Commander Q 2026</div>
+        </footer>
+    </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -173,6 +191,8 @@
             const carousel = document.getElementById('session-carousel');
             const glitch = document.getElementById('glitch');
             const bg = document.getElementById('vfx-bg');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
 
             // --- VFX ---
             for(let i=0; i<30; i++) {
@@ -220,6 +240,14 @@
                         if(firstBtn) firstBtn.classList.add('active');
                     }
                 });
+
+            // --- ARROW NAVIGATION LOGIC ---
+            nextBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: carousel.clientWidth, behavior: 'smooth' });
+            });
+            prevBtn.addEventListener('click', () => {
+                carousel.scrollBy({ left: -carousel.clientWidth, behavior: 'smooth' });
+            });
 
             window.switchSession = (id, title, btn) => {
                 document.querySelectorAll('.session-btn').forEach(b => b.classList.remove('active'));
