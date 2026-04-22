@@ -1,62 +1,157 @@
-/* VANGUARD_OS // GLOBAL KERNEL V2.3 */
-:root {
-    --bright-teal: #01cdfe;
-    --light-pink: #ff71ce;
-    --gold: #ffd700;
-    --void-black: #000000;
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --title-font: "ArcadeClassic", "Courier New", monospace;
-    --main-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Vanguard_OS // Command Center</title>
+    
+    <link rel="stylesheet" href="css/global.css">
+    
+    <style>
+        /* WORKSPACE LAYOUT */
+        .workspace-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            flex: 1;
+            min-height: 0;
+        }
 
-html, body {
-    background: var(--void-black);
-    margin: 0; padding: 0;
-    width: 100%; height: 100%;
-    overflow: hidden !important;
-    font-family: var(--main-font);
-    color: #fff;
-    /* INITIAL STATE FOR FADE-IN */
-    animation: fadeFromBlack 1.2s ease-out forwards;
-}
+        /* SIDEBAR (Study/Workstation View) */
+        .study-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .status-line {
+            font-size: 0.7rem;
+            font-family: monospace;
+            color: var(--bright-teal);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 8px;
+        }
 
-@keyframes fadeFromBlack {
-    0% { background: #000; opacity: 0; }
-    100% { background: transparent; opacity: 1; }
-}
+        /* APP GRID (Native Phone Feel) */
+        .app-launcher {
+            display: grid;
+            /* FIX: auto-fit ensures icons expand to fill the screen width */
+            grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+            gap: 20px;
+            padding: 10px;
+            align-content: start;
+        }
 
-.vanguard-page {
-    position: relative; 
-    z-index: 100;
-    display: flex; 
-    flex-direction: column; 
-    width: 100%; 
-    height: 100dvh; 
-    box-sizing: border-box;
-    padding-top: calc(80px + env(safe-area-inset-top)) !important;
-    padding-bottom: 70px !important;
-    padding-left: 20px; padding-right: 20px;
-}
+        .app-icon-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .app-icon-link:active { transform: scale(0.9); }
+        .app-icon-link:hover { transform: translateY(-5px); }
 
-/* THE SHARED WINDOW SYSTEM */
-.workspace-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    height: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-}
+        .icon-box {
+            width: clamp(65px, 18vw, 90px);
+            aspect-ratio: 1/1;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            border-radius: 20px; /* Native Squircle */
+            border: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
 
-.apple-glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px) saturate(180%);
-    -webkit-backdrop-filter: blur(15px) saturate(180%);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-top: 1px solid rgba(255,255,255,0.25);
-    border-radius: 24px;
-    padding: 20px;
-}
+        .icon-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #fff;
+            font-weight: 600;
+            text-align: center;
+        }
 
-#starfield-canvas { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
+        /* DESKTOP STUDY ADAPTATION */
+        @media (min-width: 1000px) {
+            .workspace-layout { grid-template-columns: 320px 1fr; gap: 30px; }
+            .app-launcher { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 30px; }
+            .icon-box { font-size: 2.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="starfield-canvas"></canvas>
+
+    <div class="vanguard-page">
+        <div class="workspace-container" style="max-width: 1200px; margin: 0 auto; width:100%; display:flex; flex-direction:column; flex:1;">
+            
+            <header style="margin-bottom: 20px;">
+                <h1 style="font-family: var(--title-font); color: var(--gold); font-size: 2rem; margin:0;">COMMAND_HUB</h1>
+                <p style="font-size: 0.75rem; color: var(--bright-teal); opacity: 0.8; letter-spacing: 1px;">WELCOME, COMMANDER Q</p>
+            </header>
+
+            <div class="workspace-layout">
+                <aside class="apple-glass study-sidebar">
+                    <div class="status-line">UPLINK: SECURE</div>
+                    <div class="status-line">REGION: ETERNITY_SECTOR</div>
+                    <div class="status-line" id="sync-status">SYNC: ACTIVE</div>
+                    <div style="flex:1"></div>
+                    <div style="font-family: var(--title-font); font-size: 0.6rem; color: var(--light-pink); text-align: center;">[ VANGUARD_CORE_STABLE ]</div>
+                </aside>
+
+                <main class="apple-glass" style="overflow-y: auto;">
+                    <div class="app-launcher" id="menu-grid">
+                        </div>
+                </main>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/warp.js"></script>
+    <script src="js/system.js"></script>
+
+    <script>
+        // COMMANDER'S AUTO-HYDRATION SCRIPT
+        async function loadMenu() {
+            const grid = document.getElementById('menu-grid');
+            const syncStatus = document.getElementById('sync-status');
+            
+            try {
+                const response = await fetch('database/menu.json');
+                if (!response.ok) throw new Error("DB_OFFLINE");
+                const menuItems = await response.json();
+                
+                grid.innerHTML = ''; // Clear loading state
+
+                menuItems.forEach(item => {
+                    const link = document.createElement('a');
+                    link.href = item.url;
+                    link.className = 'app-icon-link';
+                    
+                    link.innerHTML = `
+                        <div class="icon-box" style="border-color: ${item.color || 'var(--bright-teal)'}">
+                            ${item.icon}
+                        </div>
+                        <div class="icon-label">${item.title}</div>
+                    `;
+                    grid.appendChild(link);
+                });
+                syncStatus.innerText = "SYNC: COMPLETE";
+
+            } catch (err) {
+                console.error("OS_ERROR:", err);
+                syncStatus.innerText = "SYNC: FAILED";
+                grid.innerHTML = `<div style="color:red; font-family:monospace; grid-column: 1/-1;">[CRITICAL_ERROR]: Failed to load database/menu.json. Check file path.</div>`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadMenu);
+    </script>
+</body>
+</html>
