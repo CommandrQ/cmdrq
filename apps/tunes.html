@@ -9,7 +9,7 @@
         :root {
             --glass: rgba(255, 255, 255, 0.05);
             --apple-blur: blur(20px);
-            --theme-color: #0a84ff; /* Default Blue */
+            --theme-color: #0a84ff; 
         }
 
         /* --- SYSTEM LOCKDOWN --- */
@@ -76,6 +76,12 @@
             50% { box-shadow: 0 0 25px var(--theme-color); }
         }
         #yt-player { width: 100%; height: 100%; border: none; }
+        
+        /* The Glitch VFX for Double Taps */
+        .glitch-flash { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fff; opacity: 0; pointer-events: none; z-index: 10; }
+        .active-glitch { animation: glitchEffect 0.2s ease-out; }
+        @keyframes glitchEffect { 0% { opacity: 0; } 50% { opacity: 0.5; } 100% { opacity: 0; } }
+
         .touch-shield { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
 
         /* --- MEDIA BAR --- */
@@ -127,6 +133,7 @@
         .session-btn .pl-title { 
             font-size: 0.65rem; width: 100%; text-align: center; font-weight: 700; line-height: 1.2;
             display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+            pointer-events: none; /* Prevents text from interfering with tap target */
         }
 
         /* --- DESKTOP RESIZING --- */
@@ -162,6 +169,7 @@
             </header>
 
             <div class="player-wrapper">
+                <div id="glitch" class="glitch-flash"></div>
                 <div id="yt-player"></div>
                 <div class="touch-shield"></div>
             </div>
@@ -209,7 +217,12 @@
         const titleDisplay = document.getElementById('now-playing');
         const iconPlay = document.getElementById('icon-play');
         const iconPause = document.getElementById('icon-pause');
+        const glitch = document.getElementById('glitch');
         
+        // Double Tap Variables
+        let lastTapTime = 0;
+        let lastTappedBtn = null;
+
         // Grid Math
         let currentRow = 0;
         let rowHeight = window.innerWidth >= 1024 ? 62 : 60; 
@@ -232,7 +245,7 @@
             bg.appendChild(stream);
         }
 
-        // Initialize Player (Autoplay explicitly disabled)
+        // Initialize Player 
         function onYouTubeIframeAPIReady() {
             ytPlayer = new YT.Player('yt-player', {
                 height: '100%',
@@ -298,16 +311,17 @@
             currentRow = 0;
             grid.style.transform = `translateY(0px)`;
 
-            grid.innerHTML = station.playlists.map((pl, idx) => `
-                <button class="session-btn" onclick="cuePlaylistCommand('${pl.id}', '${pl.title}', this)">
+            // Inject the new handlePlaylistTap function
+            grid.innerHTML = station.playlists.map((pl) => `
+                <button class="session-btn" onclick="handlePlaylistTap('${pl.id}', '${pl.title}', this)">
                     <span class="pl-title">${pl.title}</span>
                 </button>
             `).join('');
 
-            // Automatically cue the first playlist of the station when switching tabs
-            if (station.playlists.length > 0) {
-                const firstBtn = grid.firstElementChild;
-                if(firstBtn) cuePlaylistCommand(station.playlists[0].id, station.playlists[0].title, firstBtn);
+            if (isInitialLoad && station.playlists.length > 0) {
+                titleDisplay.innerText = "STANDBY: " + station.playlists[0].title;
+                const firstBtn = document.querySelector('.session-btn');
+                if(firstBtn) firstBtn.classList.add('active');
             }
         };
 
@@ -329,28 +343,48 @@
         });
 
         // ==========================================
-        // MANUAL ENGAGEMENT PROTOCOL
+        // DOUBLE-TAP / DOUBLE-CLICK PROTOCOL
         // ==========================================
-        window.cuePlaylistCommand = (playlistId, title, btnEle) => {
-            // 1. Update UI Selection
+        window.handlePlaylistTap = (playlistId, title, btnEle) => {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTapTime;
+
+            // Highlight the button visually immediately on first tap
             document.querySelectorAll('.session-btn').forEach(b => b.classList.remove('active'));
-            if (btnEle) btnEle.classList.add('active');
-            
-            // 2. Set the Title to notify the user it's ready
-            titleDisplay.innerText = title;
+            btnEle.classList.add('active');
 
-            // 3. Reset the play button to the "Play" icon state just in case it was playing
-            isPlaying = false;
-            iconPlay.style.display = 'block';
-            iconPause.style.display = 'none';
+            // If the same button is tapped within 400 milliseconds...
+            if (lastTappedBtn === btnEle && tapLength < 400 && tapLength > 0) {
+                
+                // --- DOUBLE TAP EXECUTED ---
+                titleDisplay.innerText = title;
+                
+                // Fire the glitch VFX to confirm execution
+                if (glitch) {
+                    glitch.classList.add('active-glitch');
+                    setTimeout(() => glitch.classList.remove('active-glitch'), 200);
+                }
 
-            // 4. Cue the playlist in YouTube (Loads it into memory, but stays paused)
-            if(ytPlayer && typeof ytPlayer.cuePlaylist === 'function') {
-                ytPlayer.cuePlaylist({
-                    list: playlistId,
-                    listType: 'playlist',
-                    index: 0
-                });
+                // Force load and auto-play immediately (Bypasses mobile restrictions on 2nd tap)
+                if(ytPlayer && typeof ytPlayer.loadPlaylist === 'function') {
+                    ytPlayer.loadPlaylist({
+                        list: playlistId,
+                        listType: 'playlist',
+                        index: 0
+                    });
+                }
+
+                // Reset tap tracking to avoid accidental triple-taps
+                lastTapTime = 0;
+                lastTappedBtn = null;
+
+            } else {
+                // --- SINGLE TAP EXECUTED ---
+                titleDisplay.innerText = "SELECTED: " + title;
+                
+                // Record this tap as the baseline for a potential double-tap
+                lastTapTime = currentTime;
+                lastTappedBtn = btnEle;
             }
         };
     </script>
