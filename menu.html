@@ -1,26 +1,210 @@
-[
-    {
-        "title": "Drift",
-        "url": "apps/drift.html",
-        "icon": "images/icons/drift.png",
-        "color": "#01cdfe"
-    },
-    {
-        "title": "Tunes",
-        "url": "apps/tunes.html",
-        "icon": "images/icons/tunes.png",
-        "color": "#ff71ce"
-    },
-    {
-        "title": "Archive",
-        "url": "apps/aboutme.html",
-        "icon": "images/icons/aboutme.png",
-        "color": "#ffd700"
-    },
-    {
-        "title": "Blog",
-        "url": "https://substack.com/@commandrq",
-        "icon": "images/icons/status_icon.png",
-        "color": "#01cdfe"
-    }
-]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Vanguard_OS // Command Center</title>
+    
+    <link rel="stylesheet" href="css/global.css">
+    
+    <style>
+        /* =========================================================
+           LOCAL WORKSPACE ARCHITECTURE
+           ========================================================= */
+
+        /* Container for the sidebar and main desk */
+        .workspace-layout {
+            display: grid;
+            grid-template-columns: 1fr; /* Mobile Default */
+            gap: 20px;
+            flex: 1;
+            min-height: 0; /* Prevents container from expanding beyond viewport */
+        }
+
+        /* SIDEBAR (The "Study" Elements) */
+        .study-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-width: 260px;
+        }
+
+        .status-line {
+            font-size: 0.7rem;
+            font-family: monospace;
+            color: var(--bright-teal);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        /* APP LAUNCHER (The Grid) */
+        .app-launcher {
+            display: grid;
+            /* Auto-fit handles the "Responsive" resizing based on screen width */
+            grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+            gap: 20px;
+            padding: 10px;
+            align-content: start;
+        }
+
+        .app-icon-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Hover & Tap Feedback */
+        .app-icon-link:active { transform: scale(0.9); }
+        .app-icon-link:hover { transform: translateY(-5px); }
+
+        /* THE NATIVE SQUIRCLE */
+        .icon-box {
+            width: clamp(65px, 18vw, 95px);
+            aspect-ratio: 1 / 1;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            border-radius: 22px; /* iOS-style curvature */
+            border: 2px solid rgba(255,255,255,0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        /* Support for Custom Image Icons */
+        .icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .icon-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #fff;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 10px;
+            white-space: nowrap;
+        }
+
+        /* DESKTOP STUDY ADAPTATION */
+        @media (min-width: 1000px) {
+            .workspace-layout { 
+                grid-template-columns: 320px 1fr; 
+                gap: 30px; 
+            }
+            .app-launcher { 
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
+                gap: 35px; 
+            }
+            .icon-box { font-size: 2.8rem; }
+        }
+    </style>
+</head>
+<body>
+    
+    <canvas id="starfield-canvas"></canvas>
+
+    <div class="vanguard-page">
+        <div class="workspace-container" style="max-width: 1300px; margin: 0 auto; width:100%; display:flex; flex-direction:column; flex:1;">
+            
+            <header style="margin-bottom: 25px;">
+                <h1 style="font-family: var(--title-font); color: var(--gold); font-size: 2.2rem; margin:0; letter-spacing: 2px;">COMMAND_HUB</h1>
+                <p style="font-size: 0.8rem; color: var(--bright-teal); opacity: 0.8; letter-spacing: 1.5px; text-transform: uppercase;">Uplink Established // Welcome, Commander Q</p>
+            </header>
+
+            <div class="workspace-layout">
+                
+                <aside class="apple-glass study-sidebar">
+                    <div class="status-line">UPLINK: SECURE_PROTOCOL</div>
+                    <div class="status-line">REGION: ETERNITY_SECTOR</div>
+                    <div class="status-line" id="sync-status">SYNC: INITIALIZING...</div>
+                    <div style="flex:1"></div>
+                    <div style="font-family: var(--title-font); font-size: 0.65rem; color: var(--light-pink); text-align: center; letter-spacing: 2px;">
+                        [ VANGUARD_CORE_STABLE ]
+                    </div>
+                </aside>
+
+                <main class="apple-glass" style="overflow-y: auto;">
+                    <div class="app-launcher" id="menu-grid">
+                        </div>
+                </main>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/warp.js"></script>
+    <script src="js/system.js"></script>
+
+    <script>
+        /* =========================================================
+           VANGUARD AUTO-HYDRATION ENGINE V2.4
+           ========================================================= */
+        async function loadMenu() {
+            const grid = document.getElementById('menu-grid');
+            const syncStatus = document.getElementById('sync-status');
+            
+            try {
+                // Fetch the central database
+                const response = await fetch('database/menu.json');
+                if (!response.ok) throw new Error("DATABASE_OFFLINE");
+                const menuItems = await response.json();
+                
+                grid.innerHTML = ''; // Clear loading states
+
+                menuItems.forEach(item => {
+                    const link = document.createElement('a');
+                    link.href = item.url;
+                    link.className = 'app-icon-link';
+                    
+                    // PROTOCOL CHECK: Open external links in a separate tab
+                    if (item.url.startsWith('http')) {
+                        link.target = "_blank";
+                        link.rel = "noopener noreferrer";
+                    }
+
+                    // ASSET CHECK: Render custom icon image or emoji fallback
+                    const isImagePath = item.icon.includes('.');
+                    const iconContent = isImagePath 
+                        ? `<img src="${item.icon}" alt="${item.title}" loading="lazy">` 
+                        : `<span style="font-size: 2.2rem;">${item.icon}</span>`;
+
+                    link.innerHTML = `
+                        <div class="icon-box" style="border-color: ${item.color || 'var(--bright-teal)'}">
+                            ${iconContent}
+                        </div>
+                        <div class="icon-label">${item.title}</div>
+                    `;
+                    
+                    grid.appendChild(link);
+                });
+
+                syncStatus.innerText = "SYNC: COMPLETE";
+                syncStatus.style.color = "var(--gold)";
+
+            } catch (err) {
+                console.error("OS_ERROR:", err);
+                syncStatus.innerText = "SYNC: FAILED";
+                syncStatus.style.color = "var(--light-pink)";
+                grid.innerHTML = `
+                    <div style="color:var(--light-pink); font-family:monospace; grid-column: 1/-1; text-align:center; padding: 40px;">
+                        [CRITICAL_ERROR]: DATABASE_LINK_SEVERED<br>Ensure database/menu.json exists.
+                    </div>`;
+            }
+        }
+
+        // Initialize on boot
+        document.addEventListener('DOMContentLoaded', loadMenu);
+    </script>
+</body>
+</html>
