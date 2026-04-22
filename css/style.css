@@ -1,178 +1,155 @@
-/* VANGUARD KNIGHTS MULTIVERSE - PORTAL 01
-    AESTHETIC: ANIME VAPORWAVE / SAO / READY PLAYER ONE
-*/
+:root {
+    --neon-purple: #bc13fe;
+    --neon-cyan: #05ffa1;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+}
 
-/* --- THE FOUNDATION: RESET --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body, html {
+body {
+    background-color: #050010;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- GRID HORIZON --- */
+.grid-container {
+    position: fixed;
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    background: #050110; /* Deep void base */
-    color: white;
-    font-family: 'Orbitron', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    perspective: 500px;
+    z-index: -1;
 }
 
-/* --- THE VAPORWAVE GRID (THE HORIZON) --- */
-.vaporwave-bg {
-    background: 
-        linear-gradient(to bottom, #2d0b5a 0%, #050110 80%),
-        repeating-linear-gradient(rgba(255, 0, 255, 0.1) 0, rgba(255, 0, 255, 0.1) 1px, transparent 1px, transparent 50px),
-        repeating-linear-gradient(90deg, rgba(255, 0, 255, 0.1) 0, rgba(255, 0, 255, 0.1) 1px, transparent 1px, transparent 50px);
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+.grid {
+    position: absolute;
+    bottom: 0;
+    width: 200%;
+    height: 100%;
+    left: -50%;
+    background-image: 
+        linear-gradient(transparent 0%, var(--neon-purple) 2%, transparent 3%),
+        linear-gradient(90deg, transparent 0%, var(--neon-cyan) 2%, transparent 3%);
+    background-size: 60px 60px;
+    transform: rotateX(60deg);
+    animation: moveGrid 2s linear infinite;
 }
 
-/* --- THE SAO GLASS WINDOW (INTERFACE) --- */
-.glass-window {
-    background: rgba(10, 5, 25, 0.7); /* Dark semi-transparent */
-    backdrop-filter: blur(12px); /* Glass effect */
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(0, 255, 255, 0.4); /* Cyan edge */
-    border-radius: 20px;
-    padding: 60px 40px;
-    text-align: center;
-    box-shadow: 0 0 40px rgba(0, 255, 255, 0.1), inset 0 0 20px rgba(255, 0, 255, 0.1);
-    width: 90%;
-    max-width: 650px;
+@keyframes moveGrid {
+    0% { transform: rotateX(60deg) translateY(0); }
+    100% { transform: rotateX(60deg) translateY(60px); }
+}
+
+/* --- CRT SCANLINES --- */
+.scanlines {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 4px, 3px 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* --- GLASS UI --- */
+.ui-wrapper {
     z-index: 5;
-    position: relative;
+    text-align: center;
 }
 
-/* --- TYPOGRAPHY: COMMANDER Q'S TITLES --- */
-.presentation {
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.9);
-    text-transform: uppercase;
+.glass-window {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 3rem;
+    border-radius: 4px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.5);
+}
+
+.sub-text {
+    font-size: 0.8rem;
     letter-spacing: 4px;
     margin-bottom: 10px;
-    font-weight: 500;
 }
 
 .main-title {
-    font-size: 3rem;
-    color: #00ffff; /* Cyber Cyan */
-    text-shadow: 0 0 15px #00ffff;
+    font-size: 2.5rem;
+    font-weight: 900;
     line-height: 1.2;
-    font-weight: 900;
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
 }
 
-.subtitle {
-    font-size: 1.8rem;
-    color: #ff00ff; /* Neon Magenta */
-    text-shadow: 0 0 12px #ff00ff;
-    display: block;
+.glow {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
 }
 
-/* --- THE NEON START BUTTON (FLICKERING LOGIC) --- */
-#start-btn {
+/* --- SLICE BUTTON --- */
+.btn-slice {
     position: relative;
-    background: rgba(0, 255, 255, 0.05);
-    border: 3px solid #00ffff;
-    border-radius: 8px;
-    padding: 20px 60px;
+    background: transparent;
+    border: none;
     cursor: pointer;
-    font-size: 2.2rem;
-    color: #00ffff;
-    font-weight: 900;
     font-family: 'Orbitron', sans-serif;
-    margin-top: 40px;
-    text-transform: uppercase;
-    transition: all 0.2s ease;
-    
-    /* Neon Pulse Animation */
-    animation: neon-flicker 3s infinite;
+    font-size: 1.5rem;
+    color: #fff;
+    width: 250px;
+    height: 60px;
 }
 
-#start-btn:hover {
-    background: rgba(0, 255, 255, 0.15);
-    transform: scale(1.05);
-}
-
-/* Flickering Keyframes */
-@keyframes neon-flicker {
-    0%, 18%, 22%, 25%, 53%, 57%, 100% {
-        box-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff, inset 0 0 5px #00ffff;
-        opacity: 1;
-    }
-    20%, 24%, 55% {
-        box-shadow: none;
-        opacity: 0.7;
-    }
-}
-
-/* --- THE SLICE ANIMATION LOGIC --- */
-.slice {
-    display: block;
-    position: relative;
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
-}
-
-/* This cuts the text into two halves visually */
-.top {
-    clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
-}
-
-.bottom {
-    clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+.btn-top, .btn-bottom {
     position: absolute;
-    top: 20px; /* Aligns perfectly over the top slice */
-    left: 60px; /* Matches the padding of the button */
-    width: calc(100% - 120px);
-}
-
-/* Action: Triggered by JavaScript on Click */
-.sliced {
-    border-color: transparent !important;
-    box-shadow: none !important;
-    pointer-events: none;
-}
-
-.sliced .top {
-    transform: translate(60px, -120px) rotate(-15deg);
-    opacity: 0;
-}
-
-.sliced .bottom {
-    transform: translate(-60px, 120px) rotate(15deg);
-    opacity: 0;
-}
-
-/* --- SCREEN TRANSITION --- */
-#overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
+    height: 50%;
+    left: 0;
+    background: var(--neon-purple);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.4s cubic-bezier(0.7, 0, 0.3, 1);
+    animation: flicker 1.5s infinite;
+}
+
+.btn-top { top: 0; align-items: flex-end; }
+.btn-bottom { bottom: 0; align-items: flex-start; }
+
+.btn-top span, .btn-bottom span {
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    92% { opacity: 1; }
+    94% { opacity: 0.4; }
+    96% { opacity: 0.9; }
+    98% { opacity: 0.2; }
+}
+
+/* Sliced State */
+.btn-slice.slicing .btn-top { transform: translateY(-100%); }
+.btn-slice.slicing .btn-bottom { transform: translateY(100%); }
+
+/* Fade Overlay */
+#fade-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
     background: black;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 999;
+    transition: opacity 0.8s ease;
+    z-index: 20;
 }
 
-.fade-out {
-    opacity: 1 !important;
-}
-
-/* --- RESPONSIVE ADJUSTMENT --- */
-@media (max-width: 600px) {
-    .main-title { font-size: 2rem; }
-    .subtitle { font-size: 1.2rem; }
-    #start-btn { font-size: 1.5rem; padding: 15px 30px; }
-    .bottom { left: 30px; width: calc(100% - 60px); }
-}
+#fade-overlay.active { opacity: 1; }
