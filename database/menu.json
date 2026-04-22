@@ -20,6 +20,13 @@
       "iconType": "image",
       "link": "apps/drift.html",
       "external": false
+    },
+    {
+      "name": "Music Player",
+      "iconValue": "images/icons/tunes.png",
+      "iconType": "image",
+      "link": "apps/tunes.html",
+      "external": false
     }
   ]
 }
