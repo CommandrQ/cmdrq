@@ -15,7 +15,7 @@
             --apple-blur: blur(20px);
         }
 
-        /* --- RESET & MOBILE OPTIMIZATION --- */
+        /* --- GLOBAL RESET & FLUIDITY --- */
         * {
             margin: 0;
             padding: 0;
@@ -34,11 +34,11 @@
             overflow-x: hidden;
         }
 
-        /* --- VAPORWAVE BACKGROUNDS --- */
+        /* --- BACKGROUND ARCHITECTURE --- */
         .scanlines {
             position: fixed;
-            top: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
             background-size: 100% 3px;
             pointer-events: none;
             z-index: 100;
@@ -60,7 +60,7 @@
             background-size: 40px 40px;
             transform: rotateX(60deg);
             opacity: 0.25;
-            animation: moveGrid 5s linear infinite;
+            animation: moveGrid 6s linear infinite;
         }
 
         @keyframes moveGrid {
@@ -68,10 +68,10 @@
             100% { transform: rotateX(60deg) translateY(40px); }
         }
 
-        /* --- UI WRAPPER --- */
+        /* --- INTERFACE LAYOUT --- */
         .interface-wrapper {
             flex: 1;
-            padding: clamp(20px, 5vw, 60px) 20px;
+            padding: clamp(20px, 5vw, 60px) 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -80,131 +80,138 @@
 
         .glass-panel {
             width: 100%;
-            max-width: 700px;
+            max-width: 720px;
             background: var(--glass);
             backdrop-filter: var(--apple-blur);
             -webkit-backdrop-filter: var(--apple-blur);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 24px;
-            padding: clamp(25px, 6vw, 40px);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: clamp(1.5rem, 4vw, 3rem);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+            margin-bottom: 30px;
         }
 
-        /* --- PROFILE IDENTITY --- */
+        /* --- PROFILE SECTION --- */
         .profile-header {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 2.5rem;
         }
 
         .profile-pic {
-            width: 140px;
-            height: 140px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
             border: 3px solid var(--cyan);
-            margin: 0 auto 20px;
-            /* UPDATED ASSET PATH */
-            background: url('images/commanderqhs.png') center/cover no-repeat;
+            margin: 0 auto 1rem;
+            /* Placeholder: Replace 'profile.jpg' with your actual image path */
+            background: url('images/profile.jpg') center/cover no-repeat, #111;
             box-shadow: 0 0 25px rgba(5, 255, 161, 0.4);
         }
 
         .profile-name {
-            font-size: clamp(1.4rem, 6vw, 2rem);
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
             font-weight: 900;
-            color: #fff;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
         }
 
         .profile-title {
             font-size: 0.75rem;
             color: var(--cyan);
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            font-weight: 400;
         }
 
-        /* --- BIO INTEGRATION --- */
+        /* --- ABOUT ME TAB --- */
         .about-tab {
             background: rgba(0,0,0,0.4);
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 35px;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
             border-left: 4px solid var(--purple);
         }
 
         .tab-label {
             font-size: 0.65rem;
-            opacity: 0.5;
-            margin-bottom: 12px;
+            opacity: 0.6;
+            margin-bottom: 0.8rem;
             display: block;
             letter-spacing: 2px;
         }
 
         .bio-text {
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            font-size: 0.95rem;
             line-height: 1.7;
-            color: rgba(255,255,255,0.95);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         }
 
         /* --- DYNAMIC APP GRID --- */
         .app-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
             width: 100%;
         }
 
         .app-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px;
-            padding: 25px 15px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
             text-align: center;
             text-decoration: none;
             color: #fff;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .app-card:hover {
-            background: rgba(188, 19, 254, 0.2);
-            border-color: var(--purple);
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(188, 19, 254, 0.2);
+            background: var(--purple);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(188, 19, 254, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
-        .app-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
-        .app-name { font-size: 0.75rem; font-weight: 900; letter-spacing: 2px; color: var(--cyan); }
+        /* Icon Handling */
+        .app-icon { font-size: 1.8rem; margin-bottom: 12px; display: block; }
+        .app-img-icon {
+            width: 36px; height: 36px;
+            object-fit: contain;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 5px var(--cyan));
+        }
+        .app-name { font-size: 0.7rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
 
-        /* --- MISSION FOOTER --- */
+        /* --- DYNAMIC FOOTER --- */
         .vanguard-footer {
-            padding: 30px;
+            padding: 25px;
             text-align: center;
             z-index: 20;
         }
 
         .footer-content {
             font-size: 0.7rem;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             color: #fff;
             text-transform: uppercase;
-            transition: opacity 0.6s ease;
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        .pulse { animation: pulseWhite 2.5s infinite ease-in-out; }
+        .pulse { animation: pulseWhite 2s infinite ease-in-out; }
 
         @keyframes pulseWhite {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 1; text-shadow: 0 0 10px #fff; }
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; text-shadow: 0 0 10px #fff; transform: scale(1.02); }
         }
 
         /* MOBILE OVERRIDES */
         @media (max-width: 480px) {
-            .app-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-            .glass-panel { padding: 25px 15px; }
-            .profile-pic { width: 110px; height: 110px; }
+            .app-grid { grid-template-columns: repeat(2, 1fr); }
+            .glass-panel { padding: 1.5rem 1rem; }
+            .profile-pic { width: 90px; height: 90px; }
         }
     </style>
 </head>
@@ -216,16 +223,16 @@
     <main class="interface-wrapper">
         <div class="glass-panel">
             
-            <section class="profile-header">
+            <header class="profile-header">
                 <div class="profile-pic"></div>
                 <h2 class="profile-name">Commander Q</h2>
                 <p class="profile-title">Captain Commander of the Vanguard Knights</p>
-            </section>
+            </header>
 
             <section class="about-tab">
-                <span class="tab-label">// MISSION_PROFILE_UPDATED</span>
+                <span class="tab-label">// PERS_HISTORY_LOG</span>
                 <p class="bio-text">
-                    I am a self-taught developer and prior Armed Forces veteran, blending tactical discipline with high-end digital architecture. My experience spans from operational excellence at <strong>Apple</strong> to solution architecture at <strong>Best Buy</strong>. I focus on building resilient, aesthetic systems that empower, educate, and elevate.
+                    I am a self-taught developer and prior <strong>Armed Forces veteran</strong>, where I forged the discipline that drives my code today. My operational history includes technical roles at <strong>Apple</strong> and <strong>Best Buy</strong>, environments that demanded high-end precision and elite user standards. Now, I architect digital frontiers through pure logic and relentless execution.
                 </p>
             </section>
 
@@ -244,46 +251,55 @@
             const appGrid = document.getElementById('app-grid');
             const footerText = document.getElementById('footer-text');
 
-            // --- 1. DYNAMIC DATA FETCH ---
+            // --- TACTICAL DATA FETCHING ---
             fetch('database/menu.json')
                 .then(res => res.json())
                 .then(data => {
-                    appGrid.innerHTML = data.apps.map(app => `
-                        <a href="${app.link}" class="app-card">
-                            <span class="app-icon">${app.icon}</span>
-                            <span class="app-name">${app.name}</span>
-                        </a>
-                    `).join('');
+                    renderApps(data.apps);
                 })
                 .catch(err => {
-                    console.warn("Database offline. Initializing fallback protocols.");
-                    const fallbacks = [
-                        { name: "REPOS", icon: "⚔️", link: "https://github.com/cmdrq0" },
-                        { name: "LINKEDIN", icon: "📡", link: "#" },
-                        { name: "CONTACT", icon: "📧", link: "mailto:your@email.com" },
-                        { name: "HOME", icon: "🛡️", link: "index.html" }
-                    ];
-                    appGrid.innerHTML = fallbacks.map(app => `
-                        <a href="${app.link}" class="app-card">
-                            <span class="app-icon">${app.icon}</span>
-                            <span class="app-name">${app.name}</span>
-                        </a>
-                    `).join('');
+                    console.error("Link to Data Core lost. Loading emergency fallbacks.");
+                    renderApps([
+                        { "name": "REPOSITORY", "iconValue": "⚔️", "iconType": "emoji", "link": "https://github.com/cmdrq0", "external": true },
+                        { "name": "HOME", "iconValue": "🛡️", "iconType": "emoji", "link": "index.html", "external": false }
+                    ]);
                 });
 
-            // --- 2. FOOTER MISSION ROTATION ---
-            let showMission = false;
+            function renderApps(apps) {
+                appGrid.innerHTML = apps.map(app => {
+                    // Decide between Emoji or Image icon
+                    const iconContent = app.iconType === 'image' 
+                        ? `<img src="${app.iconValue}" alt="${app.name}" class="app-img-icon">` 
+                        : `<span class="app-icon">${app.iconValue}</span>`;
+
+                    // Handle External Security
+                    const target = app.external ? 'target="_blank" rel="noopener noreferrer"' : '';
+
+                    return `
+                        <a href="${app.link}" class="app-card" ${target}>
+                            ${iconContent}
+                            <span class="app-name">${app.name}</span>
+                        </a>
+                    `;
+                }).join('');
+            }
+
+            // --- FOOTER MISSION ROTATION ---
+            let showValues = false;
             setInterval(() => {
                 footerText.style.opacity = 0;
+                footerText.style.transform = "translateY(5px)";
+                
                 setTimeout(() => {
-                    if (!showMission) {
+                    if (!showValues) {
                         footerText.innerText = "Empower. Educate. Elevate.";
                     } else {
                         footerText.innerText = "Built by Commander Q 2026";
                     }
                     footerText.style.opacity = 1;
-                    showMission = !showMission;
-                }, 600);
+                    footerText.style.transform = "translateY(0)";
+                    showValues = !showValues;
+                }, 500);
             }, 3000);
         });
     </script>
