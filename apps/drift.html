@@ -80,15 +80,16 @@
         }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* --- TITLES --- */
+        /* --- TYPOGRAPHY --- */
         .header-tag { font-size: 0.5rem; color: var(--cyan); letter-spacing: 2px; margin-bottom: 5px; }
         .video-title { font-size: 0.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; }
 
-        /* DESKTOP TYPOGRAPHY INCREASE */
+        /* DESKTOP SCALING */
         @media (min-width: 1024px) {
             .header-tag { font-size: 0.65rem; }
             .video-title { font-size: 1.1rem; letter-spacing: 3px; }
-            .footer-content { font-size: 0.85rem !important; }
+            /* Footer text shrunk slightly on desktop compared to previous 0.85rem */
+            .footer-content { font-size: 0.7rem !important; letter-spacing: 4px !important; }
         }
 
         /* --- VERTICAL OPTION NEXUS --- */
@@ -127,11 +128,12 @@
         }
         .session-btn.active { background: var(--purple); box-shadow: 0 0 10px var(--purple); border-color: #fff; }
 
-        /* --- FOOTER --- */
+        /* --- REFINED FOOTER --- */
         .vanguard-footer { margin-top: 15px; text-align: center; }
-        .footer-content { font-size: 0.55rem; letter-spacing: 3px; color: #fff; text-transform: uppercase; }
+        /* Footer text shrunk on mobile from 0.55rem to 0.45rem */
+        .footer-content { font-size: 0.45rem; letter-spacing: 4px; color: #fff; text-transform: uppercase; }
         .pulse { animation: pulseWhite 2s infinite ease-in-out; }
-        @keyframes pulseWhite { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+        @keyframes pulseWhite { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
 
         .glitch-flash { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--cyan); opacity: 0; pointer-events: none; }
         .active-glitch { animation: glitchEffect 0.2s ease-out; }
