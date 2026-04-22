@@ -1,26 +1,32 @@
-[
-    {
-        "title": "Drift",
-        "url": "apps/drift.html",
-        "icon": "images/icons/drift.png",
-        "color": "#01cdfe"
-    },
-    {
-        "title": "Tunes",
-        "url": "apps/tunes.html",
-        "icon": "images/icons/tunes.png",
-        "color": "#ff71ce"
-    },
-    {
-        "title": "Archive",
-        "url": "apps/aboutme.html",
-        "icon": "images/icons/aboutme.png",
-        "color": "#ffd700"
-    },
-    {
-        "title": "Blog",
-        "url": "https://substack.com/@commandrq",
-        "icon": "images/icons/blog.png",
-        "color": "#01cdfe"
-    }
-]
+{
+    "apps": [
+        {
+            "id": "exp_01",
+            "name": "DEPLOYMENTS",
+            "description": "GitHub Repository: cmdrq0",
+            "icon": "⚔️",
+            "link": "https://github.com/cmdrq0"
+        },
+        {
+            "id": "exp_02",
+            "name": "APPLE_INTEL",
+            "description": "Service & Software Standards",
+            "icon": "🍎",
+            "link": "#"
+        },
+        {
+            "id": "exp_03",
+            "name": "VETERAN_LOG",
+            "description": "Armed Forces Experience",
+            "icon": "🎖️",
+            "link": "#"
+        },
+        {
+            "id": "exp_04",
+            "name": "BEST_BUY_OPS",
+            "description": "Client Solutions & Tech Support",
+            "icon": "🏷️",
+            "link": "#"
+        }
+    ]
+}
