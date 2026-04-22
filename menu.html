@@ -1,24 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Vanguard_OS // Menu</title>
-    <link rel="stylesheet" href="css/global.css">
-</head>
-<body>
-    <canvas id="starfield-canvas"></canvas>
-    <div class="vanguard-page">
-        <h1 style="font-family:var(--title-font); text-align:center; color:var(--gold);">COMMAND_MENU</h1>
-        <main class="window-manager">
-            <section class="apple-glass" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:20px;">
-                <a href="apps/drift.html" class="back-btn" style="text-align:center;">DRIFT</a>
-                <a href="apps/tunes.html" class="back-btn" style="text-align:center;">TUNES</a>
-                <a href="apps/aboutme.html" class="back-btn" style="text-align:center;">ARCHIVE</a>
-            </section>
-        </main>
-    </div>
-    <script src="js/warp.js"></script>
-    <script src="js/system.js"></script>
-</body>
-</html>
+/* VANGUARD_OS // GLOBAL KERNEL V2.3 */
+:root {
+    --bright-teal: #01cdfe;
+    --light-pink: #ff71ce;
+    --gold: #ffd700;
+    --void-black: #000000;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --title-font: "ArcadeClassic", "Courier New", monospace;
+    --main-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+}
+
+html, body {
+    background: var(--void-black);
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    overflow: hidden !important;
+    font-family: var(--main-font);
+    color: #fff;
+    /* INITIAL STATE FOR FADE-IN */
+    animation: fadeFromBlack 1.2s ease-out forwards;
+}
+
+@keyframes fadeFromBlack {
+    0% { background: #000; opacity: 0; }
+    100% { background: transparent; opacity: 1; }
+}
+
+.vanguard-page {
+    position: relative; 
+    z-index: 100;
+    display: flex; 
+    flex-direction: column; 
+    width: 100%; 
+    height: 100dvh; 
+    box-sizing: border-box;
+    padding-top: calc(80px + env(safe-area-inset-top)) !important;
+    padding-bottom: 70px !important;
+    padding-left: 20px; padding-right: 20px;
+}
+
+/* THE SHARED WINDOW SYSTEM */
+.workspace-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.apple-glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid rgba(255,255,255,0.25);
+    border-radius: 24px;
+    padding: 20px;
+}
+
+#starfield-canvas { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
