@@ -1,109 +1,88 @@
 :root {
     --neon-purple: #bc13fe;
     --neon-cyan: #05ffa1;
-    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --apple-blur: blur(20px);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; /* Mobile optimization */
 }
 
 body {
-    background-color: #050010;
+    background-color: #030008;
     color: #fff;
     font-family: 'Orbitron', sans-serif;
     height: 100vh;
+    width: 100vw;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* --- GRID HORIZON --- */
-.grid-container {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    perspective: 500px;
-    z-index: -1;
-}
-
-.grid {
-    position: absolute;
-    bottom: 0;
-    width: 200%;
-    height: 100%;
-    left: -50%;
-    background-image: 
-        linear-gradient(transparent 0%, var(--neon-purple) 2%, transparent 3%),
-        linear-gradient(90deg, transparent 0%, var(--neon-cyan) 2%, transparent 3%);
-    background-size: 60px 60px;
-    transform: rotateX(60deg);
-    animation: moveGrid 2s linear infinite;
-}
-
-@keyframes moveGrid {
-    0% { transform: rotateX(60deg) translateY(0); }
-    100% { transform: rotateX(60deg) translateY(60px); }
-}
-
-/* --- CRT SCANLINES --- */
-.scanlines {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    background-size: 100% 4px, 3px 100%;
-    pointer-events: none;
-    z-index: 10;
-}
-
-/* --- GLASS UI --- */
-.ui-wrapper {
-    z-index: 5;
-    text-align: center;
-}
-
-.glass-window {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 3rem;
-    border-radius: 4px;
-    box-shadow: 0 0 40px rgba(0,0,0,0.5);
+/* --- RESPONSIVE TYPOGRAPHY --- */
+h1 {
+    font-size: clamp(1.5rem, 8vw, 3rem); /* Scales based on screen size */
+    letter-spacing: 2px;
 }
 
 .sub-text {
-    font-size: 0.8rem;
-    letter-spacing: 4px;
-    margin-bottom: 10px;
+    font-size: clamp(0.6rem, 2vw, 0.9rem);
+    letter-spacing: 0.3em;
+    opacity: 0.8;
 }
 
-.main-title {
-    font-size: 2.5rem;
-    font-weight: 900;
-    line-height: 1.2;
-    margin-bottom: 2rem;
+/* --- LAYOUT & GLASS --- */
+.ui-viewport {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    z-index: 5;
 }
 
-.glow {
-    color: var(--neon-cyan);
-    text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+.glass-window {
+    width: 100%;
+    max-width: 600px; /* Limits size on desktop */
+    background: var(--glass-bg);
+    backdrop-filter: var(--apple-blur);
+    -webkit-backdrop-filter: var(--apple-blur);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: clamp(2rem, 10vw, 4rem) 1.5rem;
+    border-radius: 12px; /* Apple-style rounded corners */
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    transition: transform 0.1s;
 }
 
-/* --- SLICE BUTTON --- */
+/* --- THE SHAKE ANIMATION --- */
+@keyframes shake {
+    0% { transform: translate(0, 0); }
+    10% { transform: translate(-5px, -2px); }
+    30% { transform: translate(5px, 2px); }
+    50% { transform: translate(-5px, 2px); }
+    70% { transform: translate(5px, -2px); }
+    90% { transform: translate(-2px, 1px); }
+    100% { transform: translate(0, 0); }
+}
+
+.shaking {
+    animation: shake 0.2s infinite;
+}
+
+/* --- SLICE BUTTON REFINED --- */
 .btn-slice {
     position: relative;
     background: transparent;
     border: none;
     cursor: pointer;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.5rem;
-    color: #fff;
-    width: 250px;
+    width: clamp(200px, 60vw, 300px);
     height: 60px;
+    margin-top: 2.5rem;
 }
 
 .btn-top, .btn-bottom {
@@ -113,43 +92,79 @@ body {
     left: 0;
     background: var(--neon-purple);
     overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.4s cubic-bezier(0.7, 0, 0.3, 1);
+    transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
     animation: flicker 1.5s infinite;
 }
 
-.btn-top { top: 0; align-items: flex-end; }
-.btn-bottom { bottom: 0; align-items: flex-start; }
+.btn-top { top: 0; }
+.btn-bottom { bottom: 0; }
 
 .btn-top span, .btn-bottom span {
+    position: absolute;
+    width: 100%;
     height: 60px;
-    display: flex;
-    align-items: center;
+    left: 0;
+    line-height: 60px;
+    text-align: center;
+    display: block;
+    font-weight: 900;
+    font-size: clamp(1rem, 4vw, 1.4rem);
 }
 
-@keyframes flicker {
-    0%, 100% { opacity: 1; }
-    92% { opacity: 1; }
-    94% { opacity: 0.4; }
-    96% { opacity: 0.9; }
-    98% { opacity: 0.2; }
+.btn-top span { top: 0; }
+.btn-bottom span { bottom: 0; }
+
+/* Slicing State */
+.slicing .btn-top { transform: translateY(-150%) rotate(-5deg); }
+.slicing .btn-bottom { transform: translateY(150%) rotate(5deg); }
+
+/* --- BACKGROUND STYLES (GRID & CRT) --- */
+.grid-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    perspective: 1000px;
+    z-index: -1;
 }
 
-/* Sliced State */
-.btn-slice.slicing .btn-top { transform: translateY(-100%); }
-.btn-slice.slicing .btn-bottom { transform: translateY(100%); }
+.grid {
+    position: absolute;
+    bottom: -30%; width: 200%; height: 100%; left: -50%;
+    background-image: 
+        linear-gradient(transparent 0%, var(--neon-purple) 2%, transparent 3%),
+        linear-gradient(90deg, transparent 0%, var(--neon-cyan) 2%, transparent 3%);
+    background-size: 50px 50px;
+    transform: rotateX(60deg);
+    animation: moveGrid 3s linear infinite;
+}
 
-/* Fade Overlay */
+@keyframes moveGrid {
+    0% { transform: rotateX(60deg) translateY(0); }
+    100% { transform: rotateX(60deg) translateY(50px); }
+}
+
+.scanlines {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+    background-size: 100% 3px;
+    pointer-events: none;
+    z-index: 10;
+}
+
 #fade-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     background: black;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.8s ease;
-    z-index: 20;
+    transition: opacity 1s ease;
+    z-index: 100;
 }
 
 #fade-overlay.active { opacity: 1; }
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    95% { opacity: 0.8; }
+    97% { opacity: 0.4; }
+}
