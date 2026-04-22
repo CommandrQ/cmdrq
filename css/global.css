@@ -5,8 +5,8 @@
     --gold: #ffd700;
     --void-black: #000000;
     --glass-bg: rgba(255, 255, 255, 0.05);
+    --title-font: "ArcadeClassic", "Courier New", monospace;
     --main-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-    --title-font: "ArcadeClassic", monospace;
 }
 
 html, body {
@@ -18,26 +18,31 @@ html, body {
     color: #fff;
 }
 
-/* THE MASTER WRAPPER */
+/* MASTER WRAPPER */
 .vanguard-page {
-    position: relative; z-index: 100;
-    display: flex; flex-direction: column;
-    width: 100%; height: 100dvh;
+    position: relative; 
+    z-index: 100;
+    display: flex; 
+    flex-direction: column; 
+    width: 100%; 
+    height: 100dvh; 
     box-sizing: border-box;
-    /* FIX: Increased padding to prevent scrunching under header */
+    /* CLEARANCE: 110px top prevents scrunching; 60px bottom clears footer */
     padding-top: calc(110px + env(safe-area-inset-top)) !important;
-    padding-bottom: 60px; /* Space for the bottom footer */
-    padding-left: 20px; padding-right: 20px;
+    padding-bottom: 70px !important;
+    padding-left: 20px; 
+    padding-right: 20px;
     animation: smoothGlide 0.8s cubic-bezier(0.2, 1, 0.3, 1) both;
 }
 
-/* SHARED GLASS CLASS */
 .apple-glass {
     background: var(--glass-bg);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid rgba(255,255,255,0.25);
     border-radius: 24px;
+    padding: 25px;
 }
 
 @keyframes smoothGlide {
@@ -45,5 +50,4 @@ html, body {
     100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Layer 0 Canvas */
 #starfield-canvas { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
