@@ -12,7 +12,7 @@
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent; /* Fixes mobile tap highlight */
 }
 
 body {
@@ -25,7 +25,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; 
+  overflow: hidden; /* Prevent body scrolling entirely */
   position: relative;
 }
 
@@ -76,15 +76,6 @@ body {
   flex-direction: column;
   padding: 15px;
   z-index: 10;
-}
-
-/* DESKTOP OVERRIDE: Widen the box and make the video bigger */
-@media (min-width: 768px) {
-  .main-window {
-    max-width: 700px; 
-    height: 90vh;
-    padding: 25px;
-  }
 }
 
 /* Header */
@@ -241,4 +232,20 @@ body {
   color: var(--highlight);
   font-weight: 600;
   box-shadow: 0 0 10px rgba(191, 123, 255, 0.2);
+}
+
+/* --- DESKTOP OVERRIDE --- */
+/* Widen the box, but constrain the video size slightly so it's not massive */
+@media (min-width: 768px) {
+  .main-window {
+    max-width: 700px; 
+    height: 90vh;
+    padding: 25px;
+  }
+  
+  /* Shrinks the video slightly and centers it on desktop */
+  .video-section {
+    width: 80%;
+    margin: 0 auto 15px auto;
+  }
 }
