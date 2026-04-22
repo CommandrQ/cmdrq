@@ -16,7 +16,7 @@
     },
     {
       "name": "Dreamscape Drift",
-      "iconValue": "images/icon/drift.png",
+      "iconValue": "images/icons/drift.png",
       "iconType": "image",
       "link": "drift.html",
       "external": false
