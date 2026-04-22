@@ -2,72 +2,143 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>VANGUARD_OS // SELECT MODULE</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vanguard OS | Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --purple: #bc13fe;
+            --cyan: #05ffa1;
+            --glass: rgba(255, 255, 255, 0.08);
+            --blur: blur(20px);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background: #030008;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            height: 100vh; width: 100vw;
+            overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+
+        /* --- BACKGROUND & CRT --- */
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 3px; pointer-events: none; z-index: 50;
+        }
+
+        .grid-container { position: fixed; top: 0; width: 100%; height: 100%; perspective: 1000px; z-index: -1; }
+        .grid {
+            position: absolute; bottom: -30%; width: 200%; height: 100%; left: -50%;
+            background-image: linear-gradient(transparent 0%, var(--purple) 2%, transparent 3%), linear-gradient(90deg, transparent 0%, var(--cyan) 2%, transparent 3%);
+            background-size: 50px 50px; transform: rotateX(60deg); opacity: 0.2;
+        }
+
+        /* --- UI LAYOUT --- */
+        .command-interface {
+            flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; z-index: 10;
+        }
+
+        .system-header {
+            width: 100%; max-width: 800px; margin-bottom: 2rem; padding: 10px;
+            border-bottom: 1px solid var(--cyan); text-align: left;
+        }
+
+        .status-text { font-size: 0.6rem; letter-spacing: 2px; color: var(--cyan); }
+
+        /* --- APP GRID (DYNAMNICALLY POPULATED) --- */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 20px; width: 100%; max-width: 800px;
+        }
+
+        .app-tile {
+            background: var(--glass);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px; text-decoration: none; color: #fff;
+            text-align: center; transition: 0.3s all ease;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        .app-tile:hover {
+            border-color: var(--cyan);
+            background: rgba(5, 255, 161, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .app-icon { font-size: 2rem; margin-bottom: 10px; }
+        .app-name { font-size: 0.7rem; font-weight: 900; letter-spacing: 1px; }
+
+        /* --- FOOTER --- */
+        .vanguard-footer { padding: 20px; text-align: center; }
+        .footer-content { font-size: 0.7rem; letter-spacing: 2px; color: #fff; transition: opacity 0.5s; }
+        .pulse { animation: pulseWhite 2s infinite ease-in-out; }
+        @keyframes pulseWhite { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; text-shadow: 0 0 10px #fff; } }
+    </style>
 </head>
-<body class="character-select">
+<body>
 
-    <div id="starfield"></div>
-    <div class="crt-overlay"></div>
+    <div class="scanlines"></div>
+    <div class="grid-container"><div class="grid"></div></div>
 
-    <header class="select-header">
-        <h1 class="flash-title">SELECT YOUR REALITY</h1>
-        <div class="timer">99</div>
-    </header>
-
-    <main class="selection-arena">
-        <section class="preview-panel">
-            <div class="portrait-frame">
-                <div id="module-portrait" class="portrait-placeholder"></div>
-                <div class="scanline-effect"></div>
+    <main class="command-interface">
+        <header class="system-header">
+            <p class="status-text">UNIT: COMMANDER Q // REPO: CMDRQ0 // STATUS: ONLINE</p>
+        </header>
+        
+        <div id="app-grid" class="app-grid">
             </div>
-            <div class="matrix-voice-box">
-                <header>V_OS // SENTIENCE_FEED</header>
-                <p id="module-description">SCANNING SECTOR_07... CHOOSE A DESTINATION, OPERATOR.</p>
-            </div>
-        </section>
-
-        <section class="grid-panel">
-            <div class="app-grid">
-                <div class="app-tile active" 
-                     onmouseenter="previewModule('ARCHIVE', 'Access the forbidden history of the Old Net.', 'images/portraits/archive.png')"
-                     onclick="window.location.href='apps/archive.html'">
-                    <span class="tile-label">ARCHIVE</span>
-                </div>
-
-                <div class="app-tile" 
-                     onmouseenter="previewModule('MAP_VIEWER', 'Real-time telemetry of the Neo-Kyoto sprawl.', 'images/portraits/map.png')"
-                     onclick="window.location.href='apps/map.html'">
-                    <span class="tile-label">MAPS</span>
-                </div>
-
-                <div class="app-tile" 
-                     onmouseenter="previewModule('COMMS', 'Intercept thought-streams from the hive mind.', 'images/portraits/comms.png')"
-                     onclick="window.location.href='apps/comms.html'">
-                    <span class="tile-label">COMMS</span>
-                </div>
-
-                <div class="app-tile locked" 
-                     onmouseenter="previewModule('LOCKED', 'Insufficient Citizen Clearance Level.', 'images/portraits/locked.png')">
-                    <span class="tile-label">?????</span>
-                </div>
-                
-                </div>
-
-            <div class="stat-sheet">
-                <div class="stat-line">STABILITY: <div class="bar"><div class="fill" style="width: 80%;"></div></div></div>
-                <div class="stat-line">LATENCY: <div class="bar"><div class="fill" style="width: 15%;"></div></div></div>
-                <div class="stat-line">DANGER: <div class="bar"><div class="fill" style="width: 40%;"></div></div></div>
-            </div>
-        </section>
     </main>
 
-    <footer class="system-footer">
-        <button class="btn-exit" onclick="systemLogout()">[ TERMINATE LINK ]</button>
-        <span class="node-id">NODE: KY_NODE_07</span>
+    <footer class="vanguard-footer">
+        <div id="footer-text" class="footer-content pulse">Built by Commander Q 2026</div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const appGrid = document.getElementById('app-grid');
+            const footerText = document.getElementById('footer-text');
+
+            // --- 1. DATA FETCHING (THE SKILL) ---
+            fetch('database/menu.json')
+                .then(response => response.json())
+                .then(data => {
+                    renderApps(data.apps);
+                })
+                .catch(err => {
+                    console.error("Link Failure:", err);
+                    appGrid.innerHTML = `<p style="color:red">ERROR: DATABASE_LINK_OFFLINE</p>`;
+                });
+
+            function renderApps(apps) {
+                appGrid.innerHTML = apps.map(app => `
+                    <a href="${app.link}" class="app-tile">
+                        <div class="app-icon">${app.icon}</div>
+                        <div class="app-name">${app.name}</div>
+                    </a>
+                `).join('');
+            }
+
+            // --- 2. FOOTER ROTATION (THE VALUES) ---
+            let showMission = false;
+            setInterval(() => {
+                footerText.style.opacity = 0;
+                setTimeout(() => {
+                    footerText.innerText = showMission ? "Built by Commander Q 2026" : "Empower. Educate. Elevate.";
+                    footerText.style.opacity = 1;
+                    showMission = !showMission;
+                }, 500);
+            }, 3000);
+        });
+    </script>
 </body>
 </html>
