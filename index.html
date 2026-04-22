@@ -1,166 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Vanguard_OS // Init</title>
-    
-    <link rel="stylesheet" href="css/global.css">
-    
-    <style>
-        /* =========================================================
-           LOCAL CINEMATIC INTRO LOGIC (Overrides & Additions)
-           ========================================================= */
-        
-        /* Ensures central alignment for the intro sequence */
-        .vanguard-page {
-            justify-content: center !important;
-            align-items: center !important;
-            padding-top: 0 !important; /* Ignore top bar padding for intro */
-        }
-
-        /* THE MONITOR (Layer 1) */
-        .monitor-frame { 
-            width: 100%; 
-            max-width: 500px; /* Commander's Directive: Smaller size */
-            aspect-ratio: 16 / 9; 
-            border: 4px solid #111; 
-            border-radius: 20px; 
-            overflow: hidden; 
-            box-shadow: 0 0 50px #000; 
-            position: relative;
-            transition: all 0.6s cubic-bezier(0.7, 0, 0.3, 1);
-            /* Center the frame */
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .monitor-frame img { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* STYLIZED TAGLINE */
-        .os-tagline {
-            text-align: center;
-            font-family: var(--main-font); /* SF Pro stack */
-            color: var(--gold); /* Gold variable */
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 1rem;
-            margin-top: 25px;
-            margin-bottom: 5px;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-            font-weight: 300;
-            transition: opacity 0.3s;
-        }
-
-        /* System title just above the button */
-        .os-system-text {
-            color: #fff;
-            font-family: var(--main-font);
-            font-size: 0.7rem;
-            letter-spacing: 5px;
-            margin-bottom: 20px;
-            opacity: 0.6;
-            text-transform: uppercase;
-            text-align: center;
-            transition: opacity 0.3s;
-        }
-
-        /* THE BUTTON SLICE ENGINE (Layer 2) */
-        .press-start-btn {
-            position: relative; 
-            /* Spacing adjusted for new tagline */
-            width: 320px; height: 80px; 
-            background: transparent; border: none; cursor: pointer;
-            font-family: var(--title-font); color: var(--light-pink); font-size: 1.8rem;
-        }
-
-        /* SLICE LOGIC: Single text string per half */
-        .btn-half {
-            position: absolute; left: 0; width: 100%; height: 50%;
-            background: #000; border: 2px solid var(--light-pink);
-            overflow: hidden; transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
-        }
-        .top-half { top: 0; border-bottom: none; border-radius: 40px 40px 0 0; }
-        .top-half span { display: block; line-height: 80px; height: 40px; }
-
-        .bottom-half { bottom: 0; border-top: none; border-radius: 0 0 40px 40px; }
-        .bottom-half span { display: block; line-height: 80px; transform: translateY(-40px); }
-
-        /* Button Glow Hover */
-        .press-start-btn:not(.sliced):hover .btn-half {
-            box-shadow: 0 0 25px rgba(255, 113, 206, 0.3);
-            background: rgba(255, 113, 206, 0.1);
-        }
-
-        /* ANIMATIONS */
-        
-        /* High-frequency shake */
-        .shake { animation: rumble 0.1s infinite; }
-        @keyframes rumble {
-            0% { transform: translate(2px, 2px); }
-            50% { transform: translate(-2px, -2px); }
-            100% { transform: translate(2px, -2px); }
-        }
-
-        /* Slice off screen */
-        .sliced .top-half { transform: translateY(-100vh) rotate(-5deg); }
-        .sliced .bottom-half { transform: translateY(100vh) rotate(5deg); }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <title>Vanguard_OS | Login</title>
 </head>
-<body>
-    
-    <canvas id="starfield-canvas"></canvas>
+<body class="boot-sequence">
+    <div class="terminal-overlay"></div>
+    <main class="login-container">
+        <header>
+            <h1 class="glitch" data-text="VANGUARD_OS">VANGUARD_OS</h1>
+            <p class="system-status">SYSTEM: ONLINE | NEURAL_LINK: PENDING</p>
+        </header>
 
-    <div class="vanguard-page">
-        
-        <div class="monitor-frame" id="monitor">
-            <img src="images/intro.png" alt="Intro Sequence">
-        </div>
-
-        <div class="os-tagline" id="tagline-text">
-            <span>Commander Q:</span><br>Defender of Eternity
-        </div>
-
-        <div class="os-system-text" id="system-subtitle">A Vanguard Knights Production</div>
-
-        <button class="press-start-btn" id="start-btn" onclick="initiateBreach(this)">
-            <div class="btn-half top-half"><span>PRESS START</span></div>
-            <div class="btn-half bottom-half"><span>PRESS START</span></div>
-        </button>
-    </div>
-
-    <script src="js/warp.js"></script>
-    <script src="js/system.js"></script>
-
-    <script>
-        function initiateBreach(btn) {
-            const monitor = document.getElementById('monitor');
-            const tagline = document.getElementById('tagline-text');
-            const subtitle = document.getElementById('system-subtitle');
-
-            // 1. Violent Shake (Rumble)
-            btn.classList.add('shake');
-            monitor.classList.add('shake');
-            tagline.classList.add('shake');
-
-            setTimeout(() => {
-                // 2. Clear Shake
-                btn.classList.remove('shake');
-                monitor.classList.remove('shake');
-                tagline.classList.remove('shake');
-
-                // 3. Initiate Slice & Fade Out Text
-                btn.classList.add('sliced');
-                tagline.style.opacity = "0";
-                subtitle.style.opacity = "0";
-                
-                // Monitor collapse animation
-                monitor.style.transform = "scaleY(0)";
-                monitor.style.opacity = "0";
-
-                // 4. Uplink to Menu
-                setTimeout(() => { window.location.href = 'menu.html'; }, 600);
-            }, 600);
-        }
-    </script>
+        <section class="auth-box">
+            <div class="scan-line"></div>
+            <input type="password" placeholder="ENTER ACCESS KEY" id="access-key">
+            <button onclick="window.location.href='Menu.html'">INITIALIZE LINK</button>
+        </section>
+    </main>
 </body>
 </html>
