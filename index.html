@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vanguard_OS | Terminal Login</title>
-    
+    <title>Vanguard_OS | Public Terminal</title>
     <link rel="stylesheet" href="css/style.css">
-    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body class="boot-sequence">
@@ -16,7 +14,7 @@
     <main class="login-container">
         <header class="os-header">
             <h1 class="glitch" data-text="VANGUARD_OS">VANGUARD_OS</h1>
-            <p class="system-status">NEURAL_LINK_STATUS: <span class="highlight">WAITING...</span></p>
+            <p class="system-status">PUBLIC ACCESS NODE: <span class="highlight">SECTOR_07</span></p>
         </header>
 
         <section class="terminal-window">
@@ -28,36 +26,31 @@
             <div class="scan-line"></div>
             
             <div class="input-container">
-                <span class="prompt">ACCESS_KEY:</span>
-                <input type="password" id="access-key" placeholder="********" autocomplete="off">
+                <span class="prompt">CITIZEN_ID:</span>
+                <input type="password" id="access-key" placeholder="C-XXXX-XXXX" autocomplete="off">
             </div>
 
             <div class="action-bar">
                 <button class="btn-initialize" onclick="authorizeUser()">
-                    INITIALIZE LINK
+                    SYNCHRONIZE CREDENTIALS
                 </button>
             </div>
             
-            <div class="security-warning">
-                <small>WARNING: SECURE LINE ENFORCED BY VANGUARD_CORE</small>
+            <div class="public-notice">
+                <p>NOTICE: All network activity is logged by the Vanguard Registry. Improper use of Public Terminals is a Tier-3 Infraction.</p>
             </div>
         </section>
     </main>
 
     <footer class="os-metadata">
-        <div class="meta-item">NODE: <span class="highlight">0x772B</span></div>
-        <div class="meta-item">ENCRYPTION: <span class="highlight">RSA-4096</span></div>
-        <div class="meta-item">LOC: <span class="highlight">KY_US_RADCLIFF</span></div>
+        <div class="meta-item">UPTIME: <span class="highlight">99.98%</span></div>
+        <div class="meta-item">CONNECTED_CITIZENS: <span class="highlight">12,402</span></div>
+        <div class="meta-item">THREAT_LEVEL: <span class="stable">MINIMAL</span></div>
     </footer>
 
     <script src="js/main.js"></script>
 
     <script>
-        /**
-         * UX Enhancement: 
-         * Automatically focuses the password input so the user 
-         * doesn't have to click it after the boot sequence.
-         */
         document.addEventListener('keydown', () => {
             const input = document.getElementById('access-key');
             if (input && document.activeElement !== input) {
