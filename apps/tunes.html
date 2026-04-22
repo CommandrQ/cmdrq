@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tower of Tunes | Commander Q</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --purple: #bc13fe;
+            --cyan: #05ffa1;
+            --glass: rgba(255, 255, 255, 0.08);
+            --apple-blur: blur(20px);
+        }
+
+        /* --- SYSTEM RESET --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+
+        body {
+            background: #030008; color: #fff; font-family: 'Orbitron', sans-serif;
+            height: 100dvh; width: 100vw; display: flex; flex-direction: column; overflow: hidden;
+        }
+
+        /* --- TOWER DATA STREAM VFX --- */
+        .vfx-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: radial-gradient(circle at center, #0a001a 0%, #030008 100%); overflow: hidden;
+        }
+        .data-stream {
+            position: absolute; width: 1px; background: linear-gradient(to bottom, transparent, var(--purple), transparent);
+            opacity: 0.3; animation: streamDrop linear infinite;
+        }
+        @keyframes streamDrop { 0% { transform: translateY(-100vh); } 100% { transform: translateY(100vh); } }
+
+        /* --- TOP NAV --- */
+        .top-nav { position: absolute; top: 0; left: 0; width: 100%; padding: 15px 20px; z-index: 110; }
+        .back-btn {
+            display: inline-flex; align-items: center; text-decoration: none; color: var(--cyan);
+            font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: var(--apple-blur); border: 1px solid var(--cyan); padding: 10px 18px; border-radius: 4px; transition: 0.3s;
+        }
+
+        /* --- NEURAL CENTERING --- */
+        .interface-container {
+            flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; 
+            padding: 20px; z-index: 10;
+        }
+
+        .glass-window {
+            width: 100%; max-width: 650px; max-height: 95dvh;
+            background: var(--glass); backdrop-filter: var(--apple-blur); -webkit-backdrop-filter: var(--apple-blur);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 15px;
+            padding: clamp(10px, 3vw, 20px); text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+        }
+
+        /* --- PLAYER & CONTROLS --- */
+        .header-tag { font-size: 0.5rem; color: var(--purple); letter-spacing: 2px; margin-bottom: 5px; }
+        .now-playing { font-size: 0.8rem; font-weight: 900; text-transform: uppercase; color: var(--cyan); letter-spacing: 1px; margin-bottom: 10px; }
+
+        .player-wrapper {
+            position: relative; width: 100%; max-width: 350px; aspect-ratio: 16 / 9;
+            background: #000; border-radius: 8px; overflow: hidden; margin-bottom: 15px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            pointer-events: none; /* CRITICAL: Disables accidental YT UI touches */
+            flex-shrink: 0;
+        }
+        #yt-player { width: 100%; height: 100%; border: none; }
+
+        .media-controls { display: flex; gap: 15px; margin-bottom: 15px; width: 100%; justify-content: center; flex-shrink: 0; }
+        .ctrl-btn {
+            background: rgba(0,0,0,0.5); border: 1px solid var(--cyan); color: var(--cyan);
+            width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; cursor: pointer; transition: 0.2s;
+        }
+        .ctrl-btn:active { background: var(--cyan); color: #000; transform: scale(0.9); }
+        .ctrl-btn.play-pause { width: 60px; height: 60px; font-size: 1.5rem; background: rgba(5, 255, 161, 0.1); }
+
+        /* --- STATION TABS --- */
+        .station-tabs {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; width: 100%; margin-bottom: 10px; flex-shrink: 0;
+        }
+        .tab-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid transparent; border-bottom: 2px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5); padding: 8px 4px; font-family: 'Orbitron', sans-serif;
+            font-size: 0.55rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .tab-btn.active { color: var(--purple); border-bottom-color: var(--purple); background: rgba(188, 19, 254, 0.1); font-weight: 900; }
+
+        /* --- TACTICAL PLAYLIST NEXUS (Similar to Drift) --- */
+        .video-list-nexus {
+            display: flex; flex-direction: column; align-items: center;
+            width: 100%; max-width: 450px; flex-shrink: 0;
+        }
+        .scroll-arrow {
+            background: none; border: none; color: var(--cyan);
+            font-size: 1.2rem; cursor: pointer; padding: 2px;
+            transition: 0.3s; animation: arrowPulse 2s infinite;
+        }
+        @keyframes arrowPulse { 0%, 100% { opacity: 0.3; transform: translateY(0); } 50% { opacity: 1; transform: translateY(2px); } }
+
+        .list-viewport {
+            width: 100%; height: 110px; /* Fixed height for exactly 2 rows */
+            overflow: hidden; position: relative; margin: 4px 0;
+        }
+        .session-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+            transition: transform 0.4s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+
+        .session-btn {
+            height: 51px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; font-family: 'Orbitron', sans-serif;
+            cursor: pointer; border-radius: 4px; transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 0 5px; overflow: hidden;
+        }
+        .session-btn:hover, .session-btn.active { background: rgba(188, 19, 254, 0.2); border-color: var(--purple); box-shadow: 0 0 10px var(--purple); }
+        .session-btn .pl-title { font-size: 0.6rem; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: bold; }
+        .session-btn .pl-code { font-size: 0.45rem; color: var(--cyan); margin-top: 2px; letter-spacing: 1px; }
+
+        /* Desktop Adjustments */
+        @media (min-width: 1024px) {
+            .now-playing { font-size: 1rem; }
+            .session-grid { grid-template-columns: repeat(3, 1fr); } /* 3 cols on desktop */
+        }
+
+        /* --- FOOTER --- */
+        .vanguard-footer { margin-top: 10px; text-align: center; flex-shrink: 0; }
+        .footer-content { font-size: 0.45rem; letter-spacing: 4px; color: #fff; text-transform: uppercase; }
+        .pulse { animation: pulseWhite 2s infinite ease-in-out; }
+        @keyframes pulseWhite { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+
+        .glitch-flash { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--cyan); opacity: 0; pointer-events: none; }
+        .active-glitch { animation: glitchEffect 0.2s ease-out; }
+        @keyframes glitchEffect { 0% { opacity: 0; } 50% { opacity: 0.3; } 100% { opacity: 0; } }
+
+    </style>
+</head>
+<body>
+
+    <div class="vfx-layer" id="vfx-bg"></div>
+
+    <nav class="top-nav">
+        <a href="../menu.html" class="back-btn"> &LT; RETURN </a>
+    </nav>
+
+    <main class="interface-container">
+        <div class="glass-window">
+            
+            <header>
+                <p class="header-tag">// TOWER_OF_TUNES_LINK</p>
+                <h2 id="now-playing" class="now-playing">SYSTEM STANDBY</h2>
+            </header>
+
+            <div class="player-wrapper">
+                <div id="glitch" class="glitch-flash"></div>
+                <div id="yt-player"></div>
+            </div>
+
+            <div class="media-controls">
+                <button class="ctrl-btn" id="btn-prev">⏮</button>
+                <button class="ctrl-btn play-pause" id="btn-play">▶</button>
+                <button class="ctrl-btn" id="btn-next">⏭</button>
+            </div>
+
+            <div class="station-tabs" id="station-tabs"></div>
+
+            <div class="video-list-nexus">
+                <button class="scroll-arrow" id="prev-btn">▲</button>
+                <div class="list-viewport">
+                    <div id="playlist-grid" class="session-grid"></div>
+                </div>
+                <button class="scroll-arrow" id="next-btn">▼</button>
+            </div>
+
+            <footer class="vanguard-footer">
+                <div id="footer-text" class="footer-content pulse">Built by Commander Q 2026</div>
+            </footer>
+        </div>
+    </main>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script>
+        let ytPlayer;
+        let isPlaying = false;
+        let database = null;
+        
+        const grid = document.getElementById('playlist-grid');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        let currentRow = 0;
+        const rowHeight = 59; // Button height (51) + Gap (8)
+        let currentPlaylistCount = 0;
+
+        // --- 1. VFX Generator ---
+        const bg = document.getElementById('vfx-bg');
+        for(let i=0; i<15; i++) {
+            const stream = document.createElement('div');
+            stream.className = 'data-stream';
+            stream.style.left = Math.random() * 100 + '%';
+            stream.style.height = (Math.random() * 50 + 20) + 'vh';
+            stream.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            stream.style.animationDelay = Math.random() * 2 + 's';
+            bg.appendChild(stream);
+        }
+
+        // --- 2. YouTube API Initialization ---
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('yt-player', {
+                height: '100%',
+                width: '100%',
+                playerVars: {
+                    'controls': 0, // Native controls disabled
+                    'disablekb': 1,
+                    'modestbranding': 1,
+                    'rel': 0,
+                    'playsinline': 1
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            fetch('../database/tunes.json')
+                .then(res => res.json())
+                .then(data => {
+                    database = data;
+                    renderStations();
+                })
+                .catch(err => console.error("Database connection failed", err));
+        }
+
+        function onPlayerStateChange(event) {
+            const playBtn = document.getElementById('btn-play');
+            if (event.data == YT.PlayerState.PLAYING) {
+                playBtn.innerText = "⏸";
+                isPlaying = true;
+            } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
+                playBtn.innerText = "▶";
+                isPlaying = false;
+            }
+        }
+
+        // --- 3. Custom Media Controls ---
+        document.getElementById('btn-play').addEventListener('click', () => {
+            if (!ytPlayer) return;
+            if (isPlaying) ytPlayer.pauseVideo(); 
+            else ytPlayer.playVideo();
+        });
+        document.getElementById('btn-next').addEventListener('click', () => { if(ytPlayer) ytPlayer.nextVideo(); });
+        document.getElementById('btn-prev').addEventListener('click', () => { if(ytPlayer) ytPlayer.previousVideo(); });
+
+        // --- 4. UI & Tab Logic ---
+        const tabContainer = document.getElementById('station-tabs');
+        const titleDisplay = document.getElementById('now-playing');
+        const glitch = document.getElementById('glitch');
+
+        function renderStations() {
+            tabContainer.innerHTML = database.stations.map((station, idx) => `
+                <button class="tab-btn ${idx === 0 ? 'active' : ''}" onclick="selectStation(${idx}, this)">
+                    ${station.name}
+                </button>
+            `).join('');
+            selectStation(0, tabContainer.firstElementChild); 
+        }
+
+        window.selectStation = (stationIndex, btnEle) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            if(btnEle) btnEle.classList.add('active');
+
+            const station = database.stations[stationIndex];
+            currentPlaylistCount = station.playlists.length;
+            
+            // Reset Scroll
+            currentRow = 0;
+            grid.style.transform = `translateY(0px)`;
+
+            grid.innerHTML = station.playlists.map(pl => `
+                <button class="session-btn" onclick="loadPlaylist('${pl.id}', '${pl.title}', this)">
+                    <span class="pl-title">${pl.title}</span>
+                    <span class="pl-code">PL_${pl.id.slice(0, 4)}</span>
+                </button>
+            `).join('');
+        };
+
+        // --- 5. Scroll Nexus Logic (Matches Drift 2x2) ---
+        nextBtn.addEventListener('click', () => {
+            const columns = window.innerWidth >= 1024 ? 3 : 2;
+            const maxRows = Math.ceil(currentPlaylistCount / columns);
+            if (currentRow < maxRows - 2) { // 2 rows visible
+                currentRow++;
+                grid.style.transform = `translateY(-${currentRow * rowHeight}px)`;
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentRow > 0) {
+                currentRow--;
+                grid.style.transform = `translateY(-${currentRow * rowHeight}px)`;
+            }
+        });
+
+        window.loadPlaylist = (playlistId, title, btnEle) => {
+            document.querySelectorAll('.session-btn').forEach(b => b.classList.remove('active'));
+            btnEle.classList.add('active');
+            
+            glitch.classList.add('active-glitch');
+            setTimeout(() => glitch.classList.remove('active-glitch'), 200);
+
+            titleDisplay.innerText = title;
+            ytPlayer.loadPlaylist({ list: playlistId, listType: 'playlist' });
+        };
+
+        // --- 6. Footer ---
+        const ft = document.getElementById('footer-text');
+        let showM = false;
+        setInterval(() => {
+            ft.style.opacity = 0;
+            setTimeout(() => {
+                ft.innerText = showM ? "Built by Commander Q 2026" : "Empower. Educate. Elevate.";
+                ft.style.opacity = 1; showM = !showM;
+            }, 500);
+        }, 3000);
+    </script>
+</body>
+</html>
