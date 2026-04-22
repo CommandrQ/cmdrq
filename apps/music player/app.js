@@ -16,7 +16,7 @@ function onYouTubeIframeAPIReady() {
       'controls': 1, 
       'modestbranding': 1,
       'rel': 0,
-      'playsinline': 1 // CRITICAL: Fixes mobile video blocking
+      'playsinline': 1 
     },
     events: {
       'onReady': onPlayerReady,
@@ -62,6 +62,8 @@ function fetchData() {
     .catch(error => console.error("Error loading stations:", error));
 }
 
+let loadTimeout; // Variable to hold our delay timer
+
 function renderPlaylists(stationIndex) {
   const container = document.getElementById('playlist-container');
   container.innerHTML = ''; 
@@ -79,16 +81,28 @@ function renderPlaylists(stationIndex) {
     btn.innerHTML = `<div>${playlist.title}</div>`;
     
     btn.addEventListener('click', () => {
+      // 1. Highlight the clicked button visually
       document.querySelectorAll('.playlist-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       
-      player.loadPlaylist({
-        list: playlist.id,
-        listType: 'playlist',
-        index: 0,
-        startSeconds: 0,
-        suggestedQuality: 'default'
-      });
+      // 2. Clear any rapid-fire clicks
+      clearTimeout(loadTimeout);
+      
+      // 3. Stop the current video to reset the player's internal state
+      if (player && player.stopVideo) {
+        player.stopVideo();
+      }
+      
+      // 4. Wait 300ms, then load the new playlist
+      loadTimeout = setTimeout(() => {
+        player.loadPlaylist({
+          list: playlist.id,
+          listType: 'playlist',
+          index: 0,
+          startSeconds: 0,
+          suggestedQuality: 'default'
+        });
+      }, 300);
     });
 
     container.appendChild(btn);
