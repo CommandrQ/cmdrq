@@ -1,170 +1,34 @@
-:root {
-    --neon-purple: #bc13fe;
-    --neon-cyan: #05ffa1;
-    --glass-bg: rgba(255, 255, 255, 0.08);
-    --apple-blur: blur(20px);
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Commander Q | Vanguard Knights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent; /* Mobile optimization */
-}
+    <div class="scanlines"></div>
 
-body {
-    background-color: #030008;
-    color: #fff;
-    font-family: 'Orbitron', sans-serif;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    <div class="grid-container">
+        <div class="grid"></div>
+    </div>
 
-/* --- RESPONSIVE TYPOGRAPHY --- */
-h1 {
-    font-size: clamp(1.5rem, 8vw, 3rem); /* Scales based on screen size */
-    letter-spacing: 2px;
-}
+    <main class="ui-viewport">
+        <div class="glass-window" id="main-ui">
+            <p class="sub-text">A VANGUARD KNIGHTS PRESENTATION</p>
+            <h1 class="main-title">COMMANDER Q:<br><span class="glow">DEFENDER OF ETERNITY</span></h1>
+            
+            <button id="start-btn" class="btn-slice">
+                <div class="btn-top"><span>PRESS START</span></div>
+                <div class="btn-bottom"><span>PRESS START</span></div>
+            </button>
+        </div>
+    </main>
 
-.sub-text {
-    font-size: clamp(0.6rem, 2vw, 0.9rem);
-    letter-spacing: 0.3em;
-    opacity: 0.8;
-}
+    <div id="fade-overlay"></div>
 
-/* --- LAYOUT & GLASS --- */
-.ui-viewport {
-    width: 100%;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    z-index: 5;
-}
-
-.glass-window {
-    width: 100%;
-    max-width: 600px; /* Limits size on desktop */
-    background: var(--glass-bg);
-    backdrop-filter: var(--apple-blur);
-    -webkit-backdrop-filter: var(--apple-blur);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    padding: clamp(2rem, 10vw, 4rem) 1.5rem;
-    border-radius: 12px; /* Apple-style rounded corners */
-    text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    transition: transform 0.1s;
-}
-
-/* --- THE SHAKE ANIMATION --- */
-@keyframes shake {
-    0% { transform: translate(0, 0); }
-    10% { transform: translate(-5px, -2px); }
-    30% { transform: translate(5px, 2px); }
-    50% { transform: translate(-5px, 2px); }
-    70% { transform: translate(5px, -2px); }
-    90% { transform: translate(-2px, 1px); }
-    100% { transform: translate(0, 0); }
-}
-
-.shaking {
-    animation: shake 0.2s infinite;
-}
-
-/* --- SLICE BUTTON REFINED --- */
-.btn-slice {
-    position: relative;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    width: clamp(200px, 60vw, 300px);
-    height: 60px;
-    margin-top: 2.5rem;
-}
-
-.btn-top, .btn-bottom {
-    position: absolute;
-    width: 100%;
-    height: 50%;
-    left: 0;
-    background: var(--neon-purple);
-    overflow: hidden;
-    transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-    animation: flicker 1.5s infinite;
-}
-
-.btn-top { top: 0; }
-.btn-bottom { bottom: 0; }
-
-.btn-top span, .btn-bottom span {
-    position: absolute;
-    width: 100%;
-    height: 60px;
-    left: 0;
-    line-height: 60px;
-    text-align: center;
-    display: block;
-    font-weight: 900;
-    font-size: clamp(1rem, 4vw, 1.4rem);
-}
-
-.btn-top span { top: 0; }
-.btn-bottom span { bottom: 0; }
-
-/* Slicing State */
-.slicing .btn-top { transform: translateY(-150%) rotate(-5deg); }
-.slicing .btn-bottom { transform: translateY(150%) rotate(5deg); }
-
-/* --- BACKGROUND STYLES (GRID & CRT) --- */
-.grid-container {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    perspective: 1000px;
-    z-index: -1;
-}
-
-.grid {
-    position: absolute;
-    bottom: -30%; width: 200%; height: 100%; left: -50%;
-    background-image: 
-        linear-gradient(transparent 0%, var(--neon-purple) 2%, transparent 3%),
-        linear-gradient(90deg, transparent 0%, var(--neon-cyan) 2%, transparent 3%);
-    background-size: 50px 50px;
-    transform: rotateX(60deg);
-    animation: moveGrid 3s linear infinite;
-}
-
-@keyframes moveGrid {
-    0% { transform: rotateX(60deg) translateY(0); }
-    100% { transform: rotateX(60deg) translateY(50px); }
-}
-
-.scanlines {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-    background-size: 100% 3px;
-    pointer-events: none;
-    z-index: 10;
-}
-
-#fade-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: black;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 1s ease;
-    z-index: 100;
-}
-
-#fade-overlay.active { opacity: 1; }
-
-@keyframes flicker {
-    0%, 100% { opacity: 1; }
-    95% { opacity: 0.8; }
-    97% { opacity: 0.4; }
-}
+    <script src="script.js"></script>
+</body>
+</html>
