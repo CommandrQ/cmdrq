@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Vanguard_OS | Initializing...</title>
+    <title>Vanguard_OS | Terminal Login</title>
     
     <link rel="stylesheet" href="css/style.css">
     
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body class="boot-sequence">
 
@@ -17,46 +16,53 @@
     <main class="login-container">
         <header class="os-header">
             <h1 class="glitch" data-text="VANGUARD_OS">VANGUARD_OS</h1>
-            <p class="system-subtext">KERNEL v4.2.0-STABLE // NEURAL_LINK_READY</p>
+            <p class="system-status">NEURAL_LINK_STATUS: <span class="highlight">WAITING...</span></p>
         </header>
 
         <section class="terminal-window">
-            <div id="terminal-output"></div>
+            <div id="terminal-output">
+                </div>
         </section>
 
-        <section class="auth-box" id="login-module" style="opacity: 0;">
+        <section class="auth-box" id="login-module" style="opacity: 0; transition: opacity 1s ease-in;">
             <div class="scan-line"></div>
             
-            <div class="input-wrapper">
-                <span class="prompt">KEY:</span>
-                <input type="password" id="access-key" autofocus placeholder="********">
+            <div class="input-container">
+                <span class="prompt">ACCESS_KEY:</span>
+                <input type="password" id="access-key" placeholder="********" autocomplete="off">
             </div>
 
-            <div class="button-group">
-                <button class="btn-initialize" onclick="window.location.href='menu.html'">
+            <div class="action-bar">
+                <button class="btn-initialize" onclick="authorizeUser()">
                     INITIALIZE LINK
                 </button>
             </div>
             
-            <footer class="auth-footer">
-                <small>UNAUTHORIZED ACCESS IS A VIOLATION OF NETWORK LAW</small>
-            </footer>
+            <div class="security-warning">
+                <small>WARNING: SECURE LINE ENFORCED BY VANGUARD_CORE</small>
+            </div>
         </section>
     </main>
 
-    <div class="os-metadata">
-        <span>LOC: [REDACTED]</span>
-        <span>LATENCY: 14ms</span>
-        <span>ENCRYPTION: AES-256</span>
-    </div>
+    <footer class="os-metadata">
+        <div class="meta-item">NODE: <span class="highlight">0x772B</span></div>
+        <div class="meta-item">ENCRYPTION: <span class="highlight">RSA-4096</span></div>
+        <div class="meta-item">LOC: <span class="highlight">KY_US_RADCLIFF</span></div>
+    </footer>
 
     <script src="js/main.js"></script>
-    
+
     <script>
-        // Quick Focus Hack: Keeps the input selected so the user can just start typing
-        document.addEventListener('click', () => {
+        /**
+         * UX Enhancement: 
+         * Automatically focuses the password input so the user 
+         * doesn't have to click it after the boot sequence.
+         */
+        document.addEventListener('keydown', () => {
             const input = document.getElementById('access-key');
-            if(input) input.focus();
+            if (input && document.activeElement !== input) {
+                input.focus();
+            }
         });
     </script>
 
