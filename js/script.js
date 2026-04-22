@@ -1,19 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
     const startBtn = document.getElementById('start-btn');
+    const mainUI = document.getElementById('main-ui');
     const fadeOverlay = document.getElementById('fade-overlay');
 
     startBtn.addEventListener('click', () => {
-        // 1. Trigger the Slice Animation
+        // Discipline: Execute the sequence precisely
+        
+        // 1. Add shake to the window and slice to the button
+        mainUI.classList.add('shaking');
         startBtn.classList.add('slicing');
 
-        // 2. Short delay before the screen fades
+        // 2. Physical Feedback: Brief delay before the void consumes the screen
         setTimeout(() => {
             fadeOverlay.classList.add('active');
-        }, 300);
+        }, 400);
 
-        // 3. Logic to redirect to menu.html after animations
+        // 3. System Redirect
         setTimeout(() => {
             window.location.href = 'menu.html';
-        }, 1200);
+        }, 1400);
     });
 });
