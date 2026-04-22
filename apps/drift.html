@@ -15,6 +15,7 @@
             --apple-blur: blur(20px);
         }
 
+        /* --- SYSTEM RESET --- */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
@@ -54,69 +55,79 @@
 
         /* --- MAIN INTERFACE --- */
         .interface-container {
-            flex: 1; display: flex; flex-direction: column; align-items: center; padding: 0 15px 20px; z-index: 10;
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 0 15px; /* TIGHTENED BOTTOM PADDING */
+            z-index: 10;
         }
 
         .glass-window {
-            width: 96%; /* Widen to edge with small buffer */
-            max-width: 1400px; /* High-end widescreen support */
+            width: 96%;
+            max-width: 1400px;
             background: var(--glass);
             backdrop-filter: var(--apple-blur); -webkit-backdrop-filter: var(--apple-blur);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 15px;
             padding: 20px; text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            margin-bottom: 10px; /* REDUCED FOR MOBILE */
         }
 
-        /* DESKTOP PLAYER: Smaller height for density */
         .player-wrapper {
-            position: relative; width: 100%; max-width: 700px; /* Smaller center player */
+            position: relative; width: 100%; max-width: 700px;
             aspect-ratio: 16 / 9; background: #000; border-radius: 8px;
-            overflow: hidden; margin: 0 auto 20px; border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden; margin: 0 auto 15px; border: 1px solid rgba(255,255,255,0.1);
         }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* --- TACTICAL PAGING GRID --- */
+        /* --- PAGING CAROUSEL --- */
         .session-carousel {
             display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-            gap: 20px; width: 100%; padding-bottom: 10px;
+            gap: 15px; width: 100%; padding-bottom: 8px;
             scrollbar-width: thin; scrollbar-color: var(--purple) transparent;
         }
 
-        /* Custom Scrollbar */
-        .session-carousel::-webkit-scrollbar { height: 6px; }
+        .session-carousel::-webkit-scrollbar { height: 4px; }
         .session-carousel::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 10px; }
 
-        /* Mobile Logic: 2x2 Page */
         .session-page {
-            flex: 0 0 100%; /* Each page takes full width on mobile */
+            flex: 0 0 100%; 
             display: grid; grid-template-columns: repeat(2, 1fr); 
             grid-template-rows: repeat(2, 1fr); 
-            gap: 12px; scroll-snap-align: start;
+            gap: 10px; scroll-snap-align: start;
         }
 
-        /* Desktop Logic: Dynamic columns, wider view */
         @media (min-width: 1024px) {
             .session-page {
                 flex: 0 0 auto;
-                grid-template-columns: repeat(6, 1fr); /* 6 videos per row on desktop */
+                grid-template-columns: repeat(6, 1fr);
                 grid-template-rows: none;
                 width: 100%;
             }
-            .session-carousel { overflow-x: hidden; } /* Disable paging if everything fits */
+            .session-carousel { overflow-x: hidden; }
         }
 
         .session-btn {
             background: rgba(255,255,255,0.05); border: 1px solid var(--purple);
-            color: #fff; padding: 12px; font-family: 'Orbitron', sans-serif;
-            font-size: 0.65rem; cursor: pointer; border-radius: 4px; transition: 0.3s;
+            color: #fff; padding: 10px; font-family: 'Orbitron', sans-serif;
+            font-size: 0.6rem; cursor: pointer; border-radius: 4px; transition: 0.3s;
             letter-spacing: 1px; text-transform: uppercase;
         }
         .session-btn:hover, .session-btn.active {
-            background: var(--purple); box-shadow: 0 0 15px var(--purple); transform: translateY(-2px);
+            background: var(--purple); box-shadow: 0 0 10px var(--purple); transform: translateY(-2px);
+        }
+
+        /* --- MOBILE DEAD SPACE REDUCTION --- */
+        @media (max-width: 480px) {
+            .vanguard-footer { padding: 8px 15px; } /* CRITICAL: Reduced from 15px+ */
+            .interface-container { padding-bottom: 0; }
+            .glass-window { padding: 15px 10px; margin-bottom: 5px; }
+            .player-wrapper { margin-bottom: 10px; }
         }
 
         /* --- ANIMATED FOOTER --- */
         .vanguard-footer { padding: 15px; text-align: center; z-index: 20; }
-        .footer-content { font-size: 0.65rem; letter-spacing: 3px; color: #fff; text-transform: uppercase; transition: 0.5s; }
+        .footer-content { font-size: 0.6rem; letter-spacing: 3px; color: #fff; text-transform: uppercase; transition: 0.5s; }
         .pulse { animation: pulseWhite 2s infinite ease-in-out; }
         @keyframes pulseWhite { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; text-shadow: 0 0 10px #fff; } }
 
@@ -136,9 +147,9 @@
 
     <main class="interface-container">
         <div class="glass-window">
-            <header style="margin-bottom: 10px;">
-                <p style="font-size: 0.55rem; color: var(--cyan); letter-spacing: 3px;">// DRIFT_DENSITY_INTERFACE</p>
-                <h2 id="video-title" style="font-size: 1rem; font-weight: 900; text-transform: uppercase;">INITIALIZING...</h2>
+            <header style="margin-bottom: 8px;">
+                <p style="font-size: 0.5rem; color: var(--cyan); letter-spacing: 2px;">// DRIFT_HUB_V3</p>
+                <h2 id="video-title" style="font-size: 0.9rem; font-weight: 900; text-transform: uppercase;">INITIALIZING...</h2>
             </header>
 
             <div class="player-wrapper">
@@ -163,8 +174,8 @@
             const glitch = document.getElementById('glitch');
             const bg = document.getElementById('vfx-bg');
 
-            // --- 1. VFX ---
-            for(let i=0; i<35; i++) {
+            // --- VFX ---
+            for(let i=0; i<30; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.left = Math.random() * 100 + '%'; star.style.top = Math.random() * 100 + '%';
@@ -172,15 +183,8 @@
                 star.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
                 bg.appendChild(star);
             }
-            for(let i=0; i<10; i++) {
-                const line = document.createElement('div');
-                line.className = 'speed-line';
-                line.style.left = Math.random() * 100 + '%';
-                line.style.animationDelay = Math.random() * 2 + 's';
-                bg.appendChild(line);
-            }
 
-            // --- 2. DATA LOAD & PAGING LOGIC ---
+            // --- DATA LOAD ---
             fetch('../database/drift.json')
                 .then(res => res.json())
                 .then(data => {
@@ -188,7 +192,6 @@
                     const isMobile = window.innerWidth < 1024;
                     
                     if (isMobile) {
-                        // Chunk sessions into groups of 4 for mobile paging
                         for (let i = 0; i < sessions.length; i += 4) {
                             const pageArr = sessions.slice(i, i + 4);
                             const pageDiv = document.createElement('div');
@@ -201,7 +204,6 @@
                             carousel.appendChild(pageDiv);
                         }
                     } else {
-                        // Single wide page for desktop
                         const pageDiv = document.createElement('div');
                         pageDiv.className = 'session-page';
                         pageDiv.innerHTML = sessions.map((s, idx) => `
@@ -214,7 +216,8 @@
 
                     if(sessions.length > 0) {
                         loadVideo(sessions[0]);
-                        document.querySelector('.session-btn').classList.add('active');
+                        const firstBtn = document.querySelector('.session-btn');
+                        if(firstBtn) firstBtn.classList.add('active');
                     }
                 });
 
@@ -231,7 +234,7 @@
                 titleDisplay.innerText = video.title;
             }
 
-            // --- 3. FOOTER ---
+            // --- FOOTER ---
             const ft = document.getElementById('footer-text');
             let showM = false;
             setInterval(() => {
