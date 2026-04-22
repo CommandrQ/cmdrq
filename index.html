@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VANGUARD_OS // CITIZEN_LINK</title>
+    <title>VANGUARD_OS // PRESS START</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
@@ -13,38 +13,29 @@
     <div class="crt-overlay"></div>
     <div class="fade-overlay" id="fade-overlay"></div>
 
-    <main class="attract-mode">
-        <header class="top-meta">
-            <span>CREDIT 00</span>
-            <span class="center">PRESS_START_SCREEN</span>
-            <span>V_OS [S_07]</span>
+    <main class="centered-container">
+        <div class="top-meta">
+            <span>CREDIT 01</span>
+            <span>V_OS NODE_07</span>
+        </div>
+
+        <header class="logo-area">
+            <h1 class="capcom-title" data-text="VANGUARD">VANGUARD</h1>
+            <h2 class="sub-title">CITIZEN OPERATOR LINK</h2>
         </header>
 
-        <section class="logo-area">
-            <h1 class="capcom-title" data-text="VANGUARD">VANGUARD</h1>
-            <h2 class="sub-title">CITIZEN_OPERATOR LINK</h2>
-        </section>
-
-        <section class="dialog-box">
-            <header class="dialog-header">VANGUARD_CORP // ID_AUTH_07</header>
-            <p id="terminal-output" class="dialog-content">
-                </p>
-        </section>
-
-        <section class="start-action">
-            <div id="slice-container" onclick="initiateFullDive()">
-                <span class="start-text top-half" data-text="PRESS START">PRESS START</span>
-                <span class="start-text bottom-half" data-text="PRESS START">PRESS START</span>
-            </div>
-            <p class="prompt-hint">[CLICK MOUSE]</p>
-        </section>
-    </main>
-
-    <footer class="bottom-scroll">
-        <div class="marquee">
-            VANGUARD_OS // THE MATRIX SAYS: 'WHY RETURN TO THE VOID?' // FULL DIVE STATUS: PENDING // © 199X-2026 //
+        <div class="action-zone">
+            <button id="slice-button" class="start-btn" onclick="initiateFullDive()">
+                <span class="slice top" data-text="PRESS START">PRESS START</span>
+                <span class="slice bottom" data-text="PRESS START">PRESS START</span>
+            </button>
+            <p class="blink-hint">INSERT COIN TO CONTINUE</p>
         </div>
-    </footer>
+
+        <footer class="bottom-meta">
+            <p>© 199X-2026 VANGUARD CORPORATION. ALL RIGHTS RESERVED.</p>
+        </footer>
+    </main>
 
     <script src="js/main.js"></script>
 </body>
