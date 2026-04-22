@@ -1,31 +1,24 @@
 {
   "apps": [
     {
-      "name": "GITHUB_REPOS",
-      "iconValue": "⚔️",
-      "iconType": "emoji",
-      "link": "https://github.com/cmdrq0",
+      "name": "Blog",
+      "iconValue": "images/icons/blog.png",
+      "iconType": "image",
+      "link": "https://substack.com/@commandrq",
       "external": true
     },
     {
-      "name": "TACTICAL_ASSETS",
-      "iconValue": "images/icons/folder.png",
+      "name": "Social Media",
+      "iconValue": "images/icons/tiktok.png",
       "iconType": "image",
-      "link": "assets.html",
-      "external": false
-    },
-    {
-      "name": "COMMUNICATIONS",
-      "iconValue": "📡",
-      "iconType": "emoji",
-      "link": "mailto:q@vanguard.com",
+      "link": "https://www.tiktok.com/@commandr_q",
       "external": true
     },
     {
-      "name": "SYSTEM_HOME",
-      "iconValue": "images/icons/home.png",
+      "name": "Dreamscape Drift",
+      "iconValue": "images/icon/drift.png",
       "iconType": "image",
-      "link": "index.html",
+      "link": "drift.html",
       "external": false
     }
   ]
