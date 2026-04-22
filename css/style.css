@@ -259,3 +259,66 @@ button:hover {
 .log-entry::before {
     content: "> ";
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanguard_OS | Public Terminal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body class="boot-sequence">
+
+    <div class="terminal-overlay"></div>
+
+    <main class="login-container">
+        <header class="os-header">
+            <h1 class="glitch" data-text="VANGUARD_OS">VANGUARD_OS</h1>
+            <p class="system-status">PUBLIC ACCESS NODE: <span class="highlight">SECTOR_07</span></p>
+        </header>
+
+        <section class="terminal-window">
+            <div id="terminal-output">
+                </div>
+        </section>
+
+        <section class="auth-box" id="login-module" style="opacity: 0; transition: opacity 1s ease-in;">
+            <div class="scan-line"></div>
+            
+            <div class="input-container">
+                <span class="prompt">CITIZEN_ID:</span>
+                <input type="password" id="access-key" placeholder="C-XXXX-XXXX" autocomplete="off">
+            </div>
+
+            <div class="action-bar">
+                <button class="btn-initialize" onclick="authorizeUser()">
+                    SYNCHRONIZE CREDENTIALS
+                </button>
+            </div>
+            
+            <div class="public-notice">
+                <p>NOTICE: All network activity is logged by the Vanguard Registry. Improper use of Public Terminals is a Tier-3 Infraction.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="os-metadata">
+        <div class="meta-item">UPTIME: <span class="highlight">99.98%</span></div>
+        <div class="meta-item">CONNECTED_CITIZENS: <span class="highlight">12,402</span></div>
+        <div class="meta-item">THREAT_LEVEL: <span class="stable">MINIMAL</span></div>
+    </footer>
+
+    <script src="js/main.js"></script>
+
+    <script>
+        document.addEventListener('keydown', () => {
+            const input = document.getElementById('access-key');
+            if (input && document.activeElement !== input) {
+                input.focus();
+            }
+        });
+    </script>
+
+</body>
+</html>
