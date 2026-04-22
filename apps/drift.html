@@ -15,11 +15,7 @@
             --apple-blur: blur(20px);
         }
 
-        /* --- SYSTEM RESET --- */
-        * {
-            margin: 0; padding: 0; box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             background: #030008;
@@ -31,185 +27,100 @@
             overflow-x: hidden;
         }
 
-        /* --- NEON STARS & SPEED LINES VFX --- */
+        /* --- VFX BACKGROUND --- */
         .vfx-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1; background: radial-gradient(circle at center, #0a001a 0%, #030008 100%);
             overflow: hidden;
         }
-
-        .star {
-            position: absolute; background: white; border-radius: 50%;
-            animation: twinkle var(--d) infinite ease-in-out;
-        }
-
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--d) infinite ease-in-out; }
         .speed-line {
             position: absolute; width: 2px; height: 120px;
             background: linear-gradient(to bottom, transparent, var(--cyan));
             opacity: 0.2; animation: moveLine 0.6s linear infinite;
         }
-
         @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
-        @keyframes moveLine { 
-            0% { transform: translateY(-110vh) rotate(15deg); } 
-            100% { transform: translateY(110vh) rotate(15deg); } 
-        }
+        @keyframes moveLine { 0% { transform: translateY(-110vh) rotate(15deg); } 100% { transform: translateY(110vh) rotate(15deg); } }
 
         /* --- NAVIGATION --- */
-        .top-nav {
-            padding: 20px;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            z-index: 110;
-        }
-
+        .top-nav { padding: 15px 20px; width: 100%; z-index: 110; }
         .back-btn {
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-            color: var(--cyan);
-            font-size: 0.7rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: var(--apple-blur);
-            -webkit-backdrop-filter: var(--apple-blur);
-            border: 1px solid var(--cyan);
-            padding: 12px 20px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            min-height: 44px;
+            display: inline-flex; align-items: center; text-decoration: none; color: var(--cyan);
+            font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: var(--apple-blur); -webkit-backdrop-filter: var(--apple-blur);
+            border: 1px solid var(--cyan); padding: 10px 18px; border-radius: 4px; transition: 0.3s;
         }
+        .back-btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px var(--cyan); transform: translateX(-5px); }
 
-        .back-btn:hover {
-            background: var(--cyan);
-            color: #000;
-            box-shadow: 0 0 20px var(--cyan);
-            transform: translateX(-5px);
-        }
-
-        /* --- MAIN UI WINDOW --- */
+        /* --- MAIN INTERFACE --- */
         .interface-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0 20px 40px;
-            z-index: 10;
+            flex: 1; display: flex; flex-direction: column; align-items: center; padding: 0 15px 20px; z-index: 10;
         }
 
         .glass-window {
-            width: 100%;
-            max-width: 900px;
+            width: 96%; /* Widen to edge with small buffer */
+            max-width: 1400px; /* High-end widescreen support */
             background: var(--glass);
-            backdrop-filter: var(--apple-blur);
-            -webkit-backdrop-filter: var(--apple-blur);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: clamp(1rem, 5vw, 2.5rem);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-            text-align: center;
+            backdrop-filter: var(--apple-blur); -webkit-backdrop-filter: var(--apple-blur);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 15px;
+            padding: 20px; text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.8);
         }
 
-        .video-title {
-            font-size: clamp(0.9rem, 4vw, 1.3rem);
-            font-weight: 900;
-            margin-bottom: 20px;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
+        /* DESKTOP PLAYER: Smaller height for density */
         .player-wrapper {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background: #000;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.05);
+            position: relative; width: 100%; max-width: 700px; /* Smaller center player */
+            aspect-ratio: 16 / 9; background: #000; border-radius: 8px;
+            overflow: hidden; margin: 0 auto 20px; border: 1px solid rgba(255,255,255,0.1);
         }
-
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* --- TACTICAL GRID PROTOCOL --- */
-        .session-grid {
-            display: grid;
-            /* MOBILE DEFAULT: 2 Options per row */
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 15px;
-            width: 100%;
-            
-            /* SCROLL PROTOCOL */
-            max-height: 220px; 
-            overflow-y: auto;
-            padding-right: 10px;
-            scrollbar-width: thin;
-            scrollbar-color: var(--purple) transparent;
-        }
-
-        /* DESKTOP OVERRIDE: 3 Options per row */
-        @media (min-width: 768px) {
-            .session-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
+        /* --- TACTICAL PAGING GRID --- */
+        .session-carousel {
+            display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+            gap: 20px; width: 100%; padding-bottom: 10px;
+            scrollbar-width: thin; scrollbar-color: var(--purple) transparent;
         }
 
         /* Custom Scrollbar */
-        .session-grid::-webkit-scrollbar { width: 6px; }
-        .session-grid::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
-        .session-grid::-webkit-scrollbar-thumb { 
-            background: var(--purple); 
-            border-radius: 10px; 
-            box-shadow: 0 0 10px var(--purple); 
+        .session-carousel::-webkit-scrollbar { height: 6px; }
+        .session-carousel::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 10px; }
+
+        /* Mobile Logic: 2x2 Page */
+        .session-page {
+            flex: 0 0 100%; /* Each page takes full width on mobile */
+            display: grid; grid-template-columns: repeat(2, 1fr); 
+            grid-template-rows: repeat(2, 1fr); 
+            gap: 12px; scroll-snap-align: start;
+        }
+
+        /* Desktop Logic: Dynamic columns, wider view */
+        @media (min-width: 1024px) {
+            .session-page {
+                flex: 0 0 auto;
+                grid-template-columns: repeat(6, 1fr); /* 6 videos per row on desktop */
+                grid-template-rows: none;
+                width: 100%;
+            }
+            .session-carousel { overflow-x: hidden; } /* Disable paging if everything fits */
         }
 
         .session-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--purple);
-            color: #fff;
-            padding: 12px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.65rem;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: 0.3s;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            min-height: 44px;
+            background: rgba(255,255,255,0.05); border: 1px solid var(--purple);
+            color: #fff; padding: 12px; font-family: 'Orbitron', sans-serif;
+            font-size: 0.65rem; cursor: pointer; border-radius: 4px; transition: 0.3s;
+            letter-spacing: 1px; text-transform: uppercase;
         }
-
         .session-btn:hover, .session-btn.active {
-            background: var(--purple);
-            box-shadow: 0 0 15px var(--purple);
-            transform: translateY(-2px);
+            background: var(--purple); box-shadow: 0 0 15px var(--purple); transform: translateY(-2px);
         }
 
         /* --- ANIMATED FOOTER --- */
-        .vanguard-footer {
-            padding: 25px;
-            text-align: center;
-            z-index: 20;
-        }
-
-        .footer-content {
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            color: #fff;
-            text-transform: uppercase;
-            transition: opacity 0.5s ease;
-        }
-
+        .vanguard-footer { padding: 15px; text-align: center; z-index: 20; }
+        .footer-content { font-size: 0.65rem; letter-spacing: 3px; color: #fff; text-transform: uppercase; transition: 0.5s; }
         .pulse { animation: pulseWhite 2s infinite ease-in-out; }
         @keyframes pulseWhite { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; text-shadow: 0 0 10px #fff; } }
 
-        /* Glitch VFX for switches */
-        .glitch-flash {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--cyan); opacity: 0; pointer-events: none; z-index: 5;
-        }
+        .glitch-flash { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--cyan); opacity: 0; pointer-events: none; z-index: 5; }
         .active-glitch { animation: glitchEffect 0.3s ease-out; }
         @keyframes glitchEffect { 0% { opacity: 0; } 50% { opacity: 0.3; transform: skewX(10deg); } 100% { opacity: 0; } }
 
@@ -220,16 +131,14 @@
     <div class="vfx-layer" id="vfx-bg"></div>
 
     <nav class="top-nav">
-        <a href="../menu.html" class="back-btn">
-            &LT; RETURN_TO_COMMAND
-        </a>
+        <a href="../menu.html" class="back-btn"> &LT; RETURN_TO_COMMAND </a>
     </nav>
 
     <main class="interface-container">
         <div class="glass-window">
-            <header>
-                <p style="font-size: 0.6rem; color: var(--cyan); letter-spacing: 3px; margin-bottom: 5px;">// DRIFT_SESSION_READY</p>
-                <h2 id="video-title" class="video-title">INITIALIZING...</h2>
+            <header style="margin-bottom: 10px;">
+                <p style="font-size: 0.55rem; color: var(--cyan); letter-spacing: 3px;">// DRIFT_DENSITY_INTERFACE</p>
+                <h2 id="video-title" style="font-size: 1rem; font-weight: 900; text-transform: uppercase;">INITIALIZING...</h2>
             </header>
 
             <div class="player-wrapper">
@@ -237,7 +146,7 @@
                 <iframe id="main-player" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
 
-            <div id="session-grid" class="session-grid">
+            <div id="session-carousel" class="session-carousel">
                 </div>
         </div>
     </main>
@@ -250,22 +159,20 @@
         document.addEventListener('DOMContentLoaded', () => {
             const player = document.getElementById('main-player');
             const titleDisplay = document.getElementById('video-title');
-            const sessionGrid = document.getElementById('session-grid');
+            const carousel = document.getElementById('session-carousel');
             const glitch = document.getElementById('glitch');
-            const footerText = document.getElementById('footer-text');
             const bg = document.getElementById('vfx-bg');
 
-            // --- 1. VFX GENERATOR ---
-            for(let i=0; i<40; i++) {
+            // --- 1. VFX ---
+            for(let i=0; i<35; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.width = star.style.height = Math.random() * 3 + 'px';
+                star.style.left = Math.random() * 100 + '%'; star.style.top = Math.random() * 100 + '%';
+                star.style.width = star.style.height = Math.random() * 2 + 'px';
                 star.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
                 bg.appendChild(star);
             }
-            for(let i=0; i<12; i++) {
+            for(let i=0; i<10; i++) {
                 const line = document.createElement('div');
                 line.className = 'speed-line';
                 line.style.left = Math.random() * 100 + '%';
@@ -273,25 +180,43 @@
                 bg.appendChild(line);
             }
 
-            // --- 2. DATA LOAD ---
+            // --- 2. DATA LOAD & PAGING LOGIC ---
             fetch('../database/drift.json')
                 .then(res => res.json())
                 .then(data => {
-                    renderSessions(data.sessions);
-                    if(data.sessions.length > 0) loadVideo(data.sessions[0]);
-                })
-                .catch(err => {
-                    titleDisplay.innerText = "SIGNAL LOST: CHECK JSON PATH";
-                });
+                    const sessions = data.sessions;
+                    const isMobile = window.innerWidth < 1024;
+                    
+                    if (isMobile) {
+                        // Chunk sessions into groups of 4 for mobile paging
+                        for (let i = 0; i < sessions.length; i += 4) {
+                            const pageArr = sessions.slice(i, i + 4);
+                            const pageDiv = document.createElement('div');
+                            pageDiv.className = 'session-page';
+                            pageDiv.innerHTML = pageArr.map((s, idx) => `
+                                <button class="session-btn" onclick="switchSession('${s.id}', '${s.title}', this)">
+                                    SESS_${(i + idx + 1).toString().padStart(2, '0')}
+                                </button>
+                            `).join('');
+                            carousel.appendChild(pageDiv);
+                        }
+                    } else {
+                        // Single wide page for desktop
+                        const pageDiv = document.createElement('div');
+                        pageDiv.className = 'session-page';
+                        pageDiv.innerHTML = sessions.map((s, idx) => `
+                            <button class="session-btn" onclick="switchSession('${s.id}', '${s.title}', this)">
+                                SESS_${(idx + 1).toString().padStart(2, '0')}
+                            </button>
+                        `).join('');
+                        carousel.appendChild(pageDiv);
+                    }
 
-            function renderSessions(sessions) {
-                sessionGrid.innerHTML = sessions.map((s, index) => `
-                    <button class="session-btn" onclick="switchSession('${s.id}', '${s.title}', this)">
-                        SESSION_${(index + 1).toString().padStart(2, '0')}
-                    </button>
-                `).join('');
-                if(sessionGrid.firstElementChild) sessionGrid.firstElementChild.classList.add('active');
-            }
+                    if(sessions.length > 0) {
+                        loadVideo(sessions[0]);
+                        document.querySelector('.session-btn').classList.add('active');
+                    }
+                });
 
             window.switchSession = (id, title, btn) => {
                 document.querySelectorAll('.session-btn').forEach(b => b.classList.remove('active'));
@@ -306,14 +231,14 @@
                 titleDisplay.innerText = video.title;
             }
 
-            // --- 3. ANIMATED FOOTER ROTATION ---
-            let showMission = false;
+            // --- 3. FOOTER ---
+            const ft = document.getElementById('footer-text');
+            let showM = false;
             setInterval(() => {
-                footerText.style.opacity = 0;
+                ft.style.opacity = 0;
                 setTimeout(() => {
-                    footerText.innerText = showMission ? "Built by Commander Q 2026" : "Empower. Educate. Elevate.";
-                    footerText.style.opacity = 1;
-                    showMission = !showMission;
+                    ft.innerText = showM ? "Built by Commander Q 2026" : "Empower. Educate. Elevate.";
+                    ft.style.opacity = 1; showM = !showM;
                 }, 500);
             }, 3000);
         });
