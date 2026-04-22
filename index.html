@@ -2,42 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VANGUARD_OS // PRESS START</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>Vanguard Knights | Commander Q</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="arcade-boot">
+<body class="vaporwave-bg">
+    <div id="overlay"></div>
+    
+    <div class="terminal-container">
+        <h1 class="glitch" data-text="COMMANDER Q">COMMANDER Q</h1>
+        <p class="subtitle">VANGUARD KNIGHTS MULTIVERSE // PORTAL 01</p>
+        
+        <button id="start-btn">
+            <span class="slice top">PRESS START</span>
+            <span class="slice bottom">PRESS START</span>
+        </button>
+    </div>
 
-    <div id="starfield"></div>
-    <div class="crt-overlay"></div>
-    <div class="fade-overlay" id="fade-overlay"></div>
-
-    <main class="attract-mode">
-        <header class="top-meta">
-            <span>CREDIT 01</span>
-            <span>NODE_07 // KY_USA</span>
-        </header>
-
-        <section class="logo-area">
-            <h1 class="capcom-title" data-text="VANGUARD">VANGUARD</h1>
-            <h2 class="sub-title">CITIZEN_OPERATOR LINK</h2>
-        </section>
-
-        <div class="action-container">
-            <button id="slice-button" class="start-btn" onclick="initiateFullDive()">
-                <div class="slash-line"></div>
-                <span class="slice top" data-text="PRESS START">PRESS START</span>
-                <span class="slice bottom" data-text="PRESS START">PRESS START</span>
-            </button>
-            <p class="blink-hint">INSERT COIN</p>
-        </div>
-
-        <footer class="bottom-meta">
-            <p>© 199X-2026 VANGUARD CORP. // THE MATRIX IS LISTENING.</p>
-        </footer>
-    </main>
-
-    <script src="js/main.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
