@@ -3,24 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vanguard Knights | Portal 01</title>
+    <title>Commander Q | Vanguard Knights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
 </head>
-<body class="vaporwave-bg">
-    <div id="overlay"></div>
-    
-    <div class="main-container">
+<body>
+
+    <div class="scanlines"></div>
+
+    <div class="grid-container">
+        <div class="grid"></div>
+    </div>
+
+    <main class="ui-wrapper">
         <div class="glass-window">
-            <p class="presentation">A Vanguard Knights Presentation</p>
-            <h1 class="main-title glitch" data-text="Defender of Eternity">COMMANDER Q:<br><span class="subtitle">Defender of Eternity</span></h1>
+            <p class="sub-text">A VANGUARD KNIGHTS PRESENTATION</p>
+            <h1 class="main-title">COMMANDER Q:<br><span class="glow">DEFENDER OF ETERNITY</span></h1>
             
-            <button id="start-btn">
-                <span class="slice top">START</span>
-                <span class="slice bottom">START</span>
+            <button id="start-btn" class="btn-slice">
+                <div class="btn-top"><span>PRESS START</span></div>
+                <div class="btn-bottom"><span>PRESS START</span></div>
             </button>
         </div>
-    </div>
+    </main>
+
+    <div id="fade-overlay"></div>
 
     <script src="script.js"></script>
 </body>
