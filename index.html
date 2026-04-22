@@ -1,22 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="css/style.css">
-    <title>Vanguard_OS | Login</title>
-</head>
-<body class="boot-sequence">
-    <div class="terminal-overlay"></div>
-    <main class="login-container">
-        <header>
-            <h1 class="glitch" data-text="VANGUARD_OS">VANGUARD_OS</h1>
-            <p class="system-status">SYSTEM: ONLINE | NEURAL_LINK: PENDING</p>
-        </header>
-
-        <section class="auth-box">
-            <div class="scan-line"></div>
-            <input type="password" placeholder="ENTER ACCESS KEY" id="access-key">
-            <button onclick="window.location.href='Menu.html'">INITIALIZE LINK</button>
-        </section>
-    </main>
-</body>
-</html>
+<section class="terminal-window">
+    <div id="terminal-output"></div>
+    
+    <div class="auth-box" style="opacity: 0; transition: opacity 1s;">
+        <div class="scan-line"></div>
+        <input type="password" placeholder="ENTER ACCESS KEY" id="access-key">
+        <button onclick="window.location.href='Menu.html'">INITIALIZE LINK</button>
+    </div>
+</section>
