@@ -18,7 +18,7 @@
       "name": "Dreamscape Drift",
       "iconValue": "images/icons/drift.png",
       "iconType": "image",
-      "link": "drift.html",
+      "link": "apps/drift.html",
       "external": false
     }
   ]
