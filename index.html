@@ -7,33 +7,34 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
-<body class="arcade-start">
+<body class="arcade-boot">
 
     <div id="starfield"></div>
     <div class="crt-overlay"></div>
     <div class="fade-overlay" id="fade-overlay"></div>
 
-    <main class="centered-container">
-        <div class="top-meta">
+    <main class="attract-mode">
+        <header class="top-meta">
             <span>CREDIT 01</span>
-            <span>V_OS NODE_07</span>
-        </div>
-
-        <header class="logo-area">
-            <h1 class="capcom-title" data-text="VANGUARD">VANGUARD</h1>
-            <h2 class="sub-title">CITIZEN OPERATOR LINK</h2>
+            <span>NODE_07 // KY_USA</span>
         </header>
 
-        <div class="action-zone">
+        <section class="logo-area">
+            <h1 class="capcom-title" data-text="VANGUARD">VANGUARD</h1>
+            <h2 class="sub-title">CITIZEN_OPERATOR LINK</h2>
+        </section>
+
+        <div class="action-container">
             <button id="slice-button" class="start-btn" onclick="initiateFullDive()">
+                <div class="slash-line"></div>
                 <span class="slice top" data-text="PRESS START">PRESS START</span>
                 <span class="slice bottom" data-text="PRESS START">PRESS START</span>
             </button>
-            <p class="blink-hint">INSERT COIN TO CONTINUE</p>
+            <p class="blink-hint">INSERT COIN</p>
         </div>
 
         <footer class="bottom-meta">
-            <p>© 199X-2026 VANGUARD CORPORATION. ALL RIGHTS RESERVED.</p>
+            <p>© 199X-2026 VANGUARD CORP. // THE MATRIX IS LISTENING.</p>
         </footer>
     </main>
 
