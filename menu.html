@@ -15,6 +15,7 @@
             --apple-blur: blur(20px);
         }
 
+        /* --- RESET & MOBILE OPTIMIZATION --- */
         * {
             margin: 0;
             padding: 0;
@@ -33,7 +34,7 @@
             overflow-x: hidden;
         }
 
-        /* --- BACKGROUNDS --- */
+        /* --- VAPORWAVE BACKGROUNDS --- */
         .scanlines {
             position: fixed;
             top: 0; width: 100%; height: 100%;
@@ -58,7 +59,7 @@
                 linear-gradient(90deg, transparent 0%, var(--cyan) 2%, transparent 3%);
             background-size: 40px 40px;
             transform: rotateX(60deg);
-            opacity: 0.2;
+            opacity: 0.25;
             animation: moveGrid 5s linear infinite;
         }
 
@@ -67,10 +68,10 @@
             100% { transform: rotateX(60deg) translateY(40px); }
         }
 
-        /* --- UI LAYOUT --- */
+        /* --- UI WRAPPER --- */
         .interface-wrapper {
             flex: 1;
-            padding: 40px 20px;
+            padding: clamp(20px, 5vw, 60px) 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -83,120 +84,127 @@
             background: var(--glass);
             backdrop-filter: var(--apple-blur);
             -webkit-backdrop-filter: var(--apple-blur);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 24px;
+            padding: clamp(25px, 6vw, 40px);
             box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
-        /* --- PROFILE SECTION --- */
+        /* --- PROFILE IDENTITY --- */
         .profile-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         .profile-pic {
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             border: 3px solid var(--cyan);
-            margin: 0 auto 15px;
-            background: url('https://via.placeholder.com/150') center/cover; /* Replace with your actual image path */
-            box-shadow: 0 0 20px var(--cyan);
+            margin: 0 auto 20px;
+            /* UPDATED ASSET PATH */
+            background: url('images/commanderqhs.png') center/cover no-repeat;
+            box-shadow: 0 0 25px rgba(5, 255, 161, 0.4);
         }
 
         .profile-name {
-            font-size: clamp(1.2rem, 5vw, 1.8rem);
+            font-size: clamp(1.4rem, 6vw, 2rem);
             font-weight: 900;
             color: #fff;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
         }
 
         .profile-title {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--cyan);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
+            font-weight: 400;
         }
 
-        /* --- ABOUT ME TAB --- */
+        /* --- BIO INTEGRATION --- */
         .about-tab {
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 35px;
             border-left: 4px solid var(--purple);
         }
 
         .tab-label {
-            font-size: 0.7rem;
-            opacity: 0.6;
-            margin-bottom: 10px;
+            font-size: 0.65rem;
+            opacity: 0.5;
+            margin-bottom: 12px;
             display: block;
+            letter-spacing: 2px;
         }
 
         .bio-text {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: rgba(255,255,255,0.9);
-            font-family: sans-serif; /* Cleaner for long-form reading per Apple standards */
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            line-height: 1.7;
+            color: rgba(255,255,255,0.95);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-weight: 300;
         }
 
-        /* --- APP GRID (DYNAMIC) --- */
+        /* --- DYNAMIC APP GRID --- */
         .app-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 20px;
             width: 100%;
         }
 
         .app-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 25px 15px;
             text-align: center;
             text-decoration: none;
             color: #fff;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .app-card:hover {
-            background: var(--purple);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(188, 19, 254, 0.3);
+            background: rgba(188, 19, 254, 0.2);
+            border-color: var(--purple);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(188, 19, 254, 0.2);
         }
 
-        .app-icon { font-size: 1.8rem; margin-bottom: 10px; display: block; }
-        .app-name { font-size: 0.7rem; font-weight: 900; letter-spacing: 1px; }
+        .app-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+        .app-name { font-size: 0.75rem; font-weight: 900; letter-spacing: 2px; color: var(--cyan); }
 
-        /* --- DYNAMIC FOOTER --- */
+        /* --- MISSION FOOTER --- */
         .vanguard-footer {
-            padding: 20px;
+            padding: 30px;
             text-align: center;
             z-index: 20;
         }
 
         .footer-content {
             font-size: 0.7rem;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             color: #fff;
             text-transform: uppercase;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s ease;
         }
 
-        .pulse { animation: pulseWhite 2s infinite ease-in-out; }
+        .pulse { animation: pulseWhite 2.5s infinite ease-in-out; }
 
         @keyframes pulseWhite {
             0%, 100% { opacity: 0.4; }
             50% { opacity: 1; text-shadow: 0 0 10px #fff; }
         }
 
-        /* MOBILE FIXES */
+        /* MOBILE OVERRIDES */
         @media (max-width: 480px) {
-            .app-grid { grid-template-columns: repeat(2, 1fr); }
-            .glass-panel { padding: 20px; }
+            .app-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .glass-panel { padding: 25px 15px; }
+            .profile-pic { width: 110px; height: 110px; }
         }
     </style>
 </head>
@@ -215,9 +223,9 @@
             </section>
 
             <section class="about-tab">
-                <span class="tab-label">// OPERATIONAL_BIO</span>
+                <span class="tab-label">// MISSION_PROFILE_UPDATED</span>
                 <p class="bio-text">
-                    Self-taught developer and prior Armed Forces veteran. My path is defined by the discipline of service and the grit of continuous learning. Having navigated the high-intensity ecosystems of <strong>Apple</strong> and <strong>Best Buy</strong>, I specialize in bridging tactical execution with high-end creative technology.
+                    I am a self-taught developer and prior Armed Forces veteran, blending tactical discipline with high-end digital architecture. My experience spans from operational excellence at <strong>Apple</strong> to solution architecture at <strong>Best Buy</strong>. I focus on building resilient, aesthetic systems that empower, educate, and elevate.
                 </p>
             </section>
 
@@ -236,8 +244,7 @@
             const appGrid = document.getElementById('app-grid');
             const footerText = document.getElementById('footer-text');
 
-            // --- 1. DYNAMIC APP LOADING ---
-            // Fetching from your database/menu.json
+            // --- 1. DYNAMIC DATA FETCH ---
             fetch('database/menu.json')
                 .then(res => res.json())
                 .then(data => {
@@ -249,11 +256,12 @@
                     `).join('');
                 })
                 .catch(err => {
-                    console.log("Database connection offline. Using fallback apps.");
-                    // Fallback apps if JSON is missing
+                    console.warn("Database offline. Initializing fallback protocols.");
                     const fallbacks = [
                         { name: "REPOS", icon: "⚔️", link: "https://github.com/cmdrq0" },
-                        { name: "COMMMS", icon: "📡", link: "#" }
+                        { name: "LINKEDIN", icon: "📡", link: "#" },
+                        { name: "CONTACT", icon: "📧", link: "mailto:your@email.com" },
+                        { name: "HOME", icon: "🛡️", link: "index.html" }
                     ];
                     appGrid.innerHTML = fallbacks.map(app => `
                         <a href="${app.link}" class="app-card">
@@ -263,7 +271,7 @@
                     `).join('');
                 });
 
-            // --- 2. FOOTER ROTATION ---
+            // --- 2. FOOTER MISSION ROTATION ---
             let showMission = false;
             setInterval(() => {
                 footerText.style.opacity = 0;
@@ -275,7 +283,7 @@
                     }
                     footerText.style.opacity = 1;
                     showMission = !showMission;
-                }, 500);
+                }, 600);
             }, 3000);
         });
     </script>
