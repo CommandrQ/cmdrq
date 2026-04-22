@@ -2,45 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>VANGUARD_OS // SELECT MODULE</title>
     <link rel="stylesheet" href="css/style.css">
-    <title>Vanguard_OS | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
-<body class="dashboard">
-    <div class="terminal-overlay"></div>
+<body class="character-select">
 
-    <nav class="status-bar">
-        <div class="user-info">OPERATOR: <span class="highlight">ID_772-B</span></div>
-        <div class="system-clock" id="clock">00:00:00</div>
-        <div class="network-status">LINK: <span class="stable">STABLE</span></div>
-    </nav>
+    <div id="starfield"></div>
+    <div class="crt-overlay"></div>
 
-    <main class="hud-container">
-        <section class="app-grid">
-            <div class="app-tile" onclick="location.href='apps/archive.html'">
-                <div class="icon-box"><img src="images/icons/archive.svg" alt=""></div>
-                <label>ARCHIVE</label>
+    <header class="select-header">
+        <h1 class="flash-title">SELECT YOUR REALITY</h1>
+        <div class="timer">99</div>
+    </header>
+
+    <main class="selection-arena">
+        <section class="preview-panel">
+            <div class="portrait-frame">
+                <div id="module-portrait" class="portrait-placeholder"></div>
+                <div class="scanline-effect"></div>
             </div>
-            <div class="app-tile" onclick="location.href='apps/map.html'">
-                <div class="icon-box"><img src="images/icons/map.svg" alt=""></div>
-                <label>MAP_VIEWER</label>
-            </div>
-            <div class="app-tile" onclick="location.href='apps/comms.html'">
-                <div class="icon-box"><img src="images/icons/comms.svg" alt=""></div>
-                <label>COMMS</label>
-            </div>
-            <div class="app-tile locked">
-                <div class="icon-box">🔒</div>
-                <label>ENCRYPTED</label>
+            <div class="matrix-voice-box">
+                <header>V_OS // SENTIENCE_FEED</header>
+                <p id="module-description">SCANNING SECTOR_07... CHOOSE A DESTINATION, OPERATOR.</p>
             </div>
         </section>
 
-        <aside class="side-panel">
-            <h3>SYSTEM_LOGS</h3>
-            <div class="stat-row">CPU: <span>42%</span></div>
-            <div class="stat-row">MEM: <span>1.2TB/4.0TB</span></div>
-            <div class="mini-graph"></div>
-        </aside>
+        <section class="grid-panel">
+            <div class="app-grid">
+                <div class="app-tile active" 
+                     onmouseenter="previewModule('ARCHIVE', 'Access the forbidden history of the Old Net.', 'images/portraits/archive.png')"
+                     onclick="window.location.href='apps/archive.html'">
+                    <span class="tile-label">ARCHIVE</span>
+                </div>
+
+                <div class="app-tile" 
+                     onmouseenter="previewModule('MAP_VIEWER', 'Real-time telemetry of the Neo-Kyoto sprawl.', 'images/portraits/map.png')"
+                     onclick="window.location.href='apps/map.html'">
+                    <span class="tile-label">MAPS</span>
+                </div>
+
+                <div class="app-tile" 
+                     onmouseenter="previewModule('COMMS', 'Intercept thought-streams from the hive mind.', 'images/portraits/comms.png')"
+                     onclick="window.location.href='apps/comms.html'">
+                    <span class="tile-label">COMMS</span>
+                </div>
+
+                <div class="app-tile locked" 
+                     onmouseenter="previewModule('LOCKED', 'Insufficient Citizen Clearance Level.', 'images/portraits/locked.png')">
+                    <span class="tile-label">?????</span>
+                </div>
+                
+                </div>
+
+            <div class="stat-sheet">
+                <div class="stat-line">STABILITY: <div class="bar"><div class="fill" style="width: 80%;"></div></div></div>
+                <div class="stat-line">LATENCY: <div class="bar"><div class="fill" style="width: 15%;"></div></div></div>
+                <div class="stat-line">DANGER: <div class="bar"><div class="fill" style="width: 40%;"></div></div></div>
+            </div>
+        </section>
     </main>
+
+    <footer class="system-footer">
+        <button class="btn-exit" onclick="systemLogout()">[ TERMINATE LINK ]</button>
+        <span class="node-id">NODE: KY_NODE_07</span>
+    </footer>
 
     <script src="js/main.js"></script>
 </body>
