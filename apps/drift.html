@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Drift Hub | Commander Q</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
 
     <style>
@@ -14,117 +15,230 @@
             --apple-blur: blur(20px);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        /* --- SYSTEM RESET --- */
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
         body {
             background: #030008;
             color: #fff;
             font-family: 'Orbitron', sans-serif;
-            height: 100vh;
-            width: 100vw;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Locked viewport: Page will NOT scroll */
+            overflow-x: hidden;
         }
 
-        /* --- BACKGROUND VFX --- */
-        .vfx-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at center, #0a001a 0%, #030008 100%); overflow: hidden; }
-        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--d) infinite ease-in-out; }
-        .speed-line { position: absolute; width: 2px; height: 120px; background: linear-gradient(to bottom, transparent, var(--cyan)); opacity: 0.2; animation: moveLine 0.6s linear infinite; }
+        /* --- NEON STARS & SPEED LINES VFX --- */
+        .vfx-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; background: radial-gradient(circle at center, #0a001a 0%, #030008 100%);
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute; background: white; border-radius: 50%;
+            animation: twinkle var(--d) infinite ease-in-out;
+        }
+
+        .speed-line {
+            position: absolute; width: 2px; height: 120px;
+            background: linear-gradient(to bottom, transparent, var(--cyan));
+            opacity: 0.2; animation: moveLine 0.6s linear infinite;
+        }
+
         @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
-        @keyframes moveLine { 0% { transform: translateY(-110vh) rotate(15deg); } 100% { transform: translateY(110vh) rotate(15deg); } }
-        .scanlines { position: fixed; top: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%); background-size: 100% 3px; pointer-events: none; z-index: 100; }
+        @keyframes moveLine { 
+            0% { transform: translateY(-110vh) rotate(15deg); } 
+            100% { transform: translateY(110vh) rotate(15deg); } 
+        }
 
         /* --- NAVIGATION --- */
-        .top-nav { padding: 15px 20px; width: 100%; z-index: 110; }
+        .top-nav {
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            z-index: 110;
+        }
+
         .back-btn {
-            display: inline-flex; align-items: center; text-decoration: none; color: var(--cyan); font-size: 0.6rem; font-weight: 900; letter-spacing: 2px;
-            background: rgba(0, 0, 0, 0.5); backdrop-filter: var(--apple-blur); border: 1px solid var(--cyan); padding: 10px 15px; border-radius: 4px; transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--cyan);
+            font-size: 0.7rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: var(--apple-blur);
+            -webkit-backdrop-filter: var(--apple-blur);
+            border: 1px solid var(--cyan);
+            padding: 12px 20px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            min-height: 44px;
         }
-        .back-btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px var(--cyan); transform: translateX(-5px); }
 
-        /* --- INTERFACE --- */
-        .interface-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 20px; z-index: 10; min-height: 0; }
+        .back-btn:hover {
+            background: var(--cyan);
+            color: #000;
+            box-shadow: 0 0 20px var(--cyan);
+            transform: translateX(-5px);
+        }
+
+        /* --- MAIN UI WINDOW --- */
+        .interface-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 20px 40px;
+            z-index: 10;
+        }
+
         .glass-window {
-            width: 100%; max-width: 900px; max-height: 85vh; background: var(--glass); backdrop-filter: var(--apple-blur); -webkit-backdrop-filter: var(--apple-blur);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: clamp(1rem, 3vw, 2rem); box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-            display: flex; flex-direction: column;
+            width: 100%;
+            max-width: 900px;
+            background: var(--glass);
+            backdrop-filter: var(--apple-blur);
+            -webkit-backdrop-filter: var(--apple-blur);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: clamp(1rem, 5vw, 2.5rem);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            text-align: center;
         }
 
-        .video-title { font-size: clamp(0.8rem, 3vw, 1.1rem); font-weight: 900; margin-bottom: 15px; color: #fff; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
-        .player-wrapper { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 8px; overflow: hidden; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .video-title {
+            font-size: clamp(0.9rem, 4vw, 1.3rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .player-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* --- TACTICAL NAV SYSTEM --- */
-        .nav-system { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 0; }
+        /* --- TACTICAL GRID PROTOCOL --- */
         .session-grid {
-            display: grid; gap: 10px; flex: 1; overflow: hidden; scroll-behavior: smooth;
-            padding: 5px; scrollbar-width: none;
+            display: grid;
+            /* MOBILE DEFAULT: 2 Options per row */
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 15px;
+            width: 100%;
+            
+            /* SCROLL PROTOCOL */
+            max-height: 220px; 
+            overflow-y: auto;
+            padding-right: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--purple) transparent;
         }
-        .session-grid::-webkit-scrollbar { display: none; }
 
-        .nav-arrow {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--cyan); color: var(--cyan);
-            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; border-radius: 4px; transition: 0.3s; font-weight: 900; z-index: 5;
+        /* DESKTOP OVERRIDE: 3 Options per row */
+        @media (min-width: 768px) {
+            .session-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
-        .nav-arrow:hover { background: var(--cyan); color: #000; box-shadow: 0 0 15px var(--cyan); }
+
+        /* Custom Scrollbar */
+        .session-grid::-webkit-scrollbar { width: 6px; }
+        .session-grid::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+        .session-grid::-webkit-scrollbar-thumb { 
+            background: var(--purple); 
+            border-radius: 10px; 
+            box-shadow: 0 0 10px var(--purple); 
+        }
 
         .session-btn {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--purple); color: #fff;
-            padding: 12px; font-family: 'Orbitron', sans-serif; font-size: 0.6rem; cursor: pointer;
-            border-radius: 4px; transition: 0.3s; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap;
-        }
-        .session-btn.active { background: var(--purple); box-shadow: 0 0 15px var(--purple); }
-
-        /* --- RESPONSIVE LOGIC --- */
-        @media (min-width: 769px) {
-            .nav-system { flex-direction: row; }
-            .session-grid { grid-auto-flow: column; grid-auto-columns: minmax(150px, 1fr); overflow-x: auto; }
-            .arrow-up, .arrow-down { display: none; }
-        }
-
-        @media (max-width: 768px) {
-            .nav-system { flex-direction: column; height: 150px; }
-            .session-grid { grid-template-columns: 1fr; overflow-y: auto; width: 100%; }
-            .arrow-left, .arrow-right { display: none; }
-            .glass-window { max-height: 90vh; padding: 1rem; }
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--purple);
+            color: #fff;
+            padding: 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.65rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: 0.3s;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            min-height: 44px;
         }
 
-        /* --- FOOTER --- */
-        .vanguard-footer { padding: 15px; text-align: center; z-index: 20; }
-        .footer-content { font-size: 0.6rem; letter-spacing: 3px; color: #fff; text-transform: uppercase; transition: opacity 0.5s; }
+        .session-btn:hover, .session-btn.active {
+            background: var(--purple);
+            box-shadow: 0 0 15px var(--purple);
+            transform: translateY(-2px);
+        }
+
+        /* --- ANIMATED FOOTER --- */
+        .vanguard-footer {
+            padding: 25px;
+            text-align: center;
+            z-index: 20;
+        }
+
+        .footer-content {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: #fff;
+            text-transform: uppercase;
+            transition: opacity 0.5s ease;
+        }
+
         .pulse { animation: pulseWhite 2s infinite ease-in-out; }
         @keyframes pulseWhite { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; text-shadow: 0 0 10px #fff; } }
+
+        /* Glitch VFX for switches */
+        .glitch-flash {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--cyan); opacity: 0; pointer-events: none; z-index: 5;
+        }
+        .active-glitch { animation: glitchEffect 0.3s ease-out; }
+        @keyframes glitchEffect { 0% { opacity: 0; } 50% { opacity: 0.3; transform: skewX(10deg); } 100% { opacity: 0; } }
 
     </style>
 </head>
 <body>
 
-    <div class="scanlines"></div>
     <div class="vfx-layer" id="vfx-bg"></div>
 
     <nav class="top-nav">
-        <a href="../menu.html" class="back-btn">&LT; RETURN_COMMAND</a>
+        <a href="../menu.html" class="back-btn">
+            &LT; RETURN_TO_COMMAND
+        </a>
     </nav>
 
     <main class="interface-container">
         <div class="glass-window">
-            <h2 id="video-title" class="video-title">INITIALIZING_NEURAL_LINK...</h2>
+            <header>
+                <p style="font-size: 0.6rem; color: var(--cyan); letter-spacing: 3px; margin-bottom: 5px;">// DRIFT_SESSION_READY</p>
+                <h2 id="video-title" class="video-title">INITIALIZING...</h2>
+            </header>
 
             <div class="player-wrapper">
+                <div id="glitch" class="glitch-flash"></div>
                 <iframe id="main-player" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
 
-            <div class="nav-system">
-                <button class="nav-arrow arrow-left" onclick="scrollNav(-200, 0)">&LT;</button>
-                <button class="nav-arrow arrow-up" onclick="scrollNav(0, -100)">&and;</button>
-                
-                <div id="session-grid" class="session-grid"></div>
-                
-                <button class="nav-arrow arrow-down" onclick="scrollNav(0, 100)">&or;</button>
-                <button class="nav-arrow arrow-right" onclick="scrollNav(200, 0)">&GT;</button>
-            </div>
+            <div id="session-grid" class="session-grid">
+                </div>
         </div>
     </main>
 
@@ -137,18 +251,26 @@
             const player = document.getElementById('main-player');
             const titleDisplay = document.getElementById('video-title');
             const sessionGrid = document.getElementById('session-grid');
+            const glitch = document.getElementById('glitch');
             const footerText = document.getElementById('footer-text');
+            const bg = document.getElementById('vfx-bg');
 
             // --- 1. VFX GENERATOR ---
-            const bg = document.getElementById('vfx-bg');
-            for(let i=0; i<30; i++) {
+            for(let i=0; i<40; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                star.style.width = star.style.height = Math.random() * 2 + 'px';
+                star.style.width = star.style.height = Math.random() * 3 + 'px';
                 star.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
                 bg.appendChild(star);
+            }
+            for(let i=0; i<12; i++) {
+                const line = document.createElement('div');
+                line.className = 'speed-line';
+                line.style.left = Math.random() * 100 + '%';
+                line.style.animationDelay = Math.random() * 2 + 's';
+                bg.appendChild(line);
             }
 
             // --- 2. DATA LOAD ---
@@ -158,12 +280,14 @@
                     renderSessions(data.sessions);
                     if(data.sessions.length > 0) loadVideo(data.sessions[0]);
                 })
-                .catch(err => { titleDisplay.innerText = "SIGNAL_LOST"; });
+                .catch(err => {
+                    titleDisplay.innerText = "SIGNAL LOST: CHECK JSON PATH";
+                });
 
             function renderSessions(sessions) {
                 sessionGrid.innerHTML = sessions.map((s, index) => `
                     <button class="session-btn" onclick="switchSession('${s.id}', '${s.title}', this)">
-                        S_${(index + 1).toString().padStart(2, '0')}
+                        SESSION_${(index + 1).toString().padStart(2, '0')}
                     </button>
                 `).join('');
                 if(sessionGrid.firstElementChild) sessionGrid.firstElementChild.classList.add('active');
@@ -172,6 +296,8 @@
             window.switchSession = (id, title, btn) => {
                 document.querySelectorAll('.session-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+                glitch.classList.add('active-glitch');
+                setTimeout(() => glitch.classList.remove('active-glitch'), 300);
                 loadVideo({id, title});
             };
 
@@ -180,12 +306,7 @@
                 titleDisplay.innerText = video.title;
             }
 
-            // --- 3. SCROLL LOGIC ---
-            window.scrollNav = (left, top) => {
-                sessionGrid.scrollBy({ left, top, behavior: 'smooth' });
-            };
-
-            // --- 4. FOOTER ROTATION ---
+            // --- 3. ANIMATED FOOTER ROTATION ---
             let showMission = false;
             setInterval(() => {
                 footerText.style.opacity = 0;
