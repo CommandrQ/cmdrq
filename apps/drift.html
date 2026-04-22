@@ -85,7 +85,7 @@
             padding: 12px 20px;
             border-radius: 4px;
             transition: all 0.3s ease;
-            min-height: 44px; /* Apple Touch Target Standard */
+            min-height: 44px;
         }
 
         .back-btn:hover {
@@ -140,12 +140,28 @@
 
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Session Select Grid */
+        /* --- TACTICAL SCROLL GRID --- */
         .session-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 15px;
             width: 100%;
+            
+            /* SCROLL PROTOCOL */
+            max-height: 180px; 
+            overflow-y: auto;
+            padding-right: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--purple) transparent;
+        }
+
+        /* Custom Scrollbar for Chrome/Safari */
+        .session-grid::-webkit-scrollbar { width: 6px; }
+        .session-grid::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+        .session-grid::-webkit-scrollbar-thumb { 
+            background: var(--purple); 
+            border-radius: 10px; 
+            box-shadow: 0 0 10px var(--purple); 
         }
 
         .session-btn {
@@ -159,6 +175,7 @@
             border-radius: 4px;
             transition: 0.3s;
             letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .session-btn:hover, .session-btn.active {
@@ -254,7 +271,7 @@
                 bg.appendChild(line);
             }
 
-            // --- 2. DATA LOAD (JUMP BACK TO DATABASE) ---
+            // --- 2. DATA LOAD ---
             fetch('../database/drift.json')
                 .then(res => res.json())
                 .then(data => {
@@ -263,15 +280,16 @@
                 })
                 .catch(err => {
                     titleDisplay.innerText = "SIGNAL LOST: CHECK JSON PATH";
-                    console.error("404: Ensure drift.json is in /database/", err);
+                    console.error("404 Error: Ensure drift.json is in /database/", err);
                 });
 
             function renderSessions(sessions) {
                 sessionGrid.innerHTML = sessions.map((s, index) => `
                     <button class="session-btn" onclick="switchSession('${s.id}', '${s.title}', this)">
-                        SESSION_0${index + 1}
+                        SESSION_${(index + 1).toString().padStart(2, '0')}
                     </button>
                 `).join('');
+                // Mark first button as active
                 if(sessionGrid.firstElementChild) sessionGrid.firstElementChild.classList.add('active');
             }
 
