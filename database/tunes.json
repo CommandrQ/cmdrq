@@ -1,0 +1,60 @@
+{
+  "stations": [
+    {
+      "name": "CH_01_SYNTH",
+      "playlists": [
+        {
+          "id": "PLjFk9lX_3k21zZ4yO78sUfVb1yZ8N-m2y",
+          "title": "Night City Drive"
+        },
+        {
+          "id": "PL3-sRm8xAzY-EPbE-KqUa1A13XJ_R4XfV",
+          "title": "Cyberpunk Ambience"
+        },
+        {
+          "id": "PLe8jmEHFkvsb2R8Zg6zQoF_Qp8jW1P6x4",
+          "title": "Darkwave Intel"
+        }
+      ]
+    },
+    {
+      "name": "CH_02_FOCUS",
+      "playlists": [
+        {
+          "id": "PLofht4NTcUK4Hts_Sj5QW-VbU3r-vQh9q",
+          "title": "Tactical Chill"
+        },
+        {
+          "id": "PLOzDu-MXXLliO9fBNZOQTBDddoA3FzZUo",
+          "title": "Coding Flow"
+        }
+      ]
+    },
+    {
+      "name": "CH_03_DRIFT",
+      "playlists": [
+        {
+          "id": "PLWv8Wj9x3G0z6K6rV_T8xZ7o8t8U0P_q9",
+          "title": "NFS Underground"
+        },
+        {
+          "id": "PLrE_B2g4jZ5CqE8R7w2xG6c_R1Kz5b_w",
+          "title": "High Velocity"
+        }
+      ]
+    },
+    {
+      "name": "CH_04_ARCHIVE",
+      "playlists": [
+        {
+          "id": "PLMC9KNkIncKvYin_USF1qoJQnIyMAfRxl",
+          "title": "Classic Recon"
+        },
+        {
+          "id": "PL8F6B0753B2FFAA28",
+          "title": "Acoustic Retreat"
+        }
+      ]
+    }
+  ]
+}
