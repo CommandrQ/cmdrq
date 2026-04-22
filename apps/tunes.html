@@ -23,6 +23,7 @@
             background: #030008; color: #fff; 
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             height: 100dvh; width: 100vw; display: flex; flex-direction: column; overflow: hidden;
+            transition: background 0.8s ease;
         }
 
         /* --- TOWER DATA STREAM VFX --- */
@@ -35,6 +36,41 @@
             opacity: 0.2; animation: streamDrop linear infinite; transition: background 0.5s;
         }
         @keyframes streamDrop { 0% { transform: translateY(-100vh); } 100% { transform: translateY(100vh); } }
+
+        /* --- IMMERSIVE THEATER MODE TRANSITIONS --- */
+        .top-nav, .station-tabs, .video-list-nexus, .vanguard-footer, .header-tag {
+            transition: opacity 0.8s ease;
+        }
+        .glass-window {
+            transition: background 0.8s ease, border-color 0.8s ease, box-shadow 0.8s ease;
+        }
+
+        /* When the body has the 'immersive' class (music is playing) */
+        body.immersive .top-nav,
+        body.immersive .station-tabs,
+        body.immersive .video-list-nexus,
+        body.immersive .vanguard-footer,
+        body.immersive .header-tag {
+            opacity: 0.15; /* Dims the UI to 15% visibility */
+        }
+
+        body.immersive .glass-window {
+            background: rgba(0, 0, 0, 0.6);
+            border-color: rgba(255,255,255,0.02);
+            box-shadow: 0 20px 80px rgba(0,0,0,0.9);
+        }
+
+        body.immersive .now-playing {
+            text-shadow: 0 0 20px var(--theme-color);
+        }
+
+        /* Tactical Override: UI brightens when touched/hovered */
+        body.immersive .station-tabs:hover,
+        body.immersive .video-list-nexus:hover,
+        body.immersive .media-controls-bar:hover,
+        body.immersive .top-nav:hover {
+            opacity: 1;
+        }
 
         /* --- TOP NAV --- */
         .top-nav { position: absolute; top: 0; left: 0; width: 100%; padding: 15px 20px; z-index: 110; }
@@ -65,7 +101,7 @@
         .now-playing { 
             font-size: 0.9rem; font-weight: 800; text-transform: uppercase; color: #fff; 
             letter-spacing: 0.5px; margin-bottom: 15px; text-shadow: 0 0 10px var(--theme-color);
-            transition: text-shadow 0.5s;
+            transition: text-shadow 0.8s ease;
         }
 
         /* --- AURA PLAYER & CONTROLS --- */
@@ -93,6 +129,7 @@
             border-radius: 30px; padding: 10px 25px; margin-bottom: 15px;
             border: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 5;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); flex-shrink: 0;
+            transition: opacity 0.8s ease;
         }
 
         .ctrl-btn {
@@ -252,127 +289,4 @@
             stream.className = 'data-stream';
             stream.style.left = Math.random() * 100 + '%';
             stream.style.height = (Math.random() * 50 + 20) + 'vh';
-            stream.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            stream.style.animationDelay = Math.random() * 2 + 's';
-            bg.appendChild(stream);
-        }
-
-        // --- 2. YouTube API Initialization ---
-        function onYouTubeIframeAPIReady() {
-            ytPlayer = new YT.Player('yt-player', {
-                height: '100%',
-                width: '100%',
-                playerVars: {
-                    'controls': 0, 
-                    'disablekb': 1,
-                    'modestbranding': 1,
-                    'rel': 0,
-                    'playsinline': 1
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            fetch('../database/tunes.json')
-                .then(res => res.json())
-                .then(data => {
-                    database = data;
-                    renderStations();
-                })
-                .catch(err => console.error("Database connection failed", err));
-        }
-
-        function onPlayerStateChange(event) {
-            const playBtn = document.getElementById('btn-play');
-            if (event.data == YT.PlayerState.PLAYING) {
-                playBtn.innerText = "⏸";
-                isPlaying = true;
-            } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
-                playBtn.innerText = "▶";
-                isPlaying = false;
-            }
-        }
-
-        // --- 3. Custom Media Controls ---
-        document.getElementById('btn-play').addEventListener('click', () => {
-            if (!ytPlayer) return;
-            if (isPlaying) ytPlayer.pauseVideo(); 
-            else ytPlayer.playVideo();
-        });
-        document.getElementById('btn-next').addEventListener('click', () => { if(ytPlayer) ytPlayer.nextVideo(); });
-        document.getElementById('btn-prev').addEventListener('click', () => { if(ytPlayer) ytPlayer.previousVideo(); });
-
-        // --- 4. UI & Tab Logic ---
-        const tabContainer = document.getElementById('station-tabs');
-        const glitch = document.getElementById('glitch');
-
-        function renderStations() {
-            tabContainer.innerHTML = database.stations.map((station, idx) => `
-                <button class="tab-btn ${idx === 0 ? 'active' : ''}" onclick="selectStation(${idx}, this)">
-                    ${station.name}
-                </button>
-            `).join('');
-            selectStation(0, tabContainer.firstElementChild, true); 
-        }
-
-        window.selectStation = (stationIndex, btnEle, isInitialLoad = false) => {
-            document.documentElement.style.setProperty('--theme-color', stationColors[stationIndex]);
-            
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            if(btnEle) btnEle.classList.add('active');
-
-            const station = database.stations[stationIndex];
-            currentPlaylistCount = station.playlists.length;
-            
-            currentRow = 0;
-            grid.style.transform = `translateY(0px)`;
-
-            // INJECTED HTML: Code span removed, leaving only the title
-            grid.innerHTML = station.playlists.map(pl => `
-                <button class="session-btn" onclick="loadPlaylist('${pl.id}', '${pl.title}', this)">
-                    <span class="pl-title">${pl.title}</span>
-                </button>
-            `).join('');
-
-            if (isInitialLoad && station.playlists.length > 0) {
-                titleDisplay.innerText = station.playlists[0].title;
-                const firstBtn = document.querySelector('.session-btn');
-                if(firstBtn) firstBtn.classList.add('active');
-                ytPlayer.cuePlaylist({ list: station.playlists[0].id, listType: 'playlist' });
-            }
-        };
-
-        // --- 5. Scroll Nexus Logic ---
-        nextBtn.addEventListener('click', () => {
-            const columns = window.innerWidth >= 1024 ? 3 : 2;
-            const maxRows = Math.ceil(currentPlaylistCount / columns);
-            if (currentRow < maxRows - 2) { 
-                currentRow++;
-                grid.style.transform = `translateY(-${currentRow * rowHeight}px)`;
-            }
-        });
-
-        prevBtn.addEventListener('click', () => {
-            if (currentRow > 0) {
-                currentRow--;
-                grid.style.transform = `translateY(-${currentRow * rowHeight}px)`;
-            }
-        });
-
-        window.loadPlaylist = (playlistId, title, btnEle) => {
-            document.querySelectorAll('.session-btn').forEach(b => b.classList.remove('active'));
-            btnEle.classList.add('active');
-            
-            glitch.classList.add('active-glitch');
-            setTimeout(() => glitch.classList.remove('active-glitch'), 200);
-
-            titleDisplay.innerText = title;
-            ytPlayer.loadPlaylist({ list: playlistId, listType: 'playlist' });
-        };
-    </script>
-</body>
-</html>
+            stream.style.animationDuration = (Math.random() * 3 + 2)
