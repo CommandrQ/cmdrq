@@ -1,28 +1,26 @@
 /**
- * VANGUARD_OS // Full Dive Redirect
+ * VANGUARD_OS // PHASE 1 LOGIC
  */
 
 function initiateFullDive() {
     const btn = document.getElementById('slice-button');
     const fade = document.getElementById('fade-overlay');
 
-    // 1. Disable button to prevent double-clicks
+    // 1. Lock input
     btn.disabled = true;
 
-    // 2. Trigger the "Slice" animation
+    // 2. Trigger the "Shatter"
     btn.classList.add('sliced');
 
-    // 3. Wait for the slice to fly apart (approx 400ms)
+    // 3. Initiate the transition to the Void
     setTimeout(() => {
-        // 4. Trigger the fade to black
         fade.classList.add('faded-out');
     }, 400);
 
-    // 5. Final Redirect once screen is fully black
+    // 4. Full Dive into Menu.html
     setTimeout(() => {
-        // Mark session as active so they don't see intro again (optional)
-        localStorage.setItem('vanguard_login', 'true');
-        
+        // We'll set a flag so the menu knows we just 'dove' in
+        localStorage.setItem('vanguard_sync', 'true');
         window.location.href = 'Menu.html';
-    }, 1500); 
+    }, 1500);
 }
