@@ -1,18 +1,115 @@
-/* VANGUARD_OS // SYSTEM HUD & FOOTER V2.6 */
-document.addEventListener("DOMContentLoaded", function() {
-    // 1. TOP TASKBAR (Clean HUD)
-    const header = document.createElement('div');
-    header.style.cssText = `position:fixed; top:0; left:0; width:100%; height:60px; background:rgba(0,0,0,0.95); z-index:9999; display:flex; align-items:center; justify-content:space-between; padding:0 25px; border-bottom:1px solid var(--bright-teal); box-sizing:border-box; backdrop-filter:blur(10px);`;
-    header.innerHTML = `
-        <div style="font-size:0.7rem; letter-spacing:2px; font-family:sans-serif; font-weight:bold; color:#fff;">VANGUARD_OS // CORE_ACTIVE</div>
-        <div style="font-size:0.6rem; color:var(--gold); letter-spacing:1px;">ENCRYPTION: LEVEL_5</div>
-    `;
-    document.body.appendChild(header);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Vanguard_OS // Command Center</title>
+    <link rel="stylesheet" href="css/global.css">
+    <style>
+        .workspace-layout { display: grid; grid-template-columns: 1fr; gap: 20px; flex: 1; min-height: 0; }
+        .study-sidebar { display: flex; flex-direction: column; gap: 15px; }
+        .status-line { font-size: 0.7rem; font-family: monospace; color: var(--bright-teal); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
 
-    // 2. BOTTOM PERSISTENT FOOTER
-    const footer = document.createElement('div');
-    footer.style.cssText = `position:fixed; bottom:0; left:0; width:100%; height:45px; background:rgba(0,0,0,0.9); z-index:9999; display:flex; align-items:center; justify-content:center; border-top:1px solid rgba(255,255,255,0.1); box-sizing:border-box; backdrop-filter:blur(5px);`;
-    const year = new Date().getFullYear();
-    footer.innerHTML = `<div style="font-size:0.7rem; color:rgba(255,255,255,0.5); letter-spacing:1px; font-family:sans-serif;">Built by Commander Q &copy; ${year}</div>`;
-    document.body.appendChild(footer);
-});
+        .sidebar-portrait {
+            width: 130px; height: 130px;
+            margin: 10px auto;
+            border-radius: 50%;
+            border: 2px solid var(--bright-teal);
+            box-shadow: 0 0 25px rgba(1, 205, 254, 0.4);
+            object-fit: cover;
+            display: block;
+        }
+
+        /* MISSION TEXT - Optimized for Sidebar Reading */
+        .mission-statement {
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.85);
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-top: 10px;
+            scrollbar-width: thin;
+        }
+        .mission-statement p { margin-bottom: 15px; }
+
+        .app-launcher {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 25px; padding: 10px;
+        }
+
+        .app-icon-link { display: flex; flex-direction: column; align-items: center; text-decoration: none; transition: 0.3s; }
+        .app-icon-link:hover { transform: scale(1.1); filter: drop-shadow(0 0 10px var(--bright-teal)); }
+        
+        .icon-box {
+            width: 85px; aspect-ratio: 1/1; border-radius: 20px;
+            border: 2px solid rgba(255,255,255,0.1);
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden; background: rgba(0,0,0,0.5);
+        }
+        .icon-box img { width: 100%; height: 100%; object-fit: cover; }
+        .icon-label { font-size: 0.7rem; text-transform: uppercase; margin-top: 10px; color: #fff; font-weight: bold; letter-spacing: 1px; }
+
+        @media (min-width: 1100px) {
+            .workspace-layout { grid-template-columns: 380px 1fr; gap: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="starfield-canvas"></canvas>
+
+    <div class="vanguard-page">
+        <div class="workspace-layout">
+            <aside class="vanguard-terminal study-sidebar">
+                <div class="status-line" id="sync-status">SYNC: INITIALIZING...</div>
+                
+                <img src="images/commanderqhs.png" alt="Commander Q" class="sidebar-portrait">
+                
+                <h2 style="font-family: var(--title-font); font-size: 1.2rem; color: var(--gold); text-align: center; margin: 5px 0;">CMDR_Q</h2>
+                
+                <div class="mission-statement">
+                    <p>Hello! Thank you for visiting my page!</p>
+                    <p>My name is Quincy, also known as Commander Q. But beyond the callsign, I am a self-taught developer driven by relentless curiosity and disciplined execution. My architecture wasn't built in a traditional computer science lab. It was forged through rigorous self-study, late-night debugging, and a commitment to building systems from the ground up.</p>
+                    <p>My operational history extends beyond my military service. In the civilian sector, my resume reflects a versatile tech operative, with frontline experience at industry giants like Apple and Best Buy. Navigating these fast-paced, high-volume environments honed my ability to troubleshoot complex systems under pressure, manage hardware logistics, and deliver elite-level support directly the end user.</p>
+                    <p>Yet, in a digital landscape constantly threatened by the overwhelming storms of negativity, toxicity, and division, technical skills alone aren't enough. My mission is absolute: to protect the positive energy of our community and the individuals that power it.</p>
+                    <p>The Vanguard Knights isn't just a collective. We believe that hard work, discipline, and a balanced perspective are the ultimate weapons against the dark sectors of the net.</p>
+                    <p style="color:var(--gold); font-weight:bold; border-top: 1px solid rgba(255,215,0,0.2); padding-top: 10px;">Stand with me and defend the light.</p>
+                </div>
+            </aside>
+
+            <main class="vanguard-terminal" style="overflow-y: auto;">
+                <div class="app-launcher" id="menu-grid"></div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/warp.js"></script>
+    <script src="js/system.js"></script>
+    <script>
+        async function loadMenu() {
+            const grid = document.getElementById('menu-grid');
+            const syncStatus = document.getElementById('sync-status');
+            try {
+                const response = await fetch('database/menu.json');
+                const menuItems = await response.json();
+                grid.innerHTML = ''; 
+                menuItems.forEach(item => {
+                    const link = document.createElement('a');
+                    link.href = item.url;
+                    link.className = 'app-icon-link';
+                    if (item.url.startsWith('http')) { link.target = "_blank"; link.rel = "noopener"; }
+                    link.innerHTML = `
+                        <div class="icon-box" style="border-color: ${item.color}">
+                            <img src="${item.icon}" alt="${item.title}">
+                        </div>
+                        <div class="icon-label">${item.title}</div>
+                    `;
+                    grid.appendChild(link);
+                });
+                syncStatus.innerText = "SYNC: COMPLETE";
+            } catch (err) { syncStatus.innerText = "SYNC: FAILED"; }
+        }
+        document.addEventListener('DOMContentLoaded', loadMenu);
+    </script>
+</body>
+</html>
