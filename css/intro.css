@@ -1,7 +1,6 @@
 :root {
-    --neon-blue: #00c3ff; /* The specific light blue */
-    --bg-dark: #020204;
-    --glass-dark: rgba(10, 12, 16, 0.6);
+    --neon-blue: #00c3ff;
+    --window-bg: rgba(5, 5, 10, 0.55); /* Dark frosted glass */
 }
 
 * {
@@ -13,109 +12,112 @@
 
 body, html {
     margin: 0; padding: 0;
-    background-color: var(--bg-dark);
-    color: white;
-    overflow: hidden;
     height: 100dvh;
-}
-
-/* --- CINEMATIC BACKGROUND --- */
-.stars {
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0; 
-    width: 100%; height: 100%; display: block;
-    background: #000 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQMAAAC6f7wZAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAA5JREFUeNpjYBgFgxgAAASAAAH9Y8SDAAAAAElFTkSuQmCC) repeat top center;
-    z-index: -3;
-    opacity: 0.4;
-    animation: slow-drift 100s linear infinite;
-}
-
-@keyframes slow-drift {
-    0% { background-position: 0 0; }
-    100% { background-position: 0 1000px; }
-}
-
-.scanlines {
-    position: fixed; inset: 0; pointer-events: none; z-index: 50;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
-    background-size: 100% 4px;
+    overflow: hidden;
+    background-color: #000;
+    /* YOUR CUSTOM WALLPAPER */
+    background-image: url('../images/introwallpaper.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* --- UI LAYOUT --- */
 .ui-container {
-    position: fixed; inset: 0; display: flex; 
-    justify-content: center; align-items: center; z-index: 100;
+    position: fixed; inset: 0; 
+    display: flex; justify-content: center; align-items: center; 
+    z-index: 100;
 }
 
-/* --- DARK GLASS WINDOW --- */
-.glass-window {
-    background: var(--glass-dark);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    padding: 60px 50px;
+/* --- THE NEON ANIME WINDOW --- */
+.anime-window {
+    background: var(--window-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    
+    /* Neon Borders */
+    border: 1px solid rgba(0, 195, 255, 0.3);
+    border-left: 4px solid var(--neon-blue);
+    border-right: 4px solid var(--neon-blue);
+    
+    /* Angled Mecha Corners */
+    clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+    
+    padding: 50px 60px;
     text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-    transition: opacity 1.2s ease, filter 1.2s ease, transform 1.2s ease;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 195, 255, 0.1);
+    
+    /* Floating Animation */
+    animation: float-window 4s ease-in-out infinite;
+    transition: opacity 1s ease, transform 1s ease, filter 1s ease;
 }
 
-/* --- TYPOGRAPHY --- */
-.production-title {
-    font-size: 13px;
-    letter-spacing: 5px;
-    color: #888; /* Muted base text */
-    margin-bottom: 40px;
-    font-weight: 500;
+@keyframes float-window {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+/* --- TEXT STYLING --- */
+.sub-heading {
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: #fff;
+    margin-bottom: 20px;
 }
 
 .glow-blue {
     color: var(--neon-blue);
-    text-shadow: 0 0 15px rgba(0, 195, 255, 0.6);
-    font-weight: 900;
+    text-shadow: 0 0 15px rgba(0, 195, 255, 0.8), 0 0 30px rgba(0, 195, 255, 0.4);
 }
 
-/* --- SLEEK BUTTON --- */
-.sleek-btn {
-    background: rgba(0, 195, 255, 0.05);
-    border: 1px solid rgba(0, 195, 255, 0.3);
+.main-heading {
+    font-size: 28px;
+    letter-spacing: 6px;
+    color: #fff;
+    margin: 0 0 40px 0;
+    line-height: 1.4;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+}
+
+.muted-text {
+    font-size: 18px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 10px;
+}
+
+/* --- THE AWAKEN BUTTON --- */
+.neon-btn {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.2);
     color: white;
-    padding: 20px 40px;
-    font-size: 16px;
+    padding: 15px 40px;
+    font-size: 18px;
     letter-spacing: 8px;
     cursor: pointer;
-    border-radius: 4px;
     transition: all 0.3s ease;
-    box-shadow: inset 0 0 10px rgba(0, 195, 255, 0.1);
     position: relative;
 }
 
-.sleek-btn:hover {
-    background: rgba(0, 195, 255, 0.15);
-    border-color: var(--neon-blue);
-    box-shadow: 0 0 20px rgba(0, 195, 255, 0.2), inset 0 0 15px rgba(0, 195, 255, 0.2);
-    text-shadow: 0 0 8px var(--neon-blue);
+.neon-btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: #fff;
+    box-shadow: 0 0 20px rgba(255,255,255,0.3);
 }
 
-.btn-text {
-    display: inline-block;
-    position: relative;
-}
+#btn-text { display: inline-block; position: relative; }
 
 /* --- GLITCH & RISE ANIMATION --- */
 .glitching-letter {
     display: inline-block;
-    /* Forwards keeps the letter frozen in its final invisible state */
-    animation: glitch-rise 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: glitch-rise 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 @keyframes glitch-rise {
     0% { transform: translate(0, 0) skewX(0); opacity: 1; text-shadow: none; }
-    /* The Glitch Phase */
     10% { transform: translate(-2px, 1px) skewX(-15deg); opacity: 0.8; text-shadow: 2px 0 var(--neon-blue), -2px 0 magenta; }
     15% { transform: translate(2px, -1px) skewX(10deg); opacity: 0.9; text-shadow: -2px 0 var(--neon-blue), 2px 0 magenta; }
     20% { transform: translate(0, 0) skewX(0); opacity: 1; text-shadow: none; }
-    /* The Rise Phase */
     50% { transform: translateY(-5px); opacity: 1; filter: blur(0); }
-    100% { transform: translateY(-40px); opacity: 0; filter: blur(5px); }
+    100% { transform: translateY(-30px); opacity: 0; filter: blur(5px); }
 }
