@@ -2,7 +2,6 @@
     --neon-cyan: #00f3ff;
     --dark-glass: rgba(8, 8, 12, 0.85);
     --border-dim: rgba(0, 243, 255, 0.2);
-    --border-bright: rgba(0, 243, 255, 0.8);
 }
 
 * {
@@ -30,9 +29,9 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 15px;
-    gap: 15px;
-    max-width: 1200px;
+    padding: 20px;
+    gap: 20px;
+    max-width: 900px; /* Constrained for a cleaner center look */
     margin: 0 auto;
 }
 
@@ -48,8 +47,8 @@ body {
 .hud-header {
     display: flex;
     justify-content: space-between;
-    padding: 15px 20px;
-    font-size: 11px;
+    padding: 18px 25px;
+    font-size: 12px;
     letter-spacing: 2px;
     flex-shrink: 0;
 }
@@ -66,142 +65,77 @@ body {
 
 .cyan-text { color: var(--neon-cyan); }
 
-/* Main Layout (Side by Side on Desktop) */
+/* Main Grid Layout */
 .tactical-layout {
     display: flex;
-    flex-direction: row;
-    gap: 15px;
+    flex-direction: column;
     flex: 1;
-    min-height: 0; /* Important for scrollable areas */
+    min-height: 0; 
 }
 
-/* Node Matrix (Grid of Buttons) */
 .node-matrix {
-    flex: 2;
-    padding: 20px;
+    flex: 1;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
     align-content: start;
     overflow-y: auto;
+    padding-right: 10px; /* Space for scrollbar */
+    
+    /* Scrollbar styling */
     scrollbar-width: thin;
-    scrollbar-color: var(--neon-cyan) transparent;
+    scrollbar-color: var(--border-dim) transparent;
 }
 
-.node-btn {
-    background: rgba(255,255,255,0.03);
+.node-matrix::-webkit-scrollbar { width: 6px; }
+.node-matrix::-webkit-scrollbar-thumb { background: var(--border-dim); border-radius: 10px; }
+
+/* The Link Buttons */
+.node-link {
+    background: var(--dark-glass);
+    backdrop-filter: blur(15px);
     border: 1px solid var(--border-dim);
     color: white;
-    padding: 20px 15px;
-    border-radius: 8px;
-    text-align: left;
-    cursor: pointer;
-    transition: all 0.3s;
+    padding: 25px 20px;
+    border-radius: 12px;
+    text-decoration: none;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-.node-btn:hover, .node-btn.active {
+.node-link:hover {
     background: rgba(0, 243, 255, 0.1);
     border-color: var(--neon-cyan);
-    box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.1);
-    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 243, 255, 0.15), inset 0 0 10px rgba(0, 243, 255, 0.05);
+    transform: translateY(-3px);
+    color: var(--neon-cyan);
 }
 
 .node-title {
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--neon-cyan);
-}
-
-.node-status {
-    font-size: 10px;
-    letter-spacing: 1px;
-    opacity: 0.6;
-}
-
-/* Intel Sidebar */
-.intel-panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    min-width: 300px;
-}
-
-.panel-header {
-    font-size: 11px;
-    letter-spacing: 4px;
-    border-bottom: 1px solid var(--border-dim);
-    padding-bottom: 15px;
-    margin-bottom: 20px;
-    color: rgba(255,255,255,0.5);
-}
-
-.intel-content {
-    flex: 1;
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-    line-height: 1.6;
-    color: #e0e0e0;
-}
-
-.intel-stat { color: var(--neon-cyan); font-weight: bold; }
-
-.nav-btn {
-    width: 100%;
-    padding: 16px;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
     letter-spacing: 3px;
-    border-radius: 8px;
-    transition: all 0.3s;
 }
 
-.nav-btn.locked {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.3);
-    cursor: not-allowed;
+.external-icon {
+    font-size: 16px;
+    opacity: 0.5;
+    transition: 0.3s;
 }
 
-.nav-btn.active {
-    background: rgba(0, 243, 255, 0.1);
-    border: 1px solid var(--neon-cyan);
-    color: var(--neon-cyan);
-    cursor: pointer;
-    text-shadow: 0 0 10px var(--neon-cyan);
-    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
-}
-
-.nav-btn.active:hover {
-    background: var(--neon-cyan);
-    color: black;
+.node-link:hover .external-icon {
+    opacity: 1;
+    transform: translate(2px, -2px);
 }
 
 @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-@keyframes blink { 50% { opacity: 0.3; } }
-.blink-text { animation: blink 1s infinite; }
 
-/* =========================================
-   MOBILE RESPONSIVENESS
-========================================= */
+/* Mobile Adjustments */
 @media (max-width: 768px) {
-    .tactical-layout {
-        flex-direction: column; /* Stacks the grid and the intel panel */
-    }
-
     .node-matrix {
-        grid-template-columns: 1fr; /* Single column list on phones */
-        flex: unset;
-        height: 50%; /* Takes up top half */
-    }
-
-    .intel-panel {
-        flex: unset;
-        height: 50%; /* Takes up bottom half */
-        min-width: 100%;
+        grid-template-columns: 1fr; /* Stacks to 1 column on phones */
     }
 }
