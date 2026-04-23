@@ -1,107 +1,67 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Elements - Apple UI
-    const appleUI = document.getElementById('apple-ui');
-    const appleLoader = document.getElementById('apple-loader');
-    const overrideText = document.getElementById('override-text');
-    const appleGlass = document.querySelector('.apple-glass');
-    
-    // Elements - Transition & Neon UI
-    const flashBang = document.getElementById('flash-bang');
-    const scanlines = document.getElementById('scanlines');
-    const neonUI = document.getElementById('neon-ui');
-    const initiateBtn = document.getElementById('initiate-btn');
+    const insertCoinText = document.getElementById('insert-coin-text');
     const btnWrapper = document.getElementById('btn-wrapper');
-    const fadeOverlay = document.getElementById('fade-to-black');
+    const initiateBtn = document.getElementById('initiate-btn');
+    const impactFrame = document.getElementById('impact-frame');
 
-    // Helper function to pause time
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-    // THE CINEMATIC SEQUENCE (Slowed down for smoothness)
-    async function runBootSequence() {
+    // 1. ARCADE ATTRACT MODE
+    async function runArcadeBoot() {
+        // Let "INSERT COIN" blink for 2 seconds
+        await delay(2000);
         
-        // 1. Initial smooth load
-        await delay(800);
-        appleLoader.style.width = '75%';
+        // Rapid blink right before changing
+        insertCoinText.style.animation = "blinker 0.1s step-end infinite";
+        await delay(400);
         
-        // 2. The Slow Struggle
-        await delay(1500);
-        appleLoader.style.width = '82%';
+        // Swap to PRESS START button
+        insertCoinText.classList.add('hidden');
+        btnWrapper.classList.remove('hidden');
         
-        await delay(600);
-        appleLoader.style.width = '79%';
-        
-        await delay(800);
-        appleLoader.style.width = '88%';
-        
-        // 3. The Override text slowly fades in
-        await delay(500);
-        overrideText.style.opacity = '1';
-        
-        // 4. Mounting Pressure
-        await delay(1200);
-        appleLoader.style.background = '#ff2a2a'; // Fades to red
-        appleLoader.style.width = '96%';
-        appleGlass.classList.add('glitch-shake');
-        
-        // Let it shake and build tension for almost 2 seconds
-        await delay(1800);
-        
-        // 5. The Cinematic Explosion
-        // A slightly longer flash bang (1.2s total via CSS)
-        flashBang.style.animation = 'flash-white 1.2s ease-out forwards';
-        
-        appleGlass.classList.remove('glitch-shake');
-        appleGlass.classList.add('explode');
-        
-        // Wait until the screen is completely white (about 250ms) to swap UIs quietly
-        await delay(250); 
-        appleUI.classList.add('hidden');
-        document.body.classList.add('tactical-mode'); 
-        scanlines.style.opacity = '1';
-        neonUI.classList.remove('hidden');
-        
-        // The purple background and neon UI will slowly fade in as the flashbang clears
+        // Add a slight "thump" animation when the button appears
+        btnWrapper.style.animation = "power-on 0.3s cubic-bezier(0.1, 0.8, 0.3, 1)";
     }
 
-    // Start the intro sequence
-    runBootSequence();
+    runArcadeBoot();
 
-    // ----------------------------------------------------
-    // NEURAL OVERRIDE BUTTON LOGIC
-    // ----------------------------------------------------
-    initiateBtn.addEventListener('click', () => {
-        // Log the visit
+    // 2. THE KATANA CUT ACTION
+    initiateBtn.addEventListener('click', async () => {
+        // Log the visit so they bypass this screen next time
         localStorage.setItem('musubi_access_granted', 'true');
         
-        // 1. Create top half, bottom half, and laser flash
-        const topClone = initiateBtn.cloneNode(true);
-        const btmClone = initiateBtn.cloneNode(true);
+        // STEP A: HIT-STOP (Freeze and invert colors for a microsecond)
+        initiateBtn.classList.add('hit-stop');
+        
+        // Pause for impact weight (150ms)
+        await delay(150);
+
+        // STEP B: IMPACT FRAME (Screen flashes white/negative)
+        impactFrame.style.animation = "impact-flash 0.4s ease-out forwards";
+
+        // STEP C: CREATE THE SLICED CLONES
+        const topClone = document.createElement('div');
+        const btmClone = document.createElement('div');
         const flashLine = document.createElement('div');
 
-        // 2. Assign animation classes
-        topClone.className = 'neon-btn slice-top';
-        btmClone.className = 'neon-btn slice-bottom';
+        // Copy exact HTML so the text slices in half too
+        topClone.innerHTML = `<span class="btn-text">PRESS START</span>`;
+        btmClone.innerHTML = `<span class="btn-text">PRESS START</span>`;
+
+        topClone.className = 'slice-top';
+        btmClone.className = 'slice-bottom';
         flashLine.className = 'slice-flash';
 
-        // 3. Strip IDs
-        topClone.removeAttribute('id');
-        btmClone.removeAttribute('id');
-
-        // 4. Hide original button and append clones
-        initiateBtn.style.opacity = '0';
+        // Hide original button and append the flying pieces
+        initiateBtn.style.display = 'none';
         btnWrapper.appendChild(topClone);
         btnWrapper.appendChild(btmClone);
         btnWrapper.appendChild(flashLine);
 
-        // 5. Fade to Black triggers later now (at 800ms) because slice is slower
-        setTimeout(() => {
-            fadeOverlay.classList.add('active');
-        }, 800);
-
-        // 6. Warp safely in the dark
-        setTimeout(() => {
-            window.location.href = 'menu.html';
-        }, 2000); // Extended to 2 seconds to let the black screen linger for a moment
+        // STEP D: WARP TO MENU
+        // Wait for the pieces to fly off screen (1 second animation, we warp at 800ms)
+        await delay(800);
+        window.location.href = 'menu.html';
     });
 });
