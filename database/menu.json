@@ -21,9 +21,9 @@
       "color": "cyan"
     },
     {
-      "title": "SYSTEM_CNAME",
-      "link": "cname",
-      "color": "red"
+      "title": "Music Player",
+      "link": "musicplayer/index.html",
+      "color": "cyan"
     }
   ]
 }
