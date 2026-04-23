@@ -1,20 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const nodeMatrix = document.getElementById('node-matrix');
+    // New containers for split layout
+    const matrixLeft = document.getElementById('node-matrix-left');
+    const matrixRight = document.getElementById('node-matrix-right');
 
     // 1. Fetch the flashy JSON data
     fetch('database/menu.json')
         .then(response => response.json())
         .then(data => {
+            // Updated to handle the split matrix containers
             buildLinks(data.links);
         })
         .catch(error => console.error("Error loading Musubi HUD:", error));
 
-    // 2. Build the flashy direct links
+    // 2. Build and SPLIT the direct links
     function buildLinks(links) {
-        links.forEach(item => {
+        // Calculate the halfway point
+        const half = Math.ceil(links.length / 2);
+        
+        links.forEach((item, index) => {
             const a = document.createElement('a');
             
-            // Apply standard class + dynamic color class from JSON
             a.className = `node-link ${item.color || 'cyan'}`;
             a.href = item.link;
 
@@ -24,17 +29,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 a.rel = 'noopener noreferrer';
             }
 
-            // Define icons based on color vibe
-            let icon = '>>'; // Cyan internal default
-            if(item.color === 'magenta') icon = '↗'; // External Action
-            if(item.color === 'red') icon = '!!'; // System warning/Database
+            let icon = '>>'; 
+            if(item.color === 'magenta') icon = '↗'; 
+            if(item.color === 'red') icon = '!!'; 
 
             a.innerHTML = `
                 <span class="node-title">${item.title}</span>
                 <span class="action-icon">${icon}</span>
             `;
 
-            nodeMatrix.appendChild(a);
+            // Decide which column to inject based on the halfway point
+            if (index < half) {
+                matrixLeft.appendChild(a);
+            } else {
+                matrixRight.appendChild(a);
+            }
         });
     }
 
