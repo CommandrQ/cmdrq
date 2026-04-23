@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Fetch JSON
     fetch('stations.json')
         .then(res => {
-            if (!res.ok) throw new Error("Could not find stations.json");
+            if (!res.ok) throw new Error("JSON Fetch Failed");
             return res.json();
         })
         .then(data => {
@@ -20,13 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(err => {
             console.error("Uplink Failure:", err);
-            statusText.innerText = "OFFLINE - USE LIVE SERVER";
+            statusText.innerText = "OFFLINE";
             statusText.style.color = "#ff0055";
         });
 
     // 2. Build Category Tabs
     function renderTabs() {
-        tabContainer.innerHTML = ''; // Clear
+        tabContainer.innerHTML = '';
         stationData.forEach((station, index) => {
             const btn = document.createElement('button');
             btn.className = 'tab-btn';
@@ -47,13 +47,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = document.createElement('button');
             btn.className = 'pl-btn';
             btn.innerText = `> ${pl.title}`;
-            // Corrected to playlistId to match your JSON
+            // Use playlistId to match your stations.json perfectly
             btn.onclick = () => loadUplink(pl.playlistId, pl.title, btn);
             listContainer.appendChild(btn);
         });
     }
 
-    // 4. THE UPLINK (The single-click fix)
+    // 4. THE UPLINK (The source-swap)
     function loadUplink(id, title, element) {
         // UI reset
         document.querySelectorAll('.pl-btn').forEach(b => b.classList.remove('active'));
@@ -61,19 +61,19 @@ document.addEventListener('DOMContentLoaded', () => {
         
         statusText.innerText = "LINKING...";
         loader.style.display = 'flex';
-        player.style.opacity = '0'; // Hide player while loading
+        player.style.opacity = '0'; 
         player.src = ""; 
 
-        // Tactical 500ms Delay
+        // 500ms Delay
         setTimeout(() => {
-            // Using the native iframe src swap (most stable method)
+            // Native Iframe swap
             player.src = `https://www.youtube.com/embed/videoseries?list=${id}&autoplay=1&rel=0`;
             
             player.onload = () => {
                 loader.style.display = 'none';
                 player.style.opacity = '1';
                 statusText.innerText = "STABLE";
-                nowPlaying.innerText = `UPLINK: ${title}`;
+                nowPlaying.innerText = title;
             };
         }, 500);
     }
