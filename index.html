@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUSUBI | Interface Start</title>
+    <title>System Login</title>
     
     <script>
         if (localStorage.getItem('musubi_access_granted')) {
@@ -11,25 +11,35 @@
         }
     </script>
 
-    <link rel="stylesheet" href="css/intro.css?v=7">
+    <link rel="stylesheet" href="css/intro.css?v=8">
 </head>
 <body>
-    <div class="scanlines"></div>
+    <div class="scanlines" id="scanlines"></div>
 
-    <div id="intro-overlay">
-        <div class="boot-container">
-            <h1 class="tactical-title">MUSUBI_SYSTEM_v1.0</h1>
-            <div class="loading-bar">
-                <div class="progress"></div>
+    <div id="apple-ui" class="ui-container active">
+        <div class="apple-glass">
+            <svg class="apple-icon" viewBox="0 0 24 24"><path d="M17 11V7c0-2.76-2.24-5-5-5S7 4.24 7 7v4H5.5C4.67 11 4 11.67 4 12.5v8C4 21.33 4.67 22 5.5 22h13c.83 0 1.5-.67 1.5-1.5v-8c0-.83-.67-1.5-1.5-1.5H17zm-8-4c0-1.65 1.35-3 3-3s3 1.35 3 3v4H9V7z"/></svg>
+            <h2 class="apple-title">Authenticating</h2>
+            <div class="apple-loader-track">
+                <div class="apple-loader-fill" id="apple-loader"></div>
             </div>
-            <p class="status-text">SYNCING BIOMETRIC DATA...</p>
+            <p id="override-text" class="override-text">Attempting to override the user's reality...</p>
+        </div>
+    </div>
+
+    <div id="flash-bang"></div>
+
+    <div id="neon-ui" class="ui-container hidden">
+        <div class="neon-glass">
+            <h1 class="tactical-title">MUSUBI_SYSTEM_v1.0</h1>
+            <p class="status-text">REALITY OVERRIDE SUCCESSFUL.</p>
             
-            <div class="btn-wrapper" id="btn-wrapper" style="display:none;">
+            <div class="btn-wrapper" id="btn-wrapper">
                 <button id="initiate-btn" class="neon-btn">
                     <svg viewBox="0 0 24 24" class="btn-icon">
-                        <path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/>
+                        <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
                     </svg>
-                    INITIALIZE NEURAL LINK
+                    DARE TO ENTER
                 </button>
             </div>
         </div>
@@ -37,6 +47,6 @@
 
     <div id="fade-to-black"></div>
 
-    <script src="js/intro.js?v=7"></script>
+    <script src="js/intro.js?v=8"></script>
 </body>
 </html>
