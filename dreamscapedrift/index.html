@@ -1,1 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MUSUBI | Dreamscape Drift Logs</title>
+    
+    <link rel="stylesheet" href="style.css?v=1">
+    <link rel="stylesheet" href="../css/cursor.css">
+</head>
+<body>
 
+    <div class="stars"></div>
+
+    <div class="hud-wrapper">
+        
+        <header class="hud-header">
+            <a href="../menu.html" class="neon-btn"><< RETURN</a>
+            <div class="status-indicator">
+                <span class="flicker-dot"></span> ARCHIVE: <span class="cyan-text">DREAMSCAPE_DRIFT</span>
+            </div>
+        </header>
+
+        <main class="archive-layout">
+            
+            <section class="viewer-section">
+                
+                <div class="monitor-frame">
+                    <div class="video-wrapper">
+                        <iframe id="yt-player" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="telemetry-panel">
+                    <h2 id="log-title" class="cyan-text">SELECT A LOG</h2>
+                    <div class="data-grid">
+                        <div class="data-box">
+                            <span class="data-label">CHASSIS:</span>
+                            <span id="log-car" class="data-value">--</span>
+                        </div>
+                        <div class="data-box">
+                            <span class="data-label">AUDIO_MIX:</span>
+                            <span id="log-track" class="data-value">--</span>
+                        </div>
+                    </div>
+                    <p id="log-notes" class="log-notes">Awaiting input...</p>
+                </div>
+
+            </section>
+
+            <section class="log-sidebar">
+                <div class="sidebar-header">AVAILABLE_LOGS</div>
+                <div class="log-list" id="log-list">
+                    </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div class="musubi-cursor-dot"></div>
+    <script src="../js/cursor.js"></script>
+    <script src="app.js?v=1"></script>
+</body>
+</html>
