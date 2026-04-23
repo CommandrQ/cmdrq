@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TOWER OF TUNES | Signal Intercept</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../css/cursor.css">
+</head>
+<body>
+
+    <div class="space-warp" aria-hidden="true">
+        <div class="warp-layer layer-1"></div>
+        <div class="warp-layer layer-2"></div>
+        <div class="warp-layer layer-3"></div>
+    </div>
+
+    <div class="hud-wrapper">
+        
+        <header class="hud-header" role="banner">
+            <a href="../menu.html" class="neon-btn" aria-label="Return to Main Menu"><< RETURN</a>
+            <div class="status-indicator" role="status" aria-live="polite">
+                <span class="flicker-dot"></span> BROADCAST: <span class="cyan-text">TOWER_OF_TUNES</span>
+            </div>
+        </header>
+
+        <main class="archive-layout" role="main">
+            
+            <section class="viewer-section" aria-label="Media Player">
+                <div class="monitor-frame">
+                    <div class="video-wrapper">
+                        <iframe id="yt-player" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="YouTube Playlist Player"></iframe>
+                    </div>
+                </div>
+
+                <div class="telemetry-panel" aria-live="polite">
+                    <h2 id="station-title" class="cyan-text">AWAITING SIGNAL...</h2>
+                    <div class="data-grid">
+                        <div class="data-box">
+                            <span class="data-label">GENRE / FREQUENCY:</span>
+                            <span id="station-genre" class="data-value">--</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="log-sidebar" aria-label="Station Selection">
+                <div class="sidebar-header">AVAILABLE_FREQUENCIES</div>
+                <div class="log-list" id="station-list" role="menu">
+                    </div>
+            </aside>
+
+        </main>
+    </div>
+
+    <div class="musubi-cursor-dot" aria-hidden="true"></div>
+    <script src="../js/cursor.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
