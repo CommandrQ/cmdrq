@@ -1,83 +1,79 @@
 let player;
-const stationList = document.getElementById('station-list');
-const currentTrackLabel = document.getElementById('current-track');
+let isAPILoaded = false;
 
 // 1. Initialize YouTube Player
 function onYouTubeIframeAPIReady() {
-    player = new YT.Player('player', {
-        height: '0',
-        width: '0',
+    isAPILoaded = true;
+    player = new YT.Player('youtube-iframe', {
+        height: '100%',
+        width: '100%',
         playerVars: {
             'listType': 'playlist',
-            'list': 'PLwX0pb3GEremC1vfOY7jLfNqdfR2cTVi7' // Default playlist
+            'autoplay': 0,
+            'controls': 1, // Show YT controls or 0 to hide them
+            'modestbranding': 1,
+            'rel': 0
         },
         events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
+            'onReady': onPlayerReady
         }
     });
 }
 
 function onPlayerReady(event) {
-    console.log("Player Ready");
     loadStations();
 }
 
-// 2. Fetch and Load Stations
+// 2. Fetch and Build the Station List
 async function loadStations() {
     try {
         const response = await fetch('stations.json');
         const data = await response.json();
-        
-        data.stations.forEach(station => {
-            const catDiv = document.createElement('div');
-            catDiv.className = 'category-label';
-            catDiv.innerText = station.category;
-            stationList.appendChild(catDiv);
+        const stationContainer = document.getElementById('station-list');
 
-            station.playlists.forEach(pl => {
-                const item = document.createElement('div');
-                item.className = 'playlist-item';
-                item.innerText = pl.title;
-                item.onclick = () => playPlaylist(pl.playlistId, pl.title);
-                stationList.appendChild(item);
+        data.stations.forEach(category => {
+            // Add Category Label
+            const catTitle = document.createElement('div');
+            catTitle.className = 'category-header';
+            catTitle.innerText = category.category;
+            stationContainer.appendChild(catTitle);
+
+            // Add Playlists
+            category.playlists.forEach(pl => {
+                const btn = document.createElement('button');
+                btn.className = 'playlist-link';
+                btn.innerText = pl.title;
+                btn.onclick = () => {
+                    player.loadPlaylist({
+                        list: pl.playlistId,
+                        listType: 'playlist',
+                        index: 0,
+                        startSeconds: 0
+                    });
+                    document.getElementById('now-playing').innerText = pl.title;
+                };
+                stationContainer.appendChild(btn);
             });
         });
-    } catch (err) {
-        console.error("Error loading JSON:", err);
+    } catch (error) {
+        console.error("Error loading stations.json. Make sure you are running on a server!", error);
     }
 }
 
-// 3. Player Logic
-function playPlaylist(id, title) {
-    player.loadPlaylist({
-        list: id,
-        listType: 'playlist',
-        index: 0,
-        startSeconds: 0
-    });
-    currentTrackLabel.innerText = `Station: ${title}`;
-    document.getElementById('play-pause').innerText = "PAUSE";
-}
-
-function onPlayerStateChange(event) {
-    const btn = document.getElementById('play-pause');
-    if (event.data == YT.PlayerState.PLAYING) {
-        btn.innerText = "PAUSE";
-    } else {
-        btn.innerText = "PLAY";
-    }
-}
-
-// 4. Button Listeners
-document.getElementById('play-pause').addEventListener('click', () => {
+// 3. Manual Controls
+function playPause() {
     const state = player.getPlayerState();
-    if (state === YT.PlayerState.PLAYING) {
+    if (state === 1) { // 1 = Playing
         player.pauseVideo();
     } else {
         player.playVideo();
     }
-});
+}
 
-document.getElementById('next').addEventListener('click', () => player.nextVideo());
-document.getElementById('prev').addEventListener('click', () => player.previousVideo());
+function nextTrack() {
+    player.nextVideo();
+}
+
+function prevTrack() {
+    player.previousVideo();
+}
