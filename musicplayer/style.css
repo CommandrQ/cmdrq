@@ -1,0 +1,188 @@
+:root {
+    --neon-cyan: #00f3ff;
+    --neon-magenta: #ff0055;
+    --bg-dark: #020204;
+    --glass-dark: rgba(10, 12, 16, 0.85);
+    --border-glow: rgba(0, 243, 255, 0.3);
+}
+
+/* --- BASE STYLES --- */
+* {
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+    text-transform: uppercase;
+    font-weight: 900;
+}
+
+body, html {
+    margin: 0; 
+    padding: 0;
+    background-color: var(--bg-dark);
+    color: #fff;
+    overflow-x: hidden;
+    height: 100dvh;
+}
+
+/* Disable default cursor only on devices with a mouse */
+@media (pointer: fine) {
+    body, a, button, .log-item { cursor: none !important; }
+}
+
+/* --- HYPERSPACE NEON STARFIELD --- */
+.space-warp {
+    position: fixed; inset: 0; z-index: -4;
+    background: #000;
+    overflow: hidden;
+    perspective: 800px;
+}
+
+.warp-layer {
+    position: absolute;
+    top: -100%; left: -100%; width: 300%; height: 300%;
+    background-image:
+        radial-gradient(2px 2px at 10% 10%, var(--neon-cyan), transparent),
+        radial-gradient(2px 2px at 20% 40%, #fff, transparent),
+        radial-gradient(3px 3px at 30% 80%, var(--neon-magenta), transparent),
+        radial-gradient(2px 2px at 40% 20%, #fff, transparent),
+        radial-gradient(2px 2px at 60% 60%, var(--neon-cyan), transparent),
+        radial-gradient(3px 3px at 80% 90%, var(--neon-magenta), transparent),
+        radial-gradient(2px 2px at 90% 30%, #fff, transparent);
+    background-repeat: repeat;
+    background-size: 250px 250px;
+    animation: warp-fly 6s linear infinite;
+    opacity: 0;
+    transform-style: preserve-3d;
+}
+
+.layer-1 { animation-delay: 0s; }
+.layer-2 { animation-delay: -2s; transform: rotate(45deg); }
+.layer-3 { animation-delay: -4s; transform: rotate(90deg); }
+
+@keyframes warp-fly {
+    0% { transform: translateZ(-800px) scale(0.1); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateZ(400px) scale(3); opacity: 0; }
+}
+
+/* --- HUD WRAPPER & HEADER --- */
+.hud-wrapper {
+    display: flex; flex-direction: column;
+    height: 100%; padding: 20px; gap: 20px;
+    max-width: 1400px; margin: 0 auto;
+    position: relative; z-index: 10;
+}
+
+.hud-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 30px; font-size: 14px; letter-spacing: 3px; flex-shrink: 0;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    clip-path: polygon(0 0, 95% 0, 100% 30%, 100% 100%, 5% 100%, 0 70%);
+}
+
+.status-indicator { display: flex; align-items: center; }
+
+.flicker-dot {
+    display: inline-block; width: 8px; height: 8px;
+    background: var(--neon-magenta); border-radius: 50%; margin-right: 12px;
+    box-shadow: 0 0 10px var(--neon-magenta);
+    animation: rapid-flicker 0.1s infinite alternate;
+}
+@keyframes rapid-flicker { 0% { opacity: 1; } 100% { opacity: 0.3; } }
+
+.cyan-text { color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
+
+.neon-btn {
+    text-decoration: none; background: transparent; border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan); padding: 8px 15px; font-size: 12px; letter-spacing: 2px;
+    transition: all 0.2s ease-in-out; flex-shrink: 0; display: inline-block;
+}
+.neon-btn:hover, .neon-btn:focus { 
+    background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); outline: none;
+}
+
+/* --- ARCHIVE LAYOUT & PLAYER --- */
+.archive-layout { display: flex; gap: 30px; flex: 1; min-height: 0; }
+
+.viewer-section { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+.monitor-frame { 
+    background: #000; border: 2px solid var(--border-glow); padding: 5px; 
+    box-shadow: 0 0 30px rgba(0,0,0,0.8); position: relative; 
+}
+.video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
+.video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+.telemetry-panel {
+    background: var(--glass-dark); border: 1px solid rgba(255,255,255,0.1);
+    padding: 20px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+}
+.telemetry-panel h2 { 
+    margin-top: 0; font-size: 22px; letter-spacing: 3px; 
+    border-bottom: 1px solid rgba(0, 243, 255, 0.2); padding-bottom: 10px; 
+}
+
+.data-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+.data-box { background: rgba(255,255,255,0.05); padding: 15px; border-left: 3px solid var(--neon-magenta); }
+.data-label { display: block; font-size: 10px; color: #888; letter-spacing: 2px; margin-bottom: 5px; }
+.data-value { font-size: 14px; color: #fff; letter-spacing: 1px; }
+
+/* --- SIDEBAR --- */
+.log-sidebar {
+    width: 350px; background: var(--glass-dark); border: 1px solid rgba(255,255,255,0.1);
+    display: flex; flex-direction: column; flex-shrink: 0; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+}
+.sidebar-header { 
+    padding: 15px 20px; background: rgba(255,0,85,0.1); border-bottom: 2px solid var(--neon-magenta); 
+    font-size: 14px; letter-spacing: 3px; color: var(--neon-magenta); text-shadow: 0 0 10px var(--neon-magenta); 
+}
+.log-list { 
+    flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; 
+    scrollbar-width: thin; scrollbar-color: var(--neon-magenta) transparent; 
+}
+.log-list::-webkit-scrollbar { width: 4px; }
+.log-list::-webkit-scrollbar-thumb { background: var(--neon-magenta); }
+
+.log-item {
+    background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1);
+    padding: 15px; color: #fff; text-align: left; transition: all 0.2s ease;
+    display: flex; flex-direction: column; gap: 5px; width: 100%;
+}
+.log-item:hover, .log-item:focus, .log-item.active { 
+    background: rgba(0, 243, 255, 0.1); border-color: var(--neon-cyan); 
+    transform: translateX(-5px); outline: none;
+}
+.log-id { font-size: 10px; color: var(--neon-magenta); letter-spacing: 2px; }
+.log-name { font-size: 14px; letter-spacing: 1px; }
+
+/* =========================================
+   MOBILE RESPONSIVENESS
+========================================= */
+@media (max-width: 900px) {
+    body, html { height: auto; min-height: 100dvh; overflow-y: auto; }
+    .hud-wrapper { padding: 10px; gap: 15px; height: auto; }
+
+    .hud-header {
+        flex-direction: column; gap: 12px; padding: 15px;
+        clip-path: none; align-items: flex-start;
+    }
+
+    .neon-btn { font-size: 12px; padding: 10px 15px; width: 100%; text-align: center; }
+    .status-indicator { font-size: 12px; letter-spacing: 1px; white-space: normal; }
+
+    .archive-layout { flex-direction: column; gap: 15px; }
+    .viewer-section { gap: 15px; }
+    .telemetry-panel h2 { font-size: 18px; }
+    .data-box { padding: 10px; }
+
+    .log-sidebar { width: 100%; border: none; background: transparent; }
+    .sidebar-header { border: 1px solid rgba(255,255,255,0.1); border-bottom: 2px solid var(--neon-magenta); }
+    
+    .log-list { 
+        padding: 10px 0; display: grid; grid-template-columns: repeat(2, 1fr); 
+        gap: 10px; overflow-y: visible;
+    }
+
+    .log-item { padding: 20px 10px; text-align: center; align-items: center; justify-content: center; }
+    .log-item:hover, .log-item:focus, .log-item.active { transform: translateY(-3px); }
+}
