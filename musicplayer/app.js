@@ -1,45 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUSUBI | System Boot</title>
-    
-    <script>
-        if (localStorage.getItem('musubi_access_granted')) {
-            window.location.href = 'menu.html';
-        }
-    </script>
+document.addEventListener('DOMContentLoaded', () => {
+    const tabContainer = document.getElementById('category-tabs');
+    const listContainer = document.getElementById('playlist-list');
+    const player = document.getElementById('main-player');
+    const loader = document.getElementById('loader');
+    const statusText = document.getElementById('status-text');
+    const nowPlaying = document.getElementById('now-playing');
 
-    <link rel="stylesheet" href="css/intro.css?v=999">
-    <link rel="stylesheet" href="css/cursor.css">
-</head>
-<body>
+    let stationData = [];
 
-    <div class="ui-container">
+    // 1. Fetch JSON
+    fetch('stations.json')
+        .then(res => res.json())
+        .then(data => {
+            stationData = data.stations;
+            renderTabs();
+        });
+
+    // 2. Build Category Tabs
+    function renderTabs() {
+        stationData.forEach((station, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'tab-btn';
+            btn.innerText = station.category;
+            btn.onclick = () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderPlaylists(index);
+            };
+            tabContainer.appendChild(btn);
+        });
+    }
+
+    // 3. Build Playlist Items
+    function renderPlaylists(index) {
+        listContainer.innerHTML = '';
+        stationData[index].playlists.forEach(pl => {
+            const btn = document.createElement('button');
+            btn.className = 'pl-btn';
+            btn.innerText = `> ${pl.title}`;
+            btn.onclick = () => loadVideo(pl.id, pl.title, btn);
+            listContainer.appendChild(btn);
+        });
+    }
+
+    // 4. Load the Uplink (The Fix)
+    function loadVideo(id, title, element) {
+        // Visual Reset
+        document.querySelectorAll('.pl-btn').forEach(b => b.classList.remove('active'));
+        element.classList.add('active');
         
-        <div class="anime-window" id="anime-window">
-            
-            <h2 class="sub-heading">
-                <span class="glow-blue">Vanguard Knights</span> Present:
-            </h2>
-            
-            <h1 class="main-heading">
-                COMMANDER Q:<br>
-                <span class="muted-text">DEFENDER OF ETERNITY</span>
-            </h1>
-            
-            <button id="enter-btn" class="neon-btn">
-                <span id="btn-text">AWAKEN</span>
-            </button>
+        statusText.innerText = "LINKING...";
+        loader.style.display = 'flex';
+        player.classList.remove('active');
+        player.src = ""; // Wipe the current source immediately
 
-        </div>
-        
-    </div>
-
-    <div class="musubi-cursor-dot"></div>
-
-    <script src="js/cursor.js"></script>
-    <script src="js/intro.js?v=999"></script>
-</body>
-</html>
+        // Tactical Delay (500ms)
+        setTimeout(() => {
+            // We use the 'videoseries' embed for playlists
+            player.src = `https://www.youtube.com/embed/videoseries?list=${id}&autoplay=1&rel=0`;
+            
+            player.onload = () => {
+                loader.style.display = 'none';
+                player.classList.add('active');
+                statusText.innerText = "STABLE";
+                nowPlaying.innerText = `STREAMING: ${title}`;
+            };
+        }, 500);
+    }
+});
