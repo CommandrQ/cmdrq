@@ -1,30 +1,48 @@
-    // --- CUSTOM CURSOR LOGIC (SINGLE POINTER) ---
-    const cursorDot = document.querySelector('.musubi-cursor-dot');
+document.addEventListener('DOMContentLoaded', () => {
+    const matrixLeft = document.getElementById('node-matrix-left');
+    const matrixRight = document.getElementById('node-matrix-right');
 
-    if (matchMedia('(pointer: fine)').matches) {
+    fetch('database/menu.json')
+        .then(response => response.json())
+        .then(data => {
+            buildLinks(data.links);
+        })
+        .catch(error => console.error("Error loading Musubi HUD:", error));
+
+    function buildLinks(links) {
+        const half = Math.ceil(links.length / 2);
         
-        // Track mouse movement instantly
-        window.addEventListener('mousemove', (e) => {
-            cursorDot.style.left = `${e.clientX}px`;
-            cursorDot.style.top = `${e.clientY}px`;
-        });
+        links.forEach((item, index) => {
+            const a = document.createElement('a');
+            
+            a.className = `node-link ${item.color || 'cyan'}`;
+            a.href = item.link;
 
-        const observer = new MutationObserver(() => {
-            document.querySelectorAll('.node-link').forEach(link => {
-                link.addEventListener('mouseenter', () => {
-                    cursorDot.classList.add('locked');
-                });
-                link.addEventListener('mouseleave', () => {
-                    cursorDot.classList.remove('locked');
-                });
-            });
-        });
+            const isExternal = item.link.startsWith('http');
+            if (isExternal) {
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+            }
 
-        // Watch the matrix container
-        const leftMatrix = document.getElementById('node-matrix-left');
-        const rightMatrix = document.getElementById('node-matrix-right');
-        if(leftMatrix && rightMatrix) {
-            observer.observe(leftMatrix, { childList: true });
-            observer.observe(rightMatrix, { childList: true });
-        }
+            let icon = '>>'; 
+            if(item.color === 'magenta') icon = '↗'; 
+            if(item.color === 'red') icon = '!!'; 
+
+            a.innerHTML = `
+                <span class="node-title">${item.title}</span>
+                <span class="action-icon">${icon}</span>
+            `;
+
+            if (index < half) {
+                matrixLeft.appendChild(a);
+            } else {
+                matrixRight.appendChild(a);
+            }
+        });
     }
+
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleTimeString('en-GB');
+    }, 1000);
+});
