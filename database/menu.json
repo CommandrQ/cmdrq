@@ -1,8 +1,8 @@
 {
   "links": [
     {
-      "title": "AUDIO_STREAM // FM 101.3",
-      "link": "musicplayer/index.html",
+      "title": "About Me",
+      "link": "about.html",
       "color": "cyan"
     },
     {
