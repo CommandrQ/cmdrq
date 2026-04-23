@@ -2,58 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUSUBI | Tactical Map</title>
-    <link rel="stylesheet" href="css/menu.css?v=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MUSUBI | Tactical HUD</title>
+    <link rel="stylesheet" href="css/menu.css?v=2">
 </head>
-<body class="tactical-mode">
+<body>
     <div class="scanlines"></div>
 
-    <div class="hud-container">
+    <div class="hud-wrapper">
         <header class="hud-header glass">
-            <div class="system-status">
-                <span class="pulse-dot"></span> SYSTEM_STATUS: <span class="cyan-text">OPTIMAL</span>
+            <div class="status-indicator">
+                <span class="pulse-dot"></span> SYSTEM: <span class="cyan-text">ONLINE</span>
             </div>
-            <div class="location-tag">LOCATION: MUSUBI_SECTOR_07</div>
+            <div class="time-readout" id="clock">00:00:00</div>
         </header>
 
-        <main class="map-layout">
-            <section class="map-view glass">
-                <svg id="hideout-map" viewBox="0 0 500 400" preserveAspectRatio="xMidYMid meet">
-                    <path class="map-path" d="M100 200 H400 M250 100 V300" />
-                    
-                    <rect id="zone-comms" class="map-zone" x="50" y="150" width="100" height="100" />
-                    <text x="100" y="205" class="map-label">COMMS</text>
-
-                    <rect id="zone-db" class="map-zone" x="200" y="50" width="100" height="80" />
-                    <text x="250" y="95" class="map-label">DB_01</text>
-
-                    <rect id="zone-intel" class="map-zone" x="350" y="150" width="100" height="100" />
-                    <text x="400" y="205" class="map-label">INTEL</text>
-
-                    <circle id="zone-core" class="map-zone" cx="250" cy="230" r="40" />
-                    <text x="250" y="235" class="map-label">CORE</text>
-                </svg>
-            </section>
+        <main class="tactical-layout">
+            
+            <section class="node-matrix glass" id="node-matrix">
+                </section>
 
             <aside class="intel-panel glass">
-                <div class="panel-header">SECTOR_INTEL</div>
+                <div class="panel-header">NODE_INTEL_STREAM</div>
+                
                 <div id="intel-display" class="intel-content">
-                    <p class="blink-text">> HOVER OVER A ZONE TO SCAN...</p>
+                    <p class="blink-text">> AWAITING NODE SELECTION...</p>
                 </div>
                 
                 <div class="panel-footer">
-                    <div id="nav-action" class="nav-lock">LOCKED</div>
+                    <button id="nav-action" class="nav-btn locked" disabled>NO_TARGET</button>
                 </div>
             </aside>
+            
         </main>
-
-        <footer class="hud-footer glass">
-            <div class="bio-readout">USER: [HIDDEN] | CLEARANCE: LEVEL_01</div>
-            <div class="time-readout" id="clock">00:00:00</div>
-        </footer>
     </div>
 
-    <script src="js/menu.js?v=1"></script>
+    <script src="js/menu.js?v=2"></script>
 </body>
 </html>
