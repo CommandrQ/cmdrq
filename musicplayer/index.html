@@ -3,40 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUSUBI | Radio Uplink</title>
+    <title>Neon Starfield Player</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div class="stars"></div>
-
-    <div class="terminal-wrapper">
-        <header class="hud-header">
-            <a href="../menu.html" class="exit-btn"><< EXIT</a>
-            <div class="status-box">SYSTEM: <span id="status-text" class="cyan">READY</span></div>
+    <div id="starfield"></div>
+    
+    <div class="glass-container">
+        <header>
+            <h1 class="neon-text">NEON STATION</h1>
+            <p id="current-track">Select a playlist to begin</p>
         </header>
 
-        <section class="monitor-area">
-            <div id="loader" class="loader">ESTABLISHING UPLINK...</div>
-            <iframe id="main-player" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </section>
+        <main>
+            <div id="player"></div> <div class="controls">
+                <button id="prev">PREV</button>
+                <button id="play-pause" class="neon-border">PLAY</button>
+                <button id="next">NEXT</button>
+            </div>
 
-        <main class="ui-area">
-            <nav class="category-tabs" id="category-tabs">
-                </nav>
-            <div class="playlist-list" id="playlist-list">
-                <p class="placeholder">AWAITING FREQUENCY SELECTION...</p>
-            </div>
+            <div class="station-browser" id="station-list">
+                </div>
         </main>
-        
-        <footer class="hud-footer">
-            <div class="now-playing-container">
-                <span class="label">TARGET_STREAM:</span>
-                <span id="now-playing">STANDBY</span>
-            </div>
-        </footer>
     </div>
 
-    <script src="app.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="script.js"></script>
 </body>
 </html>
