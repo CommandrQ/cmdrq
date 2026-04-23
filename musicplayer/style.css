@@ -1,1 +1,80 @@
+:root {
+    --neon-cyan: #00f3ff;
+    --neon-magenta: #ff0055;
+    --bg-dark: #020204;
+    --glass: rgba(10, 12, 16, 0.85);
+}
 
+* { box-sizing: border-box; font-family: 'Courier New', monospace; text-transform: uppercase; font-weight: 900; }
+
+body, html { margin: 0; padding: 0; background: var(--bg-dark); color: #fff; height: 100dvh; overflow: hidden; }
+
+.stars {
+    position: fixed; inset: 0; z-index: -1; opacity: 0.3;
+    background: #000 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQMAAAC6f7wZAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAA5JREFUeNpjYBgFgxgAAASAAAH9Y8SDAAAAAElFTkSuQmCC) repeat;
+}
+
+.player-wrapper {
+    display: flex; flex-direction: column; height: 100%; padding: 20px;
+    max-width: 600px; margin: 0 auto; justify-content: center;
+}
+
+.player-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
+}
+
+.neon-btn {
+    text-decoration: none; color: var(--neon-cyan); border: 1px solid var(--neon-cyan);
+    padding: 5px 12px; font-size: 10px; letter-spacing: 2px;
+}
+
+/* --- THE NEON GLOW ENGINE --- */
+.media-frame-outer {
+    position: relative; width: 100%; aspect-ratio: 1/1; 
+    display: flex; align-items: center; justify-content: center;
+}
+
+.neon-glow-aura {
+    position: absolute; width: 80%; height: 80%;
+    background: var(--neon-cyan);
+    filter: blur(80px); opacity: 0.5; border-radius: 50%;
+    z-index: 1; transition: all 0.5s ease;
+    animation: pulse-glow 4s infinite alternate;
+}
+
+@keyframes pulse-glow {
+    0% { background: var(--neon-cyan); transform: scale(1); opacity: 0.4; }
+    100% { background: var(--neon-magenta); transform: scale(1.2); opacity: 0.6; }
+}
+
+.media-frame {
+    position: relative; width: 100%; height: 100%; z-index: 2;
+    background: #000; border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 20px rgba(0,0,0,0.5); overflow: hidden;
+}
+
+.media-frame video { width: 100%; height: 100%; object-fit: cover; }
+
+/* --- INFO & CONTROLS --- */
+.track-info { text-align: center; margin: 30px 0; }
+.track-info h1 { font-size: 20px; letter-spacing: 4px; margin: 0; color: var(--neon-cyan); }
+.track-info p { font-size: 12px; color: #888; letter-spacing: 2px; margin-top: 10px; }
+
+.controls-ui { background: var(--glass); padding: 20px; border: 1px solid rgba(255,255,255,0.05); }
+
+.progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.1); margin-bottom: 20px; position: relative; }
+.progress-bar { width: 0%; height: 100%; background: var(--neon-magenta); box-shadow: 0 0 10px var(--neon-magenta); }
+
+.button-row { display: flex; justify-content: space-around; align-items: center; }
+.ctrl-btn {
+    background: transparent; border: none; color: #fff; cursor: none;
+    font-size: 14px; letter-spacing: 2px; transition: 0.2s;
+}
+.ctrl-btn:hover { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
+.play-main { font-size: 20px; color: var(--neon-magenta); }
+
+/* MOBILE FIX */
+@media (max-width: 600px) {
+    .track-info h1 { font-size: 16px; }
+    .player-wrapper { padding: 15px; }
+}
