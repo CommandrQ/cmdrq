@@ -24,6 +24,11 @@
       "title": "Music Player",
       "link": "musicplayer/index.html",
       "color": "cyan"
+    },
+    {
+      "title": "Support Me!",
+      "link": "https://buymeacoffee.com/cmdrq",
+      "color": "cyan"
     }
   ]
 }
