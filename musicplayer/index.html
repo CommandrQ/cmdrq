@@ -2,32 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Starfield Player</title>
+    <title>Neon Music Player</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="starfield"></div>
-    
-    <div class="glass-container">
-        <header>
-            <h1 class="neon-text">NEON STATION</h1>
-            <p id="current-track">Select a playlist to begin</p>
-        </header>
 
-        <main>
-            <div id="player"></div> <div class="controls">
-                <button id="prev">PREV</button>
-                <button id="play-pause" class="neon-border">PLAY</button>
-                <button id="next">NEXT</button>
-            </div>
+<div id="starfield"></div>
 
-            <div class="station-browser" id="station-list">
-                </div>
-        </main>
+<div class="player-window">
+    <h2 class="neon-title">VIBRATION RADIO</h2>
+    <p id="now-playing" style="font-size: 0.8rem; color: #888;">Select a Station</p>
+
+    <div class="video-container">
+        <div id="youtube-iframe"></div>
     </div>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script src="script.js"></script>
+    <div class="controls">
+        <button onclick="prevTrack()">PREV</button>
+        <button onclick="playPause()" id="play-btn">PLAY/PAUSE</button>
+        <button onclick="nextTrack()">NEXT</button>
+    </div>
+
+    <div id="station-list">
+        </div>
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script src="script.js"></script>
 </body>
 </html>
