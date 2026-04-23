@@ -1,62 +1,58 @@
 :root {
-    --neon-cyan: #00f3ff;
-    --neon-magenta: #ff0055;
-    --bg-dark: #020204;
-    --glass: rgba(10, 12, 16, 0.85);
+    --cyan: #00f3ff;
+    --magenta: #ff0055;
+    --bg: #050507;
+    --panel: rgba(20, 20, 25, 0.9);
 }
 
-* { box-sizing: border-box; font-family: 'Courier New', monospace; text-transform: uppercase; font-weight: 900; }
-body, html { margin: 0; background: var(--bg-dark); color: #fff; height: 100dvh; overflow: hidden; }
+* { box-sizing: border-box; font-family: 'Courier New', monospace; text-transform: uppercase; }
+body { margin: 0; background: var(--bg); color: #fff; overflow-x: hidden; }
 
-.stars { position: fixed; inset: 0; z-index: -1; opacity: 0.2; background: #000 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQMAAAC6f7wZAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAA5JREFUeNpjYBgFgxgAAASAAAH9Y8SDAAAAAElFTkSuQmCC) repeat; }
+.stars { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at center, #111 0%, #000 100%); opacity: 0.5; }
 
-.terminal-wrapper { height: 100%; display: flex; flex-direction: column; padding: 20px; max-width: 1400px; margin: 0 auto; gap: 20px; }
+.terminal-wrapper { display: flex; flex-direction: column; min-height: 100vh; max-width: 900px; margin: 0 auto; padding: 15px; }
 
-.terminal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
+/* HEADER */
+.hud-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #333; margin-bottom: 15px; }
+.exit-btn { color: var(--cyan); text-decoration: none; font-weight: bold; font-size: 12px; border: 1px solid var(--cyan); padding: 5px 10px; }
+.status-box { font-size: 10px; letter-spacing: 2px; }
+.cyan { color: var(--cyan); text-shadow: 0 0 10px var(--cyan); }
 
-.neon-btn { text-decoration: none; color: var(--neon-cyan); border: 1px solid var(--neon-cyan); padding: 8px 15px; font-size: 12px; }
+/* MONITOR */
+.monitor-area { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border: 2px solid #222; overflow: hidden; margin-bottom: 20px; }
+#main-player { width: 100%; height: 100%; display: none; }
+#main-player.active { display: block; }
 
-.uplink-status { display: flex; align-items: center; gap: 10px; font-size: 12px; letter-spacing: 2px; }
-.pulse-dot { width: 8px; height: 8px; background: var(--neon-magenta); border-radius: 50%; animation: pulse 1s infinite alternate; }
-@keyframes pulse { 0% { opacity: 0.4; } 100% { opacity: 1; box-shadow: 0 0 10px var(--neon-magenta); } }
-
-/* LAYOUT */
-.radio-layout { display: flex; flex: 1; gap: 30px; min-height: 0; }
-
-.section-label { font-size: 10px; color: #555; margin-bottom: 15px; letter-spacing: 3px; }
-
-/* LEFT SIDE: SELECTION */
-.station-selection { width: 400px; overflow-y: auto; }
-.station-card { background: var(--glass); border: 1px solid rgba(255,255,255,0.05); padding: 20px; margin-bottom: 20px; }
-.station-card h2 { color: var(--neon-magenta); font-size: 16px; margin: 0 0 15px 0; border-bottom: 1px solid rgba(255,0,85,0.2); padding-bottom: 10px; }
-
-.playlist-link { 
-    display: block; padding: 12px; color: #888; text-decoration: none; font-size: 13px; 
-    border-left: 2px solid transparent; transition: 0.2s; cursor: none;
-}
-.playlist-link:hover, .playlist-link.active { color: #fff; background: rgba(0,243,255,0.05); border-left-color: var(--neon-cyan); }
-
-/* RIGHT SIDE: MONITOR */
-.monitor-section { flex: 1; display: flex; flex-direction: column; gap: 20px; }
-.monitor-frame { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border: 2px solid rgba(255,255,255,0.1); }
-#video-embed { width: 100%; height: 100%; opacity: 0; transition: opacity 0.5s ease; }
-#video-embed.visible { opacity: 1; }
-
-#loading-overlay { 
+.loader { 
     position: absolute; inset: 0; display: none; align-items: center; justify-content: center; 
-    background: #000; color: var(--neon-cyan); font-size: 14px; letter-spacing: 5px; z-index: 10;
+    color: var(--cyan); font-size: 12px; letter-spacing: 4px; animation: blink 1s infinite;
 }
+@keyframes blink { 50% { opacity: 0; } }
 
-/* SVG CONTROLS */
-.media-controls { display: flex; align-items: center; gap: 15px; background: var(--glass); padding: 15px 25px; border-top: 2px solid var(--neon-cyan); }
-.svg-btn { background: transparent; border: none; color: #fff; width: 30px; height: 30px; cursor: none; transition: 0.2s; padding: 0; }
-.svg-btn:hover { color: var(--neon-cyan); filter: drop-shadow(0 0 8px var(--neon-cyan)); transform: scale(1.1); }
-.now-playing-title { flex: 1; font-size: 14px; letter-spacing: 2px; color: var(--neon-cyan); text-align: right; }
+/* UI AREA */
+.category-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+.tab-btn { 
+    background: transparent; border: 1px solid #444; color: #888; padding: 12px; 
+    font-size: 10px; cursor: pointer; transition: 0.3s;
+}
+.tab-btn.active { border-color: var(--magenta); color: var(--magenta); background: rgba(255, 0, 85, 0.1); }
 
-/* MOBILE */
-@media (max-width: 900px) {
-    .radio-layout { flex-direction: column; overflow-y: auto; }
-    .station-selection { width: 100%; overflow: visible; }
-    .monitor-section { order: -1; } /* Video stays at top on mobile */
-    .now-playing-title { font-size: 10px; }
+.playlist-list { display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; background: var(--panel); padding: 10px; border: 1px solid #222; }
+.pl-btn { 
+    background: rgba(255,255,255,0.03); border: none; color: #ccc; text-align: left; 
+    padding: 15px; font-size: 12px; cursor: pointer; border-left: 3px solid transparent;
+}
+.pl-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.pl-btn.active { border-left-color: var(--cyan); color: var(--cyan); background: rgba(0, 243, 255, 0.05); }
+
+/* FOOTER */
+.svg-footer { margin-top: auto; padding: 20px 0; border-top: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+.now-playing { font-size: 10px; color: var(--cyan); letter-spacing: 1px; }
+.svg-cluster { display: flex; gap: 15px; color: #555; }
+.icon { width: 20px; height: 20px; }
+
+/* DESKTOP TWEAKS */
+@media (min-width: 768px) {
+    .category-tabs { grid-template-columns: repeat(4, 1fr); }
+    .terminal-wrapper { padding: 40px 20px; }
 }
