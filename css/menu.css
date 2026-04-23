@@ -1,251 +1,39 @@
-:root {
-    --neon-cyan: #00f3ff;
-    --neon-magenta: #ff0055;
-    --neon-purple: #8a2be2; 
-    --neon-red: #ff2a2a;
-    --bg-dark: #000002;
-    --text-main: #ffffff;
-}
+    .musubi-cursor-dot {
+        position: fixed;
+        top: 0; left: 0;
+        
+        /* Adjust these to match the size you want the image to appear */
+        width: 32px; 
+        height: 32px;
+        
+        /* THE HOTSPOT SETTING */
+        /* Use this if your pointer is a CROSSHAIR (Centered) */
+        transform: translate(-50%, -50%); 
+        
+        /* Use this INSTEAD if your pointer is an ARROW (Top-Left tip) */
+        /* transform: translate(0, 0); */
 
-* {
-    box-sizing: border-box;
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: 900;
-    text-transform: uppercase;
-    -webkit-tap-highlight-color: transparent;
-}
-
-body {
-    margin: 0;
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    height: 100dvh;
-    overflow: hidden;
-    position: relative;
-}
-
-/* --- DEEP BACKGROUND VISUALS --- */
-.purple-radial-glow { 
-    position: fixed; inset: 0;
-    background: radial-gradient(circle at center, rgba(138, 43, 226, 0.25) 0%, transparent 75%);
-    z-index: -4;
-    animation: bg-pulse 8s infinite alternate;
-}
-
-@keyframes bg-pulse {
-    0% { background: radial-gradient(circle at center, rgba(138, 43, 226, 0.15) 0%, transparent 75%); }
-    100% { background: radial-gradient(circle at center, rgba(138, 43, 226, 0.35) 0%, transparent 85%); }
-}
-
-.stars {
-    position:absolute; top:0; left:0; right:0; bottom:0; width:100%; height:100%; display:block;
-    background:#000 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQMAAAC6f7wZAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAA5JREFUeNpjYBgFgxgAAASAAAH9Y8SDAAAAAElFTkSuQmCC) repeat top center;
-    z-index: -3;
-    opacity: 0.3;
-}
-
-#matrix-lines {
-    position: fixed; inset: 0; z-index: -2;
-    background-image: 
-        linear-gradient(45deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(-45deg, rgba(255, 0, 85, 0.05) 1px, transparent 1px);
-    background-size: 60px 60px;
-    background-position: center;
-    animation: grid-drift 20s linear infinite;
-}
-
-@keyframes grid-drift {
-    0% { background-position: 0 0; }
-    100% { background-position: 1000px 1000px; }
-}
-
-/* Scanlines lowered to z-index: 0 so UI buttons sit on top */
-.scanlines {
-    position: fixed; inset: 0; pointer-events: none; z-index: 0;
-    background: linear-gradient(rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.3) 50%);
-    background-size: 100% 4px;
-}
-
-.hud-wrapper {
-    display: flex; flex-direction: column;
-    height: 100%; padding: 20px; gap: 20px;
-    max-width: 1200px; margin: 0 auto;
-    position: relative; 
-    z-index: 10; /* Keeps buttons and UI above the scanlines */
-}
-
-/* --- HEADER HUD --- */
-.hud-header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 15px 30px; font-size: 12px; letter-spacing: 3px; flex-shrink: 0;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.1);
-    clip-path: polygon(0 0, 95% 0, 100% 30%, 100% 100%, 5% 100%, 0 70%);
-}
-
-.flicker-dot {
-    display: inline-block; width: 8px; height: 8px;
-    background: var(--neon-cyan); border-radius: 50%; margin-right: 8px;
-    box-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
-    animation: rapid-flicker 0.1s infinite alternate;
-}
-
-.cyan-text { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
-
-/* --- MAIN TACTICAL LAYOUT --- */
-.tactical-layout {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-    min-height: 0;
-    gap: 30px; 
-}
-
-.node-matrix {
-    flex: 1; 
-    display: grid;
-    grid-template-columns: 1fr; 
-    gap: 20px;
-    align-content: center;
-    overflow-y: auto;
-    scrollbar-width: none; 
-}
-.node-matrix::-webkit-scrollbar { display: none; }
-
-/* --- FLASHY NEON BUTTONS --- */
-.node-link {
-    position: relative;
-    color: white; padding: 25px; text-decoration: none;
-    display: flex; justify-content: space-between; align-items: center;
-    transition: all 0.2s ease-out;
-    background: rgba(0,0,0,0.6);
-    overflow: hidden;
-    clip-path: polygon(0 15%, 10% 0, 100% 0, 100% 85%, 90% 100%, 0 100%);
-}
-
-.node-link.cyan { border: 2px solid var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 243, 255, 0.2), inset 0 0 10px rgba(0, 243, 255, 0.1); }
-.node-link.magenta { border: 2px solid var(--neon-magenta); box-shadow: 0 0 15px rgba(255, 0, 85, 0.2), inset 0 0 10px rgba(255, 0, 85, 0.1); }
-.node-link.red { border: 2px solid var(--neon-red); box-shadow: 0 0 15px rgba(255, 42, 42, 0.2), inset 0 0 10px rgba(255, 42, 42, 0.1); }
-
-.node-link:hover {
-    transform: scale(1.03) skewX(-2deg);
-    z-index: 10;
-    color: #000;
-    animation: rapid-flicker 0.1s step-end 3;
-}
-
-.node-link.cyan:hover { background: var(--neon-cyan); box-shadow: 0 0 40px var(--neon-cyan); }
-.node-link.magenta:hover { background: var(--neon-magenta); box-shadow: 0 0 40px var(--neon-magenta); }
-.node-link.red:hover { background: var(--neon-red); box-shadow: 0 0 40px var(--neon-red); }
-
-.node-link::after {
-    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-}
-.node-link:hover::after { left: 100%; transition: left 0.4s ease-in-out; }
-
-.node-title { font-size: 15px; letter-spacing: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-.action-icon { font-size: 20px; opacity: 0.7; }
-.node-link:hover .action-icon { animation: icon-spin 0.3s linear; }
-
-/* --- CENTRAL AVATAR NODE --- */
-.avatar-central-node {
-    flex-shrink: 0; display: flex; justify-content: center; align-items: center;
-    position: relative; animation: purple-pulse 2s infinite alternate;
-}
-
-.avatar-frame {
-    width: 250px; height: 250px;
-    background: rgba(0,0,0,0.8);
-    border: 3px solid var(--neon-purple);
-    box-shadow: 0 0 30px rgba(138, 43, 226, 0.6), inset 0 0 20px rgba(138, 43, 226, 0.4);
-    clip-path: polygon(15% 0, 85% 0, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0 85%, 0 15%);
-    display: flex; justify-content: center; align-items: center;
-    padding: 15px; position: relative; z-index: 10;
-}
-
-.avatar-img {
-    max-width: 90%; max-height: 90%;
-    filter: drop-shadow(0 0 15px var(--neon-purple));
-    object-fit: contain;
-}
-
-/* --- PERSISTENT FOOTER & CROSSFADE ANIMATION --- */
-.hud-footer {
-    margin-top: auto; /* Pushes the footer to the bottom of the wrapper */
-    height: 40px; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-}
-
-.footer-text-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.footer-text {
-    position: absolute;
-    font-size: 12px;
-    letter-spacing: 4px;
-    color: rgba(255, 255, 255, 0.5);
-    text-align: center;
-    width: 100%;
-}
-
-/* 6s total loop = 3s per message */
-.msg-1 { animation: swap-msg-1 6s infinite; }
-.msg-2 { animation: swap-msg-2 6s infinite; }
-
-@keyframes swap-msg-1 {
-    0%, 40% { opacity: 1; filter: blur(0); }
-    50%, 90% { opacity: 0; filter: blur(4px); }
-    100% { opacity: 1; filter: blur(0); }
-}
-
-@keyframes swap-msg-2 {
-    0%, 40% { opacity: 0; filter: blur(4px); }
-    50%, 90% { opacity: 1; filter: blur(0); }
-    100% { opacity: 0; filter: blur(4px); }
-}
-
-/* Animations */
-@keyframes rapid-flicker { 0% { opacity: 1; } 25% { opacity: 0.3; } 50% { opacity: 0.8; } 75% { opacity: 0.1; } 100% { opacity: 1; } }
-@keyframes icon-spin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.3); } 100% { transform: rotate(360deg) scale(1); } }
-@keyframes purple-pulse { 0% { box-shadow: 0 0 30px rgba(138, 43, 226, 0.4); } 100% { box-shadow: 0 0 50px rgba(138, 43, 226, 0.8), inset 0 0 30px rgba(138, 43, 226, 0.6); } }
-
-/* =========================================
-   MOBILE RESPONSIVENESS
-========================================= */
-@media (max-width: 768px) {
-    .tactical-layout {
-        flex-direction: column; 
-        gap: 20px;
-        overflow-y: auto;
-        padding-bottom: 20px;
+        pointer-events: none; 
+        z-index: 9999; 
+        
+        /* Injecting your custom PNG */
+        background-image: url('../images/pointer.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        
+        /* Smooth transition for when you hover over a button */
+        transition: transform 0.1s, filter 0.2s;
     }
 
-    .node-matrix {
-        grid-template-columns: 1fr;
-        flex: unset;
-        width: 100%;
-        overflow-y: visible; 
+    /* Target Locked (Hover State) */
+    .musubi-cursor-dot.locked {
+        /* If using the centered crosshair: */
+        transform: translate(-50%, -50%) scale(1.3);
+        
+        /* If using the top-left arrow, change the above line to: */
+        /* transform: translate(0, 0) scale(1.3); */
+        
+        /* Adds a magenta drop-shadow to your PNG on hover */
+        filter: drop-shadow(0 0 8px var(--neon-magenta));
     }
-
-    .avatar-central-node {
-        order: -1; 
-        margin-top: 10px;
-    }
-
-    .avatar-frame {
-        width: 180px; 
-        height: 180px;
-        padding: 10px;
-    }
-}
