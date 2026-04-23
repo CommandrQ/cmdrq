@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MUSUBI | Interface Start</title>
-    <link rel="stylesheet" href="css/intro.css?v=2">
+    
+    <script>
+        if (localStorage.getItem('musubi_access_granted')) {
+            window.location.href = 'menu.html';
+        }
+    </script>
+
+    <link rel="stylesheet" href="css/intro.css?v=3">
 </head>
 <body>
     <div class="scanlines"></div>
@@ -16,21 +23,14 @@
                 <div class="progress"></div>
             </div>
             <p class="status-text">SYNCING BIOMETRIC DATA...</p>
-            <button id="initiate-btn" class="neon-btn" style="display:none;">INITIALIZE NEURAL LINK</button>
+            
+            <button id="initiate-btn" class="neon-btn" style="display:none;">
+                <svg viewBox="0 0 24 24" class="btn-icon"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/></svg>
+                INITIALIZE NEURAL LINK
+            </button>
         </div>
     </div>
 
-    <div id="hideout-ui" class="hidden">
-        <nav class="hud-nav dark-glass">
-            <div class="hud-header">LOCATION: HIDEOUT_01</div>
-            <ul class="nav-links">
-                <li><a href="menu.html">DATABASE</a></li>
-                <li><a href="musicplayer/index.html">COMMUNICATIONS</a></li>
-                <li><a href="#intel">INTEL</a></li>
-            </ul>
-        </nav>
-    </div>
-
-    <script src="js/intro.js?v=2"></script>
+    <script src="js/intro.js?v=3"></script>
 </body>
 </html>
