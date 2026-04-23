@@ -1,71 +1,80 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const audio = document.getElementById('main-audio');
-    const video = document.getElementById('media-video');
-    const glow = document.getElementById('glow');
-    const progress = document.getElementById('progress');
+    const audio = document.getElementById('radio-core');
+    const visual = document.getElementById('bg-visual');
+    const aura = document.getElementById('aura');
+    const playBtn = document.getElementById('play-pause');
     
-    const playBtn = document.getElementById('play-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const prevBtn = document.getElementById('prev-btn');
-    
-    const title = document.getElementById('track-title');
-    const artist = document.getElementById('track-artist');
+    let stations = [];
+    let currentStationIndex = 0;
 
-    let trackIndex = 0;
-    let tracks = [];
+    fetch('stations.json').then(r => r.json()).then(data => {
+        stations = data.stations;
+        initStations();
+        loadStation(0);
+    });
 
-    fetch('playlist.json')
-        .then(res => res.json())
-        .then(data => {
-            tracks = data.tracks;
-            loadTrack(trackIndex);
+    function initStations() {
+        const nav = document.getElementById('station-tabs');
+        stations.forEach((s, i) => {
+            const btn = document.createElement('div');
+            btn.className = 'station-tab';
+            btn.innerText = s.name;
+            btn.onclick = () => loadStation(i);
+            nav.appendChild(btn);
         });
-
-    function loadTrack(index) {
-        const track = tracks[index];
-        audio.src = track.audioSrc;
-        video.src = track.coverSrc;
-        title.innerText = track.title;
-        artist.innerText = track.artist;
-        resetPlayer();
     }
 
-    function togglePlay() {
-        if (audio.paused) {
-            audio.play();
-            video.play();
-            playBtn.innerText = "PAUSE";
-            glow.style.animationPlayState = "running";
-        } else {
-            audio.pause();
-            video.pause();
-            playBtn.innerText = "PLAY";
-            glow.style.animationPlayState = "paused";
+    function loadStation(idx) {
+        currentStationIndex = idx;
+        const tabs = document.querySelectorAll('.station-tab');
+        tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+        
+        const list = document.getElementById('channel-list');
+        list.innerHTML = '';
+        
+        stations[idx].channels.forEach((ch, ci) => {
+            const item = document.createElement('div');
+            item.className = 'channel-item';
+            item.innerText = ch.title;
+            item.onclick = () => playChannel(ch, item);
+            list.appendChild(item);
+        });
+        
+        document.getElementById('current-station').innerText = `FREQ: ${stations[idx].name}`;
+    }
+
+    function playChannel(ch, el) {
+        document.querySelectorAll('.channel-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+        
+        audio.src = ch.url;
+        visual.src = ch.visual;
+        document.getElementById('current-title').innerText = ch.title;
+        
+        audio.play();
+        visual.play();
+        playBtn.innerText = "PAUSE";
+        aura.style.animationPlayState = "running";
+
+        // BACKGROUND AUDIO LOGIC (Media Session API)
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: ch.title,
+                artist: 'COMMANDER_Q',
+                album: stations[currentStationIndex].name
+            });
         }
     }
 
-    function resetPlayer() {
-        playBtn.innerText = "PLAY";
-        progress.style.width = '0%';
-        glow.style.animationPlayState = "paused";
-    }
-
-    audio.ontimeupdate = () => {
-        const pct = (audio.currentTime / audio.duration) * 100;
-        progress.style.width = `${pct}%`;
+    playBtn.onclick = () => {
+        if (audio.paused) {
+            audio.play(); visual.play();
+            playBtn.innerText = "PAUSE";
+            aura.style.animationPlayState = "running";
+        } else {
+            audio.pause(); visual.pause();
+            playBtn.innerText = "PLAY";
+            aura.style.animationPlayState = "paused";
+        }
     };
-
-    playBtn.addEventListener('click', togglePlay);
-    
-    nextBtn.addEventListener('click', () => {
-        trackIndex = (trackIndex + 1) % tracks.length;
-        loadTrack(trackIndex);
-        togglePlay();
-    });
-
-    prevBtn.addEventListener('click', () => {
-        trackIndex = (trackIndex - 1 + tracks.length) % tracks.length;
-        loadTrack(trackIndex);
-        togglePlay();
-    });
 });
