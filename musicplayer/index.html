@@ -22,17 +22,17 @@
         </section>
 
         <main class="ui-area">
-            <nav class="category-tabs" id="category-tabs"></nav>
+            <nav class="category-tabs" id="category-tabs">
+                </nav>
             <div class="playlist-list" id="playlist-list">
                 <p class="placeholder">AWAITING FREQUENCY SELECTION...</p>
             </div>
         </main>
         
         <footer class="hud-footer">
-            <div class="now-playing" id="now-playing">NO TARGET SELECTED</div>
-            <div class="svg-cluster">
-                <svg class="icon" id="svg-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-                <svg class="icon" id="svg-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="currentColor"/></svg>
+            <div class="now-playing-container">
+                <span class="label">TARGET_STREAM:</span>
+                <span id="now-playing">STANDBY</span>
             </div>
         </footer>
     </div>
