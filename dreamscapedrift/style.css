@@ -67,16 +67,21 @@ body, html {
 }
 
 .hud-header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 15px 30px; font-size: 14px; letter-spacing: 3px; flex-shrink: 0;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 15px 30px; 
+    font-size: 14px; 
+    letter-spacing: 3px; 
+    flex-shrink: 0;
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.1);
-    /* Angled corners for desktop */
     clip-path: polygon(0 0, 95% 0, 100% 30%, 100% 100%, 5% 100%, 0 70%);
 }
 
 .status-indicator {
-    display: flex; align-items: center;
+    display: flex; 
+    align-items: center;
 }
 
 .flicker-dot {
@@ -140,28 +145,57 @@ body, html {
 .log-id { font-size: 10px; color: var(--neon-magenta); letter-spacing: 2px; }
 .log-name { font-size: 14px; letter-spacing: 1px; }
 
-/* --- MOBILE RESPONSIVENESS --- */
+/* =========================================
+   MOBILE RESPONSIVENESS (FIXED ALIGNMENT)
+========================================= */
 @media (max-width: 900px) {
     .hud-wrapper { padding: 10px; gap: 15px; }
 
     .hud-header {
-        padding: 10px 15px; gap: 10px;
-        clip-path: none; /* Clear cut corners for space on mobile */
-        justify-content: space-between;
+        padding: 12px 15px;
+        display: flex;
+        flex-direction: row; 
+        align-items: center;
+        justify-content: space-between; 
+        clip-path: none; 
+        border-radius: 4px;
+        gap: 10px;
+    }
+
+    .neon-btn { 
+        font-size: 10px; 
+        padding: 8px 12px; 
+        letter-spacing: 1px;
+        flex-shrink: 0; 
+        white-space: nowrap; 
     }
 
     .status-indicator {
-        font-size: 10px; letter-spacing: 1px;
-        text-align: right; flex: 1; justify-content: flex-end;
+        font-size: 9px; 
+        letter-spacing: 1px;
+        color: #fff;
+        margin-left: auto; /* Forces text to the right side of the flex container */
+        text-align: right;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end; 
     }
 
-    .neon-btn { font-size: 10px; padding: 6px 10px; letter-spacing: 1px; }
+    .flicker-dot {
+        margin-right: 6px; 
+        flex-shrink: 0;
+    }
 
     .archive-layout { flex-direction: column; overflow-y: auto; padding-bottom: 20px; }
     
     .viewer-section { flex: unset; }
     
-    .log-sidebar { width: 100%; height: 350px; flex: unset; }
+    .log-sidebar { 
+        width: 100%; 
+        height: 350px; /* Fixed height enables internal scrolling */
+        flex: unset; 
+        margin-top: 10px;
+    }
     
     .telemetry-panel h2 { font-size: 18px; }
     .data-value { font-size: 12px; }
