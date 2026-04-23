@@ -34,7 +34,7 @@ body, html {
 
 .scanlines {
     position: fixed; inset: 0; pointer-events: none; z-index: 50;
-    /* Changed 0.2 to 0.08 to make the dark lines much softer */
+    /* Softened scanlines for readability */
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.08) 50%);
     background-size: 100% 4px;
 }
@@ -57,7 +57,7 @@ body, html {
     border-bottom: 3px solid var(--neon-magenta);
     
     width: 100%;
-    max-width: 950px; /* Widened to fit the image and text nicely */
+    max-width: 950px; 
     max-height: 90vh; 
     display: flex;
     flex-direction: column;
@@ -82,7 +82,7 @@ body, html {
     color: var(--neon-cyan);
     letter-spacing: 4px;
     text-shadow: 0 0 10px var(--neon-cyan);
-    font-size: 18px;
+    font-size: 20px; /* BUMPED UP */
 }
 
 /* --- CONTENT SCROLLING AREA --- */
@@ -96,7 +96,7 @@ body, html {
 .panel-content::-webkit-scrollbar { width: 4px; }
 .panel-content::-webkit-scrollbar-thumb { background: var(--neon-cyan); }
 
-/* --- NEW: SPLIT DOSSIER LAYOUT --- */
+/* --- SPLIT DOSSIER LAYOUT --- */
 .intel-split-layout {
     display: flex;
     gap: 40px;
@@ -105,7 +105,7 @@ body, html {
 
 /* Left Side: The Image */
 .intel-visual {
-    flex: 0 0 35%; /* Takes up 35% of the panel width */
+    flex: 0 0 35%; 
     max-width: 320px;
 }
 
@@ -114,7 +114,6 @@ body, html {
     border: 2px solid var(--neon-cyan);
     box-shadow: 0 0 20px rgba(0, 243, 255, 0.15), inset 0 0 15px rgba(0, 243, 255, 0.1);
     padding: 10px;
-    /* Angled mecha cut on opposite corners */
     clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
     position: relative;
 }
@@ -124,25 +123,25 @@ body, html {
     height: auto;
     display: block;
     object-fit: cover;
-    filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.3)); /* Gives the image subject a slight neon back-glow if it has a transparent background */
+    filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.3)); 
 }
 
 /* Right Side: The Data */
 .intel-data {
-    flex: 1; /* Takes up the remaining space */
+    flex: 1; 
 }
 
 .intel-data p {
     color: #ccc;
     line-height: 1.8;
     letter-spacing: 2px;
-    font-size: 15px;
+    font-size: 17px; /* BUMPED UP (Was 15px) */
     margin-top: 0;
     margin-bottom: 25px;
 }
 
 .mission-statement {
-    font-size: 18px !important;
+    font-size: 21px !important; /* BUMPED UP (Was 18px) */
     color: #fff !important;
     text-align: center;
     margin: 40px 0 !important;
@@ -171,7 +170,7 @@ body, html {
     border: 1px solid var(--neon-cyan);
     color: var(--neon-cyan);
     padding: 12px 25px;
-    font-size: 14px;
+    font-size: 15px; /* BUMPED UP */
     letter-spacing: 4px;
     transition: all 0.2s;
     position: relative;
@@ -192,11 +191,11 @@ body, html {
 @media (max-width: 768px) {
     .ui-container { padding: 15px; }
     .panel-header { padding: 15px 20px; }
-    .cyan-text { font-size: 14px; letter-spacing: 2px; }
+    
+    .cyan-text { font-size: 16px; letter-spacing: 2px; } /* BUMPED UP */
     
     .panel-content { padding: 25px 20px; }
     
-    /* Stack the split layout vertically on phones */
     .intel-split-layout {
         flex-direction: column;
         align-items: center;
@@ -204,14 +203,14 @@ body, html {
     }
 
     .intel-visual {
-        width: 60%; /* Scales down slightly so it's not massive on mobile */
+        width: 60%; 
         max-width: 250px;
     }
 
-    .intel-data p { font-size: 13px; letter-spacing: 1px; line-height: 1.6; }
+    .intel-data p { font-size: 15px; letter-spacing: 1px; line-height: 1.6; } /* BUMPED UP */
     
-    .mission-statement { font-size: 15px !important; margin: 30px 0 !important; }
+    .mission-statement { font-size: 18px !important; margin: 30px 0 !important; } /* BUMPED UP */
     
     .panel-footer { padding: 15px 20px; justify-content: center; }
-    .neon-btn { width: 100%; text-align: center; font-size: 12px; }
+    .neon-btn { width: 100%; text-align: center; font-size: 14px; } /* BUMPED UP */
 }
