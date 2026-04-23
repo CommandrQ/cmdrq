@@ -1,80 +1,56 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const audio = document.getElementById('radio-core');
-    const visual = document.getElementById('bg-visual');
-    const aura = document.getElementById('aura');
-    const playBtn = document.getElementById('play-pause');
-    
-    let stations = [];
-    let currentStationIndex = 0;
+    const stationContainer = document.getElementById('station-container');
+    const videoEmbed = document.getElementById('video-embed');
+    const loadingOverlay = document.getElementById('loading-overlay');
+    const syncText = document.getElementById('sync-text');
+    const nowPlaying = document.getElementById('now-playing');
 
-    fetch('stations.json').then(r => r.json()).then(data => {
-        stations = data.stations;
-        initStations();
-        loadStation(0);
-    });
-
-    function initStations() {
-        const nav = document.getElementById('station-tabs');
-        stations.forEach((s, i) => {
-            const btn = document.createElement('div');
-            btn.className = 'station-tab';
-            btn.innerText = s.name;
-            btn.onclick = () => loadStation(i);
-            nav.appendChild(btn);
-        });
-    }
-
-    function loadStation(idx) {
-        currentStationIndex = idx;
-        const tabs = document.querySelectorAll('.station-tab');
-        tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
-        
-        const list = document.getElementById('channel-list');
-        list.innerHTML = '';
-        
-        stations[idx].channels.forEach((ch, ci) => {
-            const item = document.createElement('div');
-            item.className = 'channel-item';
-            item.innerText = ch.title;
-            item.onclick = () => playChannel(ch, item);
-            list.appendChild(item);
-        });
-        
-        document.getElementById('current-station').innerText = `FREQ: ${stations[idx].name}`;
-    }
-
-    function playChannel(ch, el) {
-        document.querySelectorAll('.channel-item').forEach(i => i.classList.remove('active'));
-        el.classList.add('active');
-        
-        audio.src = ch.url;
-        visual.src = ch.visual;
-        document.getElementById('current-title').innerText = ch.title;
-        
-        audio.play();
-        visual.play();
-        playBtn.innerText = "PAUSE";
-        aura.style.animationPlayState = "running";
-
-        // BACKGROUND AUDIO LOGIC (Media Session API)
-        if ('mediaSession' in navigator) {
-            navigator.mediaSession.metadata = new MediaMetadata({
-                title: ch.title,
-                artist: 'COMMANDER_Q',
-                album: stations[currentStationIndex].name
+    fetch('stations.json')
+        .then(res => res.json())
+        .then(data => {
+            data.stations.forEach(station => {
+                const card = document.createElement('div');
+                card.className = 'station-card';
+                card.innerHTML = `<h2>${station.category}</h2><div class="pl-list"></div>`;
+                
+                const list = card.querySelector('.pl-list');
+                station.playlists.forEach(pl => {
+                    const link = document.createElement('a');
+                    link.className = 'playlist-link';
+                    link.innerHTML = `> ${pl.title}`;
+                    link.href = "#";
+                    link.onclick = (e) => {
+                        e.preventDefault();
+                        initiateUplink(pl.playlistId, pl.title, link);
+                    };
+                    list.appendChild(link);
+                });
+                stationContainer.appendChild(card);
             });
-        }
-    }
+        });
 
-    playBtn.onclick = () => {
-        if (audio.paused) {
-            audio.play(); visual.play();
-            playBtn.innerText = "PAUSE";
-            aura.style.animationPlayState = "running";
-        } else {
-            audio.pause(); visual.pause();
-            playBtn.innerText = "PLAY";
-            aura.style.animationPlayState = "paused";
-        }
-    };
+    function initiateUplink(id, title, element) {
+        // UI Feedback
+        document.querySelectorAll('.playlist-link').forEach(l => l.classList.remove('active'));
+        element.classList.add('active');
+        
+        // Start System Check (The Delay)
+        syncText.innerText = "STATUS: LINKING...";
+        loadingOverlay.style.display = 'flex';
+        videoEmbed.classList.remove('visible');
+        
+        // 450ms Delay to "process" the link
+        setTimeout(() => {
+            const embedUrl = `https://www.youtube.com/embed/videoseries?list=${id}&autoplay=1&mute=0&rel=0`;
+            videoEmbed.src = embedUrl;
+            
+            // Once iframe loads, reveal it
+            videoEmbed.onload = () => {
+                loadingOverlay.style.display = 'none';
+                videoEmbed.classList.add('visible');
+                syncText.innerText = "STATUS: CONNECTED";
+                nowPlaying.innerText = title;
+            };
+        }, 450);
+    }
 });
