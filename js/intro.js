@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnWrapper = document.getElementById('btn-wrapper');
     const initBtn = document.getElementById('initiate-btn');
     const statusText = document.querySelector('.status-text');
+    const fadeOverlay = document.getElementById('fade-to-black');
 
     const statuses = [
         "BOOTING MUSUBI_OS...",
@@ -38,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btmClone.className = 'neon-btn slice-bottom';
         flashLine.className = 'slice-flash';
 
-        // 3. Strip IDs from clones to prevent HTML duplication issues
+        // 3. Strip IDs from clones
         topClone.removeAttribute('id');
         btmClone.removeAttribute('id');
 
@@ -48,9 +49,14 @@ document.addEventListener('DOMContentLoaded', () => {
         btnWrapper.appendChild(btmClone);
         btnWrapper.appendChild(flashLine);
 
-        // 5. Warp to menu.html after the slice animation finishes
+        // 5. Trigger the Fade to Black slightly before the slice ends
+        setTimeout(() => {
+            fadeOverlay.classList.add('active');
+        }, 600); // Kicks in 600ms into the slice animation
+
+        // 6. Warp to menu.html safely in the dark
         setTimeout(() => {
             window.location.href = 'menu.html';
-        }, 1200); 
+        }, 1500); 
     });
 });
