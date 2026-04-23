@@ -166,11 +166,76 @@ body {
 @keyframes purple-pulse { 0% { box-shadow: 0 0 30px rgba(138, 43, 226, 0.4); } 100% { box-shadow: 0 0 50px rgba(138, 43, 226, 0.8), inset 0 0 30px rgba(138, 43, 226, 0.6); } }
 
 /* =========================================
-   MOBILE RESPONSIVENESS
+   MOBILE RESPONSIVENESS (NO HORIZONTAL SCROLL)
 ========================================= */
 @media (max-width: 768px) {
-    .tactical-layout { flex-direction: column; gap: 20px; overflow-y: auto; padding-bottom: 20px; }
-    .node-matrix { grid-template-columns: 1fr; flex: unset; width: 100%; overflow-y: visible; }
-    .avatar-central-node { order: -1; margin-top: 10px; }
-    .avatar-frame { width: 180px; height: 180px; padding: 10px; }
+    /* Strictly lock the horizontal axis */
+    body, html {
+        overflow-x: hidden;
+    }
+
+    .hud-wrapper {
+        padding: 10px; /* Reduced outer padding to give elements more room */
+        gap: 15px; 
+    }
+
+    /* Shrink Header Text & Padding */
+    .hud-header {
+        padding: 12px 15px; 
+        font-size: 10px; 
+        letter-spacing: 1px; /* Tighter tracking to prevent long words from overflowing */
+    }
+
+    .tactical-layout { 
+        flex-direction: column; 
+        gap: 15px; 
+        overflow-y: auto; 
+        overflow-x: hidden; /* Lock horizontal scrolling inside the layout */
+        padding-bottom: 20px; 
+    }
+    
+    .node-matrix { 
+        grid-template-columns: 1fr; 
+        flex: unset; 
+        width: 100%; 
+        overflow-y: visible; 
+        gap: 12px; /* Tighter gap between buttons */
+    }
+
+    /* Shrink the Buttons */
+    .node-link {
+        padding: 18px 20px; /* Smaller internal padding */
+    }
+
+    .node-title {
+        font-size: 13px; 
+        letter-spacing: 2px; 
+    }
+
+    .action-icon {
+        font-size: 16px;
+    }
+
+    /* Shrink the Avatar */
+    .avatar-central-node { 
+        order: -1; 
+        margin-top: 5px; 
+    }
+    
+    .avatar-frame { 
+        width: 150px; /* Scaled down from 180px */
+        height: 150px; 
+        padding: 8px; 
+    }
+
+    /* Shrink the Footer */
+    .hud-footer {
+        height: 30px;
+    }
+
+    .footer-text {
+        font-size: 10px;
+        letter-spacing: 2px;
+        padding: 0 10px; /* Prevents text from touching the absolute edges */
+    }
 }
