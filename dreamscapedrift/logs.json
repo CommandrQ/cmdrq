@@ -1,0 +1,16 @@
+{
+  "logs": [
+    {
+      "id": "LOG_001",
+      "title": "NEON_CIRCUIT_RUN",
+      "youtubeId": "YOUR_YOUTUBE_ID_HERE",
+      "car": "MAZDA RX-7 FD",
+    },
+    {
+      "id": "LOG_002",
+      "title": "TOKYO_EXPRESSWAY",
+      "youtubeId": "ANOTHER_YOUTUBE_ID",
+      "car": "NISSAN SILVIA S15",
+    }
+  ]
+}
