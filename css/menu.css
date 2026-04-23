@@ -1,6 +1,6 @@
 :root {
     --neon-cyan: #00f3ff;
-    --dark-glass: rgba(10, 10, 15, 0.9);
+    --dark-glass: rgba(8, 8, 12, 0.85);
     --border-dim: rgba(0, 243, 255, 0.2);
     --border-bright: rgba(0, 243, 255, 0.8);
 }
@@ -8,11 +8,13 @@
 * {
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
     margin: 0;
     background-color: #030303;
+    background-image: radial-gradient(circle at center, #0a0a0f 0%, #000 100%);
     color: white;
     height: 100dvh;
     overflow: hidden;
@@ -20,105 +22,122 @@ body {
 
 .scanlines {
     position: fixed; inset: 0; pointer-events: none; z-index: 1000;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
     background-size: 100% 3px;
 }
 
-.hud-container {
+.hud-wrapper {
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 20px;
+    padding: 15px;
     gap: 15px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .glass {
     background: var(--dark-glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.05);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--border-dim);
+    border-radius: 12px;
 }
 
-/* Header & Footer HUD */
-.hud-header, .hud-footer {
-    padding: 15px 25px;
+/* Header */
+.hud-header {
     display: flex;
     justify-content: space-between;
+    padding: 15px 20px;
     font-size: 11px;
     letter-spacing: 2px;
-    border-radius: 8px;
+    flex-shrink: 0;
 }
 
-.cyan-text { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
+.pulse-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--neon-cyan);
+    border-radius: 50%;
+    margin-right: 8px;
+    box-shadow: 0 0 8px var(--neon-cyan);
+    animation: pulse 2s infinite;
+}
 
-/* Main Map Layout */
-.map-layout {
+.cyan-text { color: var(--neon-cyan); }
+
+/* Main Layout (Side by Side on Desktop) */
+.tactical-layout {
     display: flex;
-    flex: 1;
+    flex-direction: row;
     gap: 15px;
-    min-height: 0;
+    flex: 1;
+    min-height: 0; /* Important for scrollable areas */
 }
 
-.map-view {
+/* Node Matrix (Grid of Buttons) */
+.node-matrix {
     flex: 2;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    align-content: start;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--neon-cyan) transparent;
 }
 
-/* SVG Map Styling */
-#hideout-map {
-    width: 100%;
-    height: 100%;
-}
-
-.map-path {
-    fill: none;
-    stroke: var(--border-dim);
-    stroke-width: 1;
-    stroke-dasharray: 5;
-}
-
-.map-zone {
-    fill: rgba(0, 243, 255, 0.02);
-    stroke: var(--border-dim);
-    stroke-width: 1.5;
+.node-btn {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-dim);
+    color: white;
+    padding: 20px 15px;
+    border-radius: 8px;
+    text-align: left;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.map-zone:hover {
-    fill: rgba(0, 243, 255, 0.1);
-    stroke: var(--neon-cyan);
-    filter: drop-shadow(0 0 8px var(--neon-cyan));
+.node-btn:hover, .node-btn.active {
+    background: rgba(0, 243, 255, 0.1);
+    border-color: var(--neon-cyan);
+    box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.1);
+    transform: translateY(-2px);
 }
 
-.map-label {
-    fill: rgba(255,255,255,0.4);
+.node-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--neon-cyan);
+}
+
+.node-status {
     font-size: 10px;
-    text-anchor: middle;
-    pointer-events: none;
     letter-spacing: 1px;
+    opacity: 0.6;
 }
 
 /* Intel Sidebar */
 .intel-panel {
     flex: 1;
-    border-radius: 12px;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    max-width: 350px;
+    min-width: 300px;
 }
 
 .panel-header {
-    font-size: 12px;
-    letter-spacing: 3px;
+    font-size: 11px;
+    letter-spacing: 4px;
     border-bottom: 1px solid var(--border-dim);
-    padding-bottom: 10px;
+    padding-bottom: 15px;
     margin-bottom: 20px;
+    color: rgba(255,255,255,0.5);
 }
 
 .intel-content {
@@ -129,27 +148,60 @@ body {
     color: #e0e0e0;
 }
 
-.intel-stat { color: var(--neon-cyan); }
+.intel-stat { color: var(--neon-cyan); font-weight: bold; }
 
-.nav-lock {
+.nav-btn {
+    width: 100%;
+    padding: 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.nav-btn.locked {
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.1);
     color: rgba(255,255,255,0.3);
-    padding: 15px;
-    text-align: center;
-    border-radius: 8px;
-    font-size: 12px;
-    letter-spacing: 2px;
-    transition: 0.3s;
+    cursor: not-allowed;
 }
 
-.nav-active {
+.nav-btn.active {
     background: rgba(0, 243, 255, 0.1);
     border: 1px solid var(--neon-cyan);
     color: var(--neon-cyan);
     cursor: pointer;
     text-shadow: 0 0 10px var(--neon-cyan);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
 }
 
+.nav-btn.active:hover {
+    background: var(--neon-cyan);
+    color: black;
+}
+
+@keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
 @keyframes blink { 50% { opacity: 0.3; } }
 .blink-text { animation: blink 1s infinite; }
+
+/* =========================================
+   MOBILE RESPONSIVENESS
+========================================= */
+@media (max-width: 768px) {
+    .tactical-layout {
+        flex-direction: column; /* Stacks the grid and the intel panel */
+    }
+
+    .node-matrix {
+        grid-template-columns: 1fr; /* Single column list on phones */
+        flex: unset;
+        height: 50%; /* Takes up top half */
+    }
+
+    .intel-panel {
+        flex: unset;
+        height: 50%; /* Takes up bottom half */
+        min-width: 100%;
+    }
+}
