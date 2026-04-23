@@ -1,7 +1,7 @@
 :root {
     --neon-cyan: #00f3ff;
     --neon-magenta: #ff0055;
-    --neon-purple: #8a2be2; /* Deep violet for glow */
+    --neon-purple: #8a2be2; 
     --neon-red: #ff2a2a;
     --bg-dark: #000002;
     --text-main: #ffffff;
@@ -25,9 +25,8 @@ body {
 }
 
 /* --- DEEP BACKGROUND VISUALS --- */
-.purple-radial-glow { /* New deepest layer */
+.purple-radial-glow { 
     position: fixed; inset: 0;
-    /* Slow, soft purple pulse */
     background: radial-gradient(circle at center, rgba(138, 43, 226, 0.25) 0%, transparent 75%);
     z-index: -4;
     animation: bg-pulse 8s infinite alternate;
@@ -60,8 +59,9 @@ body {
     100% { background-position: 1000px 1000px; }
 }
 
+/* Scanlines lowered to z-index: 0 so UI buttons sit on top */
 .scanlines {
-    position: fixed; inset: 0; pointer-events: none; z-index: 1000;
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
     background: linear-gradient(rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.3) 50%);
     background-size: 100% 4px;
 }
@@ -69,12 +69,12 @@ body {
 .hud-wrapper {
     display: flex; flex-direction: column;
     height: 100%; padding: 20px; gap: 20px;
-    max-width: 1200px; /* Widened slightly to handle flanking columns */
-    margin: 0 auto;
-    position: relative; z-index: 10;
+    max-width: 1200px; margin: 0 auto;
+    position: relative; 
+    z-index: 10; /* Keeps buttons and UI above the scanlines */
 }
 
-/* --- HEADER HUD (Angled cuts) --- */
+/* --- HEADER HUD --- */
 .hud-header {
     display: flex; justify-content: space-between; align-items: center;
     padding: 15px 30px; font-size: 12px; letter-spacing: 3px; flex-shrink: 0;
@@ -92,21 +92,20 @@ body {
 
 .cyan-text { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
 
-/* --- MAIN TACTICAL LAYOUT (Center-focused) --- */
+/* --- MAIN TACTICAL LAYOUT --- */
 .tactical-layout {
     display: flex;
     justify-content: center;
     align-items: center;
     flex: 1;
     min-height: 0;
-    gap: 30px; /* Space between matrix columns and central photo */
+    gap: 30px; 
 }
 
-/* --- THE DYNAMIC NODE MATRIX COLUMNS --- */
 .node-matrix {
-    flex: 1; /* Both flanking columns take equal space */
+    flex: 1; 
     display: grid;
-    grid-template-columns: 1fr; /* Single column stack */
+    grid-template-columns: 1fr; 
     gap: 20px;
     align-content: center;
     overflow-y: auto;
@@ -114,7 +113,7 @@ body {
 }
 .node-matrix::-webkit-scrollbar { display: none; }
 
-/* --- THE FLASHY NEON BUTTONS --- */
+/* --- FLASHY NEON BUTTONS --- */
 .node-link {
     position: relative;
     color: white; padding: 25px; text-decoration: none;
@@ -150,40 +149,70 @@ body {
 .action-icon { font-size: 20px; opacity: 0.7; }
 .node-link:hover .action-icon { animation: icon-spin 0.3s linear; }
 
-/* --- CENTRAL AVATAR NODE (New) --- */
+/* --- CENTRAL AVATAR NODE --- */
 .avatar-central-node {
-    flex-shrink: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    /* Pulsing border glow animation */
-    animation: purple-pulse 2s infinite alternate;
+    flex-shrink: 0; display: flex; justify-content: center; align-items: center;
+    position: relative; animation: purple-pulse 2s infinite alternate;
 }
 
 .avatar-frame {
-    width: 250px; /* Large desktop size */
-    height: 250px;
+    width: 250px; height: 250px;
     background: rgba(0,0,0,0.8);
     border: 3px solid var(--neon-purple);
     box-shadow: 0 0 30px rgba(138, 43, 226, 0.6), inset 0 0 20px rgba(138, 43, 226, 0.4);
-    
-    /* Intricate geometry: octagon-like clip-path */
     clip-path: polygon(15% 0, 85% 0, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0 85%, 0 15%);
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 15px;
-    position: relative;
-    z-index: 10;
+    display: flex; justify-content: center; align-items: center;
+    padding: 15px; position: relative; z-index: 10;
 }
 
 .avatar-img {
-    max-width: 90%;
-    max-height: 90%;
+    max-width: 90%; max-height: 90%;
     filter: drop-shadow(0 0 15px var(--neon-purple));
     object-fit: contain;
+}
+
+/* --- PERSISTENT FOOTER & CROSSFADE ANIMATION --- */
+.hud-footer {
+    margin-top: auto; /* Pushes the footer to the bottom of the wrapper */
+    height: 40px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.footer-text-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-text {
+    position: absolute;
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    width: 100%;
+}
+
+/* 6s total loop = 3s per message */
+.msg-1 { animation: swap-msg-1 6s infinite; }
+.msg-2 { animation: swap-msg-2 6s infinite; }
+
+@keyframes swap-msg-1 {
+    0%, 40% { opacity: 1; filter: blur(0); }
+    50%, 90% { opacity: 0; filter: blur(4px); }
+    100% { opacity: 1; filter: blur(0); }
+}
+
+@keyframes swap-msg-2 {
+    0%, 40% { opacity: 0; filter: blur(4px); }
+    50%, 90% { opacity: 1; filter: blur(0); }
+    100% { opacity: 0; filter: blur(4px); }
 }
 
 /* Animations */
@@ -196,26 +225,26 @@ body {
 ========================================= */
 @media (max-width: 768px) {
     .tactical-layout {
-        flex-direction: column; /* Stacks everything vertically on phone */
+        flex-direction: column; 
         gap: 20px;
         overflow-y: auto;
-        padding-bottom: 30px; /* Space for the bottom-most link */
+        padding-bottom: 20px;
     }
 
     .node-matrix {
         grid-template-columns: 1fr;
         flex: unset;
         width: 100%;
-        overflow-y: visible; /* Matrix handles its own scrolling on desktop, but body does on mobile */
+        overflow-y: visible; 
     }
 
     .avatar-central-node {
-        order: -1; /* Puts the central photo at the TOP of the list on mobile */
+        order: -1; 
         margin-top: 10px;
     }
 
     .avatar-frame {
-        width: 180px; /* Shrinks for phone screens */
+        width: 180px; 
         height: 180px;
         padding: 10px;
     }
