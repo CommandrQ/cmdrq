@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MUSUBI | Tactical HUD</title>
-    <link rel="stylesheet" href="css/menu.css?v=99">
+    <link rel="stylesheet" href="css/menu.css?v=100">
 </head>
 <body class="action-mode">
     
-    <div class="stars"></div>
+    <div class="purple-radial-glow"></div> <div class="stars"></div>
     <div id="matrix-lines"></div>
     <div class="scanlines"></div>
 
@@ -21,11 +21,20 @@
         </header>
 
         <main class="tactical-layout">
-            <section class="node-matrix" id="node-matrix">
-                </section>
+            
+            <section class="node-matrix" id="node-matrix-left"></section>
+
+            <div class="avatar-central-node">
+                <div class="avatar-frame">
+                    <img src="images/commanderqhs.png" alt="Commander QHS" class="avatar-img">
+                </div>
+            </div>
+
+            <section class="node-matrix" id="node-matrix-right"></section>
+
         </main>
     </div>
 
-    <script src="js/menu.js?v=99"></script>
+    <script src="js/menu.js?v=100"></script>
 </body>
 </html>
