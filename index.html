@@ -4,28 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>System Login</title>
-    
     <script>
-        if (localStorage.getItem('musubi_access_granted')) {
-            window.location.href = 'menu.html';
-        }
+        if (localStorage.getItem('musubi_access_granted')) { window.location.href = 'menu.html'; }
     </script>
-
     <link rel="stylesheet" href="css/intro.css?v=9">
+    <link rel="stylesheet" href="css/cursor.css?v=1">
 </head>
 <body>
     <div class="scanlines" id="scanlines"></div>
-
     <div id="purple-ambience"></div>
 
     <div id="apple-ui" class="ui-container active">
         <div class="apple-glass">
             <svg class="apple-icon" viewBox="0 0 24 24"><path d="M17 11V7c0-2.76-2.24-5-5-5S7 4.24 7 7v4H5.5C4.67 11 4 11.67 4 12.5v8C4 21.33 4.67 22 5.5 22h13c.83 0 1.5-.67 1.5-1.5v-8c0-.83-.67-1.5-1.5-1.5H17zm-8-4c0-1.65 1.35-3 3-3s3 1.35 3 3v4H9V7z"/></svg>
-            <h2 class="apple-title">Destabilizing the user's reality...</h2>
+            <h2 class="apple-title">Authenticating</h2>
             <div class="apple-loader-track">
                 <div class="apple-loader-fill" id="apple-loader"></div>
             </div>
-            <p id="override-text" class="override-text">ANOMOLY DETECTED! ANOMOLY DETECTED!</p>
+            <p id="override-text" class="override-text">Attempting to override the user's reality...</p>
         </div>
     </div>
 
@@ -33,14 +29,15 @@
 
     <div id="neon-ui" class="ui-container hidden">
         <div class="neon-glass">
-            <h1 class="tactical-title">The Vanguard Kights Present:</h1>
+            <h1 class="tactical-title">MUSUBI_SYSTEM_v1.0</h1>
+            <p class="status-text">REALITY OVERRIDE SUCCESSFUL.</p>
             
             <div class="btn-wrapper" id="btn-wrapper">
                 <button id="initiate-btn" class="neon-btn">
                     <svg viewBox="0 0 24 24" class="btn-icon">
                         <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
                     </svg>
-                    Commander Q: Defender of Eternity
+                    DARE TO ENTER
                 </button>
             </div>
         </div>
@@ -48,6 +45,8 @@
 
     <div id="fade-to-black"></div>
 
+    <div class="musubi-cursor-dot"></div>
+    <script src="js/cursor.js?v=1"></script>
     <script src="js/intro.js?v=9"></script>
 </body>
 </html>
