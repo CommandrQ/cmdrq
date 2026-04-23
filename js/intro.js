@@ -1,14 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const overlay = document.getElementById('intro-overlay');
     const initBtn = document.getElementById('initiate-btn');
     const statusText = document.querySelector('.status-text');
-    const hideout = document.getElementById('hideout-ui');
 
-    // Start boot sequence
     const statuses = [
-        "ESTABLISHING SECURE PROTOCOL...",
-        "DECRYPTING MUSUBI_CORES...",
-        "NEURAL LINK: READY."
+        "BOOTING MUSUBI_OS...",
+        "DECRYPTING NEURAL PROTOCOLS...",
+        "MAPPING HIDEOUT COORDINATES...",
+        "NEURAL LINK: ESTABLISHED."
     ];
 
     let i = 0;
@@ -17,16 +15,25 @@ document.addEventListener('DOMContentLoaded', () => {
         i++;
         if(i >= statuses.length) {
             clearInterval(interval);
-            initBtn.style.display = "block";
+            initBtn.style.display = "flex";
+            // Add a subtle entrance animation to the button
+            initBtn.style.animation = "fadeIn 0.5s forwards";
         }
-    }, 800);
+    }, 700);
 
-    // Initialize Hideout
+    // Initialize & Set LocalStorage
     initBtn.addEventListener('click', () => {
-        overlay.style.opacity = "0";
+        // Log the visit so they skip this next time
+        localStorage.setItem('musubi_access_granted', 'true');
+        
+        // Visual feedback
+        statusText.innerText = "ACCESS GRANTED. REDIRECTING...";
+        initBtn.style.opacity = "0.5";
+        initBtn.disabled = true;
+
+        // Warp to menu.html
         setTimeout(() => {
-            overlay.style.display = "none";
-            hideout.classList.remove('hidden');
-        }, 1200);
+            window.location.href = 'menu.html';
+        }, 800);
     });
 });
