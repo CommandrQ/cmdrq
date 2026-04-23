@@ -34,7 +34,8 @@ body, html {
 
 .scanlines {
     position: fixed; inset: 0; pointer-events: none; z-index: 50;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+    /* Changed 0.2 to 0.08 to make the dark lines much softer */
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.08) 50%);
     background-size: 100% 4px;
 }
 
