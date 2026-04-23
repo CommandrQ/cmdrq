@@ -8,20 +8,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let stationData = [];
 
-    // 1. Fetch JSON (Looks for stations.json in the same musicplayer folder)
+    // 1. Fetch JSON
     fetch('stations.json')
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) throw new Error("Could not find stations.json");
+            return res.json();
+        })
         .then(data => {
             stationData = data.stations;
             renderTabs();
         })
         .catch(err => {
             console.error("Uplink Failure:", err);
-            statusText.innerText = "OFFLINE";
+            statusText.innerText = "OFFLINE - USE LIVE SERVER";
+            statusText.style.color = "#ff0055";
         });
 
-    // 2. Build Category Tabs (The 4 Radio Stations)
+    // 2. Build Category Tabs
     function renderTabs() {
+        tabContainer.innerHTML = ''; // Clear
         stationData.forEach((station, index) => {
             const btn = document.createElement('button');
             btn.className = 'tab-btn';
@@ -35,38 +40,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Build Playlist Items (Subchannels)
+    // 3. Build Playlist Items
     function renderPlaylists(index) {
         listContainer.innerHTML = '';
         stationData[index].playlists.forEach(pl => {
             const btn = document.createElement('button');
             btn.className = 'pl-btn';
             btn.innerText = `> ${pl.title}`;
-            // Corrected to use 'pl.playlistId' to match your JSON
-            btn.onclick = () => loadPlaylist(pl.playlistId, pl.title, btn);
+            // Corrected to playlistId to match your JSON
+            btn.onclick = () => loadUplink(pl.playlistId, pl.title, btn);
             listContainer.appendChild(btn);
         });
     }
 
-    // 4. The Playlist Uplink
-    function loadPlaylist(id, title, element) {
-        // UI feedback
+    // 4. THE UPLINK (The single-click fix)
+    function loadUplink(id, title, element) {
+        // UI reset
         document.querySelectorAll('.pl-btn').forEach(b => b.classList.remove('active'));
         element.classList.add('active');
         
         statusText.innerText = "LINKING...";
         loader.style.display = 'flex';
-        player.classList.remove('active');
-        player.src = ""; // Flush the player
+        player.style.opacity = '0'; // Hide player while loading
+        player.src = ""; 
 
-        // 500ms Tactical Delay for that "System Processing" feel
+        // Tactical 500ms Delay
         setTimeout(() => {
-            // Using the Playlist-specific URL format
+            // Using the native iframe src swap (most stable method)
             player.src = `https://www.youtube.com/embed/videoseries?list=${id}&autoplay=1&rel=0`;
             
             player.onload = () => {
                 loader.style.display = 'none';
-                player.classList.add('active');
+                player.style.opacity = '1';
                 statusText.innerText = "STABLE";
                 nowPlaying.innerText = `UPLINK: ${title}`;
             };
