@@ -1,35 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
     const nodeMatrix = document.getElementById('node-matrix');
 
-    // 1. Fetch the simplified JSON data
+    // 1. Fetch the flashy JSON data
     fetch('database/menu.json')
         .then(response => response.json())
         .then(data => {
             buildLinks(data.links);
         })
-        .catch(error => console.error("Error loading Musubi Links:", error));
+        .catch(error => console.error("Error loading Musubi HUD:", error));
 
-    // 2. Build the direct links
+    // 2. Build the flashy direct links
     function buildLinks(links) {
         links.forEach(item => {
-            // Create an anchor tag instead of a button
             const a = document.createElement('a');
-            a.className = 'node-link';
+            
+            // Apply standard class + dynamic color class from JSON
+            a.className = `node-link ${item.color || 'cyan'}`;
             a.href = item.link;
 
-            // Check if it's an external link
             const isExternal = item.link.startsWith('http');
-            
             if (isExternal) {
-                // Open in new tab securely
                 a.target = '_blank';
                 a.rel = 'noopener noreferrer';
             }
 
-            // Build the inner HTML. Add an arrow icon if it's external.
+            // Define icons based on color vibe
+            let icon = '>>'; // Cyan internal default
+            if(item.color === 'magenta') icon = '↗'; // External Action
+            if(item.color === 'red') icon = '!!'; // System warning/Database
+
             a.innerHTML = `
                 <span class="node-title">${item.title}</span>
-                ${isExternal ? '<span class="external-icon">↗</span>' : ''}
+                <span class="action-icon">${icon}</span>
             `;
 
             nodeMatrix.appendChild(a);
