@@ -1,60 +1,38 @@
 document.addEventListener('DOMContentLoaded', () => {
     const nodeMatrix = document.getElementById('node-matrix');
-    const intelDisplay = document.getElementById('intel-display');
-    const navActionBtn = document.getElementById('nav-action');
 
-    // 1. Fetch the JSON data
+    // 1. Fetch the simplified JSON data
     fetch('database/menu.json')
         .then(response => response.json())
         .then(data => {
-            buildNodeMatrix(data.nodes);
+            buildLinks(data.links);
         })
-        .catch(error => console.error("Error loading Musubi Nodes:", error));
+        .catch(error => console.error("Error loading Musubi Links:", error));
 
-    // 2. Build the buttons dynamically
-    function buildNodeMatrix(nodes) {
-        nodes.forEach(node => {
-            const btn = document.createElement('button');
-            btn.className = 'node-btn';
+    // 2. Build the direct links
+    function buildLinks(links) {
+        links.forEach(item => {
+            // Create an anchor tag instead of a button
+            const a = document.createElement('a');
+            a.className = 'node-link';
+            a.href = item.link;
+
+            // Check if it's an external link
+            const isExternal = item.link.startsWith('http');
             
-            // Layout of the grid button
-            btn.innerHTML = `
-                <span class="node-title">${node.title}</span>
-                <span class="node-status">[ ${node.status} ]</span>
+            if (isExternal) {
+                // Open in new tab securely
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+            }
+
+            // Build the inner HTML. Add an arrow icon if it's external.
+            a.innerHTML = `
+                <span class="node-title">${item.title}</span>
+                ${isExternal ? '<span class="external-icon">↗</span>' : ''}
             `;
 
-            // Mobile & Desktop Click Logic
-            btn.addEventListener('click', () => {
-                
-                // Highlight active button
-                document.querySelectorAll('.node-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                // Update the Intel Panel
-                intelDisplay.innerHTML = `
-                    <h3 class="cyan-text">${node.title}</h3>
-                    <p>STATUS: <span class="intel-stat">${node.status}</span></p>
-                    <p>> ${node.desc}</p>
-                `;
-
-                // Update the Action Button
-                if (node.link && node.link !== "#") {
-                    navActionBtn.innerText = node.action;
-                    navActionBtn.className = "nav-btn active";
-                    navActionBtn.disabled = false;
-                    navActionBtn.onclick = () => {
-                        window.location.href = node.link;
-                    };
-                } else {
-                    // Lock the button if there is no valid link
-                    navActionBtn.innerText = node.action;
-                    navActionBtn.className = "nav-btn locked";
-                    navActionBtn.disabled = true;
-                    navActionBtn.onclick = null;
-                }
-            });
-
-            nodeMatrix.appendChild(btn);
+            nodeMatrix.appendChild(a);
         });
     }
 
