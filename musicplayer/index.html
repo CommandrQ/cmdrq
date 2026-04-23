@@ -3,51 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUSUBI | Media Rig</title>
-    <link rel="stylesheet" href="style.css?v=1">
+    <title>MUSUBI | Radio Uplink</title>
+    <link rel="stylesheet" href="style.css?v=2">
     <link rel="stylesheet" href="../css/cursor.css">
 </head>
 <body>
 
     <div class="stars"></div>
 
-    <div class="player-wrapper">
-        <header class="player-header">
-            <a href="../menu.html" class="neon-btn"><< EXIT</a>
-            <div class="rig-status">AUDIO_LINK: <span class="cyan-text">ACTIVE</span></div>
-        </header>
+    <div class="terminal-wrapper">
+        <nav class="station-nav" id="station-tabs"></nav>
 
-        <main class="player-container">
-            <div class="media-frame-outer">
-                <div class="neon-glow-aura" id="glow"></div>
-                <div class="media-frame">
-                    <video id="media-video" autoplay loop muted playsinline src=""></video>
-                </div>
-            </div>
+        <main class="player-layout">
+            <aside class="channel-sidebar">
+                <div class="sidebar-label">AVAILABLE_CHANNELS</div>
+                <div id="channel-list" class="channel-list"></div>
+            </aside>
 
-            <div class="track-info">
-                <h1 id="track-title">SELECT TRACK</h1>
-                <p id="track-artist">COMM_Q // VANGUARD</p>
-            </div>
-
-            <div class="controls-ui">
-                <div class="progress-container">
-                    <div class="progress-bar" id="progress"></div>
+            <section class="broadcast-center">
+                <div class="media-aura-box">
+                    <div class="neon-aura" id="aura"></div>
+                    <div class="media-frame">
+                        <video id="bg-visual" loop muted playsinline></video>
+                    </div>
                 </div>
 
-                <div class="button-row">
-                    <button id="prev-btn" class="ctrl-btn">PREV</button>
-                    <button id="play-btn" class="ctrl-btn play-main">PLAY</button>
-                    <button id="next-btn" class="ctrl-btn">NEXT</button>
+                <div class="now-playing-hud">
+                    <div class="flicker-dot"></div>
+                    <div class="track-meta">
+                        <h1 id="current-title">AWAITING UPLINK</h1>
+                        <p id="current-station">SELECT FREQUENCY</p>
+                    </div>
+                    <button id="play-pause" class="play-btn">PLAY</button>
                 </div>
-            </div>
+            </section>
         </main>
+
+        <footer class="terminal-footer">
+            <a href="../menu.html" class="neon-link"><< RETURN TO BASE</a>
+            <div id="volume-readout">VOL: 100%</div>
+        </footer>
     </div>
 
-    <audio id="main-audio" src=""></audio>
-    
+    <audio id="radio-core" crossorigin="anonymous"></audio>
+
     <div class="musubi-cursor-dot"></div>
     <script src="../js/cursor.js"></script>
-    <script src="app.js?v=1"></script>
+    <script src="app.js?v=2"></script>
 </body>
 </html>
