@@ -4,23 +4,30 @@
       "category": "VI-BRATION RADIO",
       "playlists": [
         { "title": "Beyond The Pen", "playlistId": "PLwX0pb3GEremC1vfOY7jLfNqdfR2cTVi7" },
-        { "title": "Midnight Rain", "playlistId": "PLyourIDhere" }
+        { "title": "Dreamscape", "playlistId": "PLwX0pb3GErenzlrerMLur84f2JfArD1fK" },
+        { "title": "The Fall Of Cain", "playlistId": "PLwX0pb3GErek3NOvUZzKMk5hp1G_USaHW" }
       ]
     },
     {
-      "category": "VANGUARD_PHONK",
+      "category": "Ki-netic Radio",
       "playlists": [
-        { "title": "High Speed Phonk", "playlistId": "PLyourIDhere" }
+        { "title": "Blaze's Cool Mixtape", "playlistId": "PLwX0pb3GErekhqHtx2E2WMrB4DhdDJhlu" },
+        { "title": "Baltimore Brick City", "playlistId": "PLwX0pb3GErekChtYZB_HejDEP3FWZ6o-l" },
+        { "title": "Drift Central", "playlistId": "PLwX0pb3GEreniBp2uNyHbV7Eh4euCbQQS" },
+        { "title": "Redline FM", "playlistId": "PLwX0pb3GErel9qOq9jOVVscX_mxXzkGOK" },
+        { "title": "Stylish Threadarts", "playlistId": "PLwX0pb3GEren9SyOR122ezYC8jkDeBQVB" }
       ]
     },
     {
-      "category": "SYNTH_WAVE",
+      "category": "Chi-erful Radio",
       "playlists": [
-        { "title": "Retro Drive", "playlistId": "PLyourIDhere" }
+        { "title": "Starship FM", "playlistId": "PLwX0pb3GErengziTGztMV5k6jypR6mwkf" },
+        { "title": "Neon Cities", "playlistId": "PLwX0pb3GErensoCj0ooRyGbTXRvenbolF" },
+        { "title": "Freevibes FM", "playlistId": "PLwX0pb3GErekzDDrb9BzpjtrI5XdR6tU9" }
       ]
     },
     {
-      "category": "CYBER_HEAVY",
+      "category": "Commander Q Radio",
       "playlists": [
         { "title": "Industrial Mech", "playlistId": "PLyourIDhere" }
       ]
