@@ -1,32 +1,20 @@
 {
-  "apps": [
+  "links": [
     {
-      "name": "Blog",
-      "iconValue": "images/icons/blog.png",
-      "iconType": "image",
-      "link": "https://substack.com/@commandrq",
-      "external": true
+      "title": "COMMUNICATIONS",
+      "link": "musicplayer/index.html"
     },
     {
-      "name": "Social Media",
-      "iconValue": "images/icons/tiktok.png",
-      "iconType": "image",
-      "link": "https://www.tiktok.com/@commandr_q",
-      "external": true
+      "title": "DATABASE ARCHIVE",
+      "link": "database/stations.json"
     },
     {
-      "name": "Dreamscape Drift",
-      "iconValue": "images/icons/drift.png",
-      "iconType": "image",
-      "link": "apps/drift.html",
-      "external": false
+      "title": "GITHUB REPOSITORY",
+      "link": "https://github.com"
     },
     {
-      "name": "Music Player",
-      "iconValue": "images/icons/tunes.png",
-      "iconType": "image",
-      "link": "apps/music player/index.html",
-      "external": false
+      "title": "OFFICIAL WEBSITE",
+      "link": "https://google.com"
     }
   ]
 }
