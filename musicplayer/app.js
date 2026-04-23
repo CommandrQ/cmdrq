@@ -8,15 +8,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let stationData = [];
 
-    // 1. Fetch JSON
+    // 1. Fetch JSON (Looks for stations.json in the same musicplayer folder)
     fetch('stations.json')
         .then(res => res.json())
         .then(data => {
             stationData = data.stations;
             renderTabs();
+        })
+        .catch(err => {
+            console.error("Uplink Failure:", err);
+            statusText.innerText = "OFFLINE";
         });
 
-    // 2. Build Category Tabs
+    // 2. Build Category Tabs (The 4 Radio Stations)
     function renderTabs() {
         stationData.forEach((station, index) => {
             const btn = document.createElement('button');
@@ -31,39 +35,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Build Playlist Items
+    // 3. Build Playlist Items (Subchannels)
     function renderPlaylists(index) {
         listContainer.innerHTML = '';
         stationData[index].playlists.forEach(pl => {
             const btn = document.createElement('button');
             btn.className = 'pl-btn';
             btn.innerText = `> ${pl.title}`;
-            btn.onclick = () => loadVideo(pl.id, pl.title, btn);
+            // Corrected to use 'pl.playlistId' to match your JSON
+            btn.onclick = () => loadPlaylist(pl.playlistId, pl.title, btn);
             listContainer.appendChild(btn);
         });
     }
 
-    // 4. Load the Uplink (The Fix)
-    function loadVideo(id, title, element) {
-        // Visual Reset
+    // 4. The Playlist Uplink
+    function loadPlaylist(id, title, element) {
+        // UI feedback
         document.querySelectorAll('.pl-btn').forEach(b => b.classList.remove('active'));
         element.classList.add('active');
         
         statusText.innerText = "LINKING...";
         loader.style.display = 'flex';
         player.classList.remove('active');
-        player.src = ""; // Wipe the current source immediately
+        player.src = ""; // Flush the player
 
-        // Tactical Delay (500ms)
+        // 500ms Tactical Delay for that "System Processing" feel
         setTimeout(() => {
-            // We use the 'videoseries' embed for playlists
+            // Using the Playlist-specific URL format
             player.src = `https://www.youtube.com/embed/videoseries?list=${id}&autoplay=1&rel=0`;
             
             player.onload = () => {
                 loader.style.display = 'none';
                 player.classList.add('active');
                 statusText.innerText = "STABLE";
-                nowPlaying.innerText = `STREAMING: ${title}`;
+                nowPlaying.innerText = `UPLINK: ${title}`;
             };
         }, 500);
     }
