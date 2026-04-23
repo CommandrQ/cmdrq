@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Login</title>
+    <title>MUSUBI | System Boot</title>
     
     <script>
         if (localStorage.getItem('musubi_access_granted')) {
@@ -11,23 +11,28 @@
         }
     </script>
 
-    <link rel="stylesheet" href="css/intro.css">
+    <link rel="stylesheet" href="css/intro.css?v=999">
     <link rel="stylesheet" href="css/cursor.css">
 </head>
 <body>
-    <div class="stars"></div>
-    <div class="scanlines"></div>
 
-    <div id="intro-ui" class="ui-container">
+    <div class="ui-container">
         
-        <div class="glass-window" id="glass-window">
-            <h1 class="production-title">
-                A <span class="glow-blue">Vanguard Knights</span> Production
+        <div class="anime-window" id="anime-window">
+            
+            <h2 class="sub-heading">
+                <span class="glow-blue">Vanguard Knights</span> Present:
+            </h2>
+            
+            <h1 class="main-heading">
+                COMMANDER Q:<br>
+                <span class="muted-text">DEFENDER OF ETERNITY</span>
             </h1>
             
-            <button id="initiate-btn" class="sleek-btn">
-                <span class="btn-text" id="btn-text">ENTER HIDEOUT</span>
+            <button id="enter-btn" class="neon-btn">
+                <span id="btn-text">AWAKEN</span>
             </button>
+
         </div>
         
     </div>
@@ -35,6 +40,6 @@
     <div class="musubi-cursor-dot"></div>
 
     <script src="js/cursor.js"></script>
-    <script src="js/intro.js"></script>
+    <script src="js/intro.js?v=999"></script>
 </body>
 </html>
