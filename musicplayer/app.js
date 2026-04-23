@@ -1,23 +1,21 @@
-let player; // Global player variable
+let player;
 const syncText = document.getElementById('sync-text');
 const nowPlaying = document.getElementById('now-playing');
 const loadingOverlay = document.getElementById('loading-overlay');
 
-// 1. Load the YouTube IFrame API asynchronously
+// 1. Load the YouTube IFrame API
 const tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 const firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-// 2. This function runs automatically when the API is ready
 function onYouTubeIframeAPIReady() {
-    console.log("YouTube API: ONLINE");
+    console.log("VANGUARD_API: ONLINE");
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const stationContainer = document.getElementById('station-container');
 
-    // Fetch the stations and build the menu
     fetch('stations.json')
         .then(res => res.json())
         .then(data => {
@@ -32,71 +30,82 @@ document.addEventListener('DOMContentLoaded', () => {
                     link.className = 'playlist-link';
                     link.innerHTML = `> ${pl.title}`;
                     link.href = "#";
-                    link.onclick = (e) => {
+                    // THE FIX: Use a clean click handler that prevents default behavior
+                    link.addEventListener('click', (e) => {
                         e.preventDefault();
+                        e.stopPropagation(); // Stops the click from "bleeding" to other elements
                         initiateUplink(pl.playlistId, pl.title, link);
-                    };
+                    });
                     list.appendChild(link);
                 });
                 stationContainer.appendChild(card);
             });
         });
 
-    // BIND SVG BUTTONS TO PLAYER COMMANDS
-    document.getElementById('play-hint').onclick = () => {
-        if (player) player.playVideo();
-    };
-
-    document.getElementById('pause-hint').onclick = () => {
-        if (player) player.pauseVideo();
-    };
+    // MEDIA CONTROL BINDINGS
+    document.getElementById('play-hint').onclick = () => { if (player) player.playVideo(); };
+    document.getElementById('pause-hint').onclick = () => { if (player) player.pauseVideo(); };
 });
 
 function initiateUplink(id, title, element) {
-    // UI Feedback
+    // 1. Visual Feedback
     document.querySelectorAll('.playlist-link').forEach(l => l.classList.remove('active'));
     element.classList.add('active');
     
+    // 2. Clear previous state to prevent "Restart Glitch"
     syncText.innerText = "STATUS: LINKING...";
     loadingOverlay.style.display = 'flex';
     
-    // If a player already exists, just load the new playlist
     if (player) {
-        player.loadPlaylist({
-            listType: 'playlist',
-            list: id,
-            index: 0,
-            startSeconds: 0
-        });
-        finishUplink(title);
-    } else {
-        // Create the player for the first time
-        player = new YT.Player('video-embed', {
-            height: '100%',
-            width: '100%',
-            playerVars: {
-                'listType': 'playlist',
-                'list': id,
-                'autoplay': 1,
-                'mute': 0,
-                'rel': 0,
-                'controls': 1 // Keep this 1 if you want native seekbars, 0 for pure custom look
-            },
-            events: {
-                'onReady': () => finishUplink(title)
-            }
-        });
+        // Stop current audio entirely before swapping
+        player.stopVideo(); 
     }
+
+    // 3. The Tactical Delay (450ms)
+    setTimeout(() => {
+        if (player && typeof player.loadPlaylist === 'function') {
+            // Swap the playlist data directly
+            player.loadPlaylist({
+                listType: 'playlist',
+                list: id,
+                index: 0,
+                startSeconds: 0,
+                suggestedQuality: 'default'
+            });
+            finishUplink(title);
+        } else {
+            // First time initialization
+            player = new YT.Player('video-embed', {
+                height: '100%',
+                width: '100%',
+                playerVars: {
+                    'listType': 'playlist',
+                    'list': id,
+                    'autoplay': 1,
+                    'mute': 0,
+                    'rel': 0,
+                    'controls': 1
+                },
+                events: {
+                    'onReady': () => finishUplink(title),
+                    'onError': (e) => {
+                        console.error("Uplink Error:", e);
+                        syncText.innerText = "STATUS: ERROR";
+                    }
+                }
+            });
+        }
+    }, 450);
 }
 
 function finishUplink(title) {
-    setTimeout(() => {
-        loadingOverlay.style.display = 'none';
-        syncText.innerText = "STATUS: CONNECTED";
-        nowPlaying.innerText = title;
-        
-        // Ensure the iframe gets the "visible" class for your CSS transitions
-        const iframe = document.getElementById('video-embed');
-        if (iframe) iframe.classList.add('visible');
-    }, 450);
+    loadingOverlay.style.display = 'none';
+    syncText.innerText = "STATUS: CONNECTED";
+    nowPlaying.innerText = title;
+    
+    const iframe = document.getElementById('video-embed');
+    if (iframe) iframe.classList.add('visible');
+    
+    // Force play in case browser blocked autoplay
+    if (player) player.playVideo();
 }
