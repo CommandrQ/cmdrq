@@ -1,52 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Login</title>
-    <script>
-        if (localStorage.getItem('musubi_access_granted')) { window.location.href = 'menu.html'; }
-    </script>
-    <link rel="stylesheet" href="css/intro.css?v=9">
-    <link rel="stylesheet" href="css/cursor.css?v=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Retrowave Player</title>
+  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="../css/cursor.css?v=1">
 </head>
 <body>
-    <div class="scanlines" id="scanlines"></div>
-    <div id="purple-ambience"></div>
 
-    <div id="apple-ui" class="ui-container active">
-        <div class="apple-glass">
-            <svg class="apple-icon" viewBox="0 0 24 24"><path d="M17 11V7c0-2.76-2.24-5-5-5S7 4.24 7 7v4H5.5C4.67 11 4 11.67 4 12.5v8C4 21.33 4.67 22 5.5 22h13c.83 0 1.5-.67 1.5-1.5v-8c0-.83-.67-1.5-1.5-1.5H17zm-8-4c0-1.65 1.35-3 3-3s3 1.35 3 3v4H9V7z"/></svg>
-            <h2 class="apple-title">Authenticating</h2>
-            <div class="apple-loader-track">
-                <div class="apple-loader-fill" id="apple-loader"></div>
-            </div>
-            <p id="override-text" class="override-text">Attempting to override the user's reality...</p>
-        </div>
+  <div class="main-window glass">
+    
+    <header class="app-header">
+      <a href="../menu.html" class="back-btn">
+        <svg viewBox="0 0 24 24" class="icon-sm"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg> 
+        Back to Menu
+      </a>
+    </header>
+
+    <div class="video-section">
+      <div class="pulse-wrapper">
+        <div id="player"></div> 
+      </div>
     </div>
 
-    <div id="flash-bang"></div>
-
-    <div id="neon-ui" class="ui-container hidden">
-        <div class="neon-glass">
-            <h1 class="tactical-title">MUSUBI_SYSTEM_v1.0</h1>
-            <p class="status-text">REALITY OVERRIDE SUCCESSFUL.</p>
-            
-            <div class="btn-wrapper" id="btn-wrapper">
-                <button id="initiate-btn" class="neon-btn">
-                    <svg viewBox="0 0 24 24" class="btn-icon">
-                        <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
-                    </svg>
-                    DARE TO ENTER
-                </button>
-            </div>
-        </div>
+    <div class="controls-section glass-inset">
+      <button id="prev-btn" class="ctrl-btn" title="Previous Track">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+      </button>
+      
+      <button id="play-btn" class="ctrl-btn main-ctrl" title="Play">
+        <svg viewBox="0 0 24 24" class="icon-lg"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      
+      <button id="pause-btn" class="ctrl-btn main-ctrl" title="Pause" style="display:none;">
+        <svg viewBox="0 0 24 24" class="icon-lg"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      </button>
+      
+      <button id="next-btn" class="ctrl-btn" title="Next Track">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+      </button>
     </div>
 
-    <div id="fade-to-black"></div>
+    <div class="selector-section">
+      <div class="custom-select-wrapper">
+        <select id="station-select" class="glass-input">
+          <option value="" disabled selected>Select a Station...</option>
+        </select>
+      </div>
+    </div>
 
-    <div class="musubi-cursor-dot"></div>
-    <script src="js/cursor.js?v=1"></script>
-    <script src="js/intro.js?v=9"></script>
+    <main id="playlist-container" class="playlist-section">
+      <div class="empty-state">Select a station to see playlists</div>
+    </main>
+
+  </div>
+
+  <div class="musubi-cursor-dot"></div>
+  <script src="../js/cursor.js?v=1"></script>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>
