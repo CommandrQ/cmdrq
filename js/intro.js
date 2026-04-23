@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const btnWrapper = document.getElementById('btn-wrapper');
     const initBtn = document.getElementById('initiate-btn');
     const statusText = document.querySelector('.status-text');
-    const lockIcon = document.getElementById('lock-icon');
-    const purpleBurst = document.querySelector('.purple-burst');
-    const bootContainer = document.querySelector('.boot-container');
 
     const statuses = [
         "BOOTING MUSUBI_OS...",
@@ -18,36 +16,41 @@ document.addEventListener('DOMContentLoaded', () => {
         i++;
         if(i >= statuses.length) {
             clearInterval(interval);
-            initBtn.style.display = "flex";
-            initBtn.style.animation = "fadeIn 0.5s forwards";
+            btnWrapper.style.display = "inline-block";
+            btnWrapper.style.animation = "fadeIn 0.5s forwards";
         }
     }, 700);
 
-    // Initialize & Trigger Animations
+    // Slice Animation & Redirect
     initBtn.addEventListener('click', () => {
         // Log the visit so they skip this next time
         localStorage.setItem('musubi_access_granted', 'true');
         
-        // 1. Swap icon to UNLOCKED padlock
-        if (lockIcon) {
-            lockIcon.innerHTML = '<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h2c0-1.66 1.34-3 3-3s3 1.34 3 3v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>';
-        }
+        statusText.innerText = "ACCESS GRANTED. REDIRECTING...";
 
-        // 2. Animate Button and Text
-        initBtn.classList.add('unlocking');
-        statusText.innerText = "ACCESS GRANTED. NEURAL LINK OPEN.";
+        // 1. Create top half, bottom half, and laser flash
+        const topClone = initBtn.cloneNode(true);
+        const btmClone = initBtn.cloneNode(true);
+        const flashLine = document.createElement('div');
 
-        // 3. Trigger the Purple Shockwave
-        purpleBurst.classList.add('active');
+        // 2. Assign animation classes
+        topClone.className = 'neon-btn slice-top';
+        btmClone.className = 'neon-btn slice-bottom';
+        flashLine.className = 'slice-flash';
 
-        // 4. Fade out the glass container as the light overtakes it
-        setTimeout(() => {
-            bootContainer.classList.add('vanishing');
-        }, 300);
+        // 3. Strip IDs from clones to prevent HTML duplication issues
+        topClone.removeAttribute('id');
+        btmClone.removeAttribute('id');
 
-        // 5. Warp to menu.html after the animation completes
+        // 4. Hide original button and append clones
+        initBtn.style.opacity = '0';
+        btnWrapper.appendChild(topClone);
+        btnWrapper.appendChild(btmClone);
+        btnWrapper.appendChild(flashLine);
+
+        // 5. Warp to menu.html after the slice animation finishes
         setTimeout(() => {
             window.location.href = 'menu.html';
-        }, 1400); // 1.4 seconds gives the explosion time to cover the screen
+        }, 1200); 
     });
 });
