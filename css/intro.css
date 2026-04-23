@@ -1,16 +1,259 @@
-/* ... All previous CSS from v6 remains the same ... */
+:root {
+    --neon-cyan: #00f3ff;
+    --neon-red: #ff2a2a;
+    --apple-bg: rgba(30, 30, 32, 0.65);
+    --dark-glass: rgba(8, 8, 10, 0.9); 
+    --border-white: rgba(255, 255, 255, 0.08);
+}
 
-/* --- FADE TO BLACK TRANSITION --- */
-#fade-to-black {
+* {
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    background-color: #111112; /* Starts as a dark mac-like grey */
+    color: white;
+    overflow: hidden;
+    height: 100dvh;
+    transition: background-color 0.1s;
+}
+
+/* Switches the background to pitch black when the neon UI hits */
+body.tactical-mode {
+    background-color: #050505;
+}
+
+/* --- OVERLAYS --- */
+.scanlines {
     position: fixed;
     inset: 0;
-    background-color: #000;
-    opacity: 0;
-    pointer-events: none; /* Prevents it from blocking clicks before it activates */
-    z-index: 9999; /* Sits on top of EVERYTHING, including scanlines */
-    transition: opacity 0.8s ease-in-out;
+    pointer-events: none;
+    z-index: 50;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+    background-size: 100% 3px;
+    opacity: 0; /* Hidden initially */
 }
 
-#fade-to-black.active {
-    opacity: 1;
+#flash-bang {
+    position: fixed;
+    inset: 0;
+    background-color: #fff;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
 }
+
+.ui-container {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.ui-container.hidden { display: none; }
+
+/* =========================================
+   PHASE 1: APPLE GLASS UI
+========================================= */
+.apple-glass {
+    text-align: center;
+    padding: 40px 50px;
+    border-radius: 20px;
+    background: var(--apple-bg);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    width: 320px;
+    transition: transform 0.1s;
+}
+
+.apple-icon {
+    width: 40px;
+    height: 40px;
+    fill: #e5e5ea;
+    margin-bottom: 15px;
+}
+
+.apple-title {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+    color: #f5f5f7;
+    letter-spacing: 0.5px;
+}
+
+.apple-loader-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.apple-loader-fill {
+    width: 0%;
+    height: 100%;
+    background: #0a84ff; /* Apple Blue */
+    border-radius: 10px;
+    transition: width 0.2s ease-out;
+}
+
+.override-text {
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--neon-red);
+    font-size: 11px;
+    margin-top: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0; /* Hidden initially */
+    text-shadow: 0 0 5px var(--neon-red);
+}
+
+/* Animations for Phase 1 */
+.glitch-shake {
+    animation: violent-shake 0.3s infinite;
+}
+
+.explode {
+    animation: pop-explode 0.2s forwards;
+}
+
+@keyframes violent-shake {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(5px, -5px) rotate(1deg); }
+    50% { transform: translate(-5px, 5px) rotate(-1deg); }
+    75% { transform: translate(-5px, -5px) rotate(1deg); }
+    100% { transform: translate(5px, 5px) rotate(-1deg); }
+}
+
+@keyframes pop-explode {
+    0% { transform: scale(1); opacity: 1; filter: blur(0); }
+    100% { transform: scale(1.5); opacity: 0; filter: blur(20px); }
+}
+
+@keyframes flash-white {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* =========================================
+   PHASE 2: NEON MUSUBI UI
+========================================= */
+.neon-glass {
+    text-align: center;
+    padding: 50px 40px;
+    border-radius: 16px;
+    background: var(--dark-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--neon-cyan);
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.1), inset 0 0 20px rgba(0, 243, 255, 0.05);
+    width: 90%;
+    max-width: 400px;
+    animation: power-on 0.5s cubic-bezier(0.1, 0.8, 0.3, 1);
+}
+
+@keyframes power-on {
+    0% { transform: scale(0.9); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.tactical-title {
+    font-size: 1rem;
+    letter-spacing: 5px;
+    font-weight: 700;
+    color: var(--neon-cyan);
+    margin-bottom: 10px;
+}
+
+.status-text {
+    font-size: 10px;
+    letter-spacing: 2px;
+    opacity: 0.6;
+    margin-bottom: 30px;
+}
+
+/* Neon Button & Slicing Mechanics (From v7) */
+.btn-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.neon-btn {
+    background: rgba(0, 243, 255, 0.05);
+    border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.4s;
+    width: 100%;
+    text-shadow: 0 0 10px var(--neon-cyan);
+    position: relative;
+    overflow: hidden;
+}
+
+.neon-btn:hover {
+    background: var(--neon-cyan);
+    color: #000;
+    box-shadow: 0 0 30px var(--neon-cyan);
+}
+
+.btn-icon { width: 18px; height: 18px; fill: currentColor; }
+
+.neon-btn::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: sheen 3s infinite;
+}
+
+.slice-top, .slice-bottom {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; margin: 0; background: var(--neon-cyan); color: #000;
+}
+
+.slice-top {
+    clip-path: inset(0 0 50% 0);
+    animation: slice-up 1s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+.slice-bottom {
+    clip-path: inset(50% 0 0 0);
+    animation: slice-down 1s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+.slice-flash {
+    position: absolute; top: 50%; left: -10%; width: 120%; height: 2px;
+    background: #fff; box-shadow: 0 0 15px #fff, 0 0 30px var(--neon-cyan);
+    z-index: 10; transform: translateY(-50%) scaleX(0);
+    animation: strike-flash 1s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+#fade-to-black {
+    position: fixed; inset: 0; background-color: #000; opacity: 0;
+    pointer-events: none; z-index: 9999; transition: opacity 0.8s ease-in-out;
+}
+
+#fade-to-black.active { opacity: 1; pointer-events: all; }
+
+@keyframes sheen { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
+@keyframes strike-flash { 0% { transform: translateY(-50%) scaleX(0); opacity: 1; } 15% { transform: translateY(-50%) scaleX(1); opacity: 1; } 40% { transform: translateY(-50%) scaleX(1); opacity: 0; } 100% { transform: translateY(-50%) scaleX(0); opacity: 0; } }
+@keyframes slice-up { 0% { transform: translateY(0) translateX(0); opacity: 1; } 15% { transform: translateY(-2px) translateX(-4px); opacity: 1; } 100% { transform: translateY(-30px) translateX(-15px) rotate(-3deg); opacity: 0; } }
+@keyframes slice-down { 0% { transform: translateY(0) translateX(0); opacity: 1; } 15% { transform: translateY(2px) translateX(4px); opacity: 1; } 100% { transform: translateY(30px) translateX(15px) rotate(3deg); opacity: 0; } }
