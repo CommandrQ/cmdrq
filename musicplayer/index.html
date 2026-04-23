@@ -1,1 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MUSUBI | Media Rig</title>
+    <link rel="stylesheet" href="style.css?v=1">
+    <link rel="stylesheet" href="../css/cursor.css">
+</head>
+<body>
 
+    <div class="stars"></div>
+
+    <div class="player-wrapper">
+        <header class="player-header">
+            <a href="../menu.html" class="neon-btn"><< EXIT</a>
+            <div class="rig-status">AUDIO_LINK: <span class="cyan-text">ACTIVE</span></div>
+        </header>
+
+        <main class="player-container">
+            <div class="media-frame-outer">
+                <div class="neon-glow-aura" id="glow"></div>
+                <div class="media-frame">
+                    <video id="media-video" autoplay loop muted playsinline src=""></video>
+                </div>
+            </div>
+
+            <div class="track-info">
+                <h1 id="track-title">SELECT TRACK</h1>
+                <p id="track-artist">COMM_Q // VANGUARD</p>
+            </div>
+
+            <div class="controls-ui">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress"></div>
+                </div>
+
+                <div class="button-row">
+                    <button id="prev-btn" class="ctrl-btn">PREV</button>
+                    <button id="play-btn" class="ctrl-btn play-main">PLAY</button>
+                    <button id="next-btn" class="ctrl-btn">NEXT</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <audio id="main-audio" src=""></audio>
+    
+    <div class="musubi-cursor-dot"></div>
+    <script src="../js/cursor.js"></script>
+    <script src="app.js?v=1"></script>
+</body>
+</html>
