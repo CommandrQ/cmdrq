@@ -68,7 +68,7 @@ body, html {
 
 .hud-header {
     display: flex; 
-    justify-content: space-between; /* Pushes button left, text right */
+    justify-content: space-between; 
     align-items: center;
     padding: 15px 30px; 
     font-size: 14px; 
@@ -82,7 +82,6 @@ body, html {
 .status-indicator {
     display: flex; 
     align-items: center;
-    text-align: right;
 }
 
 .flicker-dot {
@@ -121,6 +120,7 @@ body, html {
 .data-label { display: block; font-size: 10px; color: #888; letter-spacing: 2px; margin-bottom: 5px; }
 .data-value { font-size: 14px; color: #fff; letter-spacing: 1px; }
 
+/* SIDEBAR */
 .log-sidebar {
     width: 350px; background: var(--glass-dark); border: 1px solid rgba(255,255,255,0.1);
     display: flex; flex-direction: column; flex-shrink: 0; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -140,36 +140,40 @@ body, html {
 .log-name { font-size: 14px; letter-spacing: 1px; }
 
 /* =========================================
-   MOBILE RESPONSIVENESS
+   MOBILE RESPONSIVENESS (ULTRA TINY TEXT)
 ========================================= */
 @media (max-width: 900px) {
-    .hud-wrapper { padding: 10px; gap: 15px; }
+    .hud-wrapper { padding: 10px; gap: 10px; }
 
     .hud-header {
-        padding: 10px 15px;
-        clip-path: none; /* Removed for more horizontal space */
+        padding: 8px 12px;
+        clip-path: none; 
         justify-content: space-between;
+        width: 100%;
     }
 
     .neon-btn { 
-        font-size: 10px; 
-        padding: 6px 10px; 
-        letter-spacing: 1px; 
+        font-size: 8px; /* Ultra tiny */
+        padding: 5px 8px; 
+        letter-spacing: 1px;
     }
 
     .status-indicator {
-        font-size: 9px; /* Shrunk for safety */
+        font-size: 8px; /* Ultra tiny */
         letter-spacing: 1px;
+        white-space: nowrap; /* Prevents wrapping */
+        flex: 1;
+        justify-content: flex-end; /* Push content inside to the right */
         text-align: right;
-        display: block; /* Simpler than flex for alignment */
     }
 
     .flicker-dot {
         margin-right: 5px;
-        vertical-align: middle;
+        width: 6px;
+        height: 6px;
     }
 
     .archive-layout { flex-direction: column; overflow-y: auto; padding-bottom: 20px; }
-    .log-sidebar { width: 100%; height: 350px; flex: unset; margin-top: 10px; }
-    .telemetry-panel h2 { font-size: 18px; }
+    .log-sidebar { width: 100%; height: 320px; flex: unset; margin-top: 10px; }
+    .telemetry-panel h2 { font-size: 16px; }
 }
