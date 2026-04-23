@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MUSUBI | Radio Uplink</title>
+    
     <link rel="stylesheet" href="style.css?v=3">
     <link rel="stylesheet" href="../css/cursor.css">
 </head>
@@ -12,6 +13,7 @@
     <div class="stars"></div>
 
     <div class="terminal-wrapper">
+        
         <header class="terminal-header">
             <a href="../menu.html" class="neon-btn"><< RETURN</a>
             <div class="uplink-status">
@@ -21,32 +23,48 @@
         </header>
 
         <main class="radio-layout">
+            
             <section class="station-selection">
                 <div class="section-label">SELECT_FREQUENCY</div>
-                <div class="station-grid" id="station-container"></div>
+                <div class="station-grid" id="station-container">
+                    </div>
             </section>
 
             <section class="monitor-section">
                 <div class="monitor-frame">
                     <div id="loading-overlay">ESTABLISHING_LINK...</div>
-                    <iframe id="video-embed" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div id="video-embed"></div>
                 </div>
 
                 <div class="media-controls">
-                    <button class="svg-btn" id="play-hint" title="Play">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                    </button>
-                    <button class="svg-btn" id="pause-hint" title="Pause">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                    </button>
-                    <div class="now-playing-title" id="now-playing">AWAITING_INPUT</div>
+                    <div class="control-cluster">
+                        <button class="svg-btn" id="play-hint" title="Play">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </button>
+                        
+                        <button class="svg-btn" id="pause-hint" title="Pause">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="now-playing-info">
+                        <span class="label">UPLINK_TARGET:</span>
+                        <div class="now-playing-title" id="now-playing">AWAITING_INPUT</div>
+                    </div>
                 </div>
             </section>
+
         </main>
     </div>
 
     <div class="musubi-cursor-dot"></div>
     <script src="../js/cursor.js"></script>
+    
     <script src="app.js?v=3"></script>
+
 </body>
 </html>
