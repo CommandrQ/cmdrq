@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUSUBI | ARCADE BOOT</title>
+    <title>System Login</title>
     
     <script>
         if (localStorage.getItem('musubi_access_granted')) {
@@ -12,25 +12,21 @@
     </script>
 
     <link rel="stylesheet" href="css/intro.css">
-    <link rel="stylesheet" href="css/cursor.css?v=1">
+    <link rel="stylesheet" href="css/cursor.css">
 </head>
 <body>
-    <div class="crt-vignette"></div>
+    <div class="stars"></div>
     <div class="scanlines"></div>
 
-    <div id="impact-frame"></div>
-
-    <div id="arcade-ui" class="ui-container">
+    <div id="intro-ui" class="ui-container">
         
-        <div id="insert-coin-text" class="arcade-text blink-fast">
-            > INSERT COIN _
-        </div>
-
-        <div class="btn-wrapper hidden" id="btn-wrapper">
-            <h1 class="arcade-title">MUSUBI_OS // V1.0</h1>
+        <div class="glass-window" id="glass-window">
+            <h1 class="production-title">
+                A <span class="glow-blue">Vanguard Knights</span> Production
+            </h1>
             
-            <button id="initiate-btn" class="arcade-btn">
-                <span class="btn-text">PRESS START</span>
+            <button id="initiate-btn" class="sleek-btn">
+                <span class="btn-text" id="btn-text">ENTER HIDEOUT</span>
             </button>
         </div>
         
@@ -38,7 +34,7 @@
 
     <div class="musubi-cursor-dot"></div>
 
-    <script src="js/cursor.js?v=1"></script>
-    <script src="js/intro.js?v=10"></script>
+    <script src="js/cursor.js"></script>
+    <script src="js/intro.js"></script>
 </body>
 </html>
