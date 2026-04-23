@@ -1,0 +1,29 @@
+{
+  "stations": [
+    {
+      "category": "NEON_CHILL",
+      "playlists": [
+        { "title": "Lofi Drift Mix", "playlistId": "PLwX0pb3GErelnv2imByTWq5TmSSSSiosp" },
+        { "title": "Midnight Rain", "playlistId": "PLyourIDhere" }
+      ]
+    },
+    {
+      "category": "VANGUARD_PHONK",
+      "playlists": [
+        { "title": "High Speed Phonk", "playlistId": "PLyourIDhere" }
+      ]
+    },
+    {
+      "category": "SYNTH_WAVE",
+      "playlists": [
+        { "title": "Retro Drive", "playlistId": "PLyourIDhere" }
+      ]
+    },
+    {
+      "category": "CYBER_HEAVY",
+      "playlists": [
+        { "title": "Industrial Mech", "playlistId": "PLyourIDhere" }
+      ]
+    }
+  ]
+}
