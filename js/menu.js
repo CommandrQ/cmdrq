@@ -1,55 +1,30 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // New containers for split layout
-    const matrixLeft = document.getElementById('node-matrix-left');
-    const matrixRight = document.getElementById('node-matrix-right');
+    // --- CUSTOM CURSOR LOGIC (SINGLE POINTER) ---
+    const cursorDot = document.querySelector('.musubi-cursor-dot');
 
-    // 1. Fetch the flashy JSON data
-    fetch('database/menu.json')
-        .then(response => response.json())
-        .then(data => {
-            // Updated to handle the split matrix containers
-            buildLinks(data.links);
-        })
-        .catch(error => console.error("Error loading Musubi HUD:", error));
-
-    // 2. Build and SPLIT the direct links
-    function buildLinks(links) {
-        // Calculate the halfway point
-        const half = Math.ceil(links.length / 2);
+    if (matchMedia('(pointer: fine)').matches) {
         
-        links.forEach((item, index) => {
-            const a = document.createElement('a');
-            
-            a.className = `node-link ${item.color || 'cyan'}`;
-            a.href = item.link;
-
-            const isExternal = item.link.startsWith('http');
-            if (isExternal) {
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-            }
-
-            let icon = '>>'; 
-            if(item.color === 'magenta') icon = '↗'; 
-            if(item.color === 'red') icon = '!!'; 
-
-            a.innerHTML = `
-                <span class="node-title">${item.title}</span>
-                <span class="action-icon">${icon}</span>
-            `;
-
-            // Decide which column to inject based on the halfway point
-            if (index < half) {
-                matrixLeft.appendChild(a);
-            } else {
-                matrixRight.appendChild(a);
-            }
+        // Track mouse movement instantly
+        window.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = `${e.clientX}px`;
+            cursorDot.style.top = `${e.clientY}px`;
         });
-    }
 
-    // 3. Simple HUD Clock
-    setInterval(() => {
-        const now = new Date();
-        document.getElementById('clock').innerText = now.toLocaleTimeString('en-GB');
-    }, 1000);
-});
+        const observer = new MutationObserver(() => {
+            document.querySelectorAll('.node-link').forEach(link => {
+                link.addEventListener('mouseenter', () => {
+                    cursorDot.classList.add('locked');
+                });
+                link.addEventListener('mouseleave', () => {
+                    cursorDot.classList.remove('locked');
+                });
+            });
+        });
+
+        // Watch the matrix container
+        const leftMatrix = document.getElementById('node-matrix-left');
+        const rightMatrix = document.getElementById('node-matrix-right');
+        if(leftMatrix && rightMatrix) {
+            observer.observe(leftMatrix, { childList: true });
+            observer.observe(rightMatrix, { childList: true });
+        }
+    }
