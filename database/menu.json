@@ -1,20 +1,29 @@
 {
   "links": [
     {
-      "title": "COMMUNICATIONS",
-      "link": "musicplayer/index.html"
+      "title": "AUDIO_STREAM // FM 101.3",
+      "link": "musicplayer/index.html",
+      "color": "cyan"
     },
     {
-      "title": "DATABASE ARCHIVE",
-      "link": "database/stations.json"
+      "title": "DRIFT_LOGS // ROUTE_09",
+      "link": "https://google.com",
+      "color": "magenta"
     },
     {
-      "title": "GITHUB REPOSITORY",
-      "link": "https://github.com"
+      "title": "BEAT_ARCHIVE // DB",
+      "link": "database/stations.json",
+      "color": "cyan"
     },
     {
-      "title": "OFFICIAL WEBSITE",
-      "link": "https://google.com"
+      "title": "TAKE_ACTION // GITHUB",
+      "link": "https://github.com",
+      "color": "red"
+    },
+    {
+      "title": "SYSTEM_CNAME",
+      "link": "cname",
+      "color": "red"
     }
   ]
 }
