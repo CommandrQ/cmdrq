@@ -1,216 +1,72 @@
+/* Import high-energy tech fonts from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;500;700&family=VT323&display=swap');
+
 :root {
-    --neon-cyan: #00f3ff;
-    --neon-magenta: #ff0055;
-    --bg-dark: #020204;
-    --glass-dark: rgba(10, 12, 16, 0.75);
+    --neon-cyan: #00f2ff;
+    --neon-magenta: #ff00ff;
+    --electric-purple: #9d00ff;
+    --charcoal: #1a1a1a;
+    --gold: #ffcc00;
 }
 
-* {
-    box-sizing: border-box;
-    font-family: 'Courier New', Courier, monospace;
-    text-transform: uppercase;
-    font-weight: 900;
+body {
+    /* Main body text font */
+    font-family: 'Rajdhani', sans-serif;
+    line-height: 1.6;
+    color: #e0e0e0;
+    background-color: var(--charcoal);
 }
 
-body, html {
-    margin: 0; padding: 0;
-    background-color: var(--bg-dark);
-    color: #fff;
-    overflow: hidden;
-    height: 100dvh;
-}
-
-/* --- CINEMATIC BACKGROUND --- */
-.stars {
-    position: absolute; inset: 0;
-    background: #000 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQMAAAC6f7wZAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAA5JREFUeNpjYBgFgxgAAASAAAH9Y8SDAAAAAElFTkSuQmCC) repeat top center;
-    z-index: -3; opacity: 0.4;
-    animation: slow-drift 100s linear infinite;
-}
-
-@keyframes slow-drift {
-    100% { background-position: 0 1000px; }
-}
-
-.scanlines {
-    position: fixed; inset: 0; pointer-events: none; z-index: 50;
-    /* Softened scanlines for readability */
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.08) 50%);
-    background-size: 100% 4px;
-}
-
-/* --- UI LAYOUT --- */
-.ui-container {
-    position: fixed; inset: 0; display: flex; 
-    justify-content: center; align-items: center; 
-    z-index: 10; padding: 20px;
-}
-
-/* --- INTEL PANEL (DARK GLASS) --- */
-.intel-panel {
-    background: var(--glass-dark);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    
-    border: 1px solid rgba(0, 243, 255, 0.15);
-    border-top: 3px solid var(--neon-cyan);
-    border-bottom: 3px solid var(--neon-magenta);
-    
-    width: 100%;
-    max-width: 950px; 
-    max-height: 90vh; 
-    display: flex;
-    flex-direction: column;
-    
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(0, 243, 255, 0.05);
-    animation: boot-up 0.6s ease-out forwards;
-}
-
-@keyframes boot-up {
-    0% { transform: scale(0.95) translateY(20px); opacity: 0; filter: blur(5px); }
-    100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
-}
-
-/* --- HEADER --- */
-.panel-header {
-    padding: 20px 30px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    background: rgba(0,243,255,0.03);
-}
-
-.cyan-text {
-    color: var(--neon-cyan);
-    letter-spacing: 4px;
-    text-shadow: 0 0 10px var(--neon-cyan);
-    font-size: 20px; /* BUMPED UP */
-}
-
-/* --- CONTENT SCROLLING AREA --- */
-.panel-content {
-    padding: 40px;
-    overflow-y: auto; 
-    scrollbar-width: thin;
-    scrollbar-color: var(--neon-cyan) transparent;
-}
-
-.panel-content::-webkit-scrollbar { width: 4px; }
-.panel-content::-webkit-scrollbar-thumb { background: var(--neon-cyan); }
-
-/* --- SPLIT DOSSIER LAYOUT --- */
-.intel-split-layout {
-    display: flex;
-    gap: 40px;
-    align-items: flex-start;
-}
-
-/* Left Side: The Image */
-.intel-visual {
-    flex: 0 0 35%; 
-    max-width: 320px;
-}
-
-.image-frame {
-    background: rgba(0, 0, 0, 0.6);
-    border: 2px solid var(--neon-cyan);
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.15), inset 0 0 15px rgba(0, 243, 255, 0.1);
-    padding: 10px;
-    clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
-    position: relative;
-}
-
-.image-frame img {
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: cover;
-    filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.3)); 
-}
-
-/* Right Side: The Data */
-.intel-data {
-    flex: 1; 
-}
-
-.intel-data p {
-    color: #ccc;
-    line-height: 1.8;
+/* The "WHOAMI" Header - High-tech Terminal style */
+.panel-header .cyan-text {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
     letter-spacing: 2px;
-    font-size: 17px; /* BUMPED UP (Was 15px) */
-    margin-top: 0;
-    margin-bottom: 25px;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.7);
+    text-transform: uppercase;
 }
 
+/* Intel Data Body Text */
+.intel-data p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.5px;
+}
+
+/* Mission Statement - The "Vaporwave" highlight */
 .mission-statement {
-    font-size: 21px !important; /* BUMPED UP (Was 18px) */
-    color: #fff !important;
-    text-align: center;
-    margin: 40px 0 !important;
-    letter-spacing: 4px !important;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    border-left: 4px solid var(--neon-magenta);
+    padding-left: 15px;
 }
 
 .neon-magenta {
-    display: inline-block;
-    margin-top: 10px;
     color: var(--neon-magenta);
-    text-shadow: 0 0 10px var(--neon-magenta);
+    text-shadow: 2px 2px 0px var(--electric-purple), 0 0 15px rgba(255, 0, 255, 0.5);
+    text-transform: uppercase;
 }
 
-/* --- FOOTER & BUTTON --- */
-.panel-footer {
-    padding: 20px 30px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    display: flex;
-    justify-content: flex-end;
-    flex-shrink: 0;
-}
-
+/* Button Font - Arcade style */
 .neon-btn {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
     text-decoration: none;
-    background: transparent;
-    border: 1px solid var(--neon-cyan);
-    color: var(--neon-cyan);
-    padding: 12px 25px;
-    font-size: 15px; /* BUMPED UP */
-    letter-spacing: 4px;
-    transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-    cursor: none;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
 }
 
 .neon-btn:hover {
-    background: var(--neon-cyan);
-    color: #000;
-    box-shadow: 0 0 15px var(--neon-cyan);
-    transform: skewX(-5deg);
+    text-shadow: 0 0 10px var(--neon-cyan);
+    color: #fff;
 }
 
-/* =========================================
-   MOBILE RESPONSIVENESS
-========================================= */
-@media (max-width: 768px) {
-    .ui-container { padding: 15px; }
-    .panel-header { padding: 15px 20px; }
-    
-    .cyan-text { font-size: 16px; letter-spacing: 2px; } /* BUMPED UP */
-    
-    .panel-content { padding: 25px 20px; }
-    
-    .intel-split-layout {
-        flex-direction: column;
-        align-items: center;
-        gap: 25px;
-    }
-
-    .intel-visual {
-        width: 60%; 
-        max-width: 250px;
-    }
-
-    .intel-data p { font-size: 15px; letter-spacing: 1px; line-height: 1.6; } /* BUMPED UP */
-    
-    .mission-statement { font-size: 18px !important; margin: 30px 0 !important; } /* BUMPED UP */
-    
-    .panel-footer { padding: 15px 20px; justify-content: center; }
-    .neon-btn { width: 100%; text-align: center; font-size: 14px; } /* BUMPED UP */
+/* For that "Intel" Terminal feel on secondary data */
+.intel-data p:first-of-type::before {
+    content: "[DATA_LOG]: ";
+    font-family: 'VT323', monospace;
+    color: var(--gold);
 }
