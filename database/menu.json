@@ -21,6 +21,11 @@
       "color": "cyan"
     },
     {
+      "title": "My Mission",
+      "link": "manifesto.html",
+      "color": "cyan"
+    },
+    {
       "title": "Support Me!",
       "link": "https://buymeacoffee.com/cmdrq",
       "color": "cyan"
