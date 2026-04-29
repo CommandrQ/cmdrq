@@ -1,10 +1,46 @@
 [
   {
-    "title": "1. Synthwave Radio",
-    "id": "PLwX0pb3GErek3NOvUZzKMk5hp1G_USaHW"
+    "station_name": "Vi-bration Radio",
+    "playlists": [
+      {
+        "title": "Beyond The Pen",
+        "id": "PLwX0pb3GEremC1vfOY7jLfNqdfR2cTVi7"
+      },
+      {
+        "title": "2. Midnight Study",
+        "id": "INSERT_YT_ID_HERE"
+      }
+    ]
   },
   {
-    "title": "2. Chill Lofi Beats",
-    "id": "PLMIbmfz_ahnS3Zp9z9gJ0mC8w4-a2-Vly"
+    "station_name": "SYNTH",
+    "playlists": [
+      {
+        "title": "1. Darkwave",
+        "id": "INSERT_YT_ID_HERE"
+      },
+      {
+        "title": "2. Cyberpunk Radio",
+        "id": "INSERT_YT_ID_HERE"
+      }
+    ]
+  },
+  {
+    "station_name": "AMBIENT",
+    "playlists": [
+      {
+        "title": "1. Deep Space",
+        "id": "INSERT_YT_ID_HERE"
+      }
+    ]
+  },
+  {
+    "station_name": "PHONK",
+    "playlists": [
+      {
+        "title": "1. Drift Phonk",
+        "id": "INSERT_YT_ID_HERE"
+      }
+    ]
   }
 ]
