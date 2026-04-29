@@ -11,7 +11,7 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
+            overflow: hidden; /* Prevents the page itself from scrolling */
             font-family: 'Courier New', Courier, monospace;
             background-color: #000;
         }
@@ -68,9 +68,9 @@
 
         #ipod {
             width: 95%;
-            max-width: 360px;
-            height: 85vh;
-            max-height: 700px;
+            max-width: 380px;
+            height: 90vh;
+            max-height: 750px;
             background: rgba(15, 15, 20, 0.75);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -87,7 +87,7 @@
             background: #0a0f0d;
             border: 2px solid #2a3b32;
             border-radius: 10px;
-            height: 35%; /* Slightly smaller to give playlists more room */
+            height: 25%;
             padding: 15px;
             display: flex;
             flex-direction: column;
@@ -109,7 +109,7 @@
         }
 
         #track-title {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
             line-height: 1.4;
             word-wrap: break-word;
@@ -120,10 +120,10 @@
 
         /* Controls */
         #controls-container {
-            margin-top: 20px;
+            margin-top: 15px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 10px;
             flex-shrink: 0;
         }
 
@@ -133,7 +133,7 @@
             background: rgba(30, 30, 40, 0.8);
             border: 1px solid #444;
             color: #fff;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
             font-family: inherit;
             font-weight: bold;
@@ -147,28 +147,69 @@
         button:active { background: #00ffcc; color: #000; border-color: #00ffcc; }
         button:hover { border-color: #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.3); }
 
-        /* === 3. SCROLLABLE PLAYLIST MENU === */
+        /* === 3. HORIZONTAL STATIONS CAROUSEL === */
         .section-title {
             color: #aaa;
-            font-size: 0.8rem;
-            margin: 20px 0 10px 0;
+            font-size: 0.75rem;
+            margin: 15px 0 5px 0;
             text-transform: uppercase;
             letter-spacing: 1px;
             flex-shrink: 0;
         }
 
+        #stations-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            margin-bottom: 10px;
+        }
+
+        #stations-container {
+            display: flex;
+            overflow-x: hidden; /* Hide scrollbar, rely on arrows */
+            scroll-behavior: smooth;
+            gap: 10px;
+            flex: 1;
+            padding: 5px 0;
+        }
+
+        .station-btn {
+            flex: 0 0 auto; /* Prevents buttons from shrinking */
+            width: auto;
+            min-width: 80px;
+            padding: 8px 15px;
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            background: rgba(0, 255, 204, 0.1);
+        }
+
+        .station-btn:hover { background: rgba(0, 255, 204, 0.3); }
+
+        .scroll-arrow {
+            color: #00ffcc;
+            font-size: 1.2rem;
+            cursor: pointer;
+            user-select: none;
+            padding: 5px;
+            animation: arrow-bounce 1.5s infinite alternate;
+        }
+
+        @keyframes arrow-bounce {
+            0% { transform: scale(1); text-shadow: 0 0 5px rgba(0,255,204,0.2); }
+            100% { transform: scale(1.2); text-shadow: 0 0 15px rgba(0,255,204,0.8); }
+        }
+
+        /* === 4. VERTICAL PLAYLIST MENU === */
         #playlists-container {
-            flex: 1; /* Forces container to take remaining space */
-            min-height: 0; /* Required for flexbox scrolling */
-            overflow-y: auto; /* Enables vertical scrolling */
-            padding-right: 5px; /* Room for scrollbar */
-            
-            /* Firefox Scrollbar */
+            flex: 1; 
+            min-height: 0; 
+            overflow-y: auto; 
+            padding-right: 5px; 
             scrollbar-width: thin;
-            scrollbar-color: #00ffcc rgba(0,0,0,0.2);
+            scrollbar-color: #00ffcc transparent;
         }
         
-        /* Chrome/Edge/Safari Scrollbar */
         #playlists-container::-webkit-scrollbar { width: 6px; }
         #playlists-container::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 3px; }
         #playlists-container::-webkit-scrollbar-thumb { background-color: #00ffcc; border-radius: 3px; }
@@ -198,7 +239,7 @@
         <div id="ipod">
             <div id="screen">
                 <div class="sys-status">
-                    <span>YT-OS v1.2</span>
+                    <span>YT-OS v1.3</span>
                     <span id="player-status">INITIALIZING...</span>
                 </div>
                 <div id="track-title">Awaiting data connection...</div>
@@ -216,7 +257,21 @@
                 </div>
             </div>
 
-            <div class="section-title">Select Database</div>
+            <div class="section-title">Global Stations</div>
+            <div id="stations-wrapper">
+                <div class="scroll-arrow" id="scroll-left">&#10094;</div>
+                <div id="stations-container">
+                    <button class="station-btn">LOFI</button>
+                    <button class="station-btn">SYNTH</button>
+                    <button class="station-btn">AMBIENT</button>
+                    <button class="station-btn">CYBER</button>
+                    <button class="station-btn">PHONK</button>
+                    <button class="station-btn">CHILL</button>
+                </div>
+                <div class="scroll-arrow" id="scroll-right">&#10095;</div>
+            </div>
+
+            <div class="section-title">Local Database (JSON)</div>
             <div id="playlists-container">
                 </div>
         </div>
@@ -256,12 +311,20 @@
         initStars();
         animateStars();
 
+        /* === HORIZONTAL SCROLL LOGIC === */
+        document.getElementById('scroll-left').addEventListener('click', () => {
+            document.getElementById('stations-container').scrollBy({ left: -120, behavior: 'smooth' });
+        });
+        
+        document.getElementById('scroll-right').addEventListener('click', () => {
+            document.getElementById('stations-container').scrollBy({ left: 120, behavior: 'smooth' });
+        });
+
         /* === DYNAMIC PLAYLIST FETCH LOGIC === */
         async function loadPlaylists() {
             const container = document.getElementById('playlists-container');
             
             try {
-                // Reverted to look in the exact same folder
                 const response = await fetch('playlists.json');
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 
