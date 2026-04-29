@@ -172,16 +172,18 @@
             gap: 10px;
             flex: 1;
             padding: 5px 0;
+            scroll-snap-type: x mandatory; /* Forces snapping */
         }
 
         .station-btn {
-            flex: 0 0 auto; 
-            width: auto;
-            min-width: 80px;
-            padding: 8px 15px;
+            /* Calculates exactly 50% width minus half the 10px gap */
+            flex: 0 0 calc(50% - 5px); 
+            box-sizing: border-box; /* Ensures padding is calculated correctly */
+            padding: 8px 10px;
             border: 1px solid #00ffcc;
             color: #00ffcc;
             background: rgba(0, 255, 204, 0.1);
+            scroll-snap-align: start; /* Aligns to the start of the container */
         }
 
         .station-btn:hover { background: rgba(0, 255, 204, 0.3); }
@@ -246,7 +248,7 @@
         <div id="ipod">
             <div id="screen">
                 <div class="sys-status">
-                    <span>YT-OS v2.0</span>
+                    <span>YT-OS v2.1</span>
                     <span id="player-status">INITIALIZING...</span>
                 </div>
                 <div id="track-title">Awaiting data connection...</div>
@@ -313,15 +315,18 @@
         animateStars();
 
         /* === HORIZONTAL SCROLL LOGIC === */
+        // Now dynamically calculates the width of the container to page perfectly
         document.getElementById('scroll-left').addEventListener('click', () => {
-            document.getElementById('stations-container').scrollBy({ left: -120, behavior: 'smooth' });
+            const container = document.getElementById('stations-container');
+            container.scrollBy({ left: -container.clientWidth, behavior: 'smooth' });
         });
         document.getElementById('scroll-right').addEventListener('click', () => {
-            document.getElementById('stations-container').scrollBy({ left: 120, behavior: 'smooth' });
+            const container = document.getElementById('stations-container');
+            container.scrollBy({ left: container.clientWidth, behavior: 'smooth' });
         });
 
         /* === DYNAMIC DATABASE LOGIC (STATIONS -> PLAYLISTS) === */
-        let terminalData = []; // Master variable to hold the JSON
+        let terminalData = []; 
 
         async function loadDatabase() {
             try {
@@ -332,7 +337,7 @@
                 
                 if (terminalData.length > 0) {
                     renderStations();
-                    renderPlaylists(0); // Load the first station's playlists by default
+                    renderPlaylists(0); 
                 }
             } catch (error) {
                 console.error("Failed to load database:", error);
@@ -343,19 +348,17 @@
 
         function renderStations() {
             const container = document.getElementById('stations-container');
-            container.innerHTML = ''; // Clear out any existing HTML
+            container.innerHTML = ''; 
             
             terminalData.forEach((station, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'station-btn';
-                if (index === 0) btn.classList.add('active-station'); // Highlight the first one
+                if (index === 0) btn.classList.add('active-station'); 
                 btn.innerText = station.station_name;
                 
                 btn.addEventListener('click', () => {
-                    // Update visual active state
                     document.querySelectorAll('.station-btn').forEach(b => b.classList.remove('active-station'));
                     btn.classList.add('active-station');
-                    // Render the nested playlists for this specific station
                     renderPlaylists(index);
                 });
                 
@@ -365,7 +368,7 @@
 
         function renderPlaylists(stationIndex) {
             const container = document.getElementById('playlists-container');
-            container.innerHTML = ''; // Clear out old playlists
+            container.innerHTML = ''; 
             
             const playlists = terminalData[stationIndex].playlists;
             
@@ -385,7 +388,6 @@
             });
         }
 
-        // Initialize the fetch sequence
         loadDatabase();
 
         /* === YOUTUBE API LOGIC === */
