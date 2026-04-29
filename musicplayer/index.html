@@ -2,46 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEURAL_LINK | COMMANDER_Q</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOWER OF TUNES // HUD_v1.0</title>
     <link rel="stylesheet" href="css/menu.css">
-    <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 <body>
 
-    <div class="stars"></div>
+    <div class="starfield"></div>
     <div class="scanlines"></div>
-    <div class="radial-glow"></div>
+    <div class="radial-glow" id="glow"></div>
 
-    <div class="hud-container">
-        <header style="font-size: 0.65rem; color: #fff; opacity: 0.6; display: flex; justify-content: space-between;">
-            <span>GRID_OS v4.0.2</span>
-            <span id="clock">00:00:00</span>
-        </header>
-
-        <nav class="station-nav" id="station-nav"></nav>
-
-        <div class="player-frame">
-            <div style="width:100%; aspect-ratio: 16/9; background:#000;">
-                <div id="youtube-engine"></div>
-            </div>
+    <header class="hud-header">
+        <div class="system-meta">
+            <span id="clock">SYSTEM_TIME: 00:00:00</span>
+            <span class="location-tag">LOCATION: THE_HIDEOUT // TOWER_OF_TUNES</span>
         </div>
+        <button onclick="window.location.href='../menu.html'" class="return-btn">
+            [ RETURN_TO_BASE ]
+        </button>
+    </header>
 
-        <div class="playlist-container">
-            <div class="playlist-scroll" id="playlist-list">
-                <div style="padding: 20px; font-size: 0.7rem; color: var(--main-color);">[ WAITING_FOR_UPLINK... ]</div>
+    <main class="command-center">
+        <section class="player-container">
+            <div id="player-frame">
+                <div id="youtube-player"></div>
             </div>
-        </div>
-    </div>
+            <div id="station-status">STATUS: STANDBY_FOR_BROADCAST</div>
+        </section>
 
+        <nav id="station-nav" class="station-grid"></nav>
+
+        <section class="substation-container">
+            <h3 class="list-header">AVAILABLE_FREQUENCIES</h3>
+            <div id="substation-list">
+                <div class="initial-load-msg">INITIALIZING_DATA_LINK...</div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script src="js/menu.js"></script>
-    <script>
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').textContent = now.toLocaleTimeString('en-GB');
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
 </body>
 </html>
