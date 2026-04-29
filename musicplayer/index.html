@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tactical Music Console</title>
+    <title>Commander's Console // Tactical HUD</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
         </div>
 
         <div class="track-info">
-            <h2 id="track-title">SYSTEM STANDBY // SELECT PLAYLIST</h2>
+            <h2 id="track-title">SYSTEM STANDBY // WAITING FOR DATALINK</h2>
         </div>
 
         <div class="media-controls">
@@ -23,27 +23,11 @@
             <button id="btn-next" class="hud-btn">NEXT</button>
         </div>
 
-        <div class="station-slider">
-            <button class="station-btn active" data-target="station-alpha">ALPHA</button>
-            <button class="station-btn" data-target="station-bravo">BRAVO</button>
-            <button class="station-btn" data-target="station-charlie">CHARLIE</button>
-        </div>
-
-        <div class="playlist-container">
-            <div id="station-alpha" class="playlist-group active-group">
-                <button class="playlist-btn" data-playlist="PLxA687tYu_giQ2fM-lHkk1_2m8NtzZ5oW">Drift Mix 01</button>
-                <button class="playlist-btn" data-playlist="PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG">Electronic Assault</button>
+        <div class="station-slider" id="station-slider-container">
             </div>
 
-            <div id="station-bravo" class="playlist-group">
-                <button class="playlist-btn" data-playlist="PL_ID_HERE">Bmore Beats</button>
-                <button class="playlist-btn" data-playlist="PL_ID_HERE">Jersey Club Heavy</button>
+        <div class="playlist-container" id="playlist-master-container">
             </div>
-            
-            <div id="station-charlie" class="playlist-group">
-                <button class="playlist-btn" data-playlist="PL_ID_HERE">Ambient Grid</button>
-            </div>
-        </div>
     </div>
 
     <script src="https://www.youtube.com/iframe_api"></script>
