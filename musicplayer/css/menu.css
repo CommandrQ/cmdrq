@@ -1,166 +1,67 @@
-/* --- HUD BASE LAYOUT --- */
+/* Fix Background layering */
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #000;
-    color: #0ff;
-    font-family: 'Courier New', Courier, monospace;
-    overflow: hidden;
-    height: 100vh;
+    background: #050505; /* Deep black base */
+    overflow-x: hidden;
 }
 
-/* The dynamic Flow Color element */
 .purple-radial-glow {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 100vw;
-    height: 100vh;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(138, 43, 226, 0.4) 0%, transparent 70%);
-    transition: background 1.5s cubic-bezier(0.19, 1, 0.22, 1);
-    z-index: -1;
-    pointer-events: none;
+    z-index: 0; /* Move above the base background */
 }
 
-/* Background Effects */
-.stars {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: url('https://www.transparenttextures.com/patterns/stardust.png');
-    opacity: 0.3;
-    z-index: -2;
-}
-
-.scanlines {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    background-size: 100% 4px, 3px 100%;
-    pointer-events: none;
-    z-index: 100;
-}
-
-/* --- TACTICAL HUD ELEMENTS --- */
 .hud-wrapper {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
-    justify-content: space-between;
-}
-
-.hud-header {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(0, 255, 255, 0.3);
-    padding-bottom: 10px;
-    font-size: 0.9rem;
-}
-
-.tactical-layout {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-grow: 1;
-}
-
-/* Central Avatar */
-.avatar-central-node {
     position: relative;
-    width: 250px;
-    height: 250px;
+    z-index: 10; /* Ensure UI is on top */
 }
 
-.avatar-frame {
-    width: 100%;
-    height: 100%;
-    border: 2px solid #0ff;
-    border-radius: 50%;
-    padding: 10px;
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
-    animation: pulse-glow 4s infinite alternate;
-}
-
-.avatar-img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    filter: grayscale(50%) contrast(120%);
-}
-
-/* Node Matrices (Button Containers) */
-.node-matrix {
-    width: 280px;
+/* Center Column Setup */
+.center-column {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    align-items: center;
+    gap: 20px;
 }
 
-/* The Menu Buttons */
-.node-item {
-    background: rgba(0, 20, 30, 0.7);
-    border-left: 4px solid #0ff;
-    padding: 15px;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: bold;
-    letter-spacing: 2px;
-    transition: 0.3s all;
-    clip-path: polygon(0 0, 90% 0, 100% 30%, 100% 100%, 10% 100%, 0 70%);
+/* Tactical Video Monitor */
+.video-viewport {
+    width: 280px;
+    height: 157px; /* 16:9 Aspect Ratio */
+    border: 2px solid #0ff;
+    position: relative;
+    background: #000;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    overflow: hidden;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%);
 }
 
-.node-item:hover {
-    background: rgba(0, 255, 255, 0.15);
-    transform: scale(1.05);
-    box-shadow: -10px 0 20px rgba(0, 255, 255, 0.3);
-}
-
-.node-label {
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
-}
-
-/* Hidden YouTube Player */
 #youtube-engine {
+    width: 100%;
+    height: 100%;
+}
+
+/* Adds a "HUD" feel over the video */
+.viewport-overlay {
     position: absolute;
-    opacity: 0;
-    pointer-events: none;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 255, 255, 0.05) 50%);
+    background-size: 100% 4px;
+    pointer-events: none; /* Allows you to still click the video if needed */
 }
 
-/* --- FOOTER --- */
-.hud-footer {
-    border-top: 1px solid rgba(0, 255, 255, 0.3);
-    padding-top: 10px;
-    display: flex;
-    justify-content: center;
-    font-size: 0.7rem;
-}
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .tactical-layout {
+        flex-direction: column;
+        overflow-y: auto;
+        padding-top: 80px;
+    }
+    
+    .node-matrix {
+        width: 90%;
+        margin: 10px auto;
+    }
 
-.footer-text {
-    margin: 0 15px;
-    opacity: 0.6;
-}
-
-/* --- ANIMATIONS --- */
-@keyframes pulse-glow {
-    from { box-shadow: 0 0 20px rgba(0, 255, 255, 0.2); }
-    to { box-shadow: 0 0 50px rgba(0, 255, 255, 0.5); }
-}
-
-.flicker-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background: #0ff;
-    border-radius: 50%;
-    margin-right: 8px;
-    animation: flicker 1s infinite;
-}
-
-@keyframes flicker {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+    .video-viewport {
+        width: 90vw;
+        height: 50.6vw;
+    }
 }
