@@ -3,41 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOWER OF TUNES // HUD_v1.0</title>
+    <title>TOWER OF TUNES // HUD</title>
     <link rel="stylesheet" href="css/menu.css">
 </head>
 <body>
-
     <div class="starfield"></div>
     <div class="scanlines"></div>
     <div class="radial-glow" id="glow"></div>
 
     <header class="hud-header">
-        <div class="system-meta">
-            <span id="clock">SYSTEM_TIME: 00:00:00</span>
-            <span class="location-tag">LOCATION: THE_HIDEOUT // TOWER_OF_TUNES</span>
-        </div>
-        <button onclick="window.location.href='../menu.html'" class="return-btn">
-            [ RETURN_TO_BASE ]
-        </button>
+        <div id="clock">SYSTEM_TIME: 00:00:00</div>
+        <button onclick="window.location.href='../menu.html'" class="return-btn">[ RETURN_TO_BASE ]</button>
     </header>
 
     <main class="command-center">
-        <section class="player-container">
-            <div id="player-frame">
-                <div id="youtube-player"></div>
-            </div>
-            <div id="station-status">STATUS: STANDBY_FOR_BROADCAST</div>
-        </section>
+        <div id="player-frame">
+            <div id="youtube-player"></div>
+        </div>
 
-        <nav id="station-nav" class="station-grid"></nav>
+        <div class="media-controls">
+            <button onclick="player.previousVideo()">[ PREV ]</button>
+            <button id="play-pause-btn" onclick="togglePlay()">[ PLAY/PAUSE ]</button>
+            <button onclick="player.nextVideo()">[ NEXT ]</button>
+        </div>
 
-        <section class="substation-container">
-            <h3 class="list-header">AVAILABLE_FREQUENCIES</h3>
-            <div id="substation-list">
-                <div class="initial-load-msg">INITIALIZING_DATA_LINK...</div>
+        <div class="station-container">
+            <div id="station-nav" class="station-swiper"></div>
+        </div>
+
+        <div class="playlist-container">
+            <div id="substation-list" class="scroll-list">
+                <div class="loading-text">AWAITING_SIGNAL...</div>
             </div>
-        </section>
+        </div>
     </main>
 
     <script src="https://www.youtube.com/iframe_api"></script>
