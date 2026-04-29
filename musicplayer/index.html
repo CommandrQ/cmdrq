@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tactical Playlist Terminal</title>
     <style>
-        /* === 1. VISUAL ARCHITECTURE & BACKGROUND === */
+        /* === VISUAL ARCHITECTURE & BACKGROUND === */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden; /* Prevents the page itself from scrolling */
+            overflow: hidden; 
             font-family: 'Courier New', Courier, monospace;
             background-color: #000;
         }
@@ -53,7 +53,7 @@
             100% { box-shadow: 0 0 60px 20px rgba(255, 140, 0, 0.7), 0 0 120px 40px rgba(255, 69, 0, 0.4); opacity: 1; }
         }
 
-        /* === 2. THE TERMINAL UI === */
+        /* === THE TERMINAL UI === */
         #ui-layer {
             position: absolute;
             top: 0;
@@ -147,7 +147,7 @@
         button:active { background: #00ffcc; color: #000; border-color: #00ffcc; }
         button:hover { border-color: #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.3); }
 
-        /* === 3. HORIZONTAL STATIONS CAROUSEL === */
+        /* === HORIZONTAL STATIONS CAROUSEL === */
         .section-title {
             color: #aaa;
             font-size: 0.75rem;
@@ -167,7 +167,7 @@
 
         #stations-container {
             display: flex;
-            overflow-x: hidden; /* Hide scrollbar, rely on arrows */
+            overflow-x: hidden; 
             scroll-behavior: smooth;
             gap: 10px;
             flex: 1;
@@ -175,7 +175,7 @@
         }
 
         .station-btn {
-            flex: 0 0 auto; /* Prevents buttons from shrinking */
+            flex: 0 0 auto; 
             width: auto;
             min-width: 80px;
             padding: 8px 15px;
@@ -185,6 +185,13 @@
         }
 
         .station-btn:hover { background: rgba(0, 255, 204, 0.3); }
+        
+        .station-btn.active-station {
+            background: rgba(0, 255, 204, 0.5);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.8);
+            text-shadow: 0 0 5px #000;
+        }
 
         .scroll-arrow {
             color: #00ffcc;
@@ -200,7 +207,7 @@
             100% { transform: scale(1.2); text-shadow: 0 0 15px rgba(0,255,204,0.8); }
         }
 
-        /* === 4. VERTICAL PLAYLIST MENU === */
+        /* === VERTICAL PLAYLIST MENU === */
         #playlists-container {
             flex: 1; 
             min-height: 0; 
@@ -239,7 +246,7 @@
         <div id="ipod">
             <div id="screen">
                 <div class="sys-status">
-                    <span>YT-OS v1.3</span>
+                    <span>YT-OS v2.0</span>
                     <span id="player-status">INITIALIZING...</span>
                 </div>
                 <div id="track-title">Awaiting data connection...</div>
@@ -261,17 +268,11 @@
             <div id="stations-wrapper">
                 <div class="scroll-arrow" id="scroll-left">&#10094;</div>
                 <div id="stations-container">
-                    <button class="station-btn">LOFI</button>
-                    <button class="station-btn">SYNTH</button>
-                    <button class="station-btn">AMBIENT</button>
-                    <button class="station-btn">CYBER</button>
-                    <button class="station-btn">PHONK</button>
-                    <button class="station-btn">CHILL</button>
-                </div>
+                    </div>
                 <div class="scroll-arrow" id="scroll-right">&#10095;</div>
             </div>
 
-            <div class="section-title">Local Database (JSON)</div>
+            <div class="section-title">Local Database (Playlists)</div>
             <div id="playlists-container">
                 </div>
         </div>
@@ -315,43 +316,77 @@
         document.getElementById('scroll-left').addEventListener('click', () => {
             document.getElementById('stations-container').scrollBy({ left: -120, behavior: 'smooth' });
         });
-        
         document.getElementById('scroll-right').addEventListener('click', () => {
             document.getElementById('stations-container').scrollBy({ left: 120, behavior: 'smooth' });
         });
 
-        /* === DYNAMIC PLAYLIST FETCH LOGIC === */
-        async function loadPlaylists() {
-            const container = document.getElementById('playlists-container');
-            
+        /* === DYNAMIC DATABASE LOGIC (STATIONS -> PLAYLISTS) === */
+        let terminalData = []; // Master variable to hold the JSON
+
+        async function loadDatabase() {
             try {
                 const response = await fetch('playlists.json');
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 
-                const playlists = await response.json();
+                terminalData = await response.json();
                 
-                playlists.forEach(playlist => {
-                    const btn = document.createElement('button');
-                    btn.className = 'playlist-btn';
-                    btn.setAttribute('data-playlist', playlist.id);
-                    btn.innerText = playlist.title;
-                    
-                    btn.addEventListener('click', function() {
-                        if (player) {
-                            player.loadPlaylist({ list: playlist.id, listType: 'playlist', index: 0 });
-                        }
-                    });
-                    
-                    container.appendChild(btn);
-                });
+                if (terminalData.length > 0) {
+                    renderStations();
+                    renderPlaylists(0); // Load the first station's playlists by default
+                }
             } catch (error) {
-                console.error("Failed to load playlists:", error);
+                console.error("Failed to load database:", error);
                 document.getElementById('track-title').innerText = "DATABASE ERROR: Verify playlists.json path and syntax.";
                 document.getElementById('track-title').style.color = "#ff4444";
             }
         }
 
-        loadPlaylists();
+        function renderStations() {
+            const container = document.getElementById('stations-container');
+            container.innerHTML = ''; // Clear out any existing HTML
+            
+            terminalData.forEach((station, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'station-btn';
+                if (index === 0) btn.classList.add('active-station'); // Highlight the first one
+                btn.innerText = station.station_name;
+                
+                btn.addEventListener('click', () => {
+                    // Update visual active state
+                    document.querySelectorAll('.station-btn').forEach(b => b.classList.remove('active-station'));
+                    btn.classList.add('active-station');
+                    // Render the nested playlists for this specific station
+                    renderPlaylists(index);
+                });
+                
+                container.appendChild(btn);
+            });
+        }
+
+        function renderPlaylists(stationIndex) {
+            const container = document.getElementById('playlists-container');
+            container.innerHTML = ''; // Clear out old playlists
+            
+            const playlists = terminalData[stationIndex].playlists;
+            
+            playlists.forEach(playlist => {
+                const btn = document.createElement('button');
+                btn.className = 'playlist-btn';
+                btn.setAttribute('data-playlist', playlist.id);
+                btn.innerText = playlist.title;
+                
+                btn.addEventListener('click', function() {
+                    if (player) {
+                        player.loadPlaylist({ list: playlist.id, listType: 'playlist', index: 0 });
+                    }
+                });
+                
+                container.appendChild(btn);
+            });
+        }
+
+        // Initialize the fetch sequence
+        loadDatabase();
 
         /* === YOUTUBE API LOGIC === */
         let player, updateInterval;
