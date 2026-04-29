@@ -2,29 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MUSUBI | COMMAND CENTER</title>
-    <link rel="stylesheet" href="css/menu.css">
+    
+    <link rel="stylesheet" href="css/menu.css?v=1.1">
+    
+    <script src="https://www.youtube.com/iframe_api"></script>
 </head>
-<body>
+<body class="action-mode">
+
     <div class="radial-glow" id="glow"></div>
     
+    <div class="stars"></div>
+    <div class="scanlines"></div>
+
     <div class="hud-container">
-        <nav class="station-nav" id="station-nav"></nav>
+        <header class="hud-header">
+            <div class="status-indicator">
+                <span class="flicker-dot"></span> 
+                COMMAND_CONSOLE: <span class="theme-text">ONLINE</span>
+            </div>
+            <div class="time-readout" id="clock">00:00:00</div>
+        </header>
+
+        <nav class="station-nav" id="station-nav">
+            </nav>
 
         <div class="player-viewport">
-            <div id="youtube-engine"></div>
-            <div class="viewport-frame"></div>
-        </div>
+            <div class="viewport-inner">
+                <div id="youtube-engine"></div>
+            </div>
+            </div>
 
         <div class="playlist-container">
-            <h3 class="status-text">SELECT_SUBSTATION:</h3>
+            <div class="container-label">AVAILABLE_SUBSTATIONS:</div>
             <div class="playlist-scroll" id="playlist-list">
-                </div>
+                <div class="empty-msg">INITIALIZING_SYSTEM... SELECT_STATION</div>
+            </div>
         </div>
+
+        <footer class="hud-footer">
+            <span class="footer-text">Q. COMMAND CENTER v2.0</span>
+        </footer>
     </div>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script src="js/menu.js"></script>
+    <script src="js/menu.js?v=1.1"></script>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.getHours().toString().padStart(2, '0') + ":" + 
+                               now.getMinutes().toString().padStart(2, '0') + ":" + 
+                               now.getSeconds().toString().padStart(2, '0');
+            const clockEl = document.getElementById('clock');
+            if(clockEl) clockEl.textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
 </body>
 </html>
