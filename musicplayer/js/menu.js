@@ -7,8 +7,9 @@ function onYouTubeIframeAPIReady() {
         playerVars: { 
             'autoplay': 1, 
             'listType': 'playlist', 
-            'controls': 1, // Standard controls visible
-            'rel': 0
+            'controls': 1,
+            'modestbranding': 1,
+            'origin': window.location.origin
         }
     });
 }
@@ -26,30 +27,29 @@ async function initHUD() {
         btn.innerText = station.name;
         
         btn.onclick = () => {
-            // Update Theme
             const root = document.documentElement;
             root.style.setProperty('--main-color', station.color);
-            root.style.setProperty('--glow-opacity', station.color + "44");
+            root.style.setProperty('--glow-opacity', station.color + "33");
 
-            // Build Substations
             list.innerHTML = '';
             station.playlists.forEach(pl => {
                 const plItem = document.createElement('div');
                 plItem.className = 'substation-item';
-                plItem.innerText = `> ${pl.title}`;
+                plItem.innerText = `[ ${pl.title} ]`;
                 
-                // SINGLE CLICK PLAYBACK
-                plItem.onclick = () => {
+                // CRITICAL: Single-Click Fix
+                plItem.addEventListener('click', function() {
                     if (player && player.loadPlaylist) {
+                        player.stopVideo(); // Clear existing
                         player.loadPlaylist({
                             list: pl.id,
                             listType: 'playlist',
                             index: 0
                         });
-                        // Some browsers need an explicit play call after loading
-                        setTimeout(() => { player.playVideo(); }, 100);
+                        // Explicitly call play to override browser focus blocks
+                        setTimeout(() => { player.playVideo(); }, 200);
                     }
-                };
+                });
                 list.appendChild(plItem);
             });
         };
