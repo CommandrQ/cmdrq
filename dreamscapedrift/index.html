@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MUSUBI | Dreamscape Drift Logs</title>
     
+    <script>
+        window.addEventListener('pageshow', function(event) {
+            // If the page was loaded from browser cache, force a fresh reload
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+    </script>
+
     <link rel="stylesheet" href="style.css?v=4">
     <link rel="stylesheet" href="../css/cursor.css">
 </head>
