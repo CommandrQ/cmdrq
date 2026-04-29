@@ -3,40 +3,40 @@
     {
       "id": "Station 1",
       "name": "Chi-erful Radio",
-      "color": "#8a2be2",
+      "color": "#FFD700",
       "side": "left",
       "playlists": [
-        { "title": "Freevibes FM", "id": "PLwX0pb3GErekzDDrb9BzpjtrI5XdR6tU9" }
+        { "title": "Freevibes FM", "id": "PLwX0pb3GErekzDDrb9BzpjtrI5XdR6tU9" },
+        { "title": "House Party", "id": "lPLwX0pb3GErelK0luUOAZVX4-6Ifp7Tq4_" }
       ]
     },
     {
-      "id": "st-2",
-      "name": "TACTICAL OPS",
-      "color": "rgba(0, 255, 255, 0.6)",
+      "id": "Station 2",
+      "name": "Ki-netic Radio",
+      "color": "FF0000",
       "side": "left",
       "playlists": [
-        { "title": "Phonk/Aggressive", "id": "PLyourID3" },
-        { "title": "Industrial", "id": "PLyourID4" }
+        { "title": "Blaze's Cool Mixtape", "id": "PLwX0pb3GErekhqHtx2E2WMrB4DhdDJhlu" },
+        { "title": "Bmore Brick City", "id": "PLwX0pb3GErekChtYZB_HejDEP3FWZ6o-l" }
       ]
     },
     {
-      "id": "st-3",
-      "name": "DATA STREAM",
-      "color": "rgba(0, 255, 100, 0.6)",
+      "id": "Station 3",
+      "name": "Vi-bration Radio",
+      "color": "0000FF",
       "side": "right",
       "playlists": [
-        { "title": "Synthwave", "id": "PLyourID5" },
-        { "title": "Coding Focus", "id": "PLyourID6" }
+        { "title": "Beyond The Pen", "id": "PLwX0pb3GEremC1vfOY7jLfNqdfR2cTVi7" },
+        { "title": "Dreamscape", "id": "PLwX0pb3GErenzlrerMLur84f2JfArD1fK" }
       ]
     },
     {
-      "id": "st-4",
-      "name": "VOID ECHO",
-      "color": "rgba(255, 0, 80, 0.6)",
+      "id": "Station 4",
+      "name": "Commander Q Radio",
+      "color": "A020F0",
       "side": "right",
       "playlists": [
-        { "title": "Ambient Space", "id": "PLyourID7" },
-        { "title": "Deep Bass", "id": "PLyourID8" }
+        { "title": "Ambient Space", "id": "PLyourID7" }
       ]
     }
   ]
