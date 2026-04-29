@@ -1,0 +1,44 @@
+{
+  "stations": [
+    {
+      "id": "st-1",
+      "name": "NEON CHILL",
+      "color": "rgba(138, 43, 226, 0.6)",
+      "side": "left",
+      "playlists": [
+        { "title": "Lo-Fi Beats", "id": "PLyourID1" },
+        { "title": "Midnight Jazz", "id": "PLyourID2" }
+      ]
+    },
+    {
+      "id": "st-2",
+      "name": "TACTICAL OPS",
+      "color": "rgba(0, 255, 255, 0.6)",
+      "side": "left",
+      "playlists": [
+        { "title": "Phonk/Aggressive", "id": "PLyourID3" },
+        { "title": "Industrial", "id": "PLyourID4" }
+      ]
+    },
+    {
+      "id": "st-3",
+      "name": "DATA STREAM",
+      "color": "rgba(0, 255, 100, 0.6)",
+      "side": "right",
+      "playlists": [
+        { "title": "Synthwave", "id": "PLyourID5" },
+        { "title": "Coding Focus", "id": "PLyourID6" }
+      ]
+    },
+    {
+      "id": "st-4",
+      "name": "VOID ECHO",
+      "color": "rgba(255, 0, 80, 0.6)",
+      "side": "right",
+      "playlists": [
+        { "title": "Ambient Space", "id": "PLyourID7" },
+        { "title": "Deep Bass", "id": "PLyourID8" }
+      ]
+    }
+  ]
+}
