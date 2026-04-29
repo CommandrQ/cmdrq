@@ -1,95 +1,98 @@
+:root {
+    --main-color: #00ffff; /* Default Cyan */
+    --glow-opacity: rgba(0, 255, 255, 0.4);
+}
+
 body {
     margin: 0;
     background: #000;
-    color: #0ff;
+    color: var(--main-color);
     font-family: 'Courier New', monospace;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    transition: color 0.5s ease;
 }
 
+/* Dynamic Radial Background */
 .radial-glow {
     position: fixed;
     width: 150vw;
     height: 150vh;
-    background: radial-gradient(circle, rgba(138, 43, 226, 0.4) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--glow-opacity) 0%, transparent 70%);
     transition: background 0.8s ease;
     z-index: -1;
 }
 
-.hud-container {
-    width: 90%;
-    max-width: 500px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 20px;
-    border: 1px solid rgba(0, 255, 255, 0.2);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 1);
-}
-
-/* 4 Station Grid */
-.station-nav {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.station-btn {
-    background: transparent;
-    border: 1px solid #0ff;
-    color: #0ff;
-    padding: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.station-btn:hover {
-    background: rgba(0, 255, 255, 0.2);
-}
-
-/* Video Player */
+/* The Player with Flowing Border */
 .player-viewport {
     width: 100%;
     aspect-ratio: 16 / 9;
     background: #000;
-    border: 2px solid #0ff;
     position: relative;
+    padding: 3px; /* Space for the flow border */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Scrollable Playlist Area */
-.playlist-container {
-    height: 200px;
-    border-top: 1px solid rgba(0, 255, 255, 0.3);
+/* The Animated Flow Effect */
+.player-viewport::before {
+    content: '';
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    background: conic-gradient(transparent, var(--main-color), transparent 30%);
+    animation: rotateFlow 4s linear infinite;
+    z-index: 0;
 }
 
-.status-text {
-    font-size: 0.8rem;
-    margin: 10px 0;
+/* Inner frame to keep video sharp */
+.viewport-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 1;
 }
 
-.playlist-scroll {
-    height: 150px;
-    overflow-y: auto;
-    padding-right: 5px;
+@keyframes rotateFlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* UI Elements using Variables */
+.station-btn {
+    background: transparent;
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
+    padding: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 5px var(--glow-opacity);
+}
+
+.station-btn:hover {
+    background: var(--glow-opacity);
+    box-shadow: 0 0 15px var(--main-color);
 }
 
 .substation-item {
     padding: 10px;
-    border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+    border-bottom: 1px solid var(--glow-opacity);
     cursor: pointer;
-    transition: 0.2s;
+    color: #fff;
+    transition: 0.3s;
 }
 
 .substation-item:hover {
-    background: rgba(0, 255, 255, 0.1);
-    padding-left: 20px;
+    color: var(--main-color);
+    background: rgba(255, 255, 255, 0.05);
 }
 
-/* Custom Scrollbar */
-.playlist-scroll::-webkit-scrollbar { width: 5px; }
-.playlist-scroll::-webkit-scrollbar-thumb { background: #0ff; }
+/* Scrollbar Theme */
+.playlist-scroll::-webkit-scrollbar-thumb { background: var(--main-color); }
