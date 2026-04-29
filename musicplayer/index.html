@@ -343,7 +343,7 @@
 
             <div id="screen">
                 <div class="sys-status">
-                    <span>YT-OS v2.5</span>
+                    <span>YT-OS v2.6</span>
                     <span id="player-status">INITIALIZING...</span>
                 </div>
                 <div id="track-title">Awaiting data connection...</div>
@@ -487,9 +487,11 @@
                 
                 btn.addEventListener('click', function() {
                     if (player) {
-                        // Option B: Load and play immediately in the same event tick
+                        // 1. Purge the current track from the player instantly
+                        player.stopVideo(); 
+                        
+                        // 2. Load the new list and let YouTube handle the play event natively
                         player.loadPlaylist({ list: playlist.id, listType: 'playlist', index: 0 });
-                        player.playVideo();
                     }
                 });
                 
