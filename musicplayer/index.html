@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tactical Playlist Terminal</title>
+    <title>Tactical Playlist Terminal - The Tower of Tunes</title>
     <style>
         /* === VISUAL ARCHITECTURE & BACKGROUND === */
         body, html {
@@ -172,18 +172,17 @@
             gap: 10px;
             flex: 1;
             padding: 5px 0;
-            scroll-snap-type: x mandatory; /* Forces snapping */
+            scroll-snap-type: x mandatory; 
         }
 
         .station-btn {
-            /* Calculates exactly 50% width minus half the 10px gap */
             flex: 0 0 calc(50% - 5px); 
-            box-sizing: border-box; /* Ensures padding is calculated correctly */
+            box-sizing: border-box; 
             padding: 8px 10px;
             border: 1px solid #00ffcc;
             color: #00ffcc;
             background: rgba(0, 255, 204, 0.1);
-            scroll-snap-align: start; /* Aligns to the start of the container */
+            scroll-snap-align: start; 
         }
 
         .station-btn:hover { background: rgba(0, 255, 204, 0.3); }
@@ -217,6 +216,7 @@
             padding-right: 5px; 
             scrollbar-width: thin;
             scrollbar-color: #00ffcc transparent;
+            margin-bottom: 10px;
         }
         
         #playlists-container::-webkit-scrollbar { width: 6px; }
@@ -233,6 +233,71 @@
             padding: 10px;
         }
 
+        /* === FOOTER & MODAL UI === */
+        #terminal-footer {
+            text-align: center;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        #disclaimer-link {
+            color: #666;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.2s;
+            letter-spacing: 1px;
+        }
+
+        #disclaimer-link:hover {
+            color: #00ffcc;
+            text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
+        }
+
+        #disclaimer-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 100;
+            display: none; /* Hidden until clicked */
+            justify-content: center;
+            align-items: center;
+        }
+
+        #modal-content {
+            background: #0a0f0d;
+            border: 2px solid #00ffcc;
+            border-radius: 10px;
+            padding: 25px;
+            max-width: 320px;
+            width: 80%;
+            color: #00ffcc;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+        }
+
+        #modal-content h3 {
+            margin-top: 0;
+            border-bottom: 1px dashed #00ffcc;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        #modal-content p {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
         /* Hidden YouTube Iframe */
         #yt-player { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
     </style>
@@ -244,11 +309,20 @@
         <div id="sun"></div>
     </div>
 
+    <div id="disclaimer-modal">
+        <div id="modal-content">
+            <h3>SYSTEM NOTIFICATION</h3>
+            <p>All videos are loaded dynamically from YouTube. All rights of the artists and creators are reserved.</p>
+            <p>"The Tower of Tunes" is a curated playlist and is not claimed as original content.</p>
+            <button id="close-modal-btn">ACKNOWLEDGE</button>
+        </div>
+    </div>
+
     <div id="ui-layer">
         <div id="ipod">
             <div id="screen">
                 <div class="sys-status">
-                    <span>YT-OS v2.1</span>
+                    <span>YT-OS v2.2</span>
                     <span id="player-status">INITIALIZING...</span>
                 </div>
                 <div id="track-title">Awaiting data connection...</div>
@@ -277,6 +351,10 @@
             <div class="section-title">Local Database (Playlists)</div>
             <div id="playlists-container">
                 </div>
+
+            <div id="terminal-footer">
+                <a id="disclaimer-link">[ DISCLAIMER ]</a>
+            </div>
         </div>
     </div>
 
@@ -315,7 +393,6 @@
         animateStars();
 
         /* === HORIZONTAL SCROLL LOGIC === */
-        // Now dynamically calculates the width of the container to page perfectly
         document.getElementById('scroll-left').addEventListener('click', () => {
             const container = document.getElementById('stations-container');
             container.scrollBy({ left: -container.clientWidth, behavior: 'smooth' });
@@ -323,6 +400,15 @@
         document.getElementById('scroll-right').addEventListener('click', () => {
             const container = document.getElementById('stations-container');
             container.scrollBy({ left: container.clientWidth, behavior: 'smooth' });
+        });
+
+        /* === MODAL POPUP LOGIC === */
+        const modal = document.getElementById('disclaimer-modal');
+        document.getElementById('disclaimer-link').addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+        document.getElementById('close-modal-btn').addEventListener('click', () => {
+            modal.style.display = 'none';
         });
 
         /* === DYNAMIC DATABASE LOGIC (STATIONS -> PLAYLISTS) === */
