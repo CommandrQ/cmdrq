@@ -24,12 +24,7 @@
       "title": "My Mission",
       "link": "manifesto.html",
       "color": "cyan"
-    },
-    {
-      "title": "Music Player",
-      "link": "musicplayer/index.html",
-      "color": "cyan"
-    },
+    }
       {
       "title": "Support Me!",
       "link": "https://buymeacoffee.com/cmdrq",
