@@ -5,51 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MUSUBI | Intel: Commander Q</title>
     
-    <link rel="stylesheet" href="css/about.css?v=3">
+    <script>
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+    </script>
+
+    <link rel="stylesheet" href="css/manifesto.css">
     <link rel="stylesheet" href="css/cursor.css">
 </head>
 <body>
-
+    
+    <div class="purple-sky"></div>
     <div class="stars"></div>
-    <div class="ui-container">
+    <div class="scanlines"></div>
+
+    <div class="floating-window" id="about-window">
+        <div class="window-header">
+            <span class="system-text">SYSTEM_DATA // INTEL_READOUT</span>
+            <a href="menu.html" class="return-btn">[ RETURN_TO_HUD ]</a>
+        </div>
         
-        <div class="intel-panel">
+        <div class="manifesto-content">
+            <h1 class="fade-in">> WHOAMI // COMMANDER_Q</h1>
             
-            <header class="panel-header">
-                <span class="cyan-text">> WHOAMI // COMMANDER_Q</span>
-            </header>
-            
-            <main class="panel-content">
-                <div class="intel-split-layout">
-                    
-                    
-                    <div class="intel-data">
-                        <p>What's up! I'm Commander Q, a self-taught dev, all-around tech enthusiast, and the one currently leading the Vanguard Knights into our next era.</p>
-                        
-                        <p>My path here wasn't exactly a straight line. I started out serving in the Armed Forces, which taught me how to stay disciplined and focused. From there, I moved into the consumer tech world, putting in the hours at Best Buy and working behind the scenes at Apple. All of that gave me a masterclass in how hardware works and how people actually use it.</p>
-                        
-                        <p>Somewhere along the way, I decided I wanted to build the systems, not just operate them. Today, I write my own code, build my own platforms, and lead the Vanguard Knights as we push boundaries and gear up for our next major endeavors.</p>
-                        
-                        <p class="mission-statement">
-                            The mission is always the same:<br>
-                            <span class="neon-magenta">Empower. Educate. Elevate.</span>
-                        </p>
-                        
-                        <p>Glad you found the hideout. Take a look around.</p>
-                    </div>
+            <p class="fade-in delay-1">What's up! I'm Commander Q, a self-taught dev, all-around tech enthusiast, and the one currently leading the Vanguard Knights into our next era.</p>
 
-                </div>
-            </main>
+            <p class="fade-in delay-2">My path here wasn't exactly a straight line. I started out serving in the Armed Forces, which taught me how to stay disciplined and focused. From there, I moved into the consumer tech world, putting in the hours at Best Buy and working behind the scenes at Apple. All of that gave me a masterclass in how hardware works and how people actually use it.</p>
 
-            <footer class="panel-footer">
-                <a href="menu.html" class="neon-btn"><< RETURN TO MENU</a>
-            </footer>
+            <h2 class="fade-in delay-3">The Shift</h2>
+            <p class="fade-in delay-4">Somewhere along the way, I decided I wanted to build the systems, not just operate them. Today, I write my own code, build my own platforms, and lead the Vanguard Knights as we push boundaries and gear up for our next major endeavors.</p>
 
+            <h2 class="fade-in delay-5">The Prime Directive</h2>
+            <p class="fade-in delay-6">The goal is to create spaces where technology meets purpose. Whether it's through code, community building, or digital curation, the output must serve the objective.</p>
+
+            <p class="fade-in delay-7 highlight-text">
+                The mission is always the same:<br>
+                <strong>Empower. Educate. Elevate.</strong>
+            </p>
+
+            <p class="fade-in delay-8" style="font-size: 0.8rem; color: var(--cyan);">Glad you found the hideout. Take a look around.</p>
         </div>
     </div>
 
     <div class="musubi-cursor-dot"></div>
     <script src="js/cursor.js"></script>
-    
+    <script src="js/manifesto.js"></script>
 </body>
 </html>
