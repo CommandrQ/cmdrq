@@ -9,19 +9,27 @@
       {
         "title": "The Fall Of Cain",
         "id": "PLwX0pb3GErek3NOvUZzKMk5hp1G_USaHW"
+      },
+      {
+        "title": "Dreamscape",
+        "id": "PLwX0pb3GErenzlrerMLur84f2JfArD1fK"
       }
     ]
   },
   {
-    "station_name": "SYNTH",
+    "station_name": "Ki-netic Radio",
     "playlists": [
       {
-        "title": "1. Darkwave",
-        "id": "INSERT_YT_ID_HERE"
+        "title": "Stylish Threadarts",
+        "id": "PLwX0pb3GEren9SyOR122ezYC8jkDeBQVB"
       },
       {
-        "title": "2. Cyberpunk Radio",
-        "id": "INSERT_YT_ID_HERE"
+        "title": "Shred Masters",
+        "id": "PLwX0pb3GErelQXQur1jMvW2bxaK_0Q9H8"
+      },
+      {
+        "title": "Redline FM",
+        "id": "PLwX0pb3GErel9qOq9jOVVscX_mxXzkGOK"
       }
     ]
   },
