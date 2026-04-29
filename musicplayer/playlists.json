@@ -1,31 +1,26 @@
 {
   "stations": [
     {
-      "name": "VI-BRATION",
-      "color": "#FFD700",
-      "substations": [
-        { "name": "BASS_LEVEL_01", "playlistId": "PLxxxx" }
+      "id": "station-alpha",
+      "name": "EDM / DRIFT",
+      "playlists": [
+        { "title": "Dreamscape Drift 01", "id": "PLxA687tYu_giQ2fM-lHkk1_2m8NtzZ5oW" },
+        { "title": "Electronic Assault", "id": "PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG" }
       ]
     },
     {
-      "name": "KI-NETIC",
-      "color": "#FF0000",
-      "substations": [
-        { "name": "HIGH_VELOCITY", "playlistId": "PLxxxx" }
+      "id": "station-bravo",
+      "name": "BMORE / JERSEY",
+      "playlists": [
+        { "title": "Bmore Club Classics", "id": "PL_INSERT_YOUR_ID_HERE" },
+        { "title": "Jersey Heavyweights", "id": "PL_INSERT_YOUR_ID_HERE" }
       ]
     },
     {
-      "name": "CHI-ERFUL",
-      "color": "#00CCFF",
-      "substations": [
-        { "name": "Freevibes FM", "playlistId": "PLwX0pb3GErekzDDrb9BzpjtrI5XdR6tU9" }
-      ]
-    },
-    {
-      "name": "COMMANDER Q",
-      "color": "#A020F0",
-      "substations": [
-        { "name": "REFLECTIVE_DATA", "playlistId": "PLxxxx" }
+      "id": "station-charlie",
+      "name": "AMBIENT GRID",
+      "playlists": [
+        { "title": "Neon Nights", "id": "PL_INSERT_YOUR_ID_HERE" }
       ]
     }
   ]
