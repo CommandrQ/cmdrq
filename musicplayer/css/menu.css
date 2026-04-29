@@ -1,129 +1,16 @@
-:root {
-    --main-color: #FFD700; /* Neon Gold */
-    --glow-opacity: rgba(255, 215, 0, 0.2);
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    background: #050505; /* Deep Void */
-    color: #ffffff;
-    font-family: 'Courier New', monospace;
-    height: 100vh;
+#player-frame {
+    border: 2px solid var(--theme-color);
+    padding: 5px; /* Minimal padding so controls are easy to hit */
+    background: #000;
+    position: relative;
+    overflow: hidden; /* Keeps the iframe tidy */
+    animation: float 5s ease-in-out infinite, pulse 2s infinite;
+    /* Ensure the iframe fills the frame */
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
 }
 
-/* Background Layers */
-.stars {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: url('https://www.transparenttextures.com/patterns/stardust.png');
-    opacity: 0.4;
-    z-index: -2;
-    pointer-events: none;
+iframe {
+    border: none;
 }
-
-/* Scanlines overlay for that CRT/Cyberpunk feel */
-.scanlines {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-    background-size: 100% 3px, 2px 100%;
-    z-index: 100;
-    pointer-events: none;
-}
-
-.radial-glow {
-    position: fixed;
-    width: 140vw; height: 140vh;
-    background: radial-gradient(circle, var(--glow-opacity) 0%, transparent 70%);
-    transition: background 1s ease;
-    z-index: -1;
-}
-
-/* The Cyber-Deck Container */
-.hud-container {
-    width: 95%;
-    max-width: 460px;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
-    padding: 20px;
-    border-right: 3px solid var(--main-color);
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
-    z-index: 10;
-}
-
-/* The Floating Neon Frame */
-.player-frame {
-    padding: 8px;
-    border: 1px solid var(--main-color);
-    background: #000;
-    margin: 15px 0;
-    /* Subtle Drifting */
-    animation: magLev 8s ease-in-out infinite, neonFlicker 4s infinite;
-}
-
-@keyframes magLev {
-    0%, 100% { transform: translateY(0) rotate(0.1deg); }
-    50% { transform: translateY(-5px) rotate(-0.1deg); }
-}
-
-@keyframes neonFlicker {
-    0%, 100% { box-shadow: 0 0 10px var(--main-color); border-color: var(--main-color); }
-    98% { box-shadow: 0 0 10px var(--main-color); border-color: var(--main-color); }
-    99% { box-shadow: 0 0 2px var(--main-color); border-color: rgba(255,255,255,0.2); }
-}
-
-/* Stations */
-.station-nav {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-}
-
-.station-btn {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
-    padding: 8px;
-    cursor: pointer;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    transition: 0.3s;
-}
-
-.station-btn:hover {
-    border-color: var(--main-color);
-    color: var(--main-color);
-    background: rgba(255, 255, 255, 0.05);
-}
-
-/* Substation List */
-.playlist-scroll {
-    height: 150px;
-    overflow-y: auto;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.substation-item {
-    padding: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    cursor: pointer;
-    color: #fff;
-    font-size: 0.85rem;
-}
-
-.substation-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-    /* High-voltage White Glow */
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff;
-    padding-left: 15px;
-}
-
-.playlist-scroll::-webkit-scrollbar { width: 3px; }
-.playlist-scroll::-webkit-scrollbar-thumb { background: var(--main-color); }
