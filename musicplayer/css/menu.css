@@ -1,6 +1,6 @@
 :root {
     --main-color: #FFD700; /* Default Gold */
-    --glow-opacity: rgba(255, 215, 0, 0.4);
+    --glow-opacity: rgba(255, 215, 0, 0.3);
 }
 
 body {
@@ -16,80 +16,108 @@ body {
     overflow: hidden;
 }
 
-/* Starfield Background */
+/* Starfield Layer */
 .stars {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     background: url('https://www.transparenttextures.com/patterns/stardust.png');
-    opacity: 0.6;
+    opacity: 0.5;
     z-index: -2;
+    pointer-events: none;
 }
 
 .radial-glow {
     position: fixed;
-    width: 150vw;
-    height: 150vh;
+    width: 150vw; height: 150vh;
     background: radial-gradient(circle, var(--glow-opacity) 0%, transparent 70%);
-    transition: background 0.8s ease;
+    transition: background 1s ease;
     z-index: -1;
+    pointer-events: none;
 }
 
-/* Floating Player & Pulse */
+/* The Commander HUD Container */
+.hud-container {
+    width: 95%;
+    max-width: 480px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 10;
+}
+
+/* The Floating Tactical Frame */
+.player-frame {
+    padding: 10px;
+    border: 2px solid var(--main-color);
+    background: rgba(0, 0, 0, 0.5);
+    /* Subtle Floating Animation */
+    animation: subtleFloat 6s ease-in-out infinite, framePulse 3s infinite alternate;
+}
+
 .player-viewport {
     width: 100%;
     aspect-ratio: 16 / 9;
     background: #000;
-    position: relative;
-    border: 2px solid var(--main-color);
-    box-shadow: 0 0 20px var(--main-color);
-    animation: float 4s ease-in-out infinite, pulse-border 2s infinite alternate;
-    z-index: 5;
 }
 
-@keyframes float {
+@keyframes subtleFloat {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+    50% { transform: translateY(-6px); }
 }
 
-@keyframes pulse-border {
-    from { box-shadow: 0 0 10px var(--main-color); }
-    to { box-shadow: 0 0 30px var(--main-color), 0 0 10px #fff; }
+@keyframes framePulse {
+    from { box-shadow: 0 0 5px var(--main-color); }
+    to { box-shadow: 0 0 20px var(--main-color); }
 }
 
-/* Container transparency so stars show through */
-.hud-container {
-    width: 90%;
-    max-width: 500px;
-    background: rgba(0, 0, 0, 0.6); /* Semi-transparent */
-    backdrop-filter: blur(5px);
-    padding: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+/* Station Controls */
+.station-nav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
 }
 
 .station-btn {
-    background: rgba(0,0,0,0.5);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--main-color);
     color: #fff;
     padding: 10px;
     cursor: pointer;
+    font-size: 0.8rem;
     text-transform: uppercase;
-    transition: 0.3s;
+    letter-spacing: 1px;
+    transition: 0.2s;
+}
+
+.station-btn:hover {
+    background: var(--glow-opacity);
+}
+
+/* Playlist Scroll Area */
+.playlist-scroll {
+    height: 160px;
+    overflow-y: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .substation-item {
     padding: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     cursor: pointer;
     color: #fff;
-    transition: 0.3s;
+    transition: 0.2s;
 }
 
 .substation-item:hover {
-    text-shadow: 0 0 10px #ffffff;
     background: rgba(255, 255, 255, 0.1);
+    text-shadow: 0 0 8px #fff;
+    padding-left: 18px;
 }
 
+/* Scrollbar Style */
+.playlist-scroll::-webkit-scrollbar { width: 4px; }
 .playlist-scroll::-webkit-scrollbar-thumb { background: var(--main-color); }
