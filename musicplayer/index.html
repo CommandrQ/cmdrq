@@ -285,7 +285,8 @@
             const container = document.getElementById('playlists-container');
             
             try {
-                const response = await fetch('playlists.json');
+                // Updated path to look inside the musicplayer directory
+                const response = await fetch('musicplayer/playlists.json');
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
