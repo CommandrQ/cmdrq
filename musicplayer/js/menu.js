@@ -7,11 +7,8 @@ function onYouTubeIframeAPIReady() {
         playerVars: { 
             'autoplay': 1, 
             'listType': 'playlist', 
-            'controls': 1,
-            'enablejsapi': 1
-        },
-        events: {
-            'onReady': () => console.log("Commander, the system is ready.")
+            'controls': 1, // Standard controls visible
+            'rel': 0
         }
     });
 }
@@ -29,29 +26,28 @@ async function initHUD() {
         btn.innerText = station.name;
         
         btn.onclick = () => {
-            // Theme Update
+            // Update Theme
             const root = document.documentElement;
             root.style.setProperty('--main-color', station.color);
             root.style.setProperty('--glow-opacity', station.color + "44");
 
-            // Build Playlist
+            // Build Substations
             list.innerHTML = '';
             station.playlists.forEach(pl => {
                 const plItem = document.createElement('div');
                 plItem.className = 'substation-item';
                 plItem.innerText = `> ${pl.title}`;
                 
-                // SINGLE CLICK PLAY
-                plItem.onclick = (e) => {
-                    e.stopPropagation();
+                // SINGLE CLICK PLAYBACK
+                plItem.onclick = () => {
                     if (player && player.loadPlaylist) {
                         player.loadPlaylist({
                             list: pl.id,
                             listType: 'playlist',
-                            index: 0,
-                            suggestedQuality: 'default'
+                            index: 0
                         });
-                        player.playVideo(); // Force start
+                        // Some browsers need an explicit play call after loading
+                        setTimeout(() => { player.playVideo(); }, 100);
                     }
                 };
                 list.appendChild(plItem);
