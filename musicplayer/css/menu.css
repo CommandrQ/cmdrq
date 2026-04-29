@@ -1,67 +1,95 @@
-/* Fix Background layering */
 body {
-    background: #050505; /* Deep black base */
-    overflow-x: hidden;
+    margin: 0;
+    background: #000;
+    color: #0ff;
+    font-family: 'Courier New', monospace;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
-.purple-radial-glow {
-    z-index: 0; /* Move above the base background */
+.radial-glow {
+    position: fixed;
+    width: 150vw;
+    height: 150vh;
+    background: radial-gradient(circle, rgba(138, 43, 226, 0.4) 0%, transparent 70%);
+    transition: background 0.8s ease;
+    z-index: -1;
 }
 
-.hud-wrapper {
-    position: relative;
-    z-index: 10; /* Ensure UI is on top */
-}
-
-/* Center Column Setup */
-.center-column {
+.hud-container {
+    width: 90%;
+    max-width: 500px;
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 1);
 }
 
-/* Tactical Video Monitor */
-.video-viewport {
-    width: 280px;
-    height: 157px; /* 16:9 Aspect Ratio */
+/* 4 Station Grid */
+.station-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.station-btn {
+    background: transparent;
+    border: 1px solid #0ff;
+    color: #0ff;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.station-btn:hover {
+    background: rgba(0, 255, 255, 0.2);
+}
+
+/* Video Player */
+.player-viewport {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
     border: 2px solid #0ff;
     position: relative;
-    background: #000;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
-    overflow: hidden;
-    clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%);
 }
 
-#youtube-engine {
-    width: 100%;
-    height: 100%;
+/* Scrollable Playlist Area */
+.playlist-container {
+    height: 200px;
+    border-top: 1px solid rgba(0, 255, 255, 0.3);
 }
 
-/* Adds a "HUD" feel over the video */
-.viewport-overlay {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 255, 255, 0.05) 50%);
-    background-size: 100% 4px;
-    pointer-events: none; /* Allows you to still click the video if needed */
+.status-text {
+    font-size: 0.8rem;
+    margin: 10px 0;
 }
 
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-    .tactical-layout {
-        flex-direction: column;
-        overflow-y: auto;
-        padding-top: 80px;
-    }
-    
-    .node-matrix {
-        width: 90%;
-        margin: 10px auto;
-    }
-
-    .video-viewport {
-        width: 90vw;
-        height: 50.6vw;
-    }
+.playlist-scroll {
+    height: 150px;
+    overflow-y: auto;
+    padding-right: 5px;
 }
+
+.substation-item {
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.substation-item:hover {
+    background: rgba(0, 255, 255, 0.1);
+    padding-left: 20px;
+}
+
+/* Custom Scrollbar */
+.playlist-scroll::-webkit-scrollbar { width: 5px; }
+.playlist-scroll::-webkit-scrollbar-thumb { background: #0ff; }
