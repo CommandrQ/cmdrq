@@ -63,6 +63,14 @@
       {
         "title": "Freevibes FM",
         "id": "PLwX0pb3GErekzDDrb9BzpjtrI5XdR6tU9"
+      },
+      {
+        "title": "The Hustle Tour",
+        "id": "PLwX0pb3GErelMaHVNimXqv0-B1-K8omN"
+      },
+      {
+        "title": "Karaoke Nights",
+        "id": "PLwX0pb3GErenbRB8BeBmGS_uW49p_rv5M"
       }
     ]
   },
@@ -71,6 +79,10 @@
     "playlists": [
       {
         "title": "Band Hero",
+        "id": "PLwX0pb3GErenuZ-svCLPUcN9xW24Fgdok"
+      },
+      {
+        "title": "Sir Ira",
         "id": "PLwX0pb3GErenuZ-svCLPUcN9xW24Fgdok"
       }
     ]
