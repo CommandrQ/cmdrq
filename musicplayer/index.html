@@ -3,31 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUSUBI | COMMAND CENTER</title>
+    <title>NEURAL_LINK | COMMANDER_Q</title>
     <link rel="stylesheet" href="css/menu.css">
     <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 <body>
 
     <div class="stars"></div>
+    <div class="scanlines"></div>
     <div class="radial-glow"></div>
 
     <div class="hud-container">
-        <header style="font-size: 0.7rem; letter-spacing: 2px; opacity: 0.8;">
-            SYSTEM_TIME: <span id="clock">00:00:00</span> | STATUS: ACTIVE
+        <header style="font-size: 0.65rem; color: #fff; opacity: 0.6; display: flex; justify-content: space-between;">
+            <span>GRID_OS v4.0.2</span>
+            <span id="clock">00:00:00</span>
         </header>
 
         <nav class="station-nav" id="station-nav"></nav>
 
         <div class="player-frame">
-            <div class="player-viewport">
+            <div style="width:100%; aspect-ratio: 16/9; background:#000;">
                 <div id="youtube-engine"></div>
             </div>
         </div>
 
         <div class="playlist-container">
             <div class="playlist-scroll" id="playlist-list">
-                <div style="padding: 20px; opacity: 0.5;">[ SELECT_STATION_TO_LOAD_DATA ]</div>
+                <div style="padding: 20px; font-size: 0.7rem; color: var(--main-color);">[ WAITING_FOR_UPLINK... ]</div>
             </div>
         </div>
     </div>
