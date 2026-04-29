@@ -6,6 +6,11 @@
       "color": "cyan"
     },
     {
+      "title": "My Mission",
+      "link": "manifesto.html",
+      "color": "cyan"
+    },
+    {
       "title": "Blog",
       "link": "https://substack.com/@commandrq",
       "color": "cyan"
@@ -20,11 +25,7 @@
       "link": "dreamscapedrift/index.html",
       "color": "cyan"
     },
-    {
-      "title": "My Mission",
-      "link": "manifesto.html",
-      "color": "cyan"
-    },
+    ,
       {
       "title": "Music Player",
       "link": "musicplayer/index.html",
