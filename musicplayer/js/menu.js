@@ -4,7 +4,12 @@ function onYouTubeIframeAPIReady() {
     player = new YT.Player('youtube-engine', {
         height: '100%',
         width: '100%',
-        playerVars: { 'autoplay': 0, 'listType': 'playlist', 'controls': 1 }
+        playerVars: { 
+            'autoplay': 0, 
+            'listType': 'playlist', 
+            'controls': 1,
+            'modestbranding': 1 
+        }
     });
 }
 
@@ -21,19 +26,22 @@ async function initHUD() {
         btn.innerText = station.name;
         
         btn.onclick = () => {
-            // THEME ENGINE TRIGGER
+            // Update Theme Accent Variables
             const root = document.documentElement;
             root.style.setProperty('--main-color', station.color);
-            // Create a low-opacity version for the glow
-            root.style.setProperty('--glow-opacity', station.color + "66"); 
+            root.style.setProperty('--glow-opacity', station.color + "66"); // Adding alpha
 
-            // Load Playlists
+            // Clear and Load Substation list
             list.innerHTML = '';
             station.playlists.forEach(pl => {
                 const plItem = document.createElement('div');
                 plItem.className = 'substation-item';
                 plItem.innerText = `> ${pl.title}`;
-                plItem.onclick = () => player.loadPlaylist({list: pl.id, listType: 'playlist'});
+                
+                plItem.onclick = () => {
+                    player.loadPlaylist({list: pl.id, listType: 'playlist'});
+                };
+                
                 list.appendChild(plItem);
             });
         };
