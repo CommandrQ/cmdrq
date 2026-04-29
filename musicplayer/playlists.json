@@ -1,10 +1,10 @@
 {
   "stations": [
     {
-      "id": "station-alpha",
-      "name": "EDM / DRIFT",
+      "id": "Vi-bration Radio",
+      "name": "Vi-bration Radio",
       "playlists": [
-        { "title": "Dreamscape Drift 01", "id": "PLxA687tYu_giQ2fM-lHkk1_2m8NtzZ5oW" },
+        { "title": "Beyond The Pen", "id": "PLwX0pb3GEremC1vfOY7jLfNqdfR2cTVi7" },
         { "title": "Electronic Assault", "id": "PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG" }
       ]
     },
