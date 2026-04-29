@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MUSUBI | COMMAND CENTER</title>
     <link rel="stylesheet" href="css/menu.css">
     <script src="https://www.youtube.com/iframe_api"></script>
@@ -13,19 +13,22 @@
     <div class="radial-glow"></div>
 
     <div class="hud-container">
-        <header class="hud-header">
-            <span id="clock">00:00:00</span> | STATUS: ACTIVE
+        <header style="font-size: 0.7rem; letter-spacing: 2px; opacity: 0.8;">
+            SYSTEM_TIME: <span id="clock">00:00:00</span> | STATUS: ACTIVE
         </header>
 
         <nav class="station-nav" id="station-nav"></nav>
 
-        <div class="player-viewport">
-            <div id="youtube-engine"></div>
+        <div class="player-frame">
+            <div class="player-viewport">
+                <div id="youtube-engine"></div>
+            </div>
         </div>
 
         <div class="playlist-container">
             <div class="playlist-scroll" id="playlist-list">
-                </div>
+                <div style="padding: 20px; opacity: 0.5;">[ SELECT_STATION_TO_LOAD_DATA ]</div>
+            </div>
         </div>
     </div>
 
@@ -36,6 +39,7 @@
             document.getElementById('clock').textContent = now.toLocaleTimeString('en-GB');
         }
         setInterval(updateClock, 1000);
+        updateClock();
     </script>
 </body>
 </html>
