@@ -84,22 +84,41 @@
         }
 
         /* === NAVIGATION === */
-        .return-btn {
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+
+        .return-btn, .hq-audio-btn {
             color: #ffffff;
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: bold;
-            margin-bottom: 12px;
-            display: inline-block;
             transition: all 0.2s;
             text-transform: uppercase;
             letter-spacing: 1px;
-            align-self: flex-start;
         }
 
         .return-btn:hover {
             color: #00ffcc;
             text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
+        }
+
+        .hq-audio-btn {
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(0, 255, 204, 0.1);
+        }
+
+        .hq-audio-btn:hover {
+            background: rgba(0, 255, 204, 0.3);
+            box-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
+            color: #fff;
         }
 
         #screen {
@@ -339,7 +358,11 @@
 
     <div id="ui-layer">
         <div id="ipod">
-            <a href="menu.html" class="return-btn">&lt; RETURN TO MENU</a>
+            
+            <div class="top-nav">
+                <a href="menu.html" class="return-btn">&lt; MENU</a>
+                <a href="https://music.apple.com/profile/cmdrq_music" target="_blank" class="hq-audio-btn">HIGH QUALITY AUDIO &#8599;</a>
+            </div>
 
             <div id="screen">
                 <div class="sys-status">
@@ -487,11 +510,13 @@
                 
                 btn.addEventListener('click', function() {
                     if (player) {
-                        // 1. Purge the current track from the player instantly
-                        player.stopVideo(); 
+                        // The stable Two-Tap Method to prevent the race condition
+                        player.cuePlaylist({ list: playlist.id, listType: 'playlist', index: 0 });
                         
-                        // 2. Load the new list and let YouTube handle the play event natively
-                        player.loadPlaylist({ list: playlist.id, listType: 'playlist', index: 0 });
+                        // Give the user visual feedback so they know to press PLAY
+                        document.getElementById('track-title').style.color = "#ffdb58"; // Yellow warning color
+                        document.getElementById('track-title').innerText = "DATABASE CUED. PRESS [ PLAY ] TO INITIATE.";
+                        document.getElementById('player-status').innerText = "CUED";
                     }
                 });
                 
