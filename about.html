@@ -2,59 +2,265 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUSUBI | Intel: Commander Q</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About VCS | Vanguard Citizen Services</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="css/about.css?v=3">
-    <link rel="stylesheet" href="css/cursor.css">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-glow: rgba(212, 175, 55, 0.5);
+            --ambient-glow: rgba(212, 175, 55, 0.2);
+            --dark-glass: rgba(15, 15, 15, 0.95);
+            --border-gold: rgba(212, 175, 55, 0.4);
+            --nav-height: 90px;
+            --footer-height: 85px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            color: white;
+            overflow: hidden; /* Keeps background static */
+        }
+
+        /* --- STARFIELD ENGINE --- */
+        .stars-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+            overflow: hidden;
+        }
+        .star-layer {
+            position: absolute;
+            top: -100%; left: 0; width: 200%; height: 200%;
+            background-repeat: repeat;
+            animation: move-stars linear infinite;
+        }
+        .layer-1 { background-image: radial-gradient(1px 1px at 10% 10%, #fff, transparent); background-size: 300px 300px; animation-duration: 120s; opacity: 0.3; }
+        .layer-2 { background-image: radial-gradient(2px 2px at 20% 80%, #fff, transparent); background-size: 400px 400px; animation-duration: 80s; opacity: 0.5; }
+        .layer-3 { background-image: radial-gradient(4px 4px at 40% 40%, #fff, transparent); background-size: 600px 600px; animation-duration: 40s; opacity: 0.7; }
+        @keyframes move-stars { from { transform: translateY(0); } to { transform: translateY(50%); } }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            background: rgba(0,0,0,0.9);
+            border-bottom: 1px solid var(--border-gold);
+            z-index: 2000;
+            backdrop-filter: blur(20px);
+        }
+        .nav-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 45px;
+            padding: 0 40px;
+        }
+        nav ul li a {
+            text-decoration: none; 
+            color: var(--gold);
+            font-family: 'Cinzel', serif; 
+            font-weight: bold;
+            font-size: 0.9rem; 
+            letter-spacing: 2px;
+            text-transform: uppercase; 
+            transition: 0.4s;
+        }
+        nav ul li a:hover { color: white; text-shadow: 0 0 15px var(--gold); }
+
+        /* --- CONTENT PANEL --- */
+        .page-content {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: var(--nav-height) 20px var(--footer-height);
+        }
+
+        .glass-panel {
+            background: var(--dark-glass);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--border-gold);
+            border-radius: 20px;
+            padding: 60px 50px;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 0 0 100px 5px var(--ambient-glow);
+            max-height: 85vh; /* Constraints panel height */
+            overflow-y: auto; 
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold) transparent;
+        }
+
+        /* Responsive Image Fix */
+        .content-image {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border-radius: 10px;
+            margin: 0 auto 30px;
+            display: block;
+            border: 1px solid var(--border-gold);
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        section {
+            padding-bottom: 60px;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        }
+        section:last-of-type { border-bottom: none; margin-bottom: 0; }
+
+        h1, h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+        }
+        h1 { font-size: 2.8rem; }
+        h2 { font-size: 2rem; }
+
+        .divider {
+            height: 1px; width: 80px;
+            background: var(--gold);
+            margin: 0 auto 30px;
+            box-shadow: 0 0 10px var(--gold);
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #ececec;
+            font-weight: 300;
+            text-align: justify;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            height: var(--footer-height);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+        }
+        .legal-links a { color: white; text-decoration: none; font-size: 0.8rem; margin: 0 15px; }
+        .copyright { color: var(--gold); font-family: 'Cinzel', serif; font-size: 0.75rem; margin-top: 5px; }
+
+        /* --- MOBILE --- */
+        @media (max-width: 600px) {
+            .glass-panel { padding: 30px 20px; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.5rem; }
+            nav ul { gap: 20px; }
+        }
+    </style>
 </head>
 <body>
 
-    <div class="stars"></div>
-    <div class="ui-container">
-        
-        <div class="intel-panel">
-            
-            <header class="panel-header">
-                <span class="cyan-text">> WHOAMI // COMMANDER_Q</span>
-            </header>
-            
-            <main class="panel-content">
-                <div class="intel-split-layout">
-                    
-                    <div class="intel-visual">
-                        <div class="image-frame">
-                            <img src="images/battlepose.png" alt="Commander Q Battle Pose">
-                        </div>
-                    </div>
-                    
-                    <div class="intel-data">
-                        <p>What's up! I'm Commander Q, a self-taught dev, all-around tech enthusiast, and the one currently leading the Vanguard Knights into our next era.</p>
-                        
-                        <p>My path here wasn't exactly a straight line. I started out serving in the Armed Forces, which taught me how to stay disciplined and focused. From there, I moved into the consumer tech world, putting in the hours at Best Buy and working behind the scenes at Apple. All of that gave me a masterclass in how hardware works and how people actually use it.</p>
-                        
-                        <p>Somewhere along the way, I decided I wanted to build the systems, not just operate them. Today, I write my own code, build my own platforms, and lead the Vanguard Knights as we push boundaries and gear up for our next major endeavors.</p>
-                        
-                        <p class="mission-statement">
-                            The mission is always the same:<br>
-                            <span class="neon-magenta">Empower. Educate. Elevate.</span>
-                        </p>
-                        
-                        <p>Glad you found the hideout. Take a look around.</p>
-                    </div>
-
-                </div>
-            </main>
-
-            <footer class="panel-footer">
-                <a href="menu.html" class="neon-btn"><< RETURN TO MENU</a>
-            </footer>
-
-        </div>
+    <div class="stars-container">
+        <div class="star-layer layer-1"></div>
+        <div class="star-layer layer-2"></div>
+        <div class="star-layer layer-3"></div>
     </div>
 
-    <div class="musubi-cursor-dot"></div>
-    <script src="js/cursor.js"></script>
-    
+    <nav>
+        <div class="nav-container">
+            <ul id="main-nav">
+                <li><a href="#impact">Impact</a></li>
+                <li><a href="#story">Story</a></li>
+                <li><a href="#team">Team</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="glass-panel" id="scroll-panel">
+            
+            <section id="impact">
+                <img src="https://via.placeholder.com/800x400" alt="Civic Impact" class="content-image">
+                <h1>Civic Impact</h1>
+                <div class="divider"></div>
+                <p>
+                    Vanguard Citizen Services operates at the intersection of security and community. 
+                    Our impact is measured by the fortification of the individual. 
+                    By providing elite-level guidance, we empower citizens to navigate 
+                    modern complexities with total digital sovereignty.
+                </p>
+            </section>
+
+            <section id="story">
+                <h2>Our Story</h2>
+                <div class="divider"></div>
+                <p>
+                    Forged in the necessity of the digital age, VCS was founded to bridge 
+                    the gap between high-level tactical security and everyday civic life. 
+                    We believe that true protection comes from knowledge and the 
+                    disciplined application of strategy.
+                </p>
+            </section>
+
+            <section id="team">
+                <h2>The Knights</h2>
+                <div class="divider"></div>
+                <p>
+                    Our team is composed of specialists from diverse tactical and 
+                    technological backgrounds. We operate under a strict code of 
+                    excellence, ensuring that every citizen under our wing receives 
+                    the highest tier of advocacy and support.
+                </p>
+            </section>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="legal-links">
+            <a href="privacy.html">Privacy</a>
+            <a href="terms.html">Terms</a>
+        </div>
+        <div class="copyright">VCS &copy; 2026</div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for the internal glass panel
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                const panel = document.getElementById('scroll-panel');
+                
+                panel.scrollTo({
+                    top: targetElement.offsetTop - panel.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
