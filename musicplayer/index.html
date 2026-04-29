@@ -2,75 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUSUBI | Tactical HUD Music Player</title>
-    
-    <link rel="stylesheet" href="css/menu.css?v=106">
-    <link rel="stylesheet" href="css/cursor.css?v=1">
-    
-    <script src="https://www.youtube.com/iframe_api"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUSUBI | COMMAND CENTER</title>
+    <link rel="stylesheet" href="css/menu.css">
 </head>
-<body class="action-mode">
+<body>
+    <div class="radial-glow" id="glow"></div>
     
-    <div class="purple-radial-glow"></div>
-    
-    <div class="stars"></div>
-    <div id="matrix-lines"></div>
-    <div class="scanlines"></div>
+    <div class="hud-container">
+        <nav class="station-nav" id="station-nav"></nav>
 
-    <div class="hud-wrapper">
-        <header class="hud-header">
-            <div class="status-indicator">
-                <span class="flicker-dot"></span> SYSTEM_STATUS: <span class="cyan-text">ACTIVE</span>
-            </div>
-            <div class="time-readout" id="clock">00:00:00</div>
-        </header>
+        <div class="player-viewport">
+            <div id="youtube-engine"></div>
+            <div class="viewport-frame"></div>
+        </div>
 
-        <main class="tactical-layout">
-            
-            <section class="node-matrix" id="node-matrix-left"></section>
-
-            <div class="center-column">
-                
-                <div class="video-viewport">
-                    <div id="youtube-engine"></div>
-                    <div class="viewport-overlay"></div>
+        <div class="playlist-container">
+            <h3 class="status-text">SELECT_SUBSTATION:</h3>
+            <div class="playlist-scroll" id="playlist-list">
                 </div>
-
-                <div class="avatar-central-node">
-                    <div class="avatar-frame">
-                        <img src="images/commanderqhs.png" alt="Commander QHS" class="avatar-img">
-                    </div>
-                </div>
-            </div>
-
-            <section class="node-matrix" id="node-matrix-right"></section>
-        </main>
-
-        <footer class="hud-footer">
-            <div class="footer-text-container">
-                <span class="footer-text">BUILT BY COMMANDER Q.</span>
-                <span class="footer-text">EMPOWER. EDUCATE. ELEVATE.</span>
-            </div>
-        </footer>
+        </div>
     </div>
 
-    <div class="musubi-cursor-dot"></div>
-
-    <script src="js/cursor.js?v=1"></script>
-    <script src="js/menu.js?v=106"></script>
-
-    <script>
-        function updateClock() {
-            const now = new Date();
-            const timeString = now.getHours().toString().padStart(2, '0') + ":" + 
-                               now.getMinutes().toString().padStart(2, '0') + ":" + 
-                               now.getSeconds().toString().padStart(2, '0');
-            const clockElement = document.getElementById('clock');
-            if(clockElement) clockElement.textContent = timeString;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="js/menu.js"></script>
 </body>
 </html>
