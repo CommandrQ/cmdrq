@@ -1,48 +1,44 @@
 let player;
-let stationData = [];
 
-// Initialize YouTube
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('youtube-engine', {
         height: '100%',
         width: '100%',
-        playerVars: { 'autoplay': 0, 'listType': 'playlist' }
+        playerVars: { 'autoplay': 0, 'listType': 'playlist', 'controls': 1 }
     });
 }
 
-// Fetch and Build Interface
-async function init() {
+async function initHUD() {
     const res = await fetch('playlists.json');
-    stationData = (await res.json()).stations;
-
+    const data = await res.json();
+    
     const nav = document.getElementById('station-nav');
     const list = document.getElementById('playlist-list');
-    const glow = document.getElementById('glow');
 
-    stationData.forEach((station, index) => {
-        // Create Main Station Button
+    data.stations.forEach(station => {
         const btn = document.createElement('button');
         btn.className = 'station-btn';
         btn.innerText = station.name;
         
         btn.onclick = () => {
-            // Update Glow
-            glow.style.background = `radial-gradient(circle, ${station.color} 0%, transparent 70%)`;
-            
-            // Build Playlist (Substation) List
-            list.innerHTML = ''; 
+            // THEME ENGINE TRIGGER
+            const root = document.documentElement;
+            root.style.setProperty('--main-color', station.color);
+            // Create a low-opacity version for the glow
+            root.style.setProperty('--glow-opacity', station.color + "66"); 
+
+            // Load Playlists
+            list.innerHTML = '';
             station.playlists.forEach(pl => {
-                const plBtn = document.createElement('div');
-                plBtn.className = 'substation-item';
-                plBtn.innerText = `> ${pl.title}`;
-                plBtn.onclick = () => {
-                    player.loadPlaylist({list: pl.id, listType: 'playlist'});
-                };
-                list.appendChild(plBtn);
+                const plItem = document.createElement('div');
+                plItem.className = 'substation-item';
+                plItem.innerText = `> ${pl.title}`;
+                plItem.onclick = () => player.loadPlaylist({list: pl.id, listType: 'playlist'});
+                list.appendChild(plItem);
             });
         };
         nav.appendChild(btn);
     });
 }
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', initHUD);
