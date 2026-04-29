@@ -26,6 +26,11 @@
       "color": "cyan"
     },
     {
+      "title": "My Mission",
+      "link": "musicplayer/index.html",
+      "color": "cyan"
+    },
+      {
       "title": "Support Me!",
       "link": "https://buymeacoffee.com/cmdrq",
       "color": "cyan"
