@@ -30,24 +30,48 @@
       {
         "title": "Redline FM",
         "id": "PLwX0pb3GErel9qOq9jOVVscX_mxXzkGOK"
+      },
+      {
+        "title": "Drift Central",
+        "id": "PLwX0pb3GEreniBp2uNyHbV7Eh4euCbQQS"
+      },
+      {
+        "title": "Bmore Brick City",
+        "id": "PLwX0pb3GErekChtYZB_HejDEP3FWZ6o-l"
+      },
+      {
+        "title": "Blaze's Cool Mixtape",
+        "id": "PLwX0pb3GErekhqHtx2E2WMrB4DhdDJhlu"
       }
     ]
   },
   {
-    "station_name": "AMBIENT",
+    "station_name": "Chi-erful Radio",
     "playlists": [
       {
-        "title": "1. Deep Space",
-        "id": "INSERT_YT_ID_HERE"
+        "title": "Starship FM",
+        "id": "PLwX0pb3GErengziTGztMV5k6jypR6mwkf"
+      },
+       {
+        "title": "Neon Cities",
+        "id": "PLwX0pb3GErensoCj0ooRyGbTXRvenbolF"
+      },
+      {
+        "title": "House Party",
+        "id": "PLwX0pb3GErelK0luUOAZVX4-6Ifp7Tq4_"
+      },
+      {
+        "title": "Freevibes FM",
+        "id": "PLwX0pb3GErekzDDrb9BzpjtrI5XdR6tU9"
       }
     ]
   },
   {
-    "station_name": "PHONK",
+    "station_name": "Commander Q Radio",
     "playlists": [
       {
-        "title": "1. Drift Phonk",
-        "id": "INSERT_YT_ID_HERE"
+        "title": "Band Hero",
+        "id": "PLwX0pb3GErenuZ-svCLPUcN9xW24Fgdok"
       }
     ]
   }
