@@ -1,22 +1,21 @@
 :root {
-    --main-color: #00ffff; /* Default Cyan */
+    --main-color: #00ffff; /* The Accent/Theme color (Borders & Flow) */
     --glow-opacity: rgba(0, 255, 255, 0.4);
 }
 
 body {
     margin: 0;
     background: #000;
-    color: var(--main-color);
+    color: #ffffff; /* Force all text to white */
     font-family: 'Courier New', monospace;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    transition: color 0.5s ease;
 }
 
-/* Dynamic Radial Background */
+/* Dynamic Radial Background remains themed */
 .radial-glow {
     position: fixed;
     width: 150vw;
@@ -26,31 +25,69 @@ body {
     z-index: -1;
 }
 
-/* The Player with Flowing Border */
+.hud-container {
+    width: 90%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 1);
+    z-index: 10;
+}
+
+/* All headers and labels forced white */
+.hud-header, .container-label, .footer-text, .theme-text {
+    color: #ffffff !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Station Buttons (Borders are themed, text is white) */
+.station-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.station-btn {
+    background: transparent;
+    border: 1px solid var(--main-color);
+    color: #ffffff; /* White text */
+    padding: 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.station-btn:hover {
+    background: var(--glow-opacity);
+    box-shadow: 0 0 10px var(--main-color);
+}
+
+/* Player Viewport with Themed Flow Border */
 .player-viewport {
     width: 100%;
     aspect-ratio: 16 / 9;
     background: #000;
     position: relative;
-    padding: 3px; /* Space for the flow border */
+    padding: 3px;
     overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-/* The Animated Flow Effect */
 .player-viewport::before {
     content: '';
     position: absolute;
     width: 150%;
     height: 150%;
+    top: -25%; left: -25%;
     background: conic-gradient(transparent, var(--main-color), transparent 30%);
     animation: rotateFlow 4s linear infinite;
-    z-index: 0;
 }
 
-/* Inner frame to keep video sharp */
 .viewport-inner {
     position: relative;
     width: 100%;
@@ -64,35 +101,29 @@ body {
     to { transform: rotate(360deg); }
 }
 
-/* UI Elements using Variables */
-.station-btn {
-    background: transparent;
-    border: 1px solid var(--main-color);
-    color: var(--main-color);
-    padding: 10px;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    box-shadow: inset 0 0 5px var(--glow-opacity);
-}
-
-.station-btn:hover {
-    background: var(--glow-opacity);
-    box-shadow: 0 0 15px var(--main-color);
+/* Substation List (White Text + White Glow) */
+.playlist-scroll {
+    height: 180px;
+    overflow-y: auto;
+    margin-top: 10px;
 }
 
 .substation-item {
-    padding: 10px;
-    border-bottom: 1px solid var(--glow-opacity);
+    padding: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
-    color: #fff;
+    color: #ffffff;
+    font-size: 0.9rem;
     transition: 0.3s;
 }
 
+/* THE WHITE GLOW EFFECT */
 .substation-item:hover {
-    color: var(--main-color);
     background: rgba(255, 255, 255, 0.05);
+    text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff;
+    padding-left: 20px;
 }
 
-/* Scrollbar Theme */
+/* Custom Scrollbar */
+.playlist-scroll::-webkit-scrollbar { width: 4px; }
 .playlist-scroll::-webkit-scrollbar-thumb { background: var(--main-color); }
