@@ -1,12 +1,13 @@
 :root {
-    --main-color: #00ffff; /* The Accent/Theme color (Borders & Flow) */
-    --glow-opacity: rgba(0, 255, 255, 0.4);
+    --main-color: #FFD700; /* Default Gold */
+    --glow-opacity: rgba(255, 215, 0, 0.4);
 }
 
 body {
     margin: 0;
+    padding: 0;
     background: #000;
-    color: #ffffff; /* Force all text to white */
+    color: #ffffff;
     font-family: 'Courier New', monospace;
     height: 100vh;
     display: flex;
@@ -15,7 +16,15 @@ body {
     overflow: hidden;
 }
 
-/* Dynamic Radial Background remains themed */
+/* Starfield Background */
+.stars {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: url('https://www.transparenttextures.com/patterns/stardust.png');
+    opacity: 0.6;
+    z-index: -2;
+}
+
 .radial-glow {
     position: fixed;
     width: 150vw;
@@ -25,105 +34,62 @@ body {
     z-index: -1;
 }
 
-.hud-container {
-    width: 90%;
-    max-width: 500px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    background: rgba(0, 0, 0, 0.85);
-    padding: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 1);
-    z-index: 10;
-}
-
-/* All headers and labels forced white */
-.hud-header, .container-label, .footer-text, .theme-text {
-    color: #ffffff !important;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-/* Station Buttons (Borders are themed, text is white) */
-.station-nav {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.station-btn {
-    background: transparent;
-    border: 1px solid var(--main-color);
-    color: #ffffff; /* White text */
-    padding: 12px;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.station-btn:hover {
-    background: var(--glow-opacity);
-    box-shadow: 0 0 10px var(--main-color);
-}
-
-/* Player Viewport with Themed Flow Border */
+/* Floating Player & Pulse */
 .player-viewport {
     width: 100%;
     aspect-ratio: 16 / 9;
     background: #000;
     position: relative;
-    padding: 3px;
-    overflow: hidden;
+    border: 2px solid var(--main-color);
+    box-shadow: 0 0 20px var(--main-color);
+    animation: float 4s ease-in-out infinite, pulse-border 2s infinite alternate;
+    z-index: 5;
 }
 
-.player-viewport::before {
-    content: '';
-    position: absolute;
-    width: 150%;
-    height: 150%;
-    top: -25%; left: -25%;
-    background: conic-gradient(transparent, var(--main-color), transparent 30%);
-    animation: rotateFlow 4s linear infinite;
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
 }
 
-.viewport-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    z-index: 1;
+@keyframes pulse-border {
+    from { box-shadow: 0 0 10px var(--main-color); }
+    to { box-shadow: 0 0 30px var(--main-color), 0 0 10px #fff; }
 }
 
-@keyframes rotateFlow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+/* Container transparency so stars show through */
+.hud-container {
+    width: 90%;
+    max-width: 500px;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent */
+    backdrop-filter: blur(5px);
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-/* Substation List (White Text + White Glow) */
-.playlist-scroll {
-    height: 180px;
-    overflow-y: auto;
-    margin-top: 10px;
+.station-btn {
+    background: rgba(0,0,0,0.5);
+    border: 1px solid var(--main-color);
+    color: #fff;
+    padding: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.3s;
 }
 
 .substation-item {
     padding: 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
-    color: #ffffff;
-    font-size: 0.9rem;
+    color: #fff;
     transition: 0.3s;
 }
 
-/* THE WHITE GLOW EFFECT */
 .substation-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-    text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff;
-    padding-left: 20px;
+    text-shadow: 0 0 10px #ffffff;
+    background: rgba(255, 255, 255, 0.1);
 }
 
-/* Custom Scrollbar */
-.playlist-scroll::-webkit-scrollbar { width: 4px; }
 .playlist-scroll::-webkit-scrollbar-thumb { background: var(--main-color); }
