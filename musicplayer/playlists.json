@@ -1,42 +1,31 @@
 {
   "stations": [
     {
-      "id": "Station 1",
-      "name": "Chi-erful Radio",
+      "name": "VI-BRATION",
       "color": "#FFD700",
-      "side": "left",
-      "playlists": [
-        { "title": "Freevibes FM", "id": "PLwX0pb3GErekzDDrb9BzpjtrI5XdR6tU9" },
-        { "title": "House Party", "id": "lPLwX0pb3GErelK0luUOAZVX4-6Ifp7Tq4_" }
+      "substations": [
+        { "name": "BASS_LEVEL_01", "playlistId": "PLxxxx" }
       ]
     },
     {
-      "id": "Station 2",
-      "name": "Ki-netic Radio",
-      "color": "FF0000",
-      "side": "left",
-      "playlists": [
-        { "title": "Blaze's Cool Mixtape", "id": "PLwX0pb3GErekhqHtx2E2WMrB4DhdDJhlu" },
-        { "title": "Bmore Brick City", "id": "PLwX0pb3GErekChtYZB_HejDEP3FWZ6o-l" }
+      "name": "KI-NETIC",
+      "color": "#FF0000",
+      "substations": [
+        { "name": "HIGH_VELOCITY", "playlistId": "PLxxxx" }
       ]
     },
     {
-      "id": "Station 3",
-      "name": "Vi-bration Radio",
-      "color": "0000FF",
-      "side": "right",
-      "playlists": [
-        { "title": "Beyond The Pen", "id": "PLwX0pb3GEremC1vfOY7jLfNqdfR2cTVi7" },
-        { "title": "Dreamscape", "id": "PLwX0pb3GErenzlrerMLur84f2JfArD1fK" }
+      "name": "CHI-ERFUL",
+      "color": "#00CCFF",
+      "substations": [
+        { "name": "MORNING_NEON", "playlistId": "PLxxxx" }
       ]
     },
     {
-      "id": "Station 4",
-      "name": "Commander Q Radio",
-      "color": "A020F0",
-      "side": "right",
-      "playlists": [
-        { "title": "Ambient Space", "id": "PLyourID7" }
+      "name": "COMMANDER Q",
+      "color": "#A020F0",
+      "substations": [
+        { "name": "REFLECTIVE_DATA", "playlistId": "PLxxxx" }
       ]
     }
   ]
