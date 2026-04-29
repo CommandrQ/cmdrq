@@ -49,14 +49,8 @@
         }
 
         @keyframes pulse {
-            0% {
-                box-shadow: 0 0 30px 10px rgba(255, 140, 0, 0.4), 0 0 80px 20px rgba(255, 69, 0, 0.2);
-                opacity: 0.8;
-            }
-            100% {
-                box-shadow: 0 0 60px 20px rgba(255, 140, 0, 0.7), 0 0 120px 40px rgba(255, 69, 0, 0.4);
-                opacity: 1;
-            }
+            0% { box-shadow: 0 0 30px 10px rgba(255, 140, 0, 0.4), 0 0 80px 20px rgba(255, 69, 0, 0.2); opacity: 0.8; }
+            100% { box-shadow: 0 0 60px 20px rgba(255, 140, 0, 0.7), 0 0 120px 40px rgba(255, 69, 0, 0.4); opacity: 1; }
         }
 
         /* === 2. THE TERMINAL UI === */
@@ -93,7 +87,7 @@
             background: #0a0f0d;
             border: 2px solid #2a3b32;
             border-radius: 10px;
-            height: 40%;
+            height: 35%; /* Slightly smaller to give playlists more room */
             padding: 15px;
             display: flex;
             flex-direction: column;
@@ -102,6 +96,7 @@
             box-shadow: inset 0 0 15px rgba(0, 255, 204, 0.1);
             text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
             overflow: hidden;
+            flex-shrink: 0;
         }
 
         .sys-status {
@@ -121,31 +116,24 @@
             flex-grow: 1;
         }
 
-        #time-display {
-            font-size: 0.85rem;
-            text-align: right;
-        }
+        #time-display { font-size: 0.85rem; text-align: right; }
 
         /* Controls */
         #controls-container {
-            margin-top: 30px;
-            flex-grow: 1;
+            margin-top: 20px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
+            flex-shrink: 0;
         }
 
-        .btn-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
+        .btn-row { display: flex; justify-content: space-between; gap: 10px; }
 
         button {
             background: rgba(30, 30, 40, 0.8);
             border: 1px solid #444;
             color: #fff;
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
             font-family: inherit;
             font-weight: bold;
@@ -153,36 +141,37 @@
             flex: 1;
             transition: all 0.2s;
             text-transform: uppercase;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
-        button:active {
-            background: #00ffcc;
-            color: #000;
-            border-color: #00ffcc;
-        }
+        button:active { background: #00ffcc; color: #000; border-color: #00ffcc; }
+        button:hover { border-color: #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.3); }
 
-        button:hover {
-            border-color: #00ffcc;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
-        }
-
-        /* Playlist Menu */
-        #playlists-container {
-            margin-top: auto;
-            max-height: 150px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #00ffcc transparent;
-        }
-        
+        /* === 3. SCROLLABLE PLAYLIST MENU === */
         .section-title {
             color: #aaa;
             font-size: 0.8rem;
-            margin-bottom: 10px;
+            margin: 20px 0 10px 0;
             text-transform: uppercase;
             letter-spacing: 1px;
+            flex-shrink: 0;
         }
+
+        #playlists-container {
+            flex: 1; /* Forces container to take remaining space */
+            min-height: 0; /* Required for flexbox scrolling */
+            overflow-y: auto; /* Enables vertical scrolling */
+            padding-right: 5px; /* Room for scrollbar */
+            
+            /* Firefox Scrollbar */
+            scrollbar-width: thin;
+            scrollbar-color: #00ffcc rgba(0,0,0,0.2);
+        }
+        
+        /* Chrome/Edge/Safari Scrollbar */
+        #playlists-container::-webkit-scrollbar { width: 6px; }
+        #playlists-container::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 3px; }
+        #playlists-container::-webkit-scrollbar-thumb { background-color: #00ffcc; border-radius: 3px; }
 
         .playlist-btn {
             display: block;
@@ -191,16 +180,11 @@
             background: transparent;
             border: 1px dashed #555;
             text-align: left;
+            padding: 10px;
         }
 
         /* Hidden YouTube Iframe */
-        #yt-player {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-        }
+        #yt-player { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -214,7 +198,7 @@
         <div id="ipod">
             <div id="screen">
                 <div class="sys-status">
-                    <span>YT-OS v1.1</span>
+                    <span>YT-OS v1.2</span>
                     <span id="player-status">INITIALIZING...</span>
                 </div>
                 <div id="track-title">Awaiting data connection...</div>
@@ -232,8 +216,8 @@
                 </div>
             </div>
 
+            <div class="section-title">Select Database</div>
             <div id="playlists-container">
-                <div class="section-title">Select Database</div>
                 </div>
         </div>
     </div>
@@ -241,7 +225,7 @@
     <div id="yt-player"></div>
 
     <script>
-        /* === 1. ANIMATED STARFIELD LOGIC === */
+        /* === STARFIELD LOGIC === */
         const canvas = document.getElementById('starfield');
         const ctx = canvas.getContext('2d');
         let stars = [];
@@ -251,12 +235,7 @@
             canvas.height = window.innerHeight;
             stars = [];
             for (let i = 0; i < 200; i++) {
-                stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    radius: Math.random() * 1.5,
-                    speed: Math.random() * 0.5 + 0.1
-                });
+                stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, radius: Math.random() * 1.5, speed: Math.random() * 0.5 + 0.1 });
             }
         }
 
@@ -268,10 +247,7 @@
                 ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
                 ctx.fill();
                 star.x -= star.speed; 
-                if (star.x < 0) {
-                    star.x = canvas.width;
-                    star.y = Math.random() * canvas.height;
-                }
+                if (star.x < 0) { star.x = canvas.width; star.y = Math.random() * canvas.height; }
             });
             requestAnimationFrame(animateStars);
         }
@@ -280,16 +256,14 @@
         initStars();
         animateStars();
 
-        /* === 2. DYNAMIC PLAYLIST FETCH LOGIC === */
+        /* === DYNAMIC PLAYLIST FETCH LOGIC === */
         async function loadPlaylists() {
             const container = document.getElementById('playlists-container');
             
             try {
-                // Updated path to look inside the musicplayer directory
-                const response = await fetch('musicplayer/playlists.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                // Reverted to look in the exact same folder
+                const response = await fetch('playlists.json');
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 
                 const playlists = await response.json();
                 
@@ -299,14 +273,9 @@
                     btn.setAttribute('data-playlist', playlist.id);
                     btn.innerText = playlist.title;
                     
-                    // Attach click event dynamically
                     btn.addEventListener('click', function() {
                         if (player) {
-                            player.loadPlaylist({
-                                list: playlist.id,
-                                listType: 'playlist',
-                                index: 0
-                            });
+                            player.loadPlaylist({ list: playlist.id, listType: 'playlist', index: 0 });
                         }
                     });
                     
@@ -314,18 +283,15 @@
                 });
             } catch (error) {
                 console.error("Failed to load playlists:", error);
-                document.getElementById('track-title').innerText = "DATABASE ERROR: Cannot load playlists.json";
+                document.getElementById('track-title').innerText = "DATABASE ERROR: Verify playlists.json path and syntax.";
                 document.getElementById('track-title').style.color = "#ff4444";
             }
         }
 
-        // Initialize playlist fetch
         loadPlaylists();
 
-        /* === 3. YOUTUBE IFRAME API LOGIC === */
-        let player;
-        let updateInterval;
-
+        /* === YOUTUBE API LOGIC === */
+        let player, updateInterval;
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         const firstScriptTag = document.getElementsByTagName('script')[0];
@@ -333,40 +299,25 @@
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('yt-player', {
-                height: '1',
-                width: '1',
-                playerVars: {
-                    'playsinline': 1,
-                    'controls': 0,
-                    'disablekb': 1
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
+                height: '1', width: '1',
+                playerVars: { 'playsinline': 1, 'controls': 0, 'disablekb': 1 },
+                events: { 'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange }
             });
         }
 
         function onPlayerReady(event) {
             document.getElementById('player-status').innerText = "ONLINE";
-            
-            // Only update track title if we haven't already thrown a fetch error
             const titleEl = document.getElementById('track-title');
-            if(!titleEl.innerText.includes("ERROR")) {
-                titleEl.innerText = "Select a Database below to begin playback.";
-            }
+            if(!titleEl.innerText.includes("ERROR")) titleEl.innerText = "Select a Database below to begin playback.";
         }
 
         function onPlayerStateChange(event) {
             clearInterval(updateInterval);
-            
             if (event.data == YT.PlayerState.PLAYING) {
                 document.getElementById('player-status').innerText = "PLAYING";
-                
                 const videoData = player.getVideoData();
-                document.getElementById('track-title').style.color = "#00ffcc"; // Reset color in case of previous error
-                document.getElementById('track-title').innerText = videoData.title ? videoData.title : "Unknown Track";
-                
+                document.getElementById('track-title').style.color = "#00ffcc"; 
+                document.getElementById('track-title').innerText = videoData.title || "Unknown Track";
                 updateInterval = setInterval(updateTimeDisplay, 1000);
             } else if (event.data == YT.PlayerState.PAUSED) {
                 document.getElementById('player-status').innerText = "PAUSED";
@@ -375,7 +326,7 @@
             }
         }
 
-        /* === 4. CONTROL MAPPING === */
+        /* === CONTROLS === */
         document.getElementById('play-btn').addEventListener('click', () => player && player.playVideo());
         document.getElementById('pause-btn').addEventListener('click', () => player && player.pauseVideo());
         document.getElementById('next-btn').addEventListener('click', () => player && player.nextVideo());
@@ -391,9 +342,7 @@
             if (player && player.getCurrentTime) {
                 const current = player.getCurrentTime();
                 const total = player.getDuration();
-                if (total) {
-                    document.getElementById('time-display').innerText = `${formatTime(current)} / ${formatTime(total)}`;
-                }
+                if (total) document.getElementById('time-display').innerText = `${formatTime(current)} / ${formatTime(total)}`;
             }
         }
     </script>
