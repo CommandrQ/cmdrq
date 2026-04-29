@@ -1,13 +1,12 @@
 {
   "stations": [
     {
-      "id": "st-1",
-      "name": "NEON CHILL",
+      "id": "Station 1",
+      "name": "Chi-erful Radio",
       "color": "rgba(138, 43, 226, 0.6)",
       "side": "left",
       "playlists": [
-        { "title": "Lo-Fi Beats", "id": "PLyourID1" },
-        { "title": "Midnight Jazz", "id": "PLyourID2" }
+        { "title": "Freevibes FM", "id": "PLwX0pb3GErekzDDrb9BzpjtrI5XdR6tU9" }
       ]
     },
     {
