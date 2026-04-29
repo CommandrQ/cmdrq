@@ -366,7 +366,7 @@
 
             <div id="screen">
                 <div class="sys-status">
-                    <span>YT-OS v2.6</span>
+                    <span>YT-OS v2.8</span>
                     <span id="player-status">INITIALIZING...</span>
                 </div>
                 <div id="track-title">Awaiting data connection...</div>
@@ -510,13 +510,17 @@
                 
                 btn.addEventListener('click', function() {
                     if (player) {
-                        // The stable Two-Tap Method to prevent the race condition
-                        player.cuePlaylist({ list: playlist.id, listType: 'playlist', index: 0 });
+                        // 1. Explicitly hard-stop the current video
+                        player.stopVideo();
                         
-                        // Give the user visual feedback so they know to press PLAY
-                        document.getElementById('track-title').style.color = "#ffdb58"; // Yellow warning color
-                        document.getElementById('track-title').innerText = "DATABASE CUED. PRESS [ PLAY ] TO INITIATE.";
-                        document.getElementById('player-status').innerText = "CUED";
+                        // 2. Load the new playlist
+                        player.loadPlaylist({ list: playlist.id, listType: 'playlist', index: 0 });
+                        
+                        // 3. Ghost-click after 500ms delay
+                        setTimeout(() => {
+                            const playBtn = document.getElementById('play-btn');
+                            if (playBtn) playBtn.click();
+                        }, 500);
                     }
                 });
                 
