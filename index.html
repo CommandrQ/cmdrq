@@ -11,6 +11,15 @@
         }
     </script>
 
+    <script>
+        window.addEventListener('pageshow', function(event) {
+            // If the page was loaded from browser cache (e.g., using the back button), force a fresh reload
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+    </script>
+
     <link rel="stylesheet" href="css/intro.css?v=999">
     <link rel="stylesheet" href="css/cursor.css">
 </head>
