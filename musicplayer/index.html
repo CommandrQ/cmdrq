@@ -7,7 +7,6 @@
     
     <script>
         window.addEventListener('pageshow', function(event) {
-            // If the page was loaded from browser cache, force a fresh reload
             if (event.persisted) {
                 window.location.reload();
             }
@@ -93,7 +92,6 @@
             box-sizing: border-box;
         }
 
-        /* === NAVIGATION === */
         .top-nav {
             display: flex;
             justify-content: space-between;
@@ -195,7 +193,6 @@
         button:active { background: #00ffcc; color: #000; border-color: #00ffcc; }
         button:hover { border-color: #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.3); }
 
-        /* === HORIZONTAL STATIONS CAROUSEL === */
         .section-title {
             color: #aaa;
             font-size: 0.75rem;
@@ -256,7 +253,6 @@
             100% { transform: scale(1.2); text-shadow: 0 0 15px rgba(0,255,204,0.8); }
         }
 
-        /* === VERTICAL PLAYLIST MENU === */
         #playlists-container {
             flex: 1; 
             min-height: 0; 
@@ -281,7 +277,6 @@
             padding: 10px;
         }
 
-        /* === FOOTER & MODAL UI === */
         #terminal-footer {
             text-align: center;
             font-size: 0.75rem;
@@ -346,7 +341,6 @@
             margin-bottom: 15px;
         }
 
-        /* Hidden YouTube Iframe */
         #yt-player { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
     </style>
 </head>
@@ -376,7 +370,7 @@
 
             <div id="screen">
                 <div class="sys-status">
-                    <span>YT-OS v2.8</span>
+                    <span>YT-OS v2.9</span>
                     <span id="player-status">INITIALIZING...</span>
                 </div>
                 <div id="track-title">Awaiting data connection...</div>
@@ -397,14 +391,12 @@
             <div class="section-title">Global Stations</div>
             <div id="stations-wrapper">
                 <div class="scroll-arrow" id="scroll-left">&#10094;</div>
-                <div id="stations-container">
-                    </div>
+                <div id="stations-container"></div>
                 <div class="scroll-arrow" id="scroll-right">&#10095;</div>
             </div>
 
             <div class="section-title">Local Database (Playlists)</div>
-            <div id="playlists-container">
-                </div>
+            <div id="playlists-container"></div>
 
             <div id="terminal-footer">
                 <a id="disclaimer-link">[ DISCLAIMER ]</a>
@@ -415,7 +407,6 @@
     <div id="yt-player"></div>
 
     <script>
-        /* === STARFIELD LOGIC === */
         const canvas = document.getElementById('starfield');
         const ctx = canvas.getContext('2d');
         let stars = [];
@@ -446,7 +437,6 @@
         initStars();
         animateStars();
 
-        /* === HORIZONTAL SCROLL LOGIC === */
         document.getElementById('scroll-left').addEventListener('click', () => {
             const container = document.getElementById('stations-container');
             container.scrollBy({ left: -container.clientWidth, behavior: 'smooth' });
@@ -456,52 +446,38 @@
             container.scrollBy({ left: container.clientWidth, behavior: 'smooth' });
         });
 
-        /* === MODAL POPUP LOGIC === */
         const modal = document.getElementById('disclaimer-modal');
-        document.getElementById('disclaimer-link').addEventListener('click', () => {
-            modal.style.display = 'flex';
-        });
-        document.getElementById('close-modal-btn').addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
+        document.getElementById('disclaimer-link').addEventListener('click', () => { modal.style.display = 'flex'; });
+        document.getElementById('close-modal-btn').addEventListener('click', () => { modal.style.display = 'none'; });
 
-        /* === DYNAMIC DATABASE LOGIC (STATIONS -> PLAYLISTS) === */
         let terminalData = []; 
 
         async function loadDatabase() {
             try {
                 const response = await fetch('playlists.json');
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                
                 terminalData = await response.json();
-                
                 if (terminalData.length > 0) {
                     renderStations();
                     renderPlaylists(0); 
                 }
             } catch (error) {
-                console.error("Failed to load database:", error);
-                document.getElementById('track-title').innerText = "DATABASE ERROR: Verify playlists.json path and syntax.";
-                document.getElementById('track-title').style.color = "#ff4444";
+                document.getElementById('track-title').innerText = "DATABASE ERROR";
             }
         }
 
         function renderStations() {
             const container = document.getElementById('stations-container');
             container.innerHTML = ''; 
-            
             terminalData.forEach((station, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'station-btn';
                 if (index === 0) btn.classList.add('active-station'); 
                 btn.innerText = station.station_name;
-                
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.station-btn').forEach(b => b.classList.remove('active-station'));
                     btn.classList.add('active-station');
                     renderPlaylists(index);
                 });
-                
                 container.appendChild(btn);
             });
         }
@@ -509,38 +485,24 @@
         function renderPlaylists(stationIndex) {
             const container = document.getElementById('playlists-container');
             container.innerHTML = ''; 
-            
             const playlists = terminalData[stationIndex].playlists;
-            
             playlists.forEach(playlist => {
                 const btn = document.createElement('button');
                 btn.className = 'playlist-btn';
-                btn.setAttribute('data-playlist', playlist.id);
                 btn.innerText = playlist.title;
-                
                 btn.addEventListener('click', function() {
                     if (player) {
-                        // 1. Explicitly hard-stop the current video
                         player.stopVideo();
-                        
-                        // 2. Load the new playlist
                         player.loadPlaylist({ list: playlist.id, listType: 'playlist', index: 0 });
-                        
-                        // 3. Ghost-click after 500ms delay
-                        setTimeout(() => {
-                            const playBtn = document.getElementById('play-btn');
-                            if (playBtn) playBtn.click();
-                        }, 500);
+                        setTimeout(() => { document.getElementById('play-btn').click(); }, 500);
                     }
                 });
-                
                 container.appendChild(btn);
             });
         }
 
         loadDatabase();
 
-        /* === YOUTUBE API LOGIC === */
         let player, updateInterval;
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
@@ -557,8 +519,6 @@
 
         function onPlayerReady(event) {
             document.getElementById('player-status').innerText = "ONLINE";
-            const titleEl = document.getElementById('track-title');
-            if(!titleEl.innerText.includes("ERROR")) titleEl.innerText = "Select a Database below to begin playback.";
         }
 
         function onPlayerStateChange(event) {
@@ -566,21 +526,31 @@
             if (event.data == YT.PlayerState.PLAYING) {
                 document.getElementById('player-status').innerText = "PLAYING";
                 const videoData = player.getVideoData();
-                document.getElementById('track-title').style.color = "#00ffcc"; 
                 document.getElementById('track-title').innerText = videoData.title || "Unknown Track";
                 updateInterval = setInterval(updateTimeDisplay, 1000);
             } else if (event.data == YT.PlayerState.PAUSED) {
                 document.getElementById('player-status').innerText = "PAUSED";
-            } else if (event.data == YT.PlayerState.BUFFERING) {
-                document.getElementById('player-status').innerText = "BUFFERING...";
             }
         }
 
-        /* === CONTROLS === */
+        /* FIXED NAVIGATION CONTROLS */
         document.getElementById('play-btn').addEventListener('click', () => player && player.playVideo());
         document.getElementById('pause-btn').addEventListener('click', () => player && player.pauseVideo());
-        document.getElementById('next-btn').addEventListener('click', () => player && player.nextVideo());
-        document.getElementById('prev-btn').addEventListener('click', () => player && player.previousVideo());
+        
+        document.getElementById('next-btn').addEventListener('click', () => {
+            if (player && typeof player.nextVideo === 'function') {
+                player.nextVideo();
+                // Ensure audio resumes if browser tries to pause on skip
+                setTimeout(() => player.playVideo(), 200);
+            }
+        });
+
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            if (player && typeof player.previousVideo === 'function') {
+                player.previousVideo();
+                setTimeout(() => player.playVideo(), 200);
+            }
+        });
 
         function formatTime(seconds) {
             const m = Math.floor(seconds / 60);
