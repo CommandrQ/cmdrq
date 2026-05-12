@@ -1,5 +1,9 @@
+/**
+ * VANGUARD_OS SYSTEM LOGIC
+ * Powered by Supabase
+ */
+
 const VanguardOS = (() => {
-    // --- SUPABASE INIT ---
     const supabaseUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
     const supabaseKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
     let supabase = null;
@@ -32,10 +36,8 @@ const VanguardOS = (() => {
             if (app.path.startsWith('http')) {
                 appElement.addEventListener('click', (e) => { 
                     e.preventDefault(); 
-                    const modal = document.getElementById('social-modal');
-                    if (modal) modal.style.display = 'flex'; 
-                    const link = document.getElementById('modal-link');
-                    if (link) link.href = app.path;
+                    document.getElementById('social-modal').style.display = 'flex'; 
+                    document.getElementById('modal-link').href = app.path;
                 });
             } else {
                 appElement.href = app.path;
@@ -70,20 +72,20 @@ const VanguardOS = (() => {
 
     const openBlogModal = (title, content, id) => {
         currentPostId = id;
-        const titleEl = document.getElementById('blog-modal-title');
-        const contentEl = document.getElementById('blog-modal-content');
-        const modal = document.getElementById('blog-modal');
-        if (titleEl) titleEl.textContent = title;
-        if (contentEl) contentEl.innerHTML = content;
-        if (modal) modal.style.display = 'flex';
+        document.getElementById('blog-modal-title').textContent = title;
+        document.getElementById('blog-modal-content').innerHTML = content;
+        document.getElementById('blog-modal').style.display = 'flex';
     };
 
     const closeModals = () => {
         document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
     };
 
+    // UPDATED SHARE LOGIC
     const handleShare = () => {
-        alert("Signal Relay: Link copied to terminal clipboard.");
+        navigator.clipboard.writeText(window.location.href);
+        closeModals();
+        document.getElementById('share-confirm-modal').style.display = 'flex';
     };
 
     const handleReplyClick = async () => {
@@ -91,11 +93,9 @@ const VanguardOS = (() => {
         const { data: { session } } = await supabase.auth.getSession();
         closeModals();
         if (session) {
-            const replyModal = document.getElementById('reply-modal');
-            if (replyModal) replyModal.style.display = 'flex';
+            document.getElementById('reply-modal').style.display = 'flex';
         } else {
-            const authModal = document.getElementById('auth-modal');
-            if (authModal) authModal.style.display = 'flex';
+            document.getElementById('auth-modal').style.display = 'flex';
         }
     };
 
@@ -104,10 +104,8 @@ const VanguardOS = (() => {
         if (!supabase) return;
         const email = document.getElementById('auth-email').value;
         const pass = document.getElementById('auth-pass').value;
-        const nameEl = document.getElementById('auth-name');
-        const name = nameEl ? nameEl.value : '';
-        const btn = document.getElementById('auth-submit-btn');
-        const isLogin = btn ? btn.textContent === "Login" : true;
+        const name = document.getElementById('auth-name') ? document.getElementById('auth-name').value : '';
+        const isLogin = document.getElementById('auth-submit-btn').textContent === "Login";
 
         let error;
         if (isLogin) {
@@ -122,16 +120,14 @@ const VanguardOS = (() => {
             alert(error.message);
         } else {
             closeModals();
-            const replyModal = document.getElementById('reply-modal');
-            if (replyModal) replyModal.style.display = 'flex'; 
+            document.getElementById('reply-modal').style.display = 'flex'; 
         }
     };
 
     const submitReply = async (e) => {
         e.preventDefault();
         if (!supabase) return;
-        const textEl = document.getElementById('reply-text');
-        const msg = textEl ? textEl.value : '';
+        const msg = document.getElementById('reply-text').value;
         const { data: { session } } = await supabase.auth.getSession();
         
         if(!session) return;
@@ -148,7 +144,7 @@ const VanguardOS = (() => {
             alert("Comm-Link Error: " + error.message);
         } else {
             alert("Signal received. Your reply has been logged.");
-            if (textEl) textEl.value = '';
+            document.getElementById('reply-text').value = '';
             closeModals();
         }
     };
@@ -158,14 +154,14 @@ const VanguardOS = (() => {
         const btn = document.getElementById('auth-submit-btn');
         const toggleText = document.getElementById('auth-toggle-text');
         
-        if (btn && btn.textContent === "Register") {
+        if (btn.textContent === "Register") {
             if(nameGroup) nameGroup.style.display = 'none';
             btn.textContent = "Login";
-            if (toggleText) toggleText.innerHTML = `Need clearance? <a href="#" onclick="VanguardOS.toggleAuthMode()">Register here</a>`;
-        } else if (btn) {
+            toggleText.innerHTML = `Need clearance? <a href="#" onclick="VanguardOS.toggleAuthMode()">Register here</a>`;
+        } else {
             if(nameGroup) nameGroup.style.display = 'block';
             btn.textContent = "Register";
-            if (toggleText) toggleText.innerHTML = `Already registered? <a href="#" onclick="VanguardOS.toggleAuthMode()">Login here</a>`;
+            toggleText.innerHTML = `Already registered? <a href="#" onclick="VanguardOS.toggleAuthMode()">Login here</a>`;
         }
     };
 
@@ -176,17 +172,13 @@ const VanguardOS = (() => {
 
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
-            profileStatus.innerHTML = `Welcome, <strong>${session.user.user_metadata.full_name || 'Citizen'}</strong>.<br>Comms are active.<br><span style="font-size:0.8rem; opacity:0.7;">${session.user.email}</span>`;
-            const loginForm = document.getElementById('profile-login-form');
-            const logoutBtn = document.getElementById('profile-logout-btn');
-            if (loginForm) loginForm.style.display = 'none';
-            if (logoutBtn) logoutBtn.style.display = 'block';
+            profileStatus.innerHTML = `Welcome, <strong>${session.user.user_metadata.full_name || 'Citizen'}</strong>.<br>Comms are active.`;
+            document.getElementById('profile-login-form').style.display = 'none';
+            document.getElementById('profile-logout-btn').style.display = 'block';
         } else {
             profileStatus.innerHTML = "No active signal. Please identify yourself.";
-            const loginForm = document.getElementById('profile-login-form');
-            const logoutBtn = document.getElementById('profile-logout-btn');
-            if (loginForm) loginForm.style.display = 'block';
-            if (logoutBtn) logoutBtn.style.display = 'none';
+            document.getElementById('profile-login-form').style.display = 'block';
+            document.getElementById('profile-logout-btn').style.display = 'none';
         }
     };
 
