@@ -11,28 +11,24 @@
     <!-- LAYER 1: Starfield Engine -->
     <div id="star-field"></div>
 
-    <!-- LAYER 2: HUD Overlays -->
-    <div class="hud-top-left">
-        <p id="system-date">LOADING...</p>
-    </div>
-    
-    <div class="hud-top-right">
-        <p id="system-clock">00:00:00</p>
-    </div>
-
-    <!-- LAYER 3: Main Interface -->
+    <!-- LAYER 2: Main Interface -->
     <div class="interface-wrapper">
         <header class="hero-container">
             <h1 class="hero-text">Commander Q</h1>
         </header>
 
-        <!-- The Blurry Dashboard Window -->
+        <!-- Integrated HUD Header anchored to the Window width -->
+        <div class="hud-header">
+            <p id="system-date">LOADING...</p>
+            <p id="system-clock">00:00:00</p>
+        </div>
+
         <main class="app-dashboard" id="app-dashboard">
             <!-- Apps are dynamically injected here -->
         </main>
     </div>
 
-    <!-- LAYER 4: Social Media Modal -->
+    <!-- Social Media Modal -->
     <div id="social-modal" class="modal-overlay">
         <div class="modal-window">
             <h2 class="modal-title">Frequency Established</h2>
