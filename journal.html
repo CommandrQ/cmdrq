@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Journal | Commander Q</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -16,117 +16,134 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         body {
             background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #7597de 100%);
             background-attachment: fixed;
             font-family: 'Segoe UI', Tahoma, sans-serif;
             color: white;
-            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* Scroll fix: allow vertical, hide horizontal */
-            overflow-x: hidden;
-            overflow-y: auto;
         }
 
+        /* --- Transitions & Stars --- */
         #boot-screen { position: fixed; inset: 0; background: black; z-index: 1000; pointer-events: none; animation: fadeOut 1.5s forwards; }
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
-        #starfield { position: fixed; inset: 0; z-index: -1; }
+        #starfield { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
         .stars { position: absolute; width: 2px; height: 2px; background: transparent; 
                   box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 25vw 90vh #fff;
                   animation: moveStars 150s linear infinite; }
         @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
 
-        header { text-align: center; padding: 60px 20px 20px; z-index: 10; }
+        /* --- Header --- */
+        header { text-align: center; padding: 40px 20px 10px; z-index: 10; width: 100%; }
         .commander-title { 
-            font-size: 2.5rem; font-weight: bold; 
+            font-size: clamp(1.8rem, 6vw, 2.5rem); font-weight: bold; 
             background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
             background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: sheen 3s linear infinite;
         }
         @keyframes sheen { to { background-position: 200% center; } }
 
+        /* --- Journal Grid --- */
         #journal-grid { 
             display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; 
-            width: 95%; max-width: 1000px; padding: 20px 10px; z-index: 10; flex-grow: 1; 
+            width: 95%; max-width: 1000px; padding: 20px 10px; z-index: 10; 
         }
-        @media (min-width: 800px) { #journal-grid { grid-template-columns: repeat(3, 1fr); gap: 25px; } }
+        @media (min-width: 800px) { #journal-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
 
         .entry-card { 
             background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border);
             border-radius: 15px; padding: 25px 15px; cursor: pointer; transition: 0.3s ease; text-align: center;
+            display: flex; flex-direction: column; justify-content: center;
         }
-        .entry-card:hover { transform: translateY(-5px); border-color: var(--light-blue); box-shadow: 0 0 15px var(--light-blue); }
-        .entry-tag { font-size: 0.7rem; color: var(--light-purple); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
-        .entry-preview { color: var(--light-blue); font-weight: 500; font-size: 0.95rem; line-height: 1.4; }
+        .entry-card:hover { border-color: var(--light-blue); box-shadow: 0 0 15px var(--light-blue); }
 
+        /* --- Modals --- */
         .modal { 
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 500; 
-            display: none; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(8px);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; 
+            display: none; justify-content: center; align-items: flex-start; 
+            padding: 40px 20px; backdrop-filter: blur(10px); overflow-y: auto;
         }
         .modal-content { 
             background: var(--glass-bg); border: 1px solid var(--glass-border); width: 100%; max-width: 500px;
-            border-radius: 24px; padding: 40px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            max-height: 85vh; overflow-y: auto; /* Modal itself is scrollable if text is long */
+            border-radius: 24px; padding: 30px; position: relative; margin: auto;
         }
-        .modal-body { margin: 25px 0; line-height: 1.8; color: #e0e0e0; font-size: 1.05rem; }
+        .btn-close { position: absolute; top: 15px; right: 20px; background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; opacity: 0.6; }
+        .btn-close:hover { opacity: 1; }
 
-        .btn { 
-            width: 100%; padding: 14px; border-radius: 50px; border: 1px solid var(--light-blue);
-            background: transparent; color: var(--light-blue); cursor: pointer; font-weight: bold;
-            font-size: 0.9rem; letter-spacing: 1px; transition: 0.3s;
-        }
-        .btn:hover { background: var(--light-blue); color: var(--deep-space); box-shadow: 0 0 20px var(--light-blue); }
-        .btn-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; opacity: 0.5; }
+        .btn { width: 100%; padding: 14px; border-radius: 50px; border: 1px solid var(--light-blue); background: transparent; color: var(--light-blue); font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background: var(--light-blue); color: var(--deep-space); }
 
-        input, textarea { 
-            width: 100%; padding: 14px; margin-bottom: 15px; background: rgba(255,255,255,0.05); 
-            border: 1px solid var(--glass-border); border-radius: 12px; color: white; font-family: inherit;
-        }
-        .hidden { display: none; }
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: white; font-family: inherit; }
 
         footer { 
             z-index: 10; padding: 40px 20px; text-align: center; color: white; 
             font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase; 
-            animation: pulse 4s ease-in-out infinite; width: 100%;
+            animation: pulse 4s ease-in-out infinite; width: 100%; margin-top: auto;
         }
-        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.9; } }
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+
+        /* --- Mobile Specific Overrides --- */
+        @media (max-width: 600px) {
+            header { padding: 20px 20px 5px; }
+            #journal-grid { padding: 10px 10px 40px; }
+            .entry-card { padding: 20px 10px; min-height: 120px; }
+        }
     </style>
 </head>
 <body>
+
     <div id="boot-screen"></div>
     <div id="starfield"><div class="stars"></div></div>
+
     <header>
         <h1 class="commander-title">Journal</h1>
-        <p style="color: var(--light-purple); font-size: 0.9rem; letter-spacing: 1px; margin-top: 5px;">Thoughts from the Hideout</p>
+        <p style="color: var(--light-purple); font-size: 0.8rem; letter-spacing: 1px; margin-top: 5px;">Reflections from the Void</p>
     </header>
+
     <main id="journal-grid"></main>
+
+    <!-- Content View Modal -->
     <div id="viewModal" class="modal">
         <div class="modal-content">
             <button class="btn-close" onclick="closeModal('viewModal')">&times;</button>
-            <div id="viewBody" class="modal-body"></div>
-            <button class="btn" onclick="openReplyFlow()">Write a reply</button>
+            <div id="viewBody" style="margin-top:25px; line-height:1.8; font-size:1.05rem; color:#f0f0f0;"></div>
+            <button class="btn" style="margin-top:25px;" onclick="openReplyFlow()">Write a thought back</button>
         </div>
     </div>
+
+    <!-- Identity & Reply Modal -->
     <div id="replyModal" class="modal">
         <div class="modal-content">
             <button class="btn-close" onclick="closeModal('replyModal')">&times;</button>
-            <div id="signupForm" class="hidden">
-                <h3 style="color: var(--light-purple); margin-bottom: 20px;">Join the Hideout</h3>
-                <input type="text" id="regName" placeholder="Full Name">
+            
+            <div id="signupForm" style="display:none; margin-top:10px;">
+                <h3 style="color: var(--light-purple); margin-bottom: 15px;">Join the Hideout</h3>
+                <p style="font-size: 0.9rem; margin-bottom: 15px; opacity: 0.8;">To leave a note, I just need to know who you are.</p>
+                <input type="text" id="regName" placeholder="What's your name?">
                 <input type="email" id="regEmail" placeholder="Email address">
-                <input type="password" id="regPass" placeholder="Password">
+                <input type="password" id="regPass" placeholder="Pick a password">
                 <button class="btn" onclick="joinHideout()">I'm ready to join</button>
             </div>
-            <div id="messageForm" class="hidden">
-                <h3 style="color: var(--light-blue); margin-bottom: 20px;">Share a thought</h3>
-                <textarea id="replyMsg" rows="5" placeholder="What's on your mind?"></textarea>
-                <button class="btn" onclick="postMessage()">Post your reply</button>
+
+            <div id="messageForm" style="display:none; margin-top:10px;">
+                <h3 style="color: var(--light-blue); margin-bottom: 15px;">Share a thought</h3>
+                <textarea id="replyMsg" rows="5" placeholder="What did this make you think of?"></textarea>
+                <button class="btn" onclick="postMessage()">Share with the Commander</button>
             </div>
         </div>
     </div>
+
     <footer>Powered by Vanguard Citizen Services</footer>
 
     <script>
@@ -135,12 +152,12 @@
         const supabaseClient = supabase.createClient(sbUrl, sbKey);
 
         const ENTRIES = [
-            { tag: "Log 01", text: "Everyone is talking about the systems that hold us back: the wage gap, the lack of freedom, the rigged game. And they’re right. But there’s a trap here: we spend so much time fighting for the 'win' that we’ve forgotten how to advance ourselves." },
-            { tag: "Log 02", text: "We’re told that every 'no' is an opportunity. But if you don’t understand who you are or what you actually want, that opportunity is just noise." },
-            { tag: "Log 03", text: "It’s like an athlete training just to stay in second place, or a cook who never intends to run their own kitchen. Why bother?" },
-            { tag: "Log 04", text: "The truth is that self-mastery and professional growth are the same thing. You can’t have one without the other." },
-            { tag: "Log 05", text: "If we finally beat the system but we aren't grounded in who we are, we’ll squander the victory the second we get it. We’ll have the equality we fought for and no idea what to do with it." },
-            { tag: "Log 06", text: "Choosing to do one thing well, to really master a craft, is what builds your identity. It’s how you learn to be a 'good person' in practice, not just in theory. Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get to where you're going." }
+            { tag: "01. Systems", text: "Everyone is talking about the systems that hold us back: the wage gap, the lack of freedom, the rigged game. And they’re right. But there’s a trap here: we spend so much time fighting for the 'win' that we’ve forgotten how to advance ourselves." },
+            { tag: "02. Opportunities", text: "We’re told that every 'no' is an opportunity. But if you don’t understand who you are or what you actually want, that opportunity is just noise." },
+            { tag: "03. Purpose", text: "It’s like an athlete training just to stay in second place, or a cook who never intends to run their own kitchen. Why bother?" },
+            { tag: "04. Mastery", text: "The truth is that self-mastery and professional growth are the same thing. You can’t have one without the other." },
+            { tag: "05. Squandering", text: "If we finally beat the system but we aren't grounded in who we are, we’ll squander the victory the second we get it. We’ll have the equality we fought for and no idea what to do with it." },
+            { tag: "06. Identity", text: "Choosing to do one thing well, to really master a craft, is what builds your identity. It’s how you learn to be a 'good person' in practice, not just in theory. Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get to where you're going." }
         ];
 
         function init() {
@@ -152,7 +169,7 @@
                     document.getElementById('viewBody').innerText = ENTRIES[i].text;
                     document.getElementById('viewModal').style.display = 'flex';
                 };
-                el.innerHTML = `<div class="entry-tag">${entry.tag}</div><div class="entry-preview">${entry.text.substring(0, 50)}...</div>`;
+                el.innerHTML = `<div style="font-size:0.7rem; color:var(--light-purple); margin-bottom:8px; text-transform:uppercase; letter-spacing:1px;">${entry.tag}</div><div style="font-size:0.95rem; line-height:1.4;">${entry.text.substring(0, 45)}...</div>`;
                 grid.appendChild(el);
             });
         }
@@ -164,11 +181,11 @@
             document.getElementById('replyModal').style.display = 'flex';
             const { data: { user } } = await supabaseClient.auth.getUser();
             if (user) {
-                document.getElementById('messageForm').classList.remove('hidden');
-                document.getElementById('signupForm').classList.add('hidden');
+                document.getElementById('messageForm').style.display = 'block';
+                document.getElementById('signupForm').style.display = 'none';
             } else {
-                document.getElementById('signupForm').classList.remove('hidden');
-                document.getElementById('messageForm').classList.add('hidden');
+                document.getElementById('signupForm').style.display = 'block';
+                document.getElementById('messageForm').style.display = 'none';
             }
         }
 
@@ -179,19 +196,32 @@
             const { data, error } = await supabaseClient.auth.signUp({
                 email, password: pass, options: { data: { full_name: name } }
             });
-            if (error) return alert(error.message);
-            await supabaseClient.from('citizens').insert([{ email, full_name: name, user_id: data.user.id, auth_id: data.user.id }]);
-            alert("Welcome! You can now post your reply.");
+            if (error) return alert("Space sync error: " + error.message);
+            
+            await supabaseClient.from('citizens').insert([{ 
+                email, 
+                full_name: name, 
+                user_id: data.user.id, 
+                auth_id: data.user.id 
+            }]);
+            
+            alert("Welcome to the sanctuary! You can now share your reply.");
             location.reload();
         }
 
         async function postMessage() {
             const { data: { user } } = await supabaseClient.auth.getUser();
             const message = document.getElementById('replyMsg').value;
-            if (!message) return alert("Please type something.");
-            const { error } = await supabaseClient.from('blogreplies').insert([{ email: user.email, full_name: user.user_metadata.full_name, message }]);
-            if (error) alert(error.message);
-            else { alert("Shared!"); closeModal('replyModal'); }
+            if (!message) return alert("The message is empty, friend.");
+            
+            const { error } = await supabaseClient.from('blogreplies').insert([{ 
+                email: user.email, 
+                full_name: user.user_metadata.full_name, 
+                message 
+            }]);
+            
+            if (error) alert("Couldn't save that thought: " + error.message);
+            else { alert("Sent!"); closeModal('replyModal'); document.getElementById('replyMsg').value = ""; }
         }
 
         window.onload = init;
