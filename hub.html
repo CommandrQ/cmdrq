@@ -111,16 +111,14 @@
         /* --- The Hub Grid --- */
         #menu-grid {
             display: grid;
-            /* Mobile First: 2 Columns Wide */
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             width: 95%;
             max-width: 1000px;
-            padding: 20px 10px 60px;
+            padding: 20px 10px 40px;
             z-index: 10;
         }
 
-        /* Desktop: 4 Columns */
         @media (min-width: 800px) {
             #menu-grid {
                 grid-template-columns: repeat(4, 1fr);
@@ -155,6 +153,19 @@
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
             color: white;
         }
+
+        /* --- Footer --- */
+        footer {
+            z-index: 10;
+            margin-top: auto;
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--light-blue);
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
@@ -174,10 +185,13 @@
         <!-- JS will inject links here -->
     </main>
 
+    <footer>
+        Powered by Vanguard Citizen Services
+    </footer>
+
     <script>
         /**
          * 1. THE LINKS LIST
-         * Add or replace entries here. Very simple!
          */
         const HUB_LINKS = [
             { title: "About Me", url: "about.html" },
@@ -196,7 +210,6 @@
         const sbUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
         const sbKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
         
-        // Use a safe check to prevent "already declared" errors
         if (typeof supabaseClient === 'undefined') {
             var supabaseClient = supabase.createClient(sbUrl, sbKey);
         }
@@ -207,14 +220,12 @@
         function initHub() {
             const grid = document.getElementById('menu-grid');
             
-            // Generate the cards from the list above
             HUB_LINKS.forEach(item => {
                 const card = document.createElement('a');
                 card.href = item.url;
                 card.className = 'card';
                 card.innerText = item.title;
 
-                // If the link starts with http, open in a new tab
                 if (item.url.startsWith('http')) {
                     card.target = "_blank";
                     card.rel = "noopener noreferrer";
@@ -224,7 +235,6 @@
             });
         }
 
-        // Run when page loads
         window.addEventListener('DOMContentLoaded', initHub);
     </script>
 </body>
