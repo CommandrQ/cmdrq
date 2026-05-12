@@ -107,79 +107,48 @@ body, html {
 .glyph { width: 36px; height: 36px; fill: var(--color-white); filter: drop-shadow(0 0 8px var(--color-blue)); }
 .app-icon span { font-size: 0.85rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--color-white); width: 100%; }
 
-/* --- MODAL SYSTEM --- */
+/* MODALS */
 .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: none; /* Hidden by default */
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-    backdrop-filter: blur(10px);
+    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8);
+    display: none; justify-content: center; align-items: center;
+    z-index: 100; backdrop-filter: blur(10px);
 }
-
-.modal-window {
-    background: var(--window-bg);
-    border: 1px solid var(--color-blue);
-    padding: 40px;
-    border-radius: 24px;
-    max-width: 500px;
-    width: 90%;
-    text-align: center;
-    box-shadow: 0 0 30px rgba(90, 200, 250, 0.2);
-}
-
-.modal-title {
-    color: var(--color-blue);
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    margin-bottom: 20px;
-}
-
-.modal-text {
-    line-height: 1.6;
-    margin-bottom: 30px;
-}
-
-.modal-actions {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-}
-
-.modal-btn {
-    padding: 12px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: 0.3s;
-    font-family: var(--font-sys);
-    border: none;
-    cursor: pointer;
-}
-
+.modal-window { background: var(--window-bg); border: 1px solid var(--color-blue); padding: 40px; border-radius: 24px; max-width: 500px; width: 90%; text-align: center; }
+.modal-title { color: var(--color-blue); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 20px; }
+.modal-btn { padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; border: none; cursor: pointer; }
 .modal-btn.primary { background: var(--color-blue); color: #000; }
 .modal-btn.secondary { background: transparent; color: var(--color-purple); border: 1px solid var(--color-purple); }
 
-.modal-btn:hover { transform: scale(1.05); filter: brightness(1.2); }
-
 /* FOOTER */
 .vanguard-footer {
-    width: 100%;
-    text-align: center;
-    font-size: 0.8rem;
-    letter-spacing: 5px;
-    color: var(--color-white); /* Pure White Footer */
-    text-transform: uppercase;
-    font-weight: bold;
-    padding: 40px 0;
-    position: relative;
-    z-index: 10;
+    width: 100%; text-align: center; font-size: 0.8rem; letter-spacing: 5px; color: var(--color-white);
+    text-transform: uppercase; font-weight: bold; padding: 40px 0; position: relative; z-index: 10;
 }
 
+/* --- MOBILE OPTIMIZATION --- */
 @media (max-width: 600px) {
-    .app-dashboard { grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 20px; }
+    /* Uniform font sizing for HUD and Table Labels */
+    #system-date, #system-clock, .app-icon span {
+        font-size: 0.9rem !important;
+        font-family: var(--font-sys);
+    }
+
+    /* Pushing interface down so it doesn't touch the HUD */
+    .interface-wrapper {
+        padding-top: 14vh;
+    }
+
+    .hud-top-left, .hud-top-right {
+        top: 20px;
+    }
+
+    .app-dashboard {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        padding: 25px;
+    }
+
+    .icon-box {
+        width: 65px; height: 65px;
+    }
 }
