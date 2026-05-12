@@ -26,7 +26,9 @@
             background-attachment: fixed;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
+            /* Use dvh to account for mobile browser UI bars */
             min-height: 100vh;
+            min-height: 100dvh; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -79,7 +81,7 @@
         /* --- Header & Title --- */
         header {
             text-align: center;
-            padding: 60px 20px 20px;
+            padding: 40px 20px 10px;
             z-index: 10;
         }
 
@@ -115,8 +117,9 @@
             gap: 12px;
             width: 95%;
             max-width: 1000px;
-            padding: 20px 10px 40px;
+            padding: 20px 10px 40px; /* Increased bottom padding */
             z-index: 10;
+            flex-grow: 1; /* Allows grid to take up space and push footer down */
         }
 
         @media (min-width: 800px) {
@@ -157,11 +160,11 @@
         /* --- Pulsing White Footer --- */
         footer {
             z-index: 10;
-            margin-top: auto;
-            padding: 40px 20px;
+            width: 100%;
+            padding: 30px 20px;
             text-align: center;
             color: white;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             letter-spacing: 1.5px;
             text-transform: uppercase;
             animation: pulse 4s ease-in-out infinite;
@@ -195,9 +198,6 @@
     </footer>
 
     <script>
-        /**
-         * 1. THE LINKS LIST
-         */
         const HUB_LINKS = [
             { title: "About Me", url: "about.html" },
             { title: "The Blog", url: "https://commander-blog.com" },
@@ -209,9 +209,6 @@
             { title: "Settings",  url: "settings.html" }
         ];
 
-        /**
-         * 2. SUPABASE CONFIG
-         */
         const sbUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
         const sbKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
         
@@ -219,9 +216,6 @@
             var supabaseClient = supabase.createClient(sbUrl, sbKey);
         }
 
-        /**
-         * 3. INITIALIZE HUB
-         */
         function initHub() {
             const grid = document.getElementById('menu-grid');
             
