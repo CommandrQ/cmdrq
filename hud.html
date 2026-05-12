@@ -6,74 +6,60 @@
     <title>Vanguard_OS | HUD</title>
     <link rel="stylesheet" href="vanguard-os.css">
 </head>
-<body class="os-boot-sequence">
+<body class="os-container">
 
     <div id="star-field"></div>
 
-    <div class="hud-container">
-        <!-- LEFT: NAVIGATION MENU -->
-        <aside class="glass-panel scroll-menu">
-            <div style="padding: 15px; border-bottom: 1px solid var(--glass-border);">
-                <small style="color: var(--neon-purple)">DIRECTIVE_LINKS</small>
+    <!-- MAIN DESKTOP -->
+    <main class="desktop-grid">
+        
+        <!-- About Me / Origin Log -->
+        <div class="app-icon" data-label="About" id="app-about">
+            <div class="icon-box">
+                <svg class="glyph" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
             </div>
-            <nav style="padding: 10px;">
-                <a href="#war-room" class="nav-link">War Room</a>
-                <a href="#frequency" class="nav-link">Frequency Chamber</a>
-                <a href="#archives" class="nav-link">The Archives</a>
-                <a href="#armory" class="nav-link">The Armory</a>
-                <a href="#comms" class="nav-link">Encrypted Comms</a>
-                <!-- Easy to add more links here -->
-            </nav>
-        </aside>
+            <span>Origin_Log</span>
+        </div>
 
-        <!-- CENTER: MAIN VIEWPORT -->
-        <main class="glass-panel" style="min-height: 400px; padding: 30px;">
-            <header style="margin-bottom: 20px; display: flex; justify-content: space-between;">
-                <span>STATUS: <span style="color: var(--neon-blue)">CONNECTED</span></span>
-                <span id="os-clock">00:00:00</span>
-            </header>
-            
-            <section id="content-display">
-                <h2 style="letter-spacing: 5px;">WELCOME TO THE HIDEOUT</h2>
-                <p>Establishing secure link for Knight_User... success.</p>
-                <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 20px 0;">
-                <p>This is your tactical center. Use the left matrix to navigate the Vanguard sectors.</p>
-            </section>
-        </main>
-
-        <!-- RIGHT: STATUS/INTEL (Desktop Only) -->
-        <section class="glass-panel desktop-only" style="padding: 20px;">
-            <h4 style="color: var(--neon-purple); margin-top: 0;">TACTICAL_INTEL</h4>
-            <div style="font-size: 0.8rem; line-height: 1.6;">
-                > CURRENT MISSION: Recovery Phase I<br>
-                > ALLIES ONLINE: 1,204<br>
-                > SYSTEM LOAD: 14%
+        <!-- War Room (Short Stories) -->
+        <div class="app-icon" data-label="WarRoom">
+            <div class="icon-box">
+                <svg class="glyph" viewBox="0 0 24 24">
+                    <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
+                </svg>
             </div>
-        </section>
-    </div>
+            <span>War_Room</span>
+        </div>
 
-    <script>
-        // Starfield logic (reuse from previous page)
-        const container = document.getElementById('star-field');
-        for (let i = 0; i < 100; i++) {
-            const star = document.createElement('div');
-            star.style.position = 'absolute';
-            star.style.background = 'white';
-            star.style.width = Math.random() * 2 + 'px';
-            star.style.height = star.style.width;
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.opacity = Math.random();
-            container.appendChild(star);
-        }
+        <!-- Frequency Chamber (Music) -->
+        <div class="app-icon" data-label="Music">
+            <div class="icon-box">
+                <svg class="glyph" viewBox="0 0 24 24">
+                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                </svg>
+            </div>
+            <span>Frequencies</span>
+        </div>
 
-        // System Clock
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('os-clock').innerText = now.toLocaleTimeString();
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
+        <!-- TikTok Feed -->
+        <div class="app-icon" data-label="Social">
+            <div class="icon-box">
+                <svg class="glyph" viewBox="0 0 24 24">
+                    <path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-10 12.5v-9l6 4.5-6 4.5z"/>
+                </svg>
+            </div>
+            <span>Uplink</span>
+        </div>
+
+    </main>
+
+    <!-- SYSTEM DOCK -->
+    <footer class="vanguard-dock">
+        <!-- Icons move here on double-click -->
+    </footer>
+
+    <script src="vanguard-os.js"></script>
 </body>
 </html>
