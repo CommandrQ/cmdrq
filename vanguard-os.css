@@ -1,0 +1,131 @@
+/* vanguard-os.css */
+:root {
+    --neon-purple: #bf5af2;
+    --neon-blue: #5ac8fa;
+    --glass-bg: rgba(10, 10, 20, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --system-font: 'Courier New', Courier, monospace;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    background: #050505; /* Black base for the fade-in */
+    font-family: var(--system-font);
+    color: white;
+    overflow-x: hidden;
+}
+
+/* --- FADE IN FROM BLACK --- */
+.os-boot-sequence {
+    animation: bootFade 1.5s forwards ease-out;
+}
+
+@keyframes bootFade {
+    from { opacity: 0; filter: brightness(0); }
+    to { opacity: 1; filter: brightness(1); }
+}
+
+/* --- THE STARFIELD --- */
+#star-field {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, #0f0c29 0%, #24243e 100%);
+}
+
+/* --- 3D GLASS WINDOWS --- */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.8),
+        inset 0 0 15px rgba(191, 90, 242, 0.1); /* Subtle Purple Pulse Base */
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+/* Pulsing Purple Accent */
+.glass-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: var(--neon-purple);
+    box-shadow: 0 0 15px var(--neon-purple);
+    animation: pulseGlow 3s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+/* --- INTERACTIVE BUTTONS --- */
+.nav-link {
+    display: block;
+    padding: 15px;
+    margin: 10px 0;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+/* Desktop Hover Effects */
+@media (min-width: 769px) {
+    .nav-link:hover {
+        animation: flashWhite 0.15s steps(2);
+        background: rgba(90, 200, 250, 0.1);
+        border-color: var(--neon-blue);
+        box-shadow: 0 0 15px var(--neon-blue);
+        color: var(--neon-blue);
+        transform: translateX(10px);
+    }
+}
+
+@keyframes flashWhite {
+    0%, 100% { background: transparent; }
+    50% { background: white; }
+}
+
+/* --- RESPONSIVE LAYOUT --- */
+.hud-container {
+    padding: 20px;
+    display: grid;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Mobile First: Single Column Stack */
+@media (max-width: 768px) {
+    .hud-container {
+        grid-template-columns: 1fr;
+    }
+    .desktop-only { display: none; }
+}
+
+/* Desktop: 3-Column Tactical Layout */
+@media (min-width: 769px) {
+    .hud-container {
+        grid-template-columns: 300px 1fr 300px;
+        height: 100vh;
+        align-items: start;
+        padding-top: 50px;
+    }
+    .scroll-menu {
+        max-height: 70vh;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+    /* Custom Scrollbar */
+    .scroll-menu::-webkit-scrollbar { width: 4px; }
+    .scroll-menu::-webkit-scrollbar-thumb { background: var(--neon-purple); }
+}
