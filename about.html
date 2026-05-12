@@ -3,35 +3,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vanguard_OS | About Me</title>
-    <link rel="stylesheet" href="vanguard-os.css">
+    <title>About | Commander Q</title>
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --light-purple: #e0c3fc;
+            --light-blue: #8ecae6;
+            --deep-space: #0f0c29;
+            --glass-bg: rgba(20, 20, 35, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #7597de 100%);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- Fade in from Black --- */
+        #boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 1000;
+            pointer-events: none;
+            animation: fadeOut 1.2s forwards ease-in-out;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* --- Starfield --- */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .stars {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: transparent;
+            box-shadow: 5vw 15vh #fff, 40vw 35vh #fff, 70vw 25vh #fff, 90vw 70vh #fff, 
+                        20vw 80vh #fff, 60vw 55vh #fff, 85vw 10vh #fff, 10vw 90vh #fff;
+            animation: moveStars 140s linear infinite;
+        }
+
+        @keyframes moveStars {
+            from { transform: translateY(0); }
+            to { transform: translateY(-2000px); }
+        }
+
+        /* --- Content Layout --- */
+        .container {
+            width: 90%;
+            max-width: 700px;
+            padding: 60px 0;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .commander-title {
+            font-size: 2.2rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
+            background-size: 200% auto;
+            color: #8ecae6;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: sheen 3s linear infinite;
+        }
+
+        @keyframes sheen {
+            to { background-position: 200% center; }
+        }
+
+        /* --- Bio Card --- */
+        .bio-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            text-align: left;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--light-blue);
+            margin: 0 auto 30px;
+            display: block;
+            object-fit: cover;
+            box-shadow: 0 0 20px var(--light-blue);
+        }
+
+        h2 {
+            color: var(--light-blue);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: #e0e0e0;
+            font-size: 1.05rem;
+        }
+
+        .highlight {
+            color: var(--light-purple);
+            font-weight: bold;
+        }
+
+        /* --- Back Button --- */
+        .back-btn {
+            margin-top: 40px;
+            text-decoration: none;
+            color: var(--light-blue);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            color: white;
+            text-shadow: 0 0 10px var(--light-blue);
+        }
+
+        .back-btn span {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        /* Mobile specific spacing */
+        @media (max-width: 600px) {
+            .bio-card { padding: 25px; }
+            .commander-title { font-size: 1.8rem; }
+        }
+    </style>
 </head>
 <body>
-    <!-- LAYER 1: Starfield -->
-    <div id="star-field"></div>
 
-    <!-- LAYER 2: Interface -->
-    <div class="interface-wrapper">
-        <header class="hero-container">
-            <h1 class="hero-text">About Me</h1>
-        </header>
+    <div id="boot-screen"></div>
 
-        <main class="profile-window">
-            <p>Hey there! I’m truly passionate about fixing the gaps in our community. I’m dedicated to rebuilding the <strong>human bonds</strong> that keep us all connected!</p>
-            
-            <p>My path was forged in the <strong>Military</strong>, sharpened by <strong>Retail</strong>, and ignited by <strong>Digital Creation</strong>.</p>
-            
-            <p>I love breaking down complex processes to <strong>coach</strong> people toward their wins and <strong>mentor</strong> others to thrive. When I'm off-grid, it’s all about <strong>family</strong>. I also love documenting my journey through this incredible universe!</p>
-            
-            <div style="margin-top: 30px; display: flex; justify-content: center; padding-bottom: 10px;">
-                <a href="hud.html" class="modal-btn">Return to Hub</a>
-            </div>
-        </main>
+    <div id="starfield">
+        <div class="stars"></div>
     </div>
 
-    <footer class="vanguard-footer">Powered by Vanguard Citizen Services</footer>
+    <div class="container">
+        <header>
+            <h1 class="commander-title">Commander Q</h1>
+        </header>
 
-    <!-- Master Logic -->
-    <script src="vanguard-os.js"></script>
+        <main class="bio-card">
+            <img src="images/commanderqhs.png" alt="Commander Q" class="avatar">
+            
+            <h2>The Person Behind the Commms</h2>
+            
+            <p>Hello! I'm <span class="highlight">Commander Q</span>. I spend my time navigating the vast digital space, building lean interfaces and exploring new technologies.</p>
+            
+            <p>I believe that technology should feel as magical as a starry night, but as simple as a conversation. Whether it's coding, designing, or managing the hideout, I'm always looking for the beauty in the data.</p>
+            
+            <p>When I'm not at the command console, you can find me dreaming in <span style="color: var(--light-purple);">shades of purple and blue</span>, sipping tea, and planning the next big cosmic jump.</p>
+            
+            <p style="font-style: italic; opacity: 0.8;">"Keep looking up. The stars are just the beginning."</p>
+        </main>
+
+        <a href="hub.html" class="back-btn">
+            <span>←</span> Back to Hub
+        </a>
+    </div>
+
+    <script>
+        // Supabase Initialization (Safe Declaration)
+        const sbUrlAbout = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
+        const sbKeyAbout = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
+        
+        if (typeof aboutClient === 'undefined') {
+            var aboutClient = supabase.createClient(sbUrlAbout, sbKeyAbout);
+        }
+    </script>
 </body>
 </html>
