@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commander Q | The Hub</title>
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --light-purple: #e0c3fc;
+            --light-blue: #8ecae6;
+            --deep-space: #0f0c29;
+            --glass-bg: rgba(20, 20, 35, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #7597de 100%);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* --- Fade in from Black --- */
+        #boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 1000;
+            pointer-events: none;
+            animation: fadeOut 1.5s forwards ease-in-out;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* --- Starfield --- */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .stars {
+            width: 2px;
+            height: 2px;
+            background: transparent;
+            box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 95vw 80vh #fff, 
+                        25vw 90vh #fff, 55vw 50vh #fff, 75vw 30vh #fff, 15vw 15vh #fff;
+            animation: moveStars 150s linear infinite;
+        }
+
+        @keyframes moveStars {
+            from { transform: translateY(0); }
+            to { transform: translateY(-2000px); }
+        }
+
+        /* --- Header & Title --- */
+        header {
+            text-align: center;
+            padding: 60px 20px 20px;
+            z-index: 10;
+        }
+
+        .commander-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
+            background-size: 200% auto;
+            color: #8ecae6;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: sheen 3s linear infinite;
+            margin-bottom: 5px;
+        }
+
+        @keyframes sheen {
+            to { background-position: 200% center; }
+        }
+
+        .status-text {
+            font-size: 0.9rem;
+            color: var(--light-purple);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        /* --- The Hub Grid --- */
+        #menu-grid {
+            display: grid;
+            /* Mobile First: Two columns */
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 90%;
+            max-width: 1000px;
+            padding: 40px 0;
+            z-index: 10;
+        }
+
+        /* Desktop: Four columns */
+        @media (min-width: 800px) {
+            #menu-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 25px;
+            }
+        }
+
+        /* --- Dark Glass Cards --- */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 30px 15px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--light-blue);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--light-blue);
+            background: rgba(142, 202, 230, 0.1);
+            box-shadow: 0 0 20px rgba(142, 202, 230, 0.2);
+            color: white;
+        }
+
+        /* --- Loading State --- */
+        .loading-msg {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: var(--light-blue);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="boot-screen"></div>
+
+    <div id="starfield">
+        <div class="stars"></div>
+    </div>
+
+    <header>
+        <h1 class="commander-title">Commander Q</h1>
+        <p class="status-text">Hub Online</p>
+    </header>
+
+    <main id="menu-grid">
+        <p class="loading-msg">Fetching entries from the database...</p>
+    </main>
+
+    <script>
+        // Supabase Credentials
+        const supabaseUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
+        const supabaseKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
+        const supabase = supabasejs.createClient(supabaseUrl, supabaseKey);
+
+        async function initHub() {
+            const grid = document.getElementById('menu-grid');
+            
+            try {
+                // Fetch entries from your separate JSON file
+                const response = await fetch('links.json');
+                if (!response.ok) throw new Error('Could not find links.json');
+                
+                const data = await response.json();
+                
+                // Clear the loading message
+                grid.innerHTML = '';
+
+                // Generate cards dynamically
+                data.links.forEach(entry => {
+                    const card = document.createElement('a');
+                    card.href = entry.url;
+                    card.className = 'card';
+                    card.innerText = entry.title;
+
+                    // If it's an external link, open in new tab
+                    if (entry.url.startsWith('http')) {
+                        card.target = "_blank";
+                        card.rel = "noopener noreferrer";
+                    }
+
+                    grid.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('Error loading menu:', error);
+                grid.innerHTML = '<p class="loading-msg" style="color: #ff6b6b;">Error: Failed to sync with HQ.</p>';
+            }
+        }
+
+        // Run as soon as the DOM is ready
+        document.addEventListener('DOMContentLoaded', initHub);
+    </script>
+</body>
+</html>
