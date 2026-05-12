@@ -1,3 +1,7 @@
+/**
+ * VANGUARD_OS SYSTEM LOGIC
+ */
+
 const VanguardOS = (() => {
     const appsConfig = [
         { name: "About Me", path: "about.html", glyph: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" },
@@ -43,19 +47,38 @@ const VanguardOS = (() => {
     const setupStarfield = () => {
         const container = document.getElementById('star-field');
         if (!container) return;
-        const starCount = 140;
+        
+        // Increased count for a denser feel
+        const starCount = 180;
+
         for (let i = 0; i < starCount; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            const x = Math.random() * 100, y = Math.random() * 100;
+            
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
             const size = Math.random() * 2 + 0.5;
-            star.style.left = `${x}%`; star.style.top = `${y}%`;
+            const duration = (Math.random() * 5 + 3) * 1000;
+
+            star.style.left = `${x}%`;
+            star.style.top = `${y}%`;
             star.style.width = star.style.height = `${size}px`;
+
+            /** 
+             * THE FIX: Negative delay ensures stars are already 
+             * mid-animation when the page loads, preventing a "stop/start" feel.
+             */
             star.animate([
-                { transform: 'scale(0)', opacity: 0 },
-                { transform: `translate(${(x-50)*10}px, ${(y-50)*10}px) scale(2)`, opacity: 0.8, offset: 0.5 },
-                { transform: `translate(${(x-50)*25}px, ${(y-50)*25}px) scale(3)`, opacity: 0 }
-            ], { duration: (Math.random() * 4 + 2) * 1000, iterations: Infinity, easing: 'linear' });
+                { transform: 'scale(0) translate(0, 0)', opacity: 0 },
+                { transform: `scale(1.5) translate(${(x - 50) * 10}px, ${(y - 50) * 10}px)`, opacity: 0.9, offset: 0.5 },
+                { transform: `scale(3) translate(${(x - 50) * 30}px, ${(y - 50) * 30}px)`, opacity: 0 }
+            ], {
+                duration: duration,
+                iterations: Infinity,
+                easing: 'linear',
+                delay: -Math.random() * duration // Continuous movement fix
+            });
+
             container.appendChild(star);
         }
     };
@@ -64,12 +87,14 @@ const VanguardOS = (() => {
         const clockEl = document.getElementById('system-clock');
         const dateEl = document.getElementById('system-date');
         if (!clockEl || !dateEl) return;
+        
         const update = () => {
             const now = new Date();
             clockEl.textContent = now.toLocaleTimeString([], { hour12: true, hour: 'numeric', minute: '2-digit', second: '2-digit' });
             dateEl.textContent = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
         };
-        update(); setInterval(update, 1000);
+        update(); 
+        setInterval(update, 1000);
     };
 
     return { init, closeSocialModal };
