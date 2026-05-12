@@ -43,7 +43,8 @@ const VanguardOS = (() => {
     const setupStarfield = () => {
         const container = document.getElementById('star-field');
         if (!container) return;
-        for (let i = 0; i < 140; i++) {
+        const starCount = 140;
+        for (let i = 0; i < starCount; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             const x = Math.random() * 100, y = Math.random() * 100;
