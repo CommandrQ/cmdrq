@@ -1,68 +1,101 @@
 /**
- * VANGUARD_OS SYSTEM ENGINE
+ * VANGUARD_OS SYSTEM LOGIC
+ * Optimized and modularized framework.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-    initWarpStars();
-    startSystemClock();
-});
-
-function initWarpStars() {
-    const container = document.getElementById('star-field');
-    if (!container) return;
+const VanguardOS = (() => {
     
-    const starCount = 160;
+    // --- 1. CORE INITIALIZATION ---
+    const init = () => {
+        setupStarfield();
+        setupSystemClock();
+        setupAppInteractions();
+    };
 
-    for (let i = 0; i < starCount; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
+    // --- 2. STARFIELD WARP ENGINE ---
+    const setupStarfield = () => {
+        const container = document.getElementById('star-field');
+        if (!container) return;
         
-        let x = Math.random() * 100;
-        let y = Math.random() * 100;
-        let size = Math.random() * 2 + 0.5;
-        let duration = Math.random() * 4 + 2;
-        let delay = Math.random() * 5;
+        const starCount = 140; // Optimal for mobile and desktop
 
-        star.style.left = `${x}%`;
-        star.style.top = `${y}%`;
-        star.style.width = `${size}px`;
-        star.style.height = `${size}px`;
-        
-        star.animate([
-            { transform: 'translate(0, 0) scale(0)', opacity: 0 },
-            { transform: `translate(${(x - 50) * 8}px, ${(y - 50) * 8}px) scale(1)`, opacity: 1, offset: 0.4 },
-            { transform: `translate(${(x - 50) * 20}px, ${(y - 50) * 20}px) scale(2.5)`, opacity: 0 }
-        ], {
-            duration: duration * 1000,
-            iterations: Infinity,
-            delay: delay * 1000,
-            easing: 'ease-in'
-        });
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            
+            // Pre-calculate randomized values to save memory
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const size = Math.random() * 2 + 0.5;
+            const duration = Math.random() * 4 + 2;
+            const delay = Math.random() * 4;
 
-        container.appendChild(star);
-    }
-}
-
-function startSystemClock() {
-    const clockElement = document.getElementById('system-clock');
-    const dateElement = document.getElementById('system-date');
-
-    const updateHUD = () => {
-        const now = new Date();
-        
-        if (clockElement) {
-            clockElement.innerText = now.toLocaleTimeString([], { 
-                hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' 
+            star.style.left = `${x}%`;
+            star.style.top = `${y}%`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            
+            // Simplified and highly efficient Web Animations API call
+            star.animate([
+                { transform: 'translate(0, 0) scale(0)', opacity: 0 },
+                { transform: `translate(${(x - 50) * 5}px, ${(y - 50) * 5}px) scale(1)`, opacity: 0.8, offset: 0.5 },
+                { transform: `translate(${(x - 50) * 20}px, ${(y - 50) * 20}px) scale(2.5)`, opacity: 0 }
+            ], {
+                duration: duration * 1000,
+                iterations: Infinity,
+                delay: delay * 1000,
+                easing: 'linear' // Linear prevents jerky speed changes
             });
-        }
 
-        if (dateElement) {
-            dateElement.innerText = now.toLocaleDateString([], { 
-                weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' 
-            }).toUpperCase();
+            container.appendChild(star);
         }
     };
 
-    setInterval(updateHUD, 1000);
-    updateHUD();
-}
+    // --- 3. HUD SYSTEM TIME ---
+    const setupSystemClock = () => {
+        const clockEl = document.getElementById('system-clock');
+        const dateEl = document.getElementById('system-date');
+
+        if (!clockEl || !dateEl) return;
+
+        const updateTime = () => {
+            const now = new Date();
+            
+            clockEl.textContent = now.toLocaleTimeString([], { 
+                hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' 
+            });
+
+            dateEl.textContent = now.toLocaleDateString([], { 
+                weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' 
+            }).toUpperCase();
+        };
+
+        // Run immediately, then sync every second
+        updateTime();
+        setInterval(updateTime, 1000);
+    };
+
+    // --- 4. APP INTERACTION LOGIC ---
+    const setupAppInteractions = () => {
+        const apps = document.querySelectorAll('.app-icon');
+        
+        apps.forEach(app => {
+            app.addEventListener('click', (e) => {
+                const label = app.getAttribute('data-label');
+                console.log(`[SYSTEM]: Initializing ${label} Sequence...`);
+                
+                // Add click pulse effect
+                app.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    app.style.transform = '';
+                }, 150);
+            });
+        });
+    };
+
+    // Expose init function
+    return { init };
+})();
+
+// Boot OS when DOM is ready
+document.addEventListener('DOMContentLoaded', VanguardOS.init);
