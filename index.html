@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commander Q | The Hideout</title>
-    <!-- Supabase JS Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --light-purple: #e0c3fc;
             --light-blue: #8ecae6;
             --deep-space: #0f0c29;
-            --accent-glow: rgba(142, 202, 230, 0.5);
+            --glass-bg: rgba(15, 15, 25, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.15);
         }
 
         * {
@@ -20,15 +19,17 @@
             padding: 0;
         }
 
-        body {
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #7597de 100%);
             background-attachment: fixed;
             color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         /* --- Animated Starfield --- */
@@ -39,28 +40,16 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            pointer-events: none;
         }
 
-        /* Creating stars using multiple box-shadows for depth */
         .stars {
             width: 1px;
             height: 1px;
             background: transparent;
-            box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 90vw 80vh #fff, 
-                        20vw 90vh #fff, 50vw 50vh #fff, 75vw 35vh #fff, 15vw 15vh #fff,
-                        40vw 10vh #fff, 65vw 85vh #fff, 95vw 25vh #fff, 5vw 60vh #fff;
-            animation: moveStars 100s linear infinite;
-        }
-
-        .stars::after {
-            content: " ";
-            position: absolute;
-            top: 2000px; /* Repeat the pattern to create a loop */
-            width: 1px;
-            height: 1px;
-            background: transparent;
-            box-shadow: inherit;
+            box-shadow: 15vw 25vh #fff, 35vw 45vh #fff, 70vw 15vh #fff, 85vw 85vh #fff, 
+                        25vw 95vh #fff, 55vw 55vh #fff, 80vw 35vh #fff, 10vw 15vh #fff,
+                        45vw 10vh #fff, 60vw 80vh #fff, 95vw 30vh #fff, 5vw 70vh #fff;
+            animation: moveStars 120s linear infinite;
         }
 
         @keyframes moveStars {
@@ -68,32 +57,40 @@
             to { transform: translateY(-2000px); }
         }
 
-        /* --- Main Content Wrappers --- */
-        #landing, #main-nav {
+        /* --- Overlay for Fade to Black --- */
+        #fade-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        #fade-overlay.active {
+            opacity: 1;
+        }
+
+        /* --- Main Content --- */
+        #landing {
             position: relative;
             z-index: 10;
-            width: 100%;
+            text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            gap: 2rem;
+            width: 100%;
             padding: 20px;
         }
 
-        #landing {
-            height: 100vh;
-            text-align: center;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* --- Commander Q Sheen Text --- */
         .commander-title {
-            font-size: 3rem;
+            font-size: clamp(2.5rem, 8vw, 4rem);
             font-weight: bold;
-            margin-bottom: 1rem;
             background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
             background-size: 200% auto;
             color: #8ecae6;
@@ -107,161 +104,122 @@
             to { background-position: 200% center; }
         }
 
-        /* --- Floating Image --- */
         .commander-img {
-            width: 280px;
-            max-width: 80%;
+            width: 250px;
+            max-width: 70vw;
             height: auto;
-            margin-bottom: 2rem;
             animation: float 4s ease-in-out infinite;
-            filter: drop-shadow(0 0 15px var(--accent-glow));
+            filter: drop-shadow(0 0 20px rgba(142, 202, 230, 0.4));
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-20px); }
         }
 
-        /* --- UI Elements --- */
-        #enter-btn {
-            background: rgba(224, 195, 252, 0.1);
-            border: 2px solid var(--light-blue);
-            color: var(--light-blue);
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            border-radius: 50px;
+        /* --- Dark Glass Split Button --- */
+        .btn-container {
+            position: relative;
+            width: 280px;
+            height: 60px;
             cursor: pointer;
-            transition: all 0.3s ease;
+        }
+
+        .btn-part {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 50%; /* Half height */
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-top {
+            top: 0;
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
+            align-items: flex-end;
+        }
+
+        .btn-bottom {
+            bottom: 0;
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            align-items: flex-start;
+        }
+
+        /* The text is mirrored in both halves to create the illusion */
+        .btn-text {
+            height: 60px;
+            line-height: 60px;
+            width: 100%;
+            text-align: center;
             text-transform: uppercase;
             letter-spacing: 2px;
+            color: var(--light-blue);
+            font-weight: bold;
+            position: absolute;
         }
 
-        #enter-btn:hover {
-            background: var(--light-blue);
-            color: var(--deep-space);
-            box-shadow: 0 0 30px var(--light-blue);
-            transform: scale(1.05);
-        }
+        .btn-top .btn-text { top: 0; }
+        .btn-bottom .btn-text { bottom: 0; }
 
-        /* --- Navigation Grid (4 Columns Desktop, Responsive Mobile) --- */
-        #menu-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); /* Desktop default */
-            gap: 20px;
-            width: 100%;
-            max-width: 1000px;
-            margin-top: 50px;
+        /* Split Animation Classes */
+        .splitting .btn-top {
+            transform: translateY(-100vh);
         }
-
-        .nav-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(142, 202, 230, 0.3);
-            padding: 40px 20px;
-            text-align: center;
-            text-decoration: none;
-            color: var(--light-purple);
-            border-radius: 15px;
-            transition: transform 0.3s, border-color 0.3s;
-            font-weight: 500;
-        }
-
-        .nav-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--light-blue);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 900px) {
-            #menu-grid { grid-template-columns: repeat(2, 1fr); }
-            .commander-title { font-size: 2.2rem; }
-        }
-
-        @media (max-width: 480px) {
-            #menu-grid { grid-template-columns: 1fr; }
+        .splitting .btn-bottom {
+            transform: translateY(100vh);
         }
     </style>
 </head>
 <body>
 
+    <div id="fade-overlay"></div>
+
     <div id="starfield">
         <div class="stars"></div>
     </div>
 
-    <!-- Intro Page -->
     <section id="landing">
         <h1 class="commander-title">Commander Q</h1>
         <img src="images/commanderqhs.png" alt="Commander Q" class="commander-img">
-        <button id="enter-btn" onclick="openHideout()">Enter the hideout</button>
-    </section>
-
-    <!-- Main Navigation Page -->
-    <section id="main-nav" class="hidden">
-        <h2 style="color: var(--light-blue); margin-bottom: 2rem;">Command Center</h2>
-        <div id="menu-grid">
-            <!-- Links will be injected here -->
+        
+        <div class="btn-container" onclick="initiateSequence()">
+            <div class="btn-part btn-top">
+                <div class="btn-text">Enter the hideout</div>
+            </div>
+            <div class="btn-part btn-bottom">
+                <div class="btn-text">Enter the hideout</div>
+            </div>
         </div>
     </section>
 
     <script>
-        // Supabase Init
-        const supabaseUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
-        const supabaseKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
-        const supabase = supabasejs.createClient(supabaseUrl, supabaseKey);
+        function initiateSequence() {
+            const container = document.querySelector('.btn-container');
+            const overlay = document.getElementById('fade-overlay');
 
-        function openHideout() {
-            document.getElementById('landing').classList.add('hidden');
-            document.getElementById('main-nav').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Trigger the horizontal split animation
+            container.classList.add('splitting');
+
+            // Wait a moment for the split to start, then fade to black
+            setTimeout(() => {
+                overlay.classList.add('active');
+            }, 300);
+
+            // Navigate to hub.html after the animations complete
+            setTimeout(() => {
+                window.location.href = 'hub.html';
+            }, 1100);
         }
-
-        async function fetchLinks() {
-            const menuGrid = document.getElementById('menu-grid');
-            
-            try {
-                // Fetching from your local JSON file
-                const response = await fetch('links.json');
-                if (!response.ok) throw new Error('Could not load links.json');
-                
-                const data = await response.json();
-                
-                data.links.forEach(link => {
-                    const card = document.createElement('a');
-                    card.href = link.url;
-                    card.className = 'nav-card';
-                    card.innerText = link.title;
-
-                    // External links logic: Open in new tab if it starts with http
-                    if (link.url.startsWith('http')) {
-                        card.target = "_blank";
-                        card.rel = "noopener noreferrer";
-                    }
-
-                    menuGrid.appendChild(card);
-                });
-
-            } catch (error) {
-                console.error('Data error:', error);
-                // Simple user-friendly fallback links
-                const fallbacks = [
-                    {title: 'About Me', url: '#'},
-                    {title: 'Blog', url: '#'},
-                    {title: 'Profile', url: '#'},
-                    {title: 'Contact', url: '#'}
-                ];
-                fallbacks.forEach(link => {
-                    const card = document.createElement('a');
-                    card.href = link.url;
-                    card.className = 'nav-card';
-                    card.innerText = link.title;
-                    menuGrid.appendChild(card);
-                });
-            }
-        }
-
-        // Initialize
-        fetchLinks();
     </script>
 </body>
 </html>
