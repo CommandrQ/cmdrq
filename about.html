@@ -15,19 +15,20 @@
             max-height: none !important;
         }
 
-        /* Desktop: Standard vertical list */
+        /* Grid for the "Cube" layout on mobile */
         .profile-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
             width: 100%;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .collapsible-section {
             width: 100%;
             background: rgba(255, 255, 255, 0.03);
-            border-bottom: 1px solid var(--window-border);
+            border: 1px solid var(--window-border);
+            border-radius: 12px;
             overflow: hidden;
             transition: all 0.3s ease;
         }
@@ -41,40 +42,52 @@
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 2px;
-            padding: 20px 0;
-            text-align: left;
+            padding: 25px;
+            text-align: center;
             cursor: pointer;
             font-size: 1rem;
-            display: flex;
-            justify-content: space-between;
+            transition: background 0.3s ease;
         }
 
-        .drop-btn::after { content: '+'; transition: transform 0.3s; }
-        .active .drop-btn::after { transform: rotate(45deg); color: var(--color-purple); }
+        .drop-btn:hover {
+            background: rgba(90, 200, 250, 0.1);
+        }
 
         .drop-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease;
-            color: rgba(255, 255, 255, 0.9);
-            line-height: 1.6;
+            transition: max-height 0.5s ease, padding 0.5s ease;
+            color: rgba(255, 255, 255, 0.95);
+            padding: 0 30px;
+            line-height: 1.8;
+            text-align: left;
+            font-size: 1.05rem;
         }
 
-        .active .drop-content { max-height: 500px; padding-bottom: 20px; }
+        .active .drop-content {
+            max-height: 600px; /* Room for longer text */
+            padding-bottom: 30px;
+        }
 
-        /* Centered & Long Button for Desktop */
-        .back-btn {
-            display: block;
+        /* Desktop specific: Long, centered button */
+        .back-btn-container {
             width: 100%;
-            max-width: 450px;
-            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            width: 100%;
+            max-width: 500px; /* Nice long button for desktop */
             text-align: center;
             color: var(--color-purple);
             text-decoration: none;
             font-weight: bold;
             letter-spacing: 3px;
             border: 2px solid var(--color-purple);
-            padding: 15px 0;
+            padding: 18px 0;
             border-radius: 12px;
             transition: all 0.3s ease;
             text-transform: uppercase;
@@ -84,20 +97,24 @@
             background: var(--color-purple);
             color: white;
             box-shadow: 0 0 20px var(--color-purple);
+            transform: translateY(-2px);
         }
 
-        /* Mobile: Cube Layout Revert */
         @media (max-width: 600px) {
             .profile-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr 1fr; /* Cube Layout for mobile */
                 gap: 10px;
             }
-            .collapsible-section { border: 1px solid var(--window-border); border-radius: 12px; }
-            .drop-btn { text-align: center; justify-content: center; padding: 30px 10px; font-size: 0.75rem; }
-            .drop-btn::after { display: none; }
-            .active { grid-column: span 2; }
-            .drop-content { text-align: left; padding: 0 15px; }
+            .drop-btn {
+                padding: 35px 10px; 
+                font-size: 0.8rem;
+            }
+            .active {
+                grid-column: span 2;
+            }
+            .drop-content {
+                padding: 0 20px;
+            }
         }
     </style>
 </head>
@@ -115,41 +132,49 @@
 
     <div class="interface-wrapper">
         <header class="hero-container">
-            <h1 class="hero-text">Origin Log</h1>
+            <h1 class="hero-text">The Origin Log</h1>
         </header>
 
         <main class="app-dashboard profile-content">
             <div class="profile-grid">
+                
+                <!-- Section 1 -->
                 <div class="collapsible-section">
                     <button class="drop-btn">The Mission</button>
                     <div class="drop-content">
-                        I’m on a mission to fix the broken bits of our world—those human bonds that keep us all connected.
+                        Hey there! I’m truly passionate about fixing the gaps in our community. Lately, it feels like the <strong>human bonds</strong> that used to hold us together have started to fray a bit. My big goal is to step in and help rebuild those connections, making sure everyone feels like they have a place where they truly belong!
                     </div>
                 </div>
 
+                <!-- Section 2 -->
                 <div class="collapsible-section">
                     <button class="drop-btn">The Journey</button>
                     <div class="drop-content">
-                        Forged in the Military, sharpened by Retail, and ignited by Digital Creation.
+                        My story is a bit of a wild mix, and I wouldn't have it any other way! I’ve gathered some incredible perspectives from my time in the <strong>Military</strong>, learned the heart of customer connection in <strong>Retail</strong>, and found my creative spark through <strong>Digital Creation</strong>. All these paths have led me right here to you.
                     </div>
                 </div>
 
+                <!-- Section 3 -->
                 <div class="collapsible-section">
                     <button class="drop-btn">Superpowers</button>
                     <div class="drop-content">
-                        Process deconstruction, coaching to victory, and mentoring for growth.
+                        I’ve always had a knack for seeing the "big picture" by breaking down complex processes into pieces that just make sense. I love using that to <strong>coach</strong> people toward their wins and <strong>mentoring</strong> others to help them find their own unique rhythm and confidence!
                     </div>
                 </div>
 
+                <!-- Section 4 -->
                 <div class="collapsible-section">
                     <button class="drop-btn">Life</button>
                     <div class="drop-content">
-                        Prioritizing family and documenting my journey through the stars.
+                        When I’m not exploring the digital frontier, you’ll find me doing the things that matter most—spending quality time with my <strong>family</strong>. I also love documenting my journey through this incredible universe, capturing the moments that make life such a beautiful adventure!
                     </div>
                 </div>
+
             </div>
 
-            <a href="hud.html" class="back-btn">Back to Command Hub</a>
+            <div class="back-btn-container">
+                <a href="hud.html" class="back-btn">Back to Command Hub</a>
+            </div>
         </main>
     </div>
 
@@ -161,7 +186,12 @@
     <script>
         document.querySelectorAll('.drop-btn').forEach(button => {
             button.addEventListener('click', () => {
-                button.parentElement.classList.toggle('active');
+                const section = button.parentElement;
+                // Optional: Close other sections when one opens
+                // document.querySelectorAll('.collapsible-section').forEach(s => {
+                //     if(s !== section) s.classList.remove('active');
+                // });
+                section.classList.toggle('active');
             });
         });
     </script>
