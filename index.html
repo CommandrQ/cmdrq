@@ -11,6 +11,7 @@
             --deep-space: #0f0c29;
             --glass-bg: rgba(15, 15, 25, 0.7);
             --glass-border: rgba(255, 255, 255, 0.15);
+            --glow-color: rgba(142, 202, 230, 0.5);
         }
 
         * {
@@ -123,24 +124,34 @@
             width: 280px;
             height: 60px;
             cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Hover Effect: Scale and Glow */
+        .btn-container:hover:not(.splitting) {
+            transform: scale(1.08);
         }
 
         .btn-part {
             position: absolute;
             left: 0;
             width: 100%;
-            height: 50%; /* Half height */
+            height: 50%;
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
+            transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1), 
+                        border-color 0.3s ease, 
+                        box-shadow 0.3s ease,
+                        background 0.3s ease;
             border: 1px solid var(--glass-border);
         }
 
+        /* Top half styles */
         .btn-top {
             top: 0;
             border-bottom: none;
@@ -148,6 +159,7 @@
             align-items: flex-end;
         }
 
+        /* Bottom half styles */
         .btn-bottom {
             bottom: 0;
             border-top: none;
@@ -155,7 +167,7 @@
             align-items: flex-start;
         }
 
-        /* The text is mirrored in both halves to create the illusion */
+        /* Shared text within button halves */
         .btn-text {
             height: 60px;
             line-height: 60px;
@@ -166,12 +178,25 @@
             color: var(--light-blue);
             font-weight: bold;
             position: absolute;
+            transition: color 0.3s ease;
         }
 
         .btn-top .btn-text { top: 0; }
         .btn-bottom .btn-text { bottom: 0; }
 
-        /* Split Animation Classes */
+        /* --- Hover State Modifications --- */
+        .btn-container:hover:not(.splitting) .btn-part {
+            border-color: var(--light-blue);
+            background: rgba(25, 25, 40, 0.85);
+            box-shadow: 0 0 15px var(--glow-color);
+        }
+
+        .btn-container:hover:not(.splitting) .btn-text {
+            color: white;
+            text-shadow: 0 0 10px var(--light-blue);
+        }
+
+        /* --- Split Animation --- */
         .splitting .btn-top {
             transform: translateY(-100vh);
         }
@@ -207,18 +232,18 @@
             const container = document.querySelector('.btn-container');
             const overlay = document.getElementById('fade-overlay');
 
-            // Trigger the horizontal split animation
+            // Add the splitting class to trigger CSS animation
             container.classList.add('splitting');
 
-            // Wait a moment for the split to start, then fade to black
+            // Initiate the fade to black slightly after the split starts
             setTimeout(() => {
                 overlay.classList.add('active');
-            }, 300);
+            }, 350);
 
-            // Navigate to hub.html after the animations complete
+            // Navigate to the hub
             setTimeout(() => {
                 window.location.href = 'hub.html';
-            }, 1100);
+            }, 1200);
         }
     </script>
 </body>
