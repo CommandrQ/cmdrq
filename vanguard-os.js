@@ -2,19 +2,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     initWarpStars();
     startSystemClock();
-    
-    // Simple Navigation Logic
-    const icons = document.querySelectorAll('.app-icon');
-    icons.forEach(icon => {
-        icon.addEventListener('click', () => {
-            const module = icon.dataset.label;
-            console.log(`Accessing ${module}...`);
-            // Add your specific redirection or modal logic here
-        });
-    });
 });
 
-// 1. ANIMATED WARP STARS (Pocket Universe Engine)
+// Warp Speed Starfield Engine
 function initWarpStars() {
     const container = document.getElementById('star-field');
     const starCount = 150;
@@ -34,8 +24,8 @@ function initWarpStars() {
         star.style.height = `${size}px`;
         
         star.animate([
-            { transform: 'translateZ(0) scale(1)', opacity: 0.3 },
-            { transform: `translate(${(x-50)*0.5}px, ${(y-50)*0.5}px) scale(1.5)`, opacity: 1 },
+            { transform: 'translateZ(0) scale(1)', opacity: 0.2 },
+            { transform: `translate(${(x-50)*0.5}px, ${(y-50)*0.5}px) scale(1.5)`, opacity: 0.8 },
             { transform: `translate(${(x-50)*1.2}px, ${(y-50)*1.2}px) scale(2)`, opacity: 0 }
         ], {
             duration: duration * 1000,
@@ -48,7 +38,7 @@ function initWarpStars() {
     }
 }
 
-// 2. REAL-TIME LOCAL CLOCK & DATE
+// System Time & Date Management
 function startSystemClock() {
     const clockElement = document.getElementById('system-clock');
     const dateElement = document.getElementById('system-date');
@@ -56,20 +46,12 @@ function startSystemClock() {
     const update = () => {
         const now = new Date();
         
-        // Time format: HH:MM:SS
         clockElement.innerText = now.toLocaleTimeString([], { 
-            hour12: false, 
-            hour: '2-digit', 
-            minute: '2-digit', 
-            second: '2-digit' 
+            hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' 
         });
 
-        // Date format: DAY, MON DD, YYYY
         dateElement.innerText = now.toLocaleDateString([], { 
-            weekday: 'short', 
-            month: 'short', 
-            day: 'numeric', 
-            year: 'numeric' 
+            weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' 
         }).toUpperCase();
     };
 
