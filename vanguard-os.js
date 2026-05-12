@@ -1,5 +1,4 @@
 const VanguardOS = (() => {
-
     const appsConfig = [
         { name: "About Me", path: "about.html", glyph: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" },
         { name: "Dreamscape", path: "dreamscape.html", glyph: "M11.1,12.08C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12c0,0.14,0.02,0.28,0.02,0.42 C2.62,12.15,3.29,12,4,12c1.66,0,3.18,0.83,4.1,2.15C9.77,14.63,11,16.17,11,18c0,1.52-0.87,2.83-2.12,3.51 c0.98,0.32,2.03,0.5,3.11,0.5c5.52,0,10-4.48,10-10C22,7.92,17.27,4.44,11.1,12.08z" },
@@ -28,6 +27,7 @@ const VanguardOS = (() => {
 
     const setupStarfield = () => {
         const container = document.getElementById('star-field');
+        if (!container) return;
         for (let i = 0; i < 140; i++) {
             const star = document.createElement('div');
             star.className = 'star';
@@ -42,6 +42,7 @@ const VanguardOS = (() => {
     const setupSystemClock = () => {
         const clockEl = document.getElementById('system-clock');
         const dateEl = document.getElementById('system-date');
+        if (!clockEl) return;
         const update = () => {
             const now = new Date();
             clockEl.textContent = now.toLocaleTimeString([], { hour12: true, hour: 'numeric', minute: '2-digit', second: '2-digit' });
