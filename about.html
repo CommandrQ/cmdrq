@@ -10,12 +10,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 30px !important;
+            padding: 30px 20px !important;
             height: auto !important;
             max-height: none !important;
         }
 
-        /* Grid for the "Cube" layout on mobile */
         .profile-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -46,17 +45,12 @@
             text-align: center;
             cursor: pointer;
             font-size: 1rem;
-            transition: background 0.3s ease;
-        }
-
-        .drop-btn:hover {
-            background: rgba(90, 200, 250, 0.1);
         }
 
         .drop-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease, padding 0.5s ease;
+            transition: max-height 0.5s ease;
             color: rgba(255, 255, 255, 0.95);
             padding: 0 30px;
             line-height: 1.8;
@@ -65,22 +59,20 @@
         }
 
         .active .drop-content {
-            max-height: 600px; /* Room for longer text */
+            max-height: 1000px;
             padding-bottom: 30px;
         }
 
-        /* Desktop specific: Long, centered button */
         .back-btn-container {
             width: 100%;
             display: flex;
             justify-content: center;
-            margin-top: 20px;
         }
 
         .back-btn {
             display: inline-block;
             width: 100%;
-            max-width: 500px; /* Nice long button for desktop */
+            max-width: 500px;
             text-align: center;
             color: var(--color-purple);
             text-decoration: none;
@@ -97,24 +89,13 @@
             background: var(--color-purple);
             color: white;
             box-shadow: 0 0 20px var(--color-purple);
-            transform: translateY(-2px);
         }
 
         @media (max-width: 600px) {
-            .profile-grid {
-                grid-template-columns: 1fr 1fr; /* Cube Layout for mobile */
-                gap: 10px;
-            }
-            .drop-btn {
-                padding: 35px 10px; 
-                font-size: 0.8rem;
-            }
-            .active {
-                grid-column: span 2;
-            }
-            .drop-content {
-                padding: 0 20px;
-            }
+            .profile-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .drop-btn { padding: 30px 10px; font-size: 0.85rem; min-height: 100px; }
+            .active { grid-column: span 2; }
+            .back-btn { max-width: 100%; }
         }
     </style>
 </head>
@@ -123,7 +104,7 @@
     <div id="star-field"></div>
 
     <div class="hud-top-left">
-        <p id="system-date">INITIALIZING...</p>
+        <p id="system-date">LOADING...</p>
     </div>
     
     <div class="hud-top-right">
@@ -132,44 +113,38 @@
 
     <div class="interface-wrapper">
         <header class="hero-container">
-            <h1 class="hero-text">The Origin Log</h1>
+            <h1 class="hero-text">Origin Log</h1>
         </header>
 
         <main class="app-dashboard profile-content">
             <div class="profile-grid">
-                
-                <!-- Section 1 -->
                 <div class="collapsible-section">
                     <button class="drop-btn">The Mission</button>
                     <div class="drop-content">
-                        Hey there! I’m truly passionate about fixing the gaps in our community. Lately, it feels like the <strong>human bonds</strong> that used to hold us together have started to fray a bit. My big goal is to step in and help rebuild those connections, making sure everyone feels like they have a place where they truly belong!
+                        Hey there! I’m truly passionate about fixing the gaps in our community. Lately, it feels like the <strong>human bonds</strong> that used to hold us together have started to fray a bit. My big goal is to step in and help rebuild those connections!
                     </div>
                 </div>
 
-                <!-- Section 2 -->
                 <div class="collapsible-section">
                     <button class="drop-btn">The Journey</button>
                     <div class="drop-content">
-                        My story is a bit of a wild mix, and I wouldn't have it any other way! I’ve gathered some incredible perspectives from my time in the <strong>Military</strong>, learned the heart of customer connection in <strong>Retail</strong>, and found my creative spark through <strong>Digital Creation</strong>. All these paths have led me right here to you.
+                        My story is a wild mix! I’ve gathered perspectives from the <strong>Military</strong>, learned customer connection in <strong>Retail</strong>, and found my creative spark through <strong>Digital Creation</strong>.
                     </div>
                 </div>
 
-                <!-- Section 3 -->
                 <div class="collapsible-section">
                     <button class="drop-btn">Superpowers</button>
                     <div class="drop-content">
-                        I’ve always had a knack for seeing the "big picture" by breaking down complex processes into pieces that just make sense. I love using that to <strong>coach</strong> people toward their wins and <strong>mentoring</strong> others to help them find their own unique rhythm and confidence!
+                        I love breaking down complex processes into pieces that make sense. I use that to <strong>coach</strong> people toward their wins and <strong>mentor</strong> others to find their rhythm!
                     </div>
                 </div>
 
-                <!-- Section 4 -->
                 <div class="collapsible-section">
                     <button class="drop-btn">Life</button>
                     <div class="drop-content">
-                        When I’m not exploring the digital frontier, you’ll find me doing the things that matter most—spending quality time with my <strong>family</strong>. I also love documenting my journey through this incredible universe, capturing the moments that make life such a beautiful adventure!
+                        When I’m not exploring the digital frontier, I’m with my <strong>family</strong>. I also love documenting my journey through this incredible universe!
                     </div>
                 </div>
-
             </div>
 
             <div class="back-btn-container">
@@ -186,12 +161,7 @@
     <script>
         document.querySelectorAll('.drop-btn').forEach(button => {
             button.addEventListener('click', () => {
-                const section = button.parentElement;
-                // Optional: Close other sections when one opens
-                // document.querySelectorAll('.collapsible-section').forEach(s => {
-                //     if(s !== section) s.classList.remove('active');
-                // });
-                section.classList.toggle('active');
+                button.parentElement.classList.toggle('active');
             });
         });
     </script>
