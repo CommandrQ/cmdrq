@@ -2,41 +2,48 @@
     --color-purple: #bf5af2;
     --color-blue: #5ac8fa;
     --color-gold: #D4AF37;
-    --color-gold-glow: rgba(212, 175, 55, 0.3);
-    --window-bg: rgba(15, 15, 25, 0.35);
+    --color-white: #ffffff;
+    --window-bg: rgba(15, 15, 25, 0.4); 
+    --window-border: rgba(255, 255, 255, 0.1);
     --font-sys: 'Courier New', Courier, monospace;
 }
 
 body, html {
     margin: 0; padding: 0;
     width: 100%; min-height: 100vh;
-    background: radial-gradient(circle at center, #111122 0%, #050505 100%);
-    color: #fff; font-family: var(--font-sys);
+    /* Changed to background-color to ensure transparency doesn't break z-index */
+    background-color: #050505; 
+    color: var(--color-white);
+    font-family: var(--font-sys);
     overflow-x: hidden;
 }
 
-/* PERSISTENT STARFIELD */
+/* STARFIELD ENGINE - Fixed Visibility */
 #star-field {
-    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    position: fixed; 
+    inset: 0;
+    z-index: 1; /* Lowest visible layer */
+    pointer-events: none;
+    background: radial-gradient(circle at center, #111122 0%, #050505 100%);
 }
+
 .star {
-    position: absolute; background: #fff; border-radius: 50%;
+    position: absolute;
+    background: var(--color-white);
+    border-radius: 50%;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
-.interface-wrapper { position: relative; z-index: 2; padding-bottom: 100px; }
+.interface-wrapper {
+    position: relative;
+    z-index: 10; /* Higher than stars */
+    display: flex; flex-direction: column; align-items: center;
+    padding-top: 5vh; padding-bottom: 100px;
+}
 
-/* MODAL CENTERING */
-.modal-overlay {
-    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9);
-    display: none; justify-content: center; align-items: center; z-index: 100;
-    backdrop-filter: blur(10px);
-}
-.modal-window {
-    background: var(--window-bg); padding: 40px; border-radius: 24px;
-    width: 90%; position: relative; text-align: center; /* Centers title and buttons */
-}
-.modal-actions {
-    display: flex; gap: 15px; justify-content: center; /* Centers buttons */
-    margin-top: 30px; flex-wrap: wrap;
+/* FOOTER */
+.vanguard-footer { 
+    position: fixed; bottom: 0; width: 100%; text-align: center; 
+    font-size: 0.75rem; letter-spacing: 4px; padding: 20px 0; 
+    z-index: 20; background: rgba(5, 5, 5, 0.6); backdrop-filter: blur(10px);
 }
