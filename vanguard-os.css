@@ -1,73 +1,64 @@
-/* VANGUARD_OS MASTER STYLES - DESKTOP OPTIMIZATION */
 :root {
     --color-purple: #bf5af2;
     --color-blue: #5ac8fa;
     --color-gold: #D4AF37;
-    --color-solid-bg: #0a0a15;
     --color-black: #000000;
+    --color-solid-bg: #0a0a15;
     --font-sys: 'Courier New', Courier, monospace;
 }
 
-/* ... (Previous starfield and body styles remain the same) ... */
+body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    background-color: #050505;
+    color: #fff; font-family: var(--font-sys);
+    overflow: hidden;
+}
 
+/* STARFIELD - Deep Background */
+#star-field {
+    position: fixed; inset: 0;
+    z-index: 0; pointer-events: none;
+    background: radial-gradient(circle at center, #111122 0%, #050505 100%);
+}
+.star { position: absolute; background: #fff; border-radius: 50%; }
+
+/* INTERFACE WRAPPER */
 .interface-wrapper {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    padding: 2vh 2.5%; /* Reduced side padding from screen edge */
+    position: relative; z-index: 10;
+    display: flex; flex-direction: column; align-items: center;
+    height: 100vh; width: 100%;
 }
 
-/* ABOUT ME / PROFILE WINDOW */
-.profile-window {
-    background: var(--color-solid-bg);
-    border: 2px solid var(--color-blue);
-    border-radius: 15px;
-    width: 100%; 
-    max-width: 1100px; /* Allows window to expand further on desktop */
-    padding: 30px;
-    
-    /* Position just above footer */
-    margin-bottom: 75px; /* Creates padding between window and footer */
-    
-    /* Internal scroll logic */
-    overflow-y: auto;
-    line-height: 1.6;
-    text-align: left;
-    box-shadow: 0 0 30px rgba(90, 200, 250, 0.1);
+/* TITLES */
+.hero-text {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 900; letter-spacing: 8px; text-transform: uppercase;
+    color: var(--color-purple); text-align: center; margin-top: 5vh;
 }
 
-/* DESKTOP SPECIFIC REFINEMENT */
-@media (min-width: 769px) {
-    .profile-window {
-        font-size: 0.95rem; /* Slightly smaller text for desktop */
-        max-height: calc(100vh - 250px); /* Adjusts height to stay above footer/header */
-    }
-    
-    .interface-wrapper {
-        padding-top: 4vh;
-    }
-}
-
-/* SOLID BUTTONS (Ensuring Opaque Backs) */
-.modal-btn, .hub-return-btn, .app-icon {
+/* SYSTEM BUTTONS - ALWAYS SOLID */
+.modal-btn, .app-icon, .hub-return-btn {
     background: var(--color-black) !important;
     border: 2px solid var(--color-purple);
-    color: #fff;
-    padding: 12px 24px;
-    display: inline-block;
-    text-decoration: none;
-    font-weight: bold;
-    text-transform: uppercase;
-    transition: 0.3s;
+    color: #fff; padding: 12px 24px;
+    text-transform: uppercase; font-weight: bold;
+    cursor: pointer; text-decoration: none;
+    display: inline-block; transition: 0.3s;
+}
+.modal-btn.primary { background: var(--color-gold) !important; color: #000; border-color: var(--color-gold); }
+.modal-btn:hover { border-color: var(--color-blue); box-shadow: 0 0 15px var(--color-blue); }
+
+/* FOOTER */
+.vanguard-footer {
+    position: fixed; bottom: 0; width: 100%; text-align: center;
+    padding: 15px 0; background: rgba(0,0,0,0.9); z-index: 20;
+    font-size: 0.7rem; letter-spacing: 4px; border-top: 1px solid rgba(255,255,255,0.1);
 }
 
-.modal-btn:hover {
-    background: var(--color-purple) !important;
-    color: #fff;
-    box-shadow: 0 0 15px var(--color-purple);
+/* MODAL OVERLAYS */
+.modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    display: none; justify-content: center; align-items: center;
+    z-index: 2000; backdrop-filter: blur(8px);
 }
-
-/* ... (Footer and other styles remain same) ... */
