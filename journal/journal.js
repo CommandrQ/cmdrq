@@ -3,34 +3,38 @@
  */
 
 const JournalModule = (() => {
-    let currentPostId = null;
-
+    
     const loadEntries = async () => {
         const deck = document.getElementById('log-deck');
         if (!deck) return;
 
         try {
+            console.log("Journal: Fetching entries.json...");
             const response = await fetch('entries.json');
             const entries = await response.json();
             
-            deck.innerHTML = ''; // Clear previous
+            deck.innerHTML = ''; 
             entries.forEach(entry => {
                 const card = document.createElement('div');
                 card.className = 'log-entry-card';
                 card.innerHTML = `<h3>${entry.title}</h3>`;
-                card.onclick = () => openEntry(entry);
+                
+                // HARD LINK TO MAIN OS MODAL
+                card.onclick = (e) => {
+                    e.preventDefault();
+                    console.log("Card Clicked:", entry.title);
+                    if (window.VanguardOS) {
+                        window.VanguardOS.openBlogModal(entry.title, entry.content, entry.id);
+                    } else {
+                        console.error("OS Link Missing: VanguardOS not found in global scope.");
+                    }
+                };
+                
                 deck.appendChild(card);
             });
         } catch (err) {
-            console.error("Uplink Failure: entries.json unreachable.", err);
+            console.error("Uplink Failure:", err);
         }
-    };
-
-    const openEntry = (entry) => {
-        currentPostId = entry.id;
-        document.getElementById('blog-modal-title').textContent = entry.title;
-        document.getElementById('blog-modal-content').innerHTML = entry.content;
-        document.getElementById('blog-modal').style.display = 'flex';
     };
 
     return {
@@ -38,4 +42,5 @@ const JournalModule = (() => {
     };
 })();
 
-document.addEventListener('DOMContentLoaded', JournalModule.init);
+// Initialize only once the page is fully ready
+window.addEventListener('load', JournalModule.init);
