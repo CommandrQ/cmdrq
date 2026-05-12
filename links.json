@@ -1,0 +1,8 @@
+{
+  "links": [
+    { "title": "About Me", "url": "/about" },
+    { "title": "Blog", "url": "/blog" },
+    { "title": "Profile", "url": "/profile" },
+    { "title": "Star Maps", "url": "/maps" }
+  ]
+}
