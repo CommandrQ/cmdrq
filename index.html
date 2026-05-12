@@ -17,11 +17,12 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
+            /* Constant background for the whole experience */
             background: linear-gradient(180deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
             font-family: 'Segoe UI', sans-serif;
         }
 
-        /* Starfield Layer */
+        /* Starfield Layer - Visible from second one */
         #star-container {
             position: fixed;
             width: 100%;
@@ -42,7 +43,7 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* Intro Sequence Layers */
+        /* Intro Sequence Layer - Transparent background */
         #intro-sequence {
             position: fixed;
             inset: 0;
@@ -50,28 +51,31 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #000;
-            animation: fadeToSky 2s forwards 6s;
+            background: transparent; /* No black overlay */
+            pointer-events: none;
         }
 
         .frame {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 80%; /* Slightly smaller to feel like a window in the stars */
+            height: 60%;
             opacity: 0;
             background-size: cover;
             background-position: center;
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 30px rgba(90, 200, 250, 0.2);
+            border-radius: 4px;
         }
 
-        #frame-1 { animation: frameSequence 2s forwards 0s; background-image: url('images/frame1.jpg'); }
-        #frame-2 { animation: frameSequence 2s forwards 2s; background-image: url('images/frame2.jpg'); }
-        #frame-3 { animation: frameSequence 2s forwards 4s; background-image: url('images/frame3.jpg'); }
+        #frame-1 { animation: frameSequence 2s forwards 0.5s; background-image: url('images/frame1.jpg'); }
+        #frame-2 { animation: frameSequence 2s forwards 2.5s; background-image: url('images/frame2.jpg'); }
+        #frame-3 { animation: frameSequence 2s forwards 4.5s; background-image: url('images/frame3.jpg'); }
 
         @keyframes frameSequence {
-            0% { opacity: 0; transform: scale(1.1); filter: blur(10px); }
-            20% { opacity: 1; filter: blur(0px); }
+            0% { opacity: 0; transform: scale(0.95); filter: brightness(0.5) blur(5px); }
+            20% { opacity: 1; filter: brightness(1) blur(0px); }
             80% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; }
+            100% { opacity: 0; transform: scale(1.05); }
         }
 
         /* Main Content reveal */
@@ -85,7 +89,7 @@
             justify-content: center;
             align-items: center;
             opacity: 0;
-            animation: revealContent 1s forwards 6.5s;
+            animation: revealContent 1.5s forwards 6.5s;
         }
 
         @keyframes revealContent { to { opacity: 1; } }
@@ -110,7 +114,7 @@
             50% { transform: translateY(-15px); }
         }
 
-        /* Transition FX */
+        /* Transition FX: The Slice */
         #transition-overlay {
             position: fixed;
             inset: 0;
@@ -121,22 +125,21 @@
             clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
         }
 
-        /* The Slicing Animation Class */
         .slicing {
             animation: flashAndSlice 1.2s forwards ease-in;
         }
 
         @keyframes flashAndSlice {
             0% { opacity: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
-            10% { opacity: 1; } /* The Flash */
-            30% { background: black; } /* Turn to black after flash */
-            100% { opacity: 1; background: black; clip-path: polygon(0 0, 0 0, 100% 100%, 0% 100%); }
+            10% { opacity: 1; }
+            30% { background: black; }
+            100% { opacity: 1; background: black; clip-path: polygon(0 100%, 100% 0, 100% 100%, 0% 100%); }
         }
 
         .enter-btn {
             margin-top: 30px;
             padding: 15px 45px;
-            background: transparent;
+            background: rgba(20, 20, 35, 0.5);
             border: 1px solid var(--neon-purple);
             color: white;
             font-family: 'Courier New', Courier, monospace;
@@ -145,23 +148,21 @@
             cursor: pointer;
             backdrop-filter: blur(10px);
             transition: 0.3s;
-            position: relative;
-            overflow: hidden;
         }
 
         .enter-btn:hover {
             box-shadow: 0 0 20px var(--neon-purple);
-            background: rgba(191, 90, 242, 0.1);
+            background: rgba(191, 90, 242, 0.2);
         }
-
-        @keyframes fadeToSky { to { background: transparent; pointer-events: none; } }
     </style>
 </head>
 <body>
 
+    <!-- Stars and sky are now visible immediately -->
     <div id="star-container"></div>
     <div id="transition-overlay"></div>
 
+    <!-- Frames now appear over the star background -->
     <div id="intro-sequence">
         <div class="frame" id="frame-1"></div>
         <div class="frame" id="frame-2"></div>
@@ -190,12 +191,9 @@
             starContainer.appendChild(star);
         }
 
-        // Exit Sequence
         function initiateExit() {
             const overlay = document.getElementById('transition-overlay');
             overlay.classList.add('slicing');
-            
-            // Wait for animation to finish before redirect
             setTimeout(() => {
                 window.location.href = 'hud.html'; 
             }, 1100);
