@@ -1,7 +1,3 @@
-/**
- * VANGUARD_OS SYSTEM LOGIC
- */
-
 const VanguardOS = (() => {
     const appsConfig = [
         { name: "About Me", path: "about.html", glyph: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" },
@@ -17,7 +13,6 @@ const VanguardOS = (() => {
         setupSystemClock();
     };
 
-    // MODAL LOGIC
     const openSocialModal = (url) => {
         const modal = document.getElementById('social-modal');
         const link = document.getElementById('modal-link');
@@ -35,17 +30,11 @@ const VanguardOS = (() => {
         appsConfig.forEach(app => {
             const appElement = document.createElement('a');
             appElement.className = 'app-icon';
-            
-            // Check if it's an external link
             if (app.path.startsWith('http')) {
-                appElement.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    openSocialModal(app.path);
-                });
+                appElement.addEventListener('click', (e) => { e.preventDefault(); openSocialModal(app.path); });
             } else {
                 appElement.href = app.path;
             }
-
             appElement.innerHTML = `<div class="icon-box"><svg class="glyph" viewBox="0 0 24 24"><path d="${app.glyph}"/></svg></div><span>${app.name}</span>`;
             dashboard.appendChild(appElement);
         });
@@ -79,5 +68,4 @@ const VanguardOS = (() => {
 
     return { init, closeSocialModal };
 })();
-
 VanguardOS.init();
