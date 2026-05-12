@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Journal | Commander Q</title>
+    <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --light-purple: #e0c3fc;
             --light-blue: #8ecae6;
             --deep-space: #0f0c29;
-            --glass-bg: rgba(15, 15, 25, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(15, 15, 25, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.15);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,7 +20,6 @@
         html, body {
             width: 100%;
             height: 100%;
-            /* These lines ensure mobile scrolling is enabled */
             overflow-x: hidden;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
@@ -35,17 +35,18 @@
             align-items: center;
         }
 
-        /* --- Visual Flourishes --- */
+        /* --- Starfield Background --- */
         #boot-screen { position: fixed; inset: 0; background: black; z-index: 1000; pointer-events: none; animation: fadeOut 1.5s forwards; }
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
         #starfield { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
         .stars { position: absolute; width: 2px; height: 2px; background: transparent; 
-                  box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 25vw 90vh #fff, 60vw 50vh #fff;
+                  box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 25vw 90vh #fff, 55vw 50vh #fff;
                   animation: moveStars 150s linear infinite; }
         @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
 
-        header { text-align: center; padding: 40px 20px 10px; z-index: 10; width: 100%; }
+        /* --- Header --- */
+        header { text-align: center; padding: 25px 20px 10px; z-index: 10; width: 100%; }
         .commander-title { 
             font-size: clamp(1.8rem, 6vw, 2.5rem); font-weight: bold; 
             background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
@@ -54,63 +55,87 @@
         }
         @keyframes sheen { to { background-position: 200% center; } }
 
-        /* --- The 6 Separate Entries --- */
-        #journal-container { 
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            width: 90%;
-            max-width: 800px;
-            padding: 20px 0 60px;
-            z-index: 10;
+        /* --- Journal Grid (2 Columns Mobile) --- */
+        #journal-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px; 
+            width: 95%; 
+            max-width: 1000px; 
+            padding: 10px 10px 40px; 
+            z-index: 10; 
         }
+        @media (min-width: 800px) { #journal-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
 
-        .entry-card { 
+        .journal-card { 
             background: var(--glass-bg);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 35px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 160px;
         }
 
-        .entry-text {
-            line-height: 1.8;
-            color: #f0f0f0;
-            font-size: 1.1rem;
-            margin-bottom: 25px;
+        .journal-title { 
+            font-size: 1rem; 
+            color: var(--light-purple); 
+            font-weight: 600; 
+            margin-bottom: 15px;
+            line-height: 1.3;
         }
 
-        /* --- Simple UI Elements --- */
-        .btn-reply {
+        /* --- Buttons --- */
+        .btn {
             background: none;
             border: 1px solid var(--light-blue);
             color: var(--light-blue);
-            padding: 10px 20px;
+            padding: 10px 15px;
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
             transition: 0.3s;
         }
-        .btn-reply:hover { background: var(--light-blue); color: var(--deep-space); }
+        .btn:hover { background: var(--light-blue); color: var(--deep-space); box-shadow: 0 0 15px var(--light-blue); }
 
-        .modal { 
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; 
+        /* --- Modals (Popups) --- */
+        .modal-overlay { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; 
             display: none; justify-content: center; align-items: center; 
             padding: 20px; backdrop-filter: blur(10px);
         }
-        .modal-content { 
-            background: var(--glass-bg); border: 1px solid var(--glass-border); width: 100%; max-width: 450px;
-            border-radius: 24px; padding: 35px; position: relative;
+        
+        .modal-window { 
+            background: var(--glass-bg); 
+            border: 1px solid var(--glass-border); 
+            width: 100%; 
+            max-width: 500px;
+            border-radius: 28px; 
+            padding: 30px; 
+            position: relative; 
+            max-height: 80vh; 
+            overflow-y: auto;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .btn-close { position: absolute; top: 15px; right: 20px; background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; opacity: 0.5; }
 
-        input, textarea { width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; font-family: inherit; font-size: 1rem; }
-        .submit-btn { width: 100%; padding: 14px; border-radius: 50px; background: var(--light-blue); color: var(--deep-space); border: none; font-weight: bold; cursor: pointer; }
+        .modal-overlay.active { display: flex; }
+        .modal-overlay.active .modal-window { transform: scale(1); opacity: 1; }
+
+        .close-x { position: absolute; top: 15px; right: 20px; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+        .entry-content { line-height: 1.8; color: #f0f0f0; margin-top: 20px; font-size: 1.05rem; }
+
+        /* --- Forms --- */
+        input, textarea { 
+            width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; font-family: inherit; 
+        }
 
         footer { 
             z-index: 10; padding: 40px 20px; text-align: center; color: white; 
@@ -118,15 +143,6 @@
             animation: pulse 4s ease-in-out infinite; width: 100%; margin-top: auto;
         }
         @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
-
-        /* --- Mobile Layout Adjustments --- */
-        @media (max-width: 600px) {
-            header { padding: 15px 20px 5px; } /* Minimal top padding */
-            .commander-title { font-size: 1.8rem; }
-            #journal-container { width: 95%; padding-top: 10px; }
-            .entry-card { padding: 25px; }
-            .entry-text { font-size: 1rem; }
-        }
     </style>
 </head>
 <body>
@@ -135,30 +151,39 @@
     <div id="starfield"><div class="stars"></div></div>
 
     <header>
-        <h1 class="commander-title">Journal</h1>
+        <h1 class="commander-title">Journal Hub</h1>
     </header>
 
-    <!-- This container holds all 6 entries as separate cards -->
-    <main id="journal-container"></main>
+    <main id="journal-grid"></main>
 
-    <!-- Shared Modal for Login/Reply -->
-    <div id="replyModal" class="modal">
-        <div class="modal-content">
-            <button class="btn-close" onclick="closeModal()">&times;</button>
+    <!-- Reading Modal -->
+    <div id="readModal" class="modal-overlay" onclick="handleOverlayClick(event, 'readModal')">
+        <div class="modal-window">
+            <button class="close-x" onclick="closeModal('readModal')">&times;</button>
+            <div id="fullEntryText" class="entry-content"></div>
+            <div style="margin-top: 30px; display: flex; gap: 10px;">
+                <button class="btn" style="flex: 1;" onclick="openReplyModal()">Reply</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth/Reply Modal -->
+    <div id="replyModal" class="modal-overlay" onclick="handleOverlayClick(event, 'replyModal')">
+        <div class="modal-window">
+            <button class="close-x" onclick="closeModal('replyModal')">&times;</button>
             
             <div id="signupForm" style="display:none;">
                 <h3 style="color: var(--light-purple); margin-bottom: 15px;">Join the Hideout</h3>
-                <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 20px;">To leave a note, I just need to know who you are.</p>
-                <input type="text" id="regName" placeholder="Full Name">
+                <input type="text" id="regName" placeholder="What's your full name?">
                 <input type="email" id="regEmail" placeholder="Email address">
                 <input type="password" id="regPass" placeholder="Pick a password">
-                <button class="submit-btn" onclick="joinHideout()">I'm ready to join</button>
+                <button class="btn" style="width:100%; background:var(--light-purple); color:var(--deep-space);" onclick="joinHideout()">Register</button>
             </div>
 
             <div id="messageForm" style="display:none;">
                 <h3 style="color: var(--light-blue); margin-bottom: 15px;">Share a thought</h3>
-                <textarea id="replyMsg" rows="5" placeholder="What's on your mind?"></textarea>
-                <button class="submit-btn" onclick="postMessage()">Share with the Commander</button>
+                <textarea id="replyMsg" rows="5" placeholder="Write your reply here..."></textarea>
+                <button class="btn" style="width:100%;" onclick="postMessage()">Post to Journal</button>
             </div>
         </div>
     </div>
@@ -171,31 +196,40 @@
         const supabaseClient = supabase.createClient(sbUrl, sbKey);
 
         const ENTRIES = [
-            "Everyone is talking about the systems that hold us back: the wage gap, the lack of freedom, the rigged game. And they’re right. But there’s a trap here: we spend so much time fighting for the 'win' that we’ve forgotten how to advance ourselves.",
-            "We’re told that every 'no' is an opportunity. But if you don’t understand who you are or what you actually want, that opportunity is just noise.",
-            "It’s like an athlete training just to stay in second place, or a cook who never intends to run their own kitchen. Why bother?",
-            "The truth is that self-mastery and professional growth are the same thing. You can’t have one without the other.",
-            "If we finally beat the system but we aren't grounded in who we are, we’ll squander the victory the second we get it. We’ll have the equality we fought for and no idea what to do with it.",
-            "Choosing to do one thing well, to really master a craft, is what builds your identity. It’s how you learn to be a 'good person' in practice, not just in theory. Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get to where you're going."
+            { title: "The Wage Gap Trap", text: "Everyone is talking about the systems that hold us back: the wage gap, the lack of freedom, the rigged game. And they’re right. But there’s a trap here: we spend so much time fighting for the 'win' that we’ve forgotten how to advance ourselves." },
+            { title: "Opportunities & Noise", text: "We’re told that every 'no' is an opportunity. But if you don’t understand who you are or what you actually want, that opportunity is just noise." },
+            { title: "The Why Bother?", text: "It’s like an athlete training just to stay in second place, or a cook who never intends to run their own kitchen. Why bother?" },
+            { title: "Mastery of Self", text: "The truth is that self-mastery and professional growth are the same thing. You can’t have one without the other." },
+            { title: "The Risk of Squandering", text: "If we finally beat the system but we aren't grounded in who we are, we’ll squander the victory the second we get it. We’ll have the equality we fought for and no idea what to do with it." },
+            { title: "Crafting Identity", text: "Choosing to do one thing well, to really master a craft, is what builds your identity. It’s how you learn to be a 'good person' in practice, not just in theory. Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get to where you're going." }
         ];
 
         function init() {
-            const container = document.getElementById('journal-container');
-            ENTRIES.forEach((text, i) => {
-                const card = document.createElement('section');
-                card.className = 'entry-card';
+            const grid = document.getElementById('journal-grid');
+            ENTRIES.forEach((entry, i) => {
+                const card = document.createElement('div');
+                card.className = 'journal-card';
                 card.innerHTML = `
-                    <div class="entry-text">${text}</div>
-                    <button class="btn-reply" onclick="openReplyFlow()">Reply</button>
+                    <div class="journal-title">${entry.title}</div>
+                    <button class="btn" onclick="openReadModal(${i})">Read</button>
                 `;
-                container.appendChild(card);
+                grid.appendChild(card);
             });
         }
 
-        function closeModal() { document.getElementById('replyModal').style.display = 'none'; }
+        function openReadModal(index) {
+            document.getElementById('fullEntryText').innerText = ENTRIES[index].text;
+            const modal = document.getElementById('readModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
 
-        async function openReplyFlow() {
-            document.getElementById('replyModal').style.display = 'flex';
+        async function openReplyModal() {
+            closeModal('readModal');
+            const modal = document.getElementById('replyModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+
             const { data: { user } } = await supabaseClient.auth.getUser();
             if (user) {
                 document.getElementById('messageForm').style.display = 'block';
@@ -206,6 +240,16 @@
             }
         }
 
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function handleOverlayClick(e, id) {
+            if (e.target.classList.contains('modal-overlay')) closeModal(id);
+        }
+
         async function joinHideout() {
             const name = document.getElementById('regName').value;
             const email = document.getElementById('regEmail').value;
@@ -213,17 +257,13 @@
             const { data, error } = await supabaseClient.auth.signUp({
                 email, password: pass, options: { data: { full_name: name } }
             });
-            if (error) return alert("Space sync error: " + error.message);
+            if (error) return alert("Hmm, something went wrong: " + error.message);
             
-            // Map to citizens table
             await supabaseClient.from('citizens').insert([{ 
-                email: email, 
-                full_name: name, 
-                user_id: data.user.id, 
-                auth_id: data.user.id 
+                email, full_name: name, user_id: data.user.id, auth_id: data.user.id 
             }]);
             
-            alert("Welcome! You can now share your thought.");
+            alert("Welcome! You can now post your reply.");
             location.reload();
         }
 
@@ -233,13 +273,11 @@
             if (!message) return alert("The message is empty, friend.");
             
             const { error } = await supabaseClient.from('blogreplies').insert([{ 
-                email: user.email, 
-                full_name: user.user_metadata.full_name, 
-                message: message 
+                email: user.email, full_name: user.user_metadata.full_name, message 
             }]);
             
-            if (error) alert("Couldn't save that thought: " + error.message);
-            else { alert("Sent!"); closeModal(); document.getElementById('replyMsg').value = ""; }
+            if (error) alert("Sorry, I couldn't save that: " + error.message);
+            else { alert("Thank you for sharing."); closeModal('replyModal'); document.getElementById('replyMsg').value = ""; }
         }
 
         window.onload = init;
