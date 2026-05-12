@@ -2,56 +2,111 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUSUBI | Intel: Commander Q</title>
-    
-    <script>
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
-        });
-    </script>
-
-    <link rel="stylesheet" href="css/manifesto.css">
-    <link rel="stylesheet" href="css/cursor.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanguard_OS | Meet Commander Q</title>
+    <link rel="stylesheet" href="vanguard-os.css">
+    <style>
+        /* A little extra flair for your personal story! */
+        .profile-content {
+            text-align: left;
+            line-height: 1.8;
+            max-width: 750px;
+            padding: 40px !important;
+        }
+        .profile-section {
+            margin-bottom: 30px;
+        }
+        .profile-label {
+            color: var(--color-blue);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            text-shadow: 0 0 10px rgba(90, 200, 250, 0.4);
+        }
+        .profile-text {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .back-btn {
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            color: var(--color-purple);
+            text-decoration: none;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border: 2px solid var(--color-purple);
+            padding: 12px 25px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        .back-btn:hover {
+            background: var(--color-purple);
+            color: white;
+            box-shadow: 0 0 20px var(--color-purple);
+            transform: scale(1.05);
+        }
+        strong {
+            color: var(--color-blue);
+        }
+    </style>
 </head>
 <body>
+
+    <!-- Our awesome star engine! -->
+    <div id="star-field"></div>
+
+    <!-- HUD tracking your local time and date -->
+    <div class="hud-top-left">
+        <p id="system-date">INITIALIZING...</p>
+    </div>
     
-    <div class="purple-sky"></div>
-    <div class="stars"></div>
-    <div class="scanlines"></div>
-
-    <div class="floating-window" id="about-window">
-        <div class="window-header">
-            <span class="system-text">SYSTEM_DATA // INTEL_READOUT</span>
-            <a href="menu.html" class="return-btn">[ RETURN_TO_HUD ]</a>
-        </div>
-        
-        <div class="manifesto-content">
-            <h1 class="fade-in">> WHOAMI // COMMANDER_Q</h1>
-            
-            <p class="fade-in delay-1">What's up! I'm Commander Q, a self-taught dev, all-around tech enthusiast, and the one currently leading the Vanguard Knights into our next era.</p>
-
-            <p class="fade-in delay-2">My path here wasn't exactly a straight line. I started out serving in the Armed Forces, which taught me how to stay disciplined and focused. From there, I moved into the consumer tech world, putting in the hours at Best Buy and working behind the scenes at Apple. All of that gave me a masterclass in how hardware works and how people actually use it.</p>
-
-            <h2 class="fade-in delay-3">The Shift</h2>
-            <p class="fade-in delay-4">Somewhere along the way, I decided I wanted to build the systems, not just operate them. Today, I write my own code, build my own platforms, and lead the Vanguard Knights as we push boundaries and gear up for our next major endeavors.</p>
-
-            <h2 class="fade-in delay-5">The Prime Directive</h2>
-            <p class="fade-in delay-6">The goal is to create spaces where technology meets purpose. Whether it's through code, community building, or digital curation, the output must serve the objective.</p>
-
-            <p class="fade-in delay-7 highlight-text">
-                The mission is always the same:<br>
-                <strong>Empower. Educate. Elevate.</strong>
-            </p>
-
-            <p class="fade-in delay-8" style="font-size: 0.8rem; color: var(--cyan);">Glad you found the hideout. Take a look around.</p>
-        </div>
+    <div class="hud-top-right">
+        <p id="system-clock">00:00:00</p>
     </div>
 
-    <div class="musubi-cursor-dot"></div>
-    <script src="js/cursor.js"></script>
-    <script src="js/manifesto.js"></script>
+    <div class="interface-wrapper">
+        <header class="hero-container">
+            <h1 class="hero-text">The Origin Log</h1>
+        </header>
+
+        <!-- Your story lives in this beautiful blurry glass window -->
+        <main class="app-dashboard profile-content">
+            
+            <div class="profile-section">
+                <span class="profile-label">The Mission</span>
+                <p class="profile-text">I’m on a mission to fix the broken bits of our world—those <strong>human bonds</strong> that keep us all connected. I believe we’re stronger together, and I’m dedicated to rebuilding the community ties that have started to fray.</p>
+            </div>
+
+            <div class="profile-section">
+                <span class="profile-label">The Journey</span>
+                <p class="profile-text">My path wasn't a straight line, and I love that about it! It was forged in the discipline of the <strong>Military</strong>, sharpened by the fast-paced world of <strong>Retail</strong>, and ignited by the endless possibilities of <strong>Digital Creation</strong>.</p>
+            </div>
+
+            <div class="profile-section">
+                <span class="profile-label">My Superpowers</span>
+                <p class="profile-text">I’m at my best when I’m breaking down complex processes, <strong>coaching</strong> teams to victory, and <strong>mentoring</strong> people to help them realize they've got exactly what it takes to thrive.</p>
+            </div>
+
+            <div class="profile-section">
+                <span class="profile-label">Life in the Universe</span>
+                <p class="profile-text">When the "Commander" hat comes off, I’m all about my <strong>family</strong>. They’re my world. You’ll also find me documenting my journey through the stars—because every moment in this universe is worth remembering.</p>
+            </div>
+
+            <a href="hud.html" class="back-btn">Back to Command Hub</a>
+
+        </main>
+    </div>
+
+    <footer class="vanguard-footer">
+        Powered by The Vanguard Knights
+    </footer>
+
+    <!-- Same great logic engine! -->
+    <script src="vanguard-os.js" defer></script>
 </body>
 </html>
