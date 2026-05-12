@@ -1,6 +1,6 @@
 /* 
     VANGUARD_OS CORE STYLESHEET
-    Theme: Cyber-Tactical Sanctuary
+    Theme: Cyber-Tactical Sanctuary (Pocket Universe)
     Colors: Neon Purple (#bf5af2) & Neon Blue (#5ac8fa)
 */
 
@@ -10,7 +10,7 @@
     --glass-bg: rgba(15, 15, 25, 0.7);
     --glass-border: rgba(255, 255, 255, 0.15);
     --system-font: 'Courier New', Courier, monospace;
-    --dock-height: 80px;
+    --dock-height: 85px;
 }
 
 * { 
@@ -26,7 +26,7 @@ body, html {
     background: #000;
     color: white;
     font-family: var(--system-font);
-    overflow: hidden; /* Prevents bounce on mobile drag */
+    overflow: hidden; /* Essential for mobile drag/drop app feel */
 }
 
 /* --- BOOT SEQUENCE --- */
@@ -37,36 +37,65 @@ body, html {
 
 @keyframes bootIn {
     0% { opacity: 0; filter: brightness(0); }
-    10% { opacity: 1; filter: brightness(2); } /* Initial Power Surge */
+    10% { opacity: 1; filter: brightness(2); }
     100% { opacity: 1; filter: brightness(1); }
 }
 
-/* --- BACKGROUND: POCKET UNIVERSE --- */
+/* --- THE POCKET UNIVERSE (WARP STARS) --- */
 #star-field {
     position: fixed;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(180deg, #0f0c29 0%, #1a1a2e 100%);
+    background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
+    perspective: 1000px;
 }
 
 .star {
     position: absolute;
     background: white;
     border-radius: 50%;
-    opacity: 0.6;
     pointer-events: none;
+    box-shadow: 0 0 10px white;
 }
 
-/* --- DESKTOP GRID --- */
+/* --- HERO TEXT: COMMANDER Q --- */
+.hero-container {
+    text-align: center;
+    padding: 60px 20px 30px 20px;
+    z-index: 5;
+}
+
+.hero-text {
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    font-weight: 900;
+    letter-spacing: clamp(8px, 2vw, 15px);
+    color: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(120deg, transparent 30%, #fff 50%, transparent 70%);
+    background-size: 200% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: shine 3.5s infinite linear;
+    text-transform: uppercase;
+    margin: 0;
+    filter: drop-shadow(0 0 10px rgba(191, 90, 242, 0.3));
+}
+
+@keyframes shine {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* --- APP GRID (CENTERED) --- */
 .desktop-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-    grid-auto-rows: min-content;
-    gap: 25px;
-    padding: 40px 25px;
-    max-width: 1200px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    gap: 30px;
+    padding: 20px;
+    max-width: 1000px;
     margin: 0 auto;
-    height: calc(100vh - var(--dock-height) - 40px);
+    height: calc(100vh - 250px);
     overflow-y: auto;
 }
 
@@ -75,14 +104,10 @@ body, html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    cursor: grab;
+    cursor: pointer;
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     user-select: none;
-    z-index: 10;
-}
-
-.app-icon:active {
-    cursor: grabbing;
+    width: 90px;
 }
 
 .icon-box {
@@ -91,134 +116,107 @@ body, html {
     background: var(--glass-bg);
     backdrop-filter: blur(15px);
     border: 1px solid var(--glass-border);
-    border-radius: 16px;
+    border-radius: 18px;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
     position: relative;
-}
-
-/* Pulsing Purple Accent (The 3D feel) */
-.icon-box::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 16px;
-    background: linear-gradient(135deg, rgba(191, 90, 242, 0.2), transparent);
-    pointer-events: none;
+    transition: border-color 0.3s;
 }
 
 .icon-box::after {
     content: '';
     position: absolute;
-    bottom: 5px;
-    width: 20px;
+    bottom: 6px;
+    width: 25px;
     height: 2px;
     background: var(--neon-purple);
-    box-shadow: 0 0 10px var(--neon-purple);
-    opacity: 0.5;
-    animation: iconBreath 3s infinite ease-in-out;
+    box-shadow: 0 0 12px var(--neon-purple);
+    opacity: 0.6;
+    animation: iconPulse 3s infinite ease-in-out;
 }
 
 .app-icon span {
-    font-size: 0.65rem;
-    margin-top: 10px;
+    font-size: 0.75rem;
+    margin-top: 12px;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     text-align: center;
-    color: var(--neon-purple);
-    text-shadow: 0 0 5px rgba(191, 90, 242, 0.5);
+    color: #ffffff; /* White text as requested */
+    text-shadow: 0 0 8px rgba(90, 200, 250, 0.6);
+    font-weight: bold;
 }
 
-/* --- DRAG & DROP STATES --- */
+/* --- DRAG STATE (1-SECOND HOLD) --- */
 .app-icon.dragging {
-    transform: scale(1.15);
-    filter: brightness(1.4) drop-shadow(0 0 25px var(--neon-blue));
+    transform: scale(1.2);
+    filter: brightness(1.3) drop-shadow(0 0 25px var(--neon-blue));
     opacity: 0.9;
     z-index: 9999 !important;
 }
 
 .app-icon.dragging .icon-box {
     border-color: var(--neon-blue);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
 }
 
 /* --- VANGUARD DOCK --- */
 .vanguard-dock {
     position: fixed;
-    bottom: 25px;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    min-width: 120px;
+    min-width: 140px;
     height: var(--dock-height);
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(30px);
     border: 1px solid var(--glass-border);
-    border-radius: 24px;
-    padding: 0 20px;
+    border-radius: 28px;
+    padding: 0 25px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
-    box-shadow: 
-        0 -15px 40px rgba(0,0,0,0.6),
-        inset 0 0 20px rgba(255, 255, 255, 0.02);
+    gap: 20px;
+    box-shadow: 0 -15px 45px rgba(0,0,0,0.7);
     z-index: 1000;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Desktop Hover Dock Expansion */
-@media (min-width: 769px) {
-    .vanguard-dock:hover {
-        background: rgba(90, 200, 250, 0.08);
-        border-color: var(--neon-blue);
-        box-shadow: 0 0 30px rgba(90, 200, 250, 0.2);
-    }
+.vanguard-dock .app-icon {
+    width: auto;
 }
 
 .vanguard-dock .app-icon span {
-    display: none; /* Mobile app style: no labels in dock */
+    display: none; /* No labels in dock for clean app look */
 }
 
 .vanguard-dock .icon-box {
-    width: 54px;
-    height: 54px;
+    width: 58px;
+    height: 58px;
 }
 
-/* --- GLYPHS (SVG) --- */
+/* --- SVGs --- */
 .glyph {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     fill: white;
-    filter: drop-shadow(0 0 8px rgba(90, 200, 250, 0.8));
+    filter: drop-shadow(0 0 10px var(--neon-blue));
 }
 
 /* --- ANIMATIONS --- */
-@keyframes iconBreath {
-    0%, 100% { opacity: 0.3; transform: scaleX(1); }
-    50% { opacity: 1; transform: scaleX(1.2); }
+@keyframes iconPulse {
+    0%, 100% { opacity: 0.4; transform: scaleX(1); }
+    50% { opacity: 1; transform: scaleX(1.3); }
 }
 
-@keyframes flashBlue {
-    0% { background: white; }
-    100% { background: transparent; }
-}
+/* Custom Scrollbar for Desktop Grid */
+.desktop-grid::-webkit-scrollbar { width: 4px; }
+.desktop-grid::-webkit-scrollbar-track { background: transparent; }
+.desktop-grid::-webkit-scrollbar-thumb { background: var(--neon-purple); border-radius: 10px; }
 
-/* --- RESPONSIVE ADJUSTMENTS --- */
+/* --- MOBILE ADAPTATION --- */
 @media (max-width: 480px) {
-    .desktop-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-    }
-    
-    .icon-box {
-        width: 58px;
-        height: 58px;
-    }
-    
-    .vanguard-dock {
-        width: 90%;
-        gap: 10px;
-    }
+    .hero-text { font-size: 2.2rem; }
+    .desktop-grid { gap: 20px; padding-bottom: 120px; }
+    .vanguard-dock { width: 92%; }
 }
