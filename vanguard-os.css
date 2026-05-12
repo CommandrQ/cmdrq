@@ -1,83 +1,70 @@
-/* 
-    VANGUARD_OS CORE STYLESHEET
-    Theme: Cyber-Tactical Sanctuary (Pocket Universe)
-    Colors: Neon Purple (#bf5af2) & Neon Blue (#5ac8fa)
-*/
-
+/* vanguard-os.css */
 :root {
     --neon-purple: #bf5af2;
     --neon-blue: #5ac8fa;
-    --glass-bg: rgba(15, 15, 25, 0.7);
+    --glass-bg: rgba(15, 15, 25, 0.75);
     --glass-border: rgba(255, 255, 255, 0.15);
     --system-font: 'Courier New', Courier, monospace;
-    --dock-height: 85px;
-}
-
-* { 
-    box-sizing: border-box; 
-    -webkit-tap-highlight-color: transparent; 
 }
 
 body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    color: white;
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    background: #000; color: white;
     font-family: var(--system-font);
-    overflow: hidden; /* Essential for mobile drag/drop app feel */
+    overflow: hidden;
 }
 
-/* --- BOOT SEQUENCE --- */
-.os-container {
-    opacity: 0;
-    animation: bootIn 1.5s forwards ease-out;
-}
-
-@keyframes bootIn {
-    0% { opacity: 0; filter: brightness(0); }
-    10% { opacity: 1; filter: brightness(2); }
-    100% { opacity: 1; filter: brightness(1); }
-}
-
-/* --- THE POCKET UNIVERSE (WARP STARS) --- */
+/* Starfield Layer */
 #star-field {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
+    position: fixed; inset: 0; z-index: -1;
     background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
-    perspective: 1000px;
 }
 
-.star {
+.star { position: absolute; background: white; border-radius: 50%; pointer-events: none; }
+
+/* --- TOP HUD (CLOCK/DATE) --- */
+.top-hud {
     position: absolute;
-    background: white;
-    border-radius: 50%;
-    pointer-events: none;
-    box-shadow: 0 0 10px white;
+    top: 20px;
+    right: 30px;
+    text-align: right;
+    z-index: 10;
 }
 
-/* --- HERO TEXT: COMMANDER Q --- */
+#system-clock {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--neon-blue);
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+#system-date {
+    font-size: 0.8rem;
+    color: var(--neon-purple);
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+/* --- HERO SECTION --- */
 .hero-container {
     text-align: center;
-    padding: 60px 20px 30px 20px;
-    z-index: 5;
+    padding-top: 100px;
+    margin-bottom: 40px;
 }
 
 .hero-text {
-    font-size: clamp(2rem, 8vw, 3.5rem);
+    font-size: clamp(2rem, 10vw, 4rem);
     font-weight: 900;
-    letter-spacing: clamp(8px, 2vw, 15px);
+    letter-spacing: 15px;
     color: rgba(255, 255, 255, 0.1);
     background: linear-gradient(120deg, transparent 30%, #fff 50%, transparent 70%);
     background-size: 200% 100%;
     background-clip: text;
     -webkit-background-clip: text;
-    animation: shine 3.5s infinite linear;
+    animation: shine 3s infinite linear;
     text-transform: uppercase;
-    margin: 0;
-    filter: drop-shadow(0 0 10px rgba(191, 90, 242, 0.3));
 }
 
 @keyframes shine {
@@ -85,138 +72,58 @@ body, html {
     100% { background-position: 200% 0; }
 }
 
-/* --- APP GRID (CENTERED) --- */
+/* --- APPS GRID --- */
 .desktop-grid {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    align-content: flex-start;
-    gap: 30px;
-    padding: 20px;
-    max-width: 1000px;
+    gap: 40px;
+    flex-wrap: wrap;
+    max-width: 900px;
     margin: 0 auto;
-    height: calc(100vh - 250px);
-    overflow-y: auto;
 }
 
-/* --- APP ICONS --- */
 .app-icon {
     display: flex;
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    user-select: none;
-    width: 90px;
+    transition: 0.3s;
 }
 
+.app-icon:hover { transform: translateY(-10px); }
+
 .icon-box {
-    width: 64px;
-    height: 64px;
+    width: 70px; height: 70px;
     background: var(--glass-bg);
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(10px);
     border: 1px solid var(--glass-border);
-    border-radius: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    border-radius: 20px;
+    display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
     position: relative;
-    transition: border-color 0.3s;
 }
 
 .icon-box::after {
-    content: '';
-    position: absolute;
-    bottom: 6px;
-    width: 25px;
-    height: 2px;
-    background: var(--neon-purple);
-    box-shadow: 0 0 12px var(--neon-purple);
-    opacity: 0.6;
-    animation: iconPulse 3s infinite ease-in-out;
+    content: ''; position: absolute; bottom: 8px;
+    width: 20px; height: 2px; background: var(--neon-purple);
+    box-shadow: 0 0 10px var(--neon-purple);
 }
 
 .app-icon span {
-    font-size: 0.75rem;
-    margin-top: 12px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    margin-top: 15px; font-size: 0.8rem; font-weight: bold;
+    text-transform: uppercase; letter-spacing: 2px;
+}
+
+.glyph { width: 35px; height: 35px; fill: white; filter: drop-shadow(0 0 8px var(--neon-blue)); }
+
+/* --- FOOTER --- */
+.vanguard-footer {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
     text-align: center;
-    color: #ffffff; /* White text as requested */
-    text-shadow: 0 0 8px rgba(90, 200, 250, 0.6);
-    font-weight: bold;
-}
-
-/* --- DRAG STATE (1-SECOND HOLD) --- */
-.app-icon.dragging {
-    transform: scale(1.2);
-    filter: brightness(1.3) drop-shadow(0 0 25px var(--neon-blue));
-    opacity: 0.9;
-    z-index: 9999 !important;
-}
-
-.app-icon.dragging .icon-box {
-    border-color: var(--neon-blue);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-}
-
-/* --- VANGUARD DOCK --- */
-.vanguard-dock {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    min-width: 140px;
-    height: var(--dock-height);
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(30px);
-    border: 1px solid var(--glass-border);
-    border-radius: 28px;
-    padding: 0 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    box-shadow: 0 -15px 45px rgba(0,0,0,0.7);
-    z-index: 1000;
-}
-
-.vanguard-dock .app-icon {
-    width: auto;
-}
-
-.vanguard-dock .app-icon span {
-    display: none; /* No labels in dock for clean app look */
-}
-
-.vanguard-dock .icon-box {
-    width: 58px;
-    height: 58px;
-}
-
-/* --- SVGs --- */
-.glyph {
-    width: 34px;
-    height: 34px;
-    fill: white;
-    filter: drop-shadow(0 0 10px var(--neon-blue));
-}
-
-/* --- ANIMATIONS --- */
-@keyframes iconPulse {
-    0%, 100% { opacity: 0.4; transform: scaleX(1); }
-    50% { opacity: 1; transform: scaleX(1.3); }
-}
-
-/* Custom Scrollbar for Desktop Grid */
-.desktop-grid::-webkit-scrollbar { width: 4px; }
-.desktop-grid::-webkit-scrollbar-track { background: transparent; }
-.desktop-grid::-webkit-scrollbar-thumb { background: var(--neon-purple); border-radius: 10px; }
-
-/* --- MOBILE ADAPTATION --- */
-@media (max-width: 480px) {
-    .hero-text { font-size: 2.2rem; }
-    .desktop-grid { gap: 20px; padding-bottom: 120px; }
-    .vanguard-dock { width: 92%; }
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
 }
