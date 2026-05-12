@@ -4,31 +4,264 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commander Q | The Hideout</title>
-    <link rel="stylesheet" href="style.css">
     <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --light-purple: #e0c3fc;
+            --light-blue: #8ecae6;
+            --deep-space: #0f0c29;
+            --accent-glow: rgba(142, 202, 230, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #7597de 100%);
+            background-attachment: fixed;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Animated Starfield --- */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Creating stars using multiple box-shadows for depth */
+        .stars {
+            width: 1px;
+            height: 1px;
+            background: transparent;
+            box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 90vw 80vh #fff, 
+                        20vw 90vh #fff, 50vw 50vh #fff, 75vw 35vh #fff, 15vw 15vh #fff,
+                        40vw 10vh #fff, 65vw 85vh #fff, 95vw 25vh #fff, 5vw 60vh #fff;
+            animation: moveStars 100s linear infinite;
+        }
+
+        .stars::after {
+            content: " ";
+            position: absolute;
+            top: 2000px; /* Repeat the pattern to create a loop */
+            width: 1px;
+            height: 1px;
+            background: transparent;
+            box-shadow: inherit;
+        }
+
+        @keyframes moveStars {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-2000px); }
+        }
+
+        /* --- Main Content Wrappers --- */
+        #landing, #main-nav {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #landing {
+            height: 100vh;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- Commander Q Sheen Text --- */
+        .commander-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
+            background-size: 200% auto;
+            color: #8ecae6;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: sheen 3s linear infinite;
+        }
+
+        @keyframes sheen {
+            to { background-position: 200% center; }
+        }
+
+        /* --- Floating Image --- */
+        .commander-img {
+            width: 280px;
+            max-width: 80%;
+            height: auto;
+            margin-bottom: 2rem;
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px var(--accent-glow));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* --- UI Elements --- */
+        #enter-btn {
+            background: rgba(224, 195, 252, 0.1);
+            border: 2px solid var(--light-blue);
+            color: var(--light-blue);
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        #enter-btn:hover {
+            background: var(--light-blue);
+            color: var(--deep-space);
+            box-shadow: 0 0 30px var(--light-blue);
+            transform: scale(1.05);
+        }
+
+        /* --- Navigation Grid (4 Columns Desktop, Responsive Mobile) --- */
+        #menu-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Desktop default */
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+            margin-top: 50px;
+        }
+
+        .nav-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(142, 202, 230, 0.3);
+            padding: 40px 20px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--light-purple);
+            border-radius: 15px;
+            transition: transform 0.3s, border-color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--light-blue);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 900px) {
+            #menu-grid { grid-template-columns: repeat(2, 1fr); }
+            .commander-title { font-size: 2.2rem; }
+        }
+
+        @media (max-width: 480px) {
+            #menu-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Animated Starfield Background -->
-    <div id="starfield"></div>
-    <div class="gradient-overlay"></div>
+    <div id="starfield">
+        <div class="stars"></div>
+    </div>
 
-    <!-- Intro Section -->
+    <!-- Intro Page -->
     <section id="landing">
-        <div class="intro-container">
-            <img src="images/commanderqhs.png" alt="Commander Q" class="float-animation">
-            <button id="enter-btn" onclick="revealMenu()">Enter the hideout</button>
+        <h1 class="commander-title">Commander Q</h1>
+        <img src="images/commanderqhs.png" alt="Commander Q" class="commander-img">
+        <button id="enter-btn" onclick="openHideout()">Enter the hideout</button>
+    </section>
+
+    <!-- Main Navigation Page -->
+    <section id="main-nav" class="hidden">
+        <h2 style="color: var(--light-blue); margin-bottom: 2rem;">Command Center</h2>
+        <div id="menu-grid">
+            <!-- Links will be injected here -->
         </div>
     </section>
 
-    <!-- Navigation Section -->
-    <section id="main-nav" class="hidden">
-        <nav id="menu-grid">
-            <!-- Links injected via JS -->
-        </nav>
-    </section>
+    <script>
+        // Supabase Init
+        const supabaseUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
+        const supabaseKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
+        const supabase = supabasejs.createClient(supabaseUrl, supabaseKey);
 
-    <script src="app.js"></script>
+        function openHideout() {
+            document.getElementById('landing').classList.add('hidden');
+            document.getElementById('main-nav').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function fetchLinks() {
+            const menuGrid = document.getElementById('menu-grid');
+            
+            try {
+                // Fetching from your local JSON file
+                const response = await fetch('links.json');
+                if (!response.ok) throw new Error('Could not load links.json');
+                
+                const data = await response.json();
+                
+                data.links.forEach(link => {
+                    const card = document.createElement('a');
+                    card.href = link.url;
+                    card.className = 'nav-card';
+                    card.innerText = link.title;
+
+                    // External links logic: Open in new tab if it starts with http
+                    if (link.url.startsWith('http')) {
+                        card.target = "_blank";
+                        card.rel = "noopener noreferrer";
+                    }
+
+                    menuGrid.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('Data error:', error);
+                // Simple user-friendly fallback links
+                const fallbacks = [
+                    {title: 'About Me', url: '#'},
+                    {title: 'Blog', url: '#'},
+                    {title: 'Profile', url: '#'},
+                    {title: 'Contact', url: '#'}
+                ];
+                fallbacks.forEach(link => {
+                    const card = document.createElement('a');
+                    card.href = link.url;
+                    card.className = 'nav-card';
+                    card.innerText = link.title;
+                    menuGrid.appendChild(card);
+                });
+            }
+        }
+
+        // Initialize
+        fetchLinks();
+    </script>
 </body>
 </html>
