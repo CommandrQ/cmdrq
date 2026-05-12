@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commander Q | The Hub</title>
+    <title>Commander Q | Hub</title>
     <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -11,7 +11,7 @@
             --light-purple: #e0c3fc;
             --light-blue: #8ecae6;
             --deep-space: #0f0c29;
-            --glass-bg: rgba(20, 20, 35, 0.7);
+            --glass-bg: rgba(15, 15, 25, 0.7);
             --glass-border: rgba(255, 255, 255, 0.1);
         }
 
@@ -62,6 +62,7 @@
         }
 
         .stars {
+            position: absolute;
             width: 2px;
             height: 2px;
             background: transparent;
@@ -83,7 +84,7 @@
         }
 
         .commander-title {
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 5vw, 3rem);
             font-weight: bold;
             background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
             background-size: 200% auto;
@@ -100,41 +101,41 @@
         }
 
         .status-text {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: var(--light-purple);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            opacity: 0.8;
+            opacity: 0.7;
         }
 
         /* --- The Hub Grid --- */
         #menu-grid {
             display: grid;
-            /* Mobile First: Two columns */
+            /* Mobile First: 2 Columns Wide */
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            width: 90%;
+            gap: 12px;
+            width: 95%;
             max-width: 1000px;
-            padding: 40px 0;
+            padding: 20px 10px 60px;
             z-index: 10;
         }
 
-        /* Desktop: Four columns */
+        /* Desktop: 4 Columns */
         @media (min-width: 800px) {
             #menu-grid {
                 grid-template-columns: repeat(4, 1fr);
-                gap: 25px;
+                gap: 20px;
             }
         }
 
         /* --- Dark Glass Cards --- */
         .card {
             background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            padding: 30px 15px;
+            border-radius: 12px;
+            padding: 25px 10px;
             text-align: center;
             text-decoration: none;
             color: var(--light-blue);
@@ -143,23 +144,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100px;
+            min-height: 80px;
+            font-size: 0.95rem;
         }
 
         .card:hover {
             transform: translateY(-5px);
             border-color: var(--light-blue);
-            background: rgba(142, 202, 230, 0.1);
-            box-shadow: 0 0 20px rgba(142, 202, 230, 0.2);
+            background: rgba(142, 202, 230, 0.15);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
             color: white;
-        }
-
-        /* --- Loading State --- */
-        .loading-msg {
-            grid-column: 1 / -1;
-            text-align: center;
-            color: var(--light-blue);
-            font-style: italic;
         }
     </style>
 </head>
@@ -173,56 +167,65 @@
 
     <header>
         <h1 class="commander-title">Commander Q</h1>
-        <p class="status-text">Hub Online</p>
+        <p class="status-text">Hub Active</p>
     </header>
 
     <main id="menu-grid">
-        <p class="loading-msg">Fetching entries from the database...</p>
+        <!-- JS will inject links here -->
     </main>
 
     <script>
-        // Supabase Credentials
-        const supabaseUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
-        const supabaseKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
-        const supabase = supabasejs.createClient(supabaseUrl, supabaseKey);
+        /**
+         * 1. THE LINKS LIST
+         * Add or replace entries here. Very simple!
+         */
+        const HUB_LINKS = [
+            { title: "About Me", url: "about.html" },
+            { title: "The Blog", url: "https://commander-blog.com" },
+            { title: "Profile",   url: "profile.html" },
+            { title: "Data Logs", url: "logs.html" },
+            { title: "Gallery",   url: "gallery.html" },
+            { title: "Instagram", url: "https://instagram.com/commanderq" },
+            { title: "Connect",   url: "mailto:q@hideout.com" },
+            { title: "Settings",  url: "settings.html" }
+        ];
 
-        async function initHub() {
-            const grid = document.getElementById('menu-grid');
-            
-            try {
-                // Fetch entries from your separate JSON file
-                const response = await fetch('links.json');
-                if (!response.ok) throw new Error('Could not find links.json');
-                
-                const data = await response.json();
-                
-                // Clear the loading message
-                grid.innerHTML = '';
-
-                // Generate cards dynamically
-                data.links.forEach(entry => {
-                    const card = document.createElement('a');
-                    card.href = entry.url;
-                    card.className = 'card';
-                    card.innerText = entry.title;
-
-                    // If it's an external link, open in new tab
-                    if (entry.url.startsWith('http')) {
-                        card.target = "_blank";
-                        card.rel = "noopener noreferrer";
-                    }
-
-                    grid.appendChild(card);
-                });
-
-            } catch (error) {
-                console.error('Error loading menu:', error);
-                grid.innerHTML = '<p class="loading-msg" style="color: #ff6b6b;">Error: Failed to sync with HQ.</p>';
-            }
+        /**
+         * 2. SUPABASE CONFIG
+         */
+        const sbUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
+        const sbKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
+        
+        // Use a safe check to prevent "already declared" errors
+        if (typeof supabaseClient === 'undefined') {
+            var supabaseClient = supabase.createClient(sbUrl, sbKey);
         }
 
-        // Run as soon as the DOM is ready
-        document.addEventListener('DOMContentLoaded', initHub);
+        /**
+         * 3. INITIALIZE HUB
+         */
+        function initHub() {
+            const grid = document.getElementById('menu-grid');
+            
+            // Generate the cards from the list above
+            HUB_LINKS.forEach(item => {
+                const card = document.createElement('a');
+                card.href = item.url;
+                card.className = 'card';
+                card.innerText = item.title;
+
+                // If the link starts with http, open in a new tab
+                if (item.url.startsWith('http')) {
+                    card.target = "_blank";
+                    card.rel = "noopener noreferrer";
+                }
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Run when page loads
+        window.addEventListener('DOMContentLoaded', initHub);
     </script>
 </body>
 </html>
