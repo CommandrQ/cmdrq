@@ -3,51 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vanguard_OS | Meet Commander Q</title>
+    <title>Vanguard_OS | About Me</title>
     <link rel="stylesheet" href="vanguard-os.css">
-    <!-- SUPABASE LIBRARY REQUIRED FOR OS TO RUN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        .profile-content { display: flex; flex-direction: column; align-items: center; padding: 30px 20px !important; height: auto !important; max-height: none !important; }
-        .profile-grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; margin-bottom: 40px; }
-        .collapsible-section { width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--window-border); border-radius: 12px; overflow: hidden; transition: all 0.3s ease; }
-        .drop-btn { width: 100%; background: none; border: none; color: var(--color-blue); font-family: var(--font-sys); font-weight: 900; text-transform: uppercase; letter-spacing: 2px; padding: 25px; text-align: center; cursor: pointer; font-size: 1rem; }
-        .drop-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; color: rgba(255, 255, 255, 0.95); padding: 0 30px; line-height: 1.8; text-align: left; font-size: 1.05rem; }
-        .active .drop-content { max-height: 1000px; padding-bottom: 30px; }
-        .back-btn-container { width: 100%; display: flex; justify-content: center; }
-        .back-btn { display: inline-block; width: 100%; max-width: 500px; text-align: center; color: var(--color-purple); text-decoration: none; font-weight: bold; letter-spacing: 3px; border: 2px solid var(--color-purple); padding: 18px 0; border-radius: 12px; transition: all 0.3s ease; text-transform: uppercase; }
-        .back-btn:hover { background: var(--color-purple); color: white; box-shadow: 0 0 20px var(--color-purple); }
-        @media (max-width: 600px) { .profile-grid { grid-template-columns: 1fr 1fr; gap: 12px; } .drop-btn { padding: 30px 10px; font-size: 0.85rem; min-height: 100px; } .active { grid-column: span 2; } .back-btn { max-width: 100%; } }
-    </style>
 </head>
 <body>
-
     <div id="star-field"></div>
-
     <div class="interface-wrapper">
         <header class="hero-container">
-            <h1 class="hero-text">Origin Log</h1>
+            <h1 class="hero-text">About Me</h1>
         </header>
 
-        <main class="app-dashboard profile-content">
-            <div class="profile-grid">
-                <div class="collapsible-section"><button class="drop-btn">The Mission</button><div class="drop-content">Hey there! I’m truly passionate about fixing the gaps in our community. I’m dedicated to rebuilding the <strong>human bonds</strong> that keep us all connected!</div></div>
-                <div class="collapsible-section"><button class="drop-btn">The Journey</button><div class="drop-content">My path was forged in the <strong>Military</strong>, sharpened by <strong>Retail</strong>, and ignited by <strong>Digital Creation</strong>.</div></div>
-                <div class="collapsible-section"><button class="drop-btn">Superpowers</button><div class="drop-content">I love breaking down complex processes to <strong>coach</strong> people toward their wins and <strong>mentor</strong> others to thrive.</div></div>
-                <div class="collapsible-section"><button class="drop-btn">Life</button><div class="drop-content">When I'm off-grid, it’s all about <strong>family</strong>. I also love documenting my journey through this incredible universe!</div></div>
-            </div>
-
-            <div class="back-btn-container">
-                <a href="hud.html" class="back-btn">Back to Command Hub</a>
+        <main class="profile-window">
+            <p>Hey there! I’m truly passionate about fixing the gaps in our community. I’m dedicated to rebuilding the <strong>human bonds</strong> that keep us all connected!</p>
+            
+            <p>My path was forged in the <strong>Military</strong>, sharpened by <strong>Retail</strong>, and ignited by <strong>Digital Creation</strong>. These experiences taught me that character isn't built when you have everything you need; it's defined when you have nothing.</p>
+            
+            <p>I love breaking down complex processes to <strong>coach</strong> people toward their wins and <strong>mentor</strong> others to thrive. Success isn't just about changing the world; it’s about making sure you're someone worth being when you finally get to where you're going.</p>
+            
+            <p>When I'm off-grid, it’s all about <strong>family</strong>. I also love documenting my journey through this incredible universe! I believe that outgrowing your environment is the price you pay for deciding to be someone of substance.</p>
+            
+            <div style="margin-top: 40px; display: flex; justify-content: center;">
+                <a href="hud.html" class="modal-btn" style="padding: 15px 40px;">Return to Hub</a>
             </div>
         </main>
     </div>
-
     <footer class="vanguard-footer">Powered by Vanguard Citizen Services</footer>
-
     <script src="vanguard-os.js"></script>
-    <script>
-        document.querySelectorAll('.drop-btn').forEach(button => { button.addEventListener('click', () => { button.parentElement.classList.toggle('active'); }); });
-    </script>
 </body>
 </html>
