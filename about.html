@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About | Commander Q</title>
-    <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
@@ -15,85 +14,41 @@
             --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #7597de 100%);
             background-attachment: fixed;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             color: white;
-            /* Mobile-friendly viewport height */
-            min-height: 100vh;
             min-height: 100dvh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            /* Scroll fix: allow vertical, hide horizontal */
             overflow-x: hidden;
+            overflow-y: auto; 
             line-height: 1.6;
         }
 
-        /* --- Fade in from Black --- */
-        #boot-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
-            z-index: 1000;
-            pointer-events: none;
-            animation: fadeOut 1.5s forwards ease-in-out;
-        }
+        #boot-screen { position: fixed; inset: 0; background: black; z-index: 1000; pointer-events: none; animation: fadeOut 1.5s forwards; }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
+        #starfield { position: fixed; inset: 0; z-index: -1; }
+        .stars { position: absolute; width: 2px; height: 2px; background: transparent; 
+                  box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 25vw 90vh #fff;
+                  animation: moveStars 150s linear infinite; }
+        @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
 
-        /* --- Starfield --- */
-        #starfield {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .stars {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: transparent;
-            box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 95vw 80vh #fff, 
-                        25vw 90vh #fff, 55vw 50vh #fff, 75vw 30vh #fff, 15vw 15vh #fff;
-            animation: moveStars 150s linear infinite;
-        }
-
-        @keyframes moveStars {
-            from { transform: translateY(0); }
-            to { transform: translateY(-2000px); }
-        }
-
-        /* --- Layout Container --- */
         .container {
             width: 90%;
             max-width: 700px;
-            padding: 40px 0;
+            padding: 60px 0 20px;
             z-index: 10;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
         }
 
         .commander-title {
@@ -106,13 +61,11 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: sheen 3s linear infinite;
+            margin-bottom: 30px;
         }
 
-        @keyframes sheen {
-            to { background-position: 200% center; }
-        }
+        @keyframes sheen { to { background-position: 200% center; } }
 
-        /* --- Bio Console (Card) --- */
         .bio-console {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -122,70 +75,42 @@
             padding: 40px;
             width: 100%;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            text-align: left;
         }
 
         .avatar {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
             border: 2px solid var(--light-blue);
             margin: 0 auto 30px;
             display: block;
             object-fit: cover;
-            box-shadow: 0 0 15px var(--light-blue);
             animation: float 4s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        h2 {
-            color: var(--light-blue);
-            margin-bottom: 15px;
-            font-size: 1.4rem;
-            letter-spacing: 1px;
-        }
+        .highlight { color: var(--light-purple); font-weight: bold; }
 
-        p {
-            margin-bottom: 20px;
-            color: #e0e0e0;
-            font-size: 1.05rem;
-            line-height: 1.8;
-        }
-
-        .highlight {
-            color: var(--light-purple);
-            font-weight: bold;
-        }
-
-        /* --- Back UI Element --- */
         .back-nav {
-            margin-top: 30px;
+            margin: 30px 0;
             text-decoration: none;
             color: var(--light-blue);
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-size: 0.85rem;
-            padding: 10px 20px;
-            border: 1px solid transparent;
+            padding: 12px 24px;
+            border: 1px solid var(--glass-border);
             border-radius: 50px;
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
-        .back-nav:hover {
-            background: rgba(142, 202, 230, 0.1);
-            border-color: var(--light-blue);
-            box-shadow: 0 0 15px var(--light-blue);
-        }
+        .back-nav:hover { background: rgba(142, 202, 230, 0.1); border-color: var(--light-blue); }
 
-        /* --- Pulsing Footer --- */
         footer {
             z-index: 10;
-            padding: 30px 20px;
+            padding: 40px 20px;
             text-align: center;
             color: white;
             font-size: 0.7rem;
@@ -194,61 +119,26 @@
             animation: pulse 4s ease-in-out infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.9; }
-        }
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.9; } }
 
-        @media (max-width: 600px) {
-            .bio-console { padding: 25px; }
-            .avatar { width: 100px; height: 100px; }
-        }
+        @media (max-width: 600px) { .bio-console { padding: 25px; } }
     </style>
 </head>
 <body>
-
     <div id="boot-screen"></div>
-
-    <div id="starfield">
-        <div class="stars"></div>
-    </div>
-
+    <div id="starfield"><div class="stars"></div></div>
     <div class="container">
-        <header>
-            <h1 class="commander-title">Commander Q</h1>
-        </header>
-
+        <h1 class="commander-title">Commander Q</h1>
         <main class="bio-console">
             <img src="images/commanderqhs.png" alt="Commander Q" class="avatar">
-            
-            <h2>Mission Objective</h2>
-            <p>Hello! I'm <span class="highlight">Commander Q!</span>. I spend my time navigating the vast digital space and exploring new narratives.</p>
-            
-            <p>I believe that technology should feel as magical as a starry night, but as simple as a conversation. Whether it's coding, designing, or managing the hideout, I'm always looking for the beauty in the code.</p>
-            
-            <p>When I'm not at the command console, you can find me spending time with my family, creating a mix, or gaming!</p>
-            
-            <p style="font-style: italic; opacity: 0.8; text-align: center; margin-top: 30px;">
-                "Keep looking up. The stars are just the beginning."
-            </p>
+            <h2 style="color: var(--light-blue); margin-bottom: 15px;">Mission Objective</h2>
+            <p>Hello! I'm <span class="highlight">Commander Q</span>. I spend my time navigating the vast digital space, building lean interfaces and exploring new technologies.</p>
+            <p>I believe that technology should feel as magical as a starry night, but as simple as a conversation. Whether it's coding, designing, or managing the hideout, I'm always looking for the beauty in the data.</p>
+            <p>When I'm not at the command console, you can find me dreaming in <span style="color: var(--light-purple);">shades of purple and blue</span>, sipping tea, and planning the next big cosmic jump.</p>
+            <p style="font-style: italic; opacity: 0.8; text-align: center; margin-top: 30px;">"Keep looking up. The stars are just the beginning."</p>
         </main>
-
-        <a href="hub.html" class="back-nav">
-            Back to Hub
-        </a>
+        <a href="hub.html" class="back-nav">Back to Hub</a>
     </div>
-
-    <footer>
-        Powered by Vanguard Citizen Services
-    </footer>
-
-    <script>
-        const sbUrlAbout = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
-        const sbKeyAbout = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
-        
-        if (typeof aboutClient === 'undefined') {
-            var aboutClient = supabase.createClient(sbUrlAbout, sbKeyAbout);
-        }
-    </script>
+    <footer>Powered by Vanguard Citizen Services</footer>
 </body>
 </html>
