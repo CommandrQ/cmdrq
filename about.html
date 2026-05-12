@@ -7,17 +7,30 @@
     <link rel="stylesheet" href="vanguard-os.css">
     <style>
         .profile-content {
+            display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-            text-align: left;
+            align-items: center;
             padding: 30px !important;
+            height: auto !important;
+            max-height: none !important;
         }
 
-        /* Interactive Section Styling */
+        /* Grid for the "Cube" layout on mobile */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
         .collapsible-section {
             width: 100%;
-            margin-bottom: 15px;
-            border-bottom: 1px solid var(--window-border);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--window-border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .drop-btn {
@@ -28,64 +41,66 @@
             font-family: var(--font-sys);
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            padding: 15px 0;
-            text-align: left;
-            cursor: url('images/pointer.png'), pointer !important;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        .drop-btn:hover {
-            color: var(--color-white);
-            text-shadow: 0 0 10px var(--color-blue);
-        }
-
-        .drop-btn::after {
-            content: '+';
-            font-size: 1.5rem;
-            transition: transform 0.3s ease;
-        }
-
-        .active .drop-btn::after {
-            transform: rotate(45deg);
-            color: var(--color-purple);
+            letter-spacing: 2px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.9rem;
         }
 
         .drop-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: max-height 0.4s ease, padding 0.4s ease;
             color: rgba(255, 255, 255, 0.9);
-            line-height: 1.7;
-            font-size: 1rem;
+            padding: 0 20px;
+            line-height: 1.6;
+            text-align: left;
         }
 
         .active .drop-content {
-            max-height: 300px; /* Adjust as needed */
+            max-height: 500px;
             padding-bottom: 20px;
         }
 
+        /* Desktop specific: Long, centered button */
         .back-btn {
-            margin-top: 20px;
-            align-self: center;
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
             color: var(--color-purple);
             text-decoration: none;
             font-weight: bold;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             border: 2px solid var(--color-purple);
-            padding: 12px 25px;
+            padding: 15px 0;
             border-radius: 12px;
             transition: all 0.3s ease;
             text-transform: uppercase;
+            white-space: nowrap;
         }
 
         .back-btn:hover {
             background: var(--color-purple);
             color: white;
             box-shadow: 0 0 20px var(--color-purple);
+        }
+
+        @media (max-width: 600px) {
+            .profile-grid {
+                grid-template-columns: 1fr 1fr; /* Cube Layout */
+                gap: 10px;
+            }
+            .drop-btn {
+                padding: 30px 10px; /* Make them more "square" */
+                font-size: 0.75rem;
+            }
+            /* When active on mobile, allow it to span full width to read easier */
+            .active {
+                grid-column: span 2;
+            }
         }
     </style>
 </head>
@@ -103,41 +118,41 @@
 
     <div class="interface-wrapper">
         <header class="hero-container">
-            <h1 class="hero-text">The Origin Log</h1>
+            <h1 class="hero-text">Origin Log</h1>
         </header>
 
         <main class="app-dashboard profile-content">
-            
-            <div class="collapsible-section">
-                <button class="drop-btn">The Mission</button>
-                <div class="drop-content">
-                    I’m on a mission to fix the broken bits of our world—those <strong>human bonds</strong> that keep us all connected. I believe we’re stronger together, and I’m dedicated to rebuilding the community ties that have started to fray.
+            <div class="profile-grid">
+                <div class="collapsible-section">
+                    <button class="drop-btn">The Mission</button>
+                    <div class="drop-content">
+                        I’m on a mission to fix the broken bits of our world—those human bonds that keep us all connected.
+                    </div>
                 </div>
-            </div>
 
-            <div class="collapsible-section">
-                <button class="drop-btn">The Journey</button>
-                <div class="drop-content">
-                    My path wasn't a straight line, and I love that about it! It was forged in the discipline of the <strong>Military</strong>, sharpened by the fast-paced world of <strong>Retail</strong>, and ignited by the endless possibilities of <strong>Digital Creation</strong>.
+                <div class="collapsible-section">
+                    <button class="drop-btn">The Journey</button>
+                    <div class="drop-content">
+                        Forged in the Military, sharpened by Retail, and ignited by Digital Creation.
+                    </div>
                 </div>
-            </div>
 
-            <div class="collapsible-section">
-                <button class="drop-btn">My Superpowers</button>
-                <div class="drop-content">
-                    I’m at my best when I’m breaking down complex processes, <strong>coaching</strong> teams to victory, and <strong>mentoring</strong> people to help them realize they've got exactly what it takes to thrive.
+                <div class="collapsible-section">
+                    <button class="drop-btn">Superpowers</button>
+                    <div class="drop-content">
+                        Process deconstruction, coaching to victory, and mentoring for growth.
+                    </div>
                 </div>
-            </div>
 
-            <div class="collapsible-section">
-                <button class="drop-btn">Life in the Universe</button>
-                <div class="drop-content">
-                    When the "Commander" hat comes off, I’m all about my <strong>family</strong>. They’re my world. You’ll also find me documenting my journey through the stars—because every moment in this universe is worth remembering.
+                <div class="collapsible-section">
+                    <button class="drop-btn">Life</button>
+                    <div class="drop-content">
+                        Prioritizing family and documenting my journey through the stars.
+                    </div>
                 </div>
             </div>
 
             <a href="hud.html" class="back-btn">Back to Command Hub</a>
-
         </main>
     </div>
 
@@ -147,11 +162,9 @@
 
     <script src="vanguard-os.js"></script>
     <script>
-        // Local logic for About Me dropdowns
         document.querySelectorAll('.drop-btn').forEach(button => {
             button.addEventListener('click', () => {
-                const parent = button.parentElement;
-                parent.classList.toggle('active');
+                button.parentElement.classList.toggle('active');
             });
         });
     </script>
