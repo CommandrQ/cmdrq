@@ -1,156 +1,184 @@
-/* 
-    VANGUARD_OS CORE STYLESHEET
-    Persistent Cursor | Desktop Upscaling | Pocket Universe UI
-*/
+/* =========================================
+   VANGUARD_OS SYSTEM STYLES
+   ========================================= */
 
+/* --- 1. VARIABLES --- */
 :root {
-    --neon-purple: #bf5af2;
-    --neon-blue: #5ac8fa;
-    --glass-bg: rgba(15, 15, 25, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --system-font: 'Courier New', Courier, monospace;
+    --color-purple: #bf5af2;
+    --color-blue: #5ac8fa;
+    --color-white: #ffffff;
+    --window-bg: rgba(15, 15, 25, 0.45); /* Slightly transparent solid back */
+    --window-border: rgba(255, 255, 255, 0.1);
+    --font-sys: 'Courier New', Courier, monospace;
 }
 
-* { 
-    box-sizing: border-box; 
-    /* Applying the persistent custom pointer */
-    cursor: url('images/pointer.png'), auto !important;
+/* --- 2. BASE RESET --- */
+* {
+    box-sizing: border-box;
+    cursor: url('images/pointer.png'), default !important; /* Persistent custom pointer */
+    -webkit-tap-highlight-color: transparent;
 }
 
 body, html {
     margin: 0; padding: 0;
     width: 100%; height: 100%;
-    background: transparent; /* Allows star-field to show through */
-    color: white;
-    font-family: var(--system-font);
-    overflow: hidden;
-}
-
-/* --- THE POCKET UNIVERSE (FIXED DEPTH) --- */
-#star-field {
-    position: fixed; 
-    inset: 0; 
-    z-index: -2; 
+    /* Gradient goes on the body to anchor the background */
     background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
+    color: var(--color-white);
+    font-family: var(--font-sys);
+    overflow: hidden;
+    animation: bootIn 1.5s ease-out forwards;
+}
+
+@keyframes bootIn {
+    0% { opacity: 0; filter: brightness(0); }
+    100% { opacity: 1; filter: brightness(1); }
+}
+
+/* --- 3. BACKGROUND: STARFIELD --- */
+#star-field {
+    position: fixed; inset: 0;
+    z-index: 0; /* Layer 0: Behind everything */
+    pointer-events: none;
     overflow: hidden;
 }
 
-.star { 
-    position: absolute; 
-    background: #fff; 
-    border-radius: 50%; 
-    pointer-events: none; 
-    box-shadow: 0 0 5px #fff;
-    z-index: -1; 
+.star {
+    position: absolute;
+    background: var(--color-white);
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
 }
 
-/* --- HUD READOUTS --- */
-.hud-date-left { position: absolute; top: 25px; left: 30px; z-index: 10; }
-.hud-time-right { position: absolute; top: 25px; right: 30px; z-index: 10; }
+/* --- 4. HUD READOUTS --- */
+.hud-top-left { position: absolute; top: 25px; left: 30px; z-index: 10; }
+.hud-top-right { position: absolute; top: 25px; right: 30px; z-index: 10; text-align: right; }
 
 #system-date, #system-clock {
-    color: var(--neon-blue);
+    color: var(--color-blue);
     font-weight: bold;
     letter-spacing: 2px;
     margin: 0;
 }
+
 #system-date { font-size: 0.9rem; opacity: 0.9; }
 #system-clock { font-size: 1.6rem; }
 
-/* --- HERO SECTION --- */
-.hero-container {
-    text-align: center;
-    padding-top: 110px;
-    margin-bottom: 30px;
-}
-.hero-text {
-    font-size: clamp(2.2rem, 10vw, 4.5rem);
-    font-weight: 900;
-    letter-spacing: clamp(10px, 2vw, 20px);
-    color: rgba(255, 255, 255, 0.1);
-    background: linear-gradient(120deg, transparent 30%, #fff 50%, transparent 70%);
-    background-size: 200% 100%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    animation: shine 3s infinite linear;
-    text-transform: uppercase;
+/* --- 5. INTERFACE LAYOUT --- */
+.interface-wrapper {
+    position: relative;
+    z-index: 1; /* Layer 1: Above stars */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    padding-top: 10vh;
 }
 
-/* --- THE DASHBOARD --- */
+.hero-container {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.hero-text {
+    font-size: clamp(2.2rem, 8vw, 4.5rem);
+    font-weight: 900;
+    letter-spacing: clamp(8px, 2vw, 18px);
+    color: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(120deg, transparent 30%, var(--color-white) 50%, transparent 70%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: shine 3s infinite linear;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+@keyframes shine {
+    to { background-position: 200% 0; }
+}
+
+/* --- 6. THE DASHBOARD WINDOW --- */
 .app-dashboard {
-    background: var(--glass-bg);
+    background: var(--window-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 30px;
-    padding: 40px;
+    border: 1px solid var(--window-border);
+    border-radius: 24px;
+    padding: 30px;
     max-width: 900px;
-    margin: 0 auto;
+    width: 90%;
     display: flex;
     justify-content: center;
     gap: 30px;
     flex-wrap: wrap;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
 }
 
+/* --- 7. APP ICONS --- */
 .app-icon {
-    display: flex; 
-    flex-direction: column; 
-    align-items: center;
-    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex; flex-direction: column; align-items: center;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .icon-box {
     width: 75px; height: 75px;
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--glass-border);
+    border: 1px solid var(--window-border);
     border-radius: 20px;
     display: flex; justify-content: center; align-items: center;
     position: relative;
+    transition: border-color 0.3s ease;
 }
+
 .icon-box::after {
     content: ''; position: absolute; bottom: 8px;
-    width: 25px; height: 2px; background: var(--neon-purple);
-    box-shadow: 0 0 12px var(--neon-purple);
+    width: 25px; height: 2px;
+    background: var(--color-purple);
+    box-shadow: 0 0 10px var(--color-purple);
+}
+
+.glyph {
+    width: 36px; height: 36px;
+    fill: var(--color-white);
+    filter: drop-shadow(0 0 8px var(--color-blue));
 }
 
 .app-icon span {
-    margin-top: 15px;
-    text-transform: uppercase;
-    color: #ffffff;
-    text-shadow: 0 0 10px rgba(90, 200, 250, 0.6);
-    font-weight: bold;
-    text-align: center;
-    font-size: 0.8rem; /* Mobile Size */
-    letter-spacing: 2px;
+    margin-top: 15px; font-size: 0.85rem; font-weight: bold;
+    text-transform: uppercase; letter-spacing: 2px;
+    color: var(--color-white);
+    text-shadow: 0 0 10px rgba(90, 200, 250, 0.5);
+    transition: color 0.3s ease;
 }
 
-/* --- DESKTOP UPSCALING --- */
-@media (min-width: 1024px) {
-    .app-icon span {
-        font-size: 1.2rem; /* Substantial Desktop Size */
-        letter-spacing: 4px;
-        margin-top: 20px;
-    }
-    .icon-box { width: 95px; height: 95px; border-radius: 24px; }
-    .glyph { width: 45px; height: 45px; }
-    .app-dashboard { gap: 60px; padding: 60px; max-width: 1100px; }
-    .app-icon:hover { transform: translateY(-15px) scale(1.08); }
-    .app-icon:hover span { color: var(--neon-blue); }
-}
-
-.glyph { fill: white; filter: drop-shadow(0 0 8px var(--neon-blue)); }
-
-/* --- FOOTER --- */
+/* --- 8. FOOTER --- */
 .vanguard-footer {
-    position: absolute; bottom: 35px; width: 100%;
-    text-align: center; font-size: 0.8rem; letter-spacing: 6px;
-    color: #ffffff;
+    position: absolute; bottom: 25px; width: 100%;
+    text-align: center; font-size: 0.8rem; letter-spacing: 5px;
+    color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase; font-weight: bold;
-    opacity: 0.8;
+    z-index: 10;
 }
 
-@keyframes shine {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+/* --- 9. RESPONSIVE QUERIES --- */
+@media (min-width: 1024px) {
+    .app-dashboard { padding: 50px; gap: 60px; max-width: 1000px; }
+    .icon-box { width: 90px; height: 90px; border-radius: 24px; }
+    .glyph { width: 44px; height: 44px; }
+    .app-icon span { font-size: 1.1rem; letter-spacing: 4px; margin-top: 20px; }
+    
+    .app-icon:hover { transform: translateY(-12px) scale(1.05); }
+    .app-icon:hover .icon-box { border-color: var(--color-blue); }
+    .app-icon:hover span { color: var(--color-blue); }
+}
+
+@media (max-width: 600px) {
+    .hud-top-left, .hud-top-right { top: 15px; }
+    .hud-top-left { left: 15px; } .hud-top-right { right: 15px; }
+    #system-clock { font-size: 1.2rem; }
+    .app-dashboard { gap: 20px; padding: 25px; border-radius: 18px; }
+    .icon-box { width: 65px; height: 65px; border-radius: 16px; }
+    .glyph { width: 30px; height: 30px; }
+    .vanguard-footer { font-size: 0.65rem; letter-spacing: 3px; }
 }
