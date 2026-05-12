@@ -1,7 +1,3 @@
-/**
- * VANGUARD_OS SYSTEM LOGIC
- */
-
 const VanguardOS = (() => {
     const appsConfig = [
         { name: "About Me", path: "about.html", glyph: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" },
@@ -14,7 +10,6 @@ const VanguardOS = (() => {
     const init = () => {
         renderApps();
         setupStarfield();
-        setupSystemClock();
     };
 
     const openSocialModal = (url) => {
@@ -47,54 +42,28 @@ const VanguardOS = (() => {
     const setupStarfield = () => {
         const container = document.getElementById('star-field');
         if (!container) return;
-        
-        // Increased count for a denser feel
-        const starCount = 180;
-
+        const starCount = 200;
         for (let i = 0; i < starCount; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            
-            const x = Math.random() * 100;
-            const y = Math.random() * 100;
-            const size = Math.random() * 2 + 0.5;
-            const duration = (Math.random() * 5 + 3) * 1000;
-
-            star.style.left = `${x}%`;
-            star.style.top = `${y}%`;
-            star.style.width = star.style.height = `${size}px`;
-
-            /** 
-             * THE FIX: Negative delay ensures stars are already 
-             * mid-animation when the page loads, preventing a "stop/start" feel.
-             */
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 50 + 50; 
+            const duration = (Math.random() * 8 + 4) * 1000;
+            star.style.left = `50%`;
+            star.style.top = `50%`;
+            star.style.width = star.style.height = `2px`;
             star.animate([
-                { transform: 'scale(0) translate(0, 0)', opacity: 0 },
-                { transform: `scale(1.5) translate(${(x - 50) * 10}px, ${(y - 50) * 10}px)`, opacity: 0.9, offset: 0.5 },
-                { transform: `scale(3) translate(${(x - 50) * 30}px, ${(y - 50) * 30}px)`, opacity: 0 }
+                { transform: 'translate(-50%, -50%) scale(0)', opacity: 0 },
+                { opacity: 1, offset: 0.2 },
+                { transform: `translate(calc(-50% + ${Math.cos(angle) * velocity}vw), calc(-50% + ${Math.sin(angle) * velocity}vh)) scale(2.5)`, opacity: 0 }
             ], {
                 duration: duration,
                 iterations: Infinity,
-                easing: 'linear',
-                delay: -Math.random() * duration // Continuous movement fix
+                easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                delay: -Math.random() * duration 
             });
-
             container.appendChild(star);
         }
-    };
-
-    const setupSystemClock = () => {
-        const clockEl = document.getElementById('system-clock');
-        const dateEl = document.getElementById('system-date');
-        if (!clockEl || !dateEl) return;
-        
-        const update = () => {
-            const now = new Date();
-            clockEl.textContent = now.toLocaleTimeString([], { hour12: true, hour: 'numeric', minute: '2-digit', second: '2-digit' });
-            dateEl.textContent = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
-        };
-        update(); 
-        setInterval(update, 1000);
     };
 
     return { init, closeSocialModal };
