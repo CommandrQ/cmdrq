@@ -12,98 +12,49 @@
             --color-gold-glow: rgba(212, 175, 55, 0.3);
         }
 
-        .journal-container {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
+        .journal-container { width: 100%; max-width: 800px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        
+        .hero-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
+        .hub-return-top { margin-top: -15px; font-size: 0.8rem; letter-spacing: 3px; padding: 10px 30px; border-radius: 50px; width: auto; }
 
-        /* UNIFORM BUTTON REDESIGN */
-        .modal-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 20px;
-            height: 48px; /* Uniform Height */
-            min-width: 160px; /* Uniform Minimum Width */
-            font-size: 0.75rem;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            border-radius: 8px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
-            cursor: pointer;
-            border: 1px solid transparent;
-        }
-
-        /* ACTIONS GRID FOR UNIFORMITY */
-        .modal-actions {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            width: 100%;
-            margin-top: 30px;
-        }
-
-        @media (min-width: 600px) {
-            .modal-actions {
-                grid-template-columns: repeat(3, 1fr); /* Three across on desktop */
-            }
-        }
-
-        .gold-action {
-            background: var(--color-gold) !important;
-            color: #000 !important;
-            box-shadow: 0 4px 15px var(--color-gold-glow);
-        }
-
-        .gold-action:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
-        }
-
-        /* SCROLLABLE LOG DECK */
-        .log-deck {
-            width: 100%;
-            max-height: 550px;
-            overflow-y: auto;
-            padding: 10px 15px;
-            scrollbar-width: thin;
-            scrollbar-color: var(--color-gold) transparent;
-        }
-
+        .log-deck { width: 100%; max-height: 550px; overflow-y: auto; padding: 10px 15px; scrollbar-width: thin; scrollbar-color: var(--color-gold) transparent; }
         .log-deck::-webkit-scrollbar { width: 4px; }
         .log-deck::-webkit-scrollbar-thumb { background: var(--color-gold); border-radius: 10px; }
 
         .log-entry-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--window-border);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.4s ease;
-            animation: slideIn 0.5s ease forwards;
-            opacity: 0;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--window-border); border-radius: 12px;
+            padding: 25px; margin-bottom: 15px; cursor: pointer; text-align: center;
+            transition: 0.4s; animation: slideIn 0.5s ease forwards; opacity: 0;
         }
 
         @keyframes slideIn { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        .log-entry-card:hover {
-            border-color: var(--color-gold);
-            background: rgba(212, 175, 55, 0.05);
-            transform: translateY(-3px);
-        }
+        .log-entry-card:hover { border-color: var(--color-gold); background: rgba(212, 175, 55, 0.05); transform: translateY(-3px); box-shadow: 0 5px 15px var(--color-gold-glow); }
+        .log-entry-card h3 { margin: 0; font-size: 1.1rem; letter-spacing: 2px; color: #fff; text-transform: uppercase; }
 
-        /* GOLD ACCENTED MODALS */
+        /* PURPLE RETURN BUTTON & DISCLAIMER */
+        .purple-return-btn {
+            background: var(--color-purple); color: white; border: none; padding: 10px 25px;
+            border-radius: 50px; margin: 0 auto 20px auto; display: block; cursor: pointer;
+            text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; font-weight: bold;
+            transition: 0.3s;
+        }
+        .purple-return-btn:hover { box-shadow: 0 0 15px var(--color-purple); transform: scale(1.05); }
+
+        .disclaimer { font-size: 0.65rem; color: rgba(255, 255, 255, 0.5); margin-top: 25px; text-align: center; line-height: 1.4; }
+
+        /* MODAL STYLES */
         .gold-modal { border: 1px solid var(--color-gold) !important; box-shadow: 0 0 30px var(--color-gold-glow) !important; }
-        .gold-modal .modal-title { color: #fff !important; border-bottom: 1px solid var(--color-gold); padding-bottom: 10px; margin-bottom: 20px; display: inline-block; }
-        .tactical-input { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(0,0,0,0.4); border: 1px solid rgba(212, 175, 55, 0.3); color: white; font-family: var(--font-sys); border-radius: 8px; }
+        .gold-modal .modal-title { color: #fff !important; border-bottom: 1px solid var(--color-gold); padding-bottom: 10px; display: inline-block; margin-bottom: 20px; }
+        .gold-modal p, .gold-modal label { color: #fff; }
+        
+        .tactical-input { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(0,0,0,0.4); border: 1px solid rgba(212, 175, 55, 0.3); color: #fff; font-family: var(--font-sys); border-radius: 8px; }
+        .tactical-input:focus { border-color: var(--color-gold); box-shadow: 0 0 10px var(--color-gold-glow); outline: none; }
+        
+        .modal-btn.primary.gold-action { background: var(--color-gold); color: #000; font-weight: 900; }
+        .journal-modal-body { max-height: 50vh; overflow-y: auto; line-height: 1.8; font-size: 1.1rem; color: #fff; }
+
+        @media (max-width: 600px) { .hub-return-top { margin-top: -5px; } .log-entry-card h3 { font-size: 0.9rem; } }
     </style>
 </head>
 <body>
@@ -111,9 +62,9 @@
     <div id="star-field"></div>
 
     <div class="interface-wrapper">
-        <header class="hero-container" style="display: flex; flex-direction: column; align-items: center; margin-bottom: 40px;">
+        <header class="hero-container">
             <h1 class="hero-text">Journal Logs</h1>
-            <a href="../hud.html" class="modal-btn secondary" style="min-width: 200px; height: 40px;">Return to Hub</a>
+            <a href="../hud.html" class="modal-btn secondary hub-return-top">Return to Hub</a>
         </header>
 
         <main class="app-dashboard journal-container">
@@ -121,17 +72,24 @@
         </main>
     </div>
 
-    <!-- READ MODAL -->
+    <!-- SHARE CONFIRMATION MODAL -->
+    <div id="share-confirm-modal" class="modal-overlay">
+        <div class="modal-window gold-modal" style="text-align: center;">
+            <button onclick="VanguardOS.closeModals()" class="purple-return-btn">Return</button>
+            <h2 class="modal-title">Frequency Copied</h2>
+            <p style="margin-bottom: 25px;">The log uplink has been secured to your clipboard. You can now paste this link onto your social media platform to relay the signal.</p>
+            <button onclick="VanguardOS.closeModals()" class="modal-btn primary gold-action" style="width: 100%;">Acknowledged</button>
+        </div>
+    </div>
+
+    <!-- READ BLOG MODAL -->
     <div id="blog-modal" class="modal-overlay">
-        <div class="modal-window" style="max-width: 800px; text-align: left;">
+        <div class="modal-window" style="max-width: 700px; text-align: left;">
             <h2 id="blog-modal-title" class="modal-title" style="margin-bottom: 25px;">Log Title</h2>
-            <div id="blog-modal-content" style="max-height: 45vh; overflow-y: auto; line-height: 1.8; color: #fff; padding-right: 10px;"></div>
-            
-            <!-- UNIFORM BUTTON ARRAY -->
-            <div class="modal-actions">
+            <div id="blog-modal-content" class="journal-modal-body"></div>
+            <div class="modal-actions" style="margin-top: 30px;">
                 <button onclick="VanguardOS.closeModals()" class="modal-btn secondary">Close</button>
-                <button onclick="VanguardOS.handleShare()" class="modal-btn gold-action">Share Link</button>
-                <button onclick="VanguardOS.handleReplyClick()" class="modal-btn gold-action">Write a Reply</button>
+                <button onclick="VanguardOS.handleShare()" class="modal-btn primary gold-action">Share link to social media post</button>
             </div>
         </div>
     </div>
@@ -139,30 +97,33 @@
     <!-- REPLY WINDOW -->
     <div id="reply-modal" class="modal-overlay">
         <div class="modal-window gold-modal">
+            <button onclick="VanguardOS.closeModals()" class="purple-return-btn">Return</button>
             <h2 class="modal-title">Transmit Reply</h2>
             <form onsubmit="VanguardOS.submitReply(event)">
-                <textarea id="reply-text" class="tactical-input" placeholder="Compose your response for the Blogreplies table..." required style="min-height: 150px;"></textarea>
-                <div class="modal-actions" style="grid-template-columns: 1fr 1fr;">
-                    <button type="button" onclick="VanguardOS.closeModals()" class="modal-btn secondary">Abort</button>
-                    <button type="submit" class="modal-btn gold-action">Log Reply</button>
+                <textarea id="reply-text" class="tactical-input" placeholder="Write your transmission here..." required style="min-height: 150px;"></textarea>
+                <div class="modal-actions">
+                    <button type="submit" class="modal-btn primary gold-action" style="width: 100%;">Confirm Signal</button>
                 </div>
             </form>
+            <p class="disclaimer">Vanguard Citizen Services is not responsible for lost passwords or unauthorized data access.</p>
         </div>
     </div>
 
     <!-- AUTH MODAL -->
     <div id="auth-modal" class="modal-overlay">
         <div class="modal-window gold-modal">
-            <h2 class="modal-title">Clearance Required</h2>
+            <button onclick="VanguardOS.closeModals()" class="purple-return-btn">Return</button>
+            <h2 class="modal-title">Identity Check</h2>
             <form onsubmit="VanguardOS.submitAuth(event)">
-                <div id="name-group"><input type="text" id="auth-name" class="tactical-input" placeholder="Callsign"></div>
+                <div id="name-group"><input type="text" id="auth-name" class="tactical-input" placeholder="Full Name"></div>
                 <input type="email" id="auth-email" class="tactical-input" placeholder="Email" required>
-                <input type="password" id="auth-pass" class="tactical-input" placeholder="Access Key" required>
-                <button type="submit" id="auth-submit-btn" class="modal-btn gold-action" style="width: 100%;">Register</button>
+                <input type="password" id="auth-pass" class="tactical-input" placeholder="Password" required>
+                <button type="submit" id="auth-submit-btn" class="modal-btn primary gold-action" style="width: 100%;">Register</button>
             </form>
-            <p id="auth-toggle-text" style="font-size: 0.8rem; margin-top: 15px; color: var(--color-gold); text-align: center;">
-                Existing Citizen? <a href="#" onclick="VanguardOS.toggleAuthMode()" style="color: #fff;">Login</a>
+            <p id="auth-toggle-text" style="font-size: 0.8rem; margin-top: 15px; text-align: center;">
+                Known Citizen? <a href="#" onclick="VanguardOS.toggleAuthMode()" style="color: #fff; text-decoration: underline;">Login here</a>
             </p>
+            <p class="disclaimer">Vanguard Citizen Services is not responsible for lost passwords or unauthorized data access.</p>
         </div>
     </div>
 
@@ -172,12 +133,12 @@
 
     <script>
         const journalEntries = [
-            { id: "log_006", title: "The Weight of the Tether", content: `<p>Outgrowing the people I used to run with is a bittersweet realization... Loyalty isn't staying the same forever; it's respecting the potential of the mission.</p>` },
-            { id: "log_005", title: "The Shield of Self-Deprecation", content: `<p>The most dangerous lies are the ones we tell ourselves under the guise of being realistic or humble...</p>` },
+            { id: "log_006", title: "The Weight of the Tether", content: `<p>Outgrowing the people I used to run with is a bittersweet realization...</p>` },
+            { id: "log_005", title: "The Shield of Self-Deprecation", content: `<p>The most dangerous lies are the ones we tell ourselves...</p>` },
             { id: "log_004", title: "The War Within", content: `<p>The most difficult rule to follow is often the first one: you must respect yourself...</p>` },
             { id: "log_003", title: "Survival and The Three Respects", content: `<p>Respecting others is often expressed through the quiet dignity of providing for those who depend on us...</p>` },
             { id: "log_002", title: "Stagnation and Character", content: `<p>Character isn't built when you have everything you need. It’s defined when you have nothing...</p>` },
-            { id: "log_001", title: "The Trap of External Victories", content: `<p>Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get there.</p>` }
+            { id: "log_001", title: "The Trap of External Victories", content: `<p>We spend so much time fighting for the "win" that we’ve forgotten how to advance ourselves...</p>` }
         ];
 
         function loadJournal() {
