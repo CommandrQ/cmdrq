@@ -8,7 +8,7 @@
         :root {
             --neon-purple: #bf5af2;
             --neon-blue: #5ac8fa;
-            --glass-bg: rgba(20, 20, 35, 0.7);
+            --glass-bg: rgba(20, 20, 35, 0.6);
         }
 
         body, html {
@@ -17,12 +17,11 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            /* Constant background for the whole experience */
             background: linear-gradient(180deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Courier New', Courier, monospace;
         }
 
-        /* Starfield Layer - Visible from second one */
+        /* --- BACKGROUND LAYER --- */
         #star-container {
             position: fixed;
             width: 100%;
@@ -43,42 +42,7 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* Intro Sequence Layer - Transparent background */
-        #intro-sequence {
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: transparent; /* No black overlay */
-            pointer-events: none;
-        }
-
-        .frame {
-            position: absolute;
-            width: 80%; /* Slightly smaller to feel like a window in the stars */
-            height: 60%;
-            opacity: 0;
-            background-size: cover;
-            background-position: center;
-            border: 1px solid var(--neon-blue);
-            box-shadow: 0 0 30px rgba(90, 200, 250, 0.2);
-            border-radius: 4px;
-        }
-
-        #frame-1 { animation: frameSequence 2s forwards 0.5s; background-image: url('images/frame1.jpg'); }
-        #frame-2 { animation: frameSequence 2s forwards 2.5s; background-image: url('images/frame2.jpg'); }
-        #frame-3 { animation: frameSequence 2s forwards 4.5s; background-image: url('images/frame3.jpg'); }
-
-        @keyframes frameSequence {
-            0% { opacity: 0; transform: scale(0.95); filter: brightness(0.5) blur(5px); }
-            20% { opacity: 1; filter: brightness(1) blur(0px); }
-            80% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(1.05); }
-        }
-
-        /* Main Content reveal */
+        /* --- MAIN UI --- */
         #main-content {
             position: relative;
             z-index: 10;
@@ -88,33 +52,95 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            animation: revealContent 1.5s forwards 6.5s;
         }
 
-        @keyframes revealContent { to { opacity: 1; } }
-
         .splash-container {
-            width: 400px;
-            height: 400px;
+            width: 350px;
+            height: 350px;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: radial-gradient(circle, rgba(191, 90, 242, 0.2) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(191, 90, 242, 0.15) 0%, transparent 70%);
         }
 
         .commander-img {
-            width: 90%;
-            filter: drop-shadow(0 0 20px var(--neon-blue));
+            width: 100%;
+            filter: drop-shadow(0 0 15px var(--neon-blue));
             animation: float 4s infinite ease-in-out;
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-10px); }
         }
 
-        /* Transition FX: The Slice */
+        /* --- BUTTON SLICE LOGIC --- */
+        .btn-wrapper {
+            position: relative;
+            margin-top: 40px;
+            cursor: pointer;
+        }
+
+        .enter-btn {
+            padding: 18px 50px;
+            background: var(--glass-bg);
+            border: 1px solid var(--neon-purple);
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            font-size: 1.1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            position: relative;
+            display: block;
+        }
+
+        /* Slice State */
+        .btn-wrapper.sliced .enter-btn {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .slice-part {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--glass-bg);
+            border: 1px solid var(--neon-purple);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 6px;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .btn-wrapper.sliced .slice-part {
+            opacity: 1;
+        }
+
+        .part-top {
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 55%);
+            animation: sliceTop 0.8s forwards ease-out;
+        }
+
+        .part-bottom {
+            clip-path: polygon(0 55%, 100% 45%, 100% 100%, 0 100%);
+            animation: sliceBottom 0.8s forwards ease-out;
+        }
+
+        @keyframes sliceTop {
+            to { transform: translate(-20px, -40px) rotate(-5deg); opacity: 0; }
+        }
+
+        @keyframes sliceBottom {
+            to { transform: translate(20px, 40px) rotate(5deg); opacity: 0; }
+        }
+
+        /* --- FULL SCREEN OVERLAY --- */
         #transition-overlay {
             position: fixed;
             inset: 0;
@@ -122,63 +148,44 @@
             background: white;
             opacity: 0;
             pointer-events: none;
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
         }
 
-        .slicing {
-            animation: flashAndSlice 1.2s forwards ease-in;
+        .screen-cut {
+            animation: screenFadeOut 1s forwards ease-in;
         }
 
-        @keyframes flashAndSlice {
-            0% { opacity: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
-            10% { opacity: 1; }
-            30% { background: black; }
-            100% { opacity: 1; background: black; clip-path: polygon(0 100%, 100% 0, 100% 100%, 0% 100%); }
+        @keyframes screenFadeOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; background: white; } /* Initial Flash */
+            30% { background: black; clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
+            100% { opacity: 1; background: black; clip-path: polygon(0 50%, 100% 0, 100% 100%, 0 100%); }
         }
 
-        .enter-btn {
-            margin-top: 30px;
-            padding: 15px 45px;
-            background: rgba(20, 20, 35, 0.5);
-            border: 1px solid var(--neon-purple);
-            color: white;
-            font-family: 'Courier New', Courier, monospace;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-        }
-
-        .enter-btn:hover {
-            box-shadow: 0 0 20px var(--neon-purple);
-            background: rgba(191, 90, 242, 0.2);
-        }
     </style>
 </head>
 <body>
 
-    <!-- Stars and sky are now visible immediately -->
     <div id="star-container"></div>
     <div id="transition-overlay"></div>
-
-    <!-- Frames now appear over the star background -->
-    <div id="intro-sequence">
-        <div class="frame" id="frame-1"></div>
-        <div class="frame" id="frame-2"></div>
-        <div class="frame" id="frame-3"></div>
-    </div>
 
     <div id="main-content">
         <div class="splash-container">
             <img src="images/commanderqhs.png" alt="Commander Q" class="commander-img">
         </div>
-        <h1 style="color: white; letter-spacing: 8px; font-weight: 200;">COMMANDER Q</h1>
-        <button class="enter-btn" onclick="initiateExit()">>Enter The Hideout<</button>
+        
+        <h1 style="color: white; letter-spacing: 10px; font-weight: 200; margin-bottom: 0;">COMMANDER Q</h1>
+        <p style="color: var(--neon-blue); letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 20px;">VANGUARD COMMANDER // SECTOR 01</p>
+
+        <div class="btn-wrapper" id="target-btn" onclick="executeSlice()">
+            <div class="enter-btn">>Enter The Hideout<</div>
+            <!-- These only show during the click -->
+            <div class="slice-part part-top">>Enter The Hideout<</div>
+            <div class="slice-part part-bottom">>Enter The Hideout<</div>
+        </div>
     </div>
 
     <script>
-        // Starfield Generation
+        // Starfield Init
         const starContainer = document.getElementById('star-container');
         for (let i = 0; i < 150; i++) {
             const star = document.createElement('div');
@@ -191,12 +198,17 @@
             starContainer.appendChild(star);
         }
 
-        function initiateExit() {
+        function executeSlice() {
+            // Trigger Button Animation
+            document.getElementById('target-btn').classList.add('sliced');
+            
+            // Trigger Screen Transition
             const overlay = document.getElementById('transition-overlay');
-            overlay.classList.add('slicing');
+            overlay.classList.add('screen-cut');
+            
             setTimeout(() => {
                 window.location.href = 'hud.html'; 
-            }, 1100);
+            }, 1000);
         }
     </script>
 </body>
