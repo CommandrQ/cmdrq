@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="../vanguard-os.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        /* GOLD ACCENT PALETTE */
+        :root {
+            --color-gold: #D4AF37;
+            --color-gold-glow: rgba(212, 175, 55, 0.3);
+        }
+
         .journal-container {
             width: 100%;
             max-width: 800px;
@@ -16,17 +22,35 @@
             gap: 20px;
         }
 
+        /* HEADER ADJUSTMENTS */
+        .hero-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .hub-return-top {
+            margin-top: -15px;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            padding: 10px 30px;
+            border-radius: 50px;
+            width: auto;
+        }
+
+        /* SCROLLABLE LOG DECK */
         .log-deck {
             width: 100%;
             max-height: 550px;
             overflow-y: auto;
-            padding-right: 15px;
+            padding: 10px 15px;
             scrollbar-width: thin;
-            scrollbar-color: var(--color-blue) transparent;
+            scrollbar-color: var(--color-gold) transparent;
         }
 
         .log-deck::-webkit-scrollbar { width: 4px; }
-        .log-deck::-webkit-scrollbar-thumb { background: var(--color-blue); border-radius: 10px; }
+        .log-deck::-webkit-scrollbar-thumb { background: var(--color-gold); border-radius: 10px; }
 
         .log-entry-card {
             background: rgba(255, 255, 255, 0.03);
@@ -36,21 +60,21 @@
             margin-bottom: 15px;
             cursor: pointer;
             text-align: center;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s ease;
             animation: slideIn 0.5s ease forwards;
             opacity: 0;
         }
 
         @keyframes slideIn {
-            from { transform: translateY(10px); opacity: 0; }
+            from { transform: translateY(15px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
         .log-entry-card:hover {
-            border-color: var(--color-blue);
-            background: rgba(90, 200, 250, 0.08);
-            transform: scale(1.02);
-            box-shadow: 0 0 20px rgba(90, 200, 250, 0.1);
+            border-color: var(--color-gold);
+            background: rgba(212, 175, 55, 0.05);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--color-gold-glow);
         }
 
         .log-entry-card h3 {
@@ -61,24 +85,47 @@
             text-transform: uppercase;
         }
 
+        /* GOLD ACCENTED MODALS */
+        .gold-modal {
+            border: 1px solid var(--color-gold) !important;
+            box-shadow: 0 0 30px var(--color-gold-glow) !important;
+        }
+
+        .gold-modal .modal-title {
+            color: var(--color-white) !important;
+            border-bottom: 1px solid var(--color-gold);
+            padding-bottom: 10px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .gold-modal .tactical-input {
+            border-color: rgba(212, 175, 55, 0.3);
+            color: #ffffff;
+        }
+
+        .gold-modal .tactical-input:focus {
+            border-color: var(--color-gold);
+            box-shadow: 0 0 10px var(--color-gold-glow);
+        }
+
+        .modal-btn.primary.gold-action {
+            background: var(--color-gold);
+            color: #000;
+            font-weight: 900;
+        }
+
         .journal-modal-body {
-            max-height: 55vh;
+            max-height: 50vh;
             overflow-y: auto;
             line-height: 1.8;
             font-size: 1.1rem;
-            color: rgba(255,255,255,0.95);
-            padding-right: 10px;
-        }
-
-        .tactical-input {
-            width: 100%; padding: 12px; margin-bottom: 15px;
-            background: rgba(0,0,0,0.4); border: 1px solid var(--window-border);
-            color: white; font-family: var(--font-sys); border-radius: 8px;
+            color: #ffffff;
         }
 
         @media (max-width: 600px) {
-            .log-entry-card { padding: 20px; }
-            .log-entry-card h3 { font-size: 0.9rem; letter-spacing: 1px; }
+            .hub-return-top { margin-top: -5px; }
+            .log-entry-card h3 { font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -89,15 +136,12 @@
     <div class="interface-wrapper">
         <header class="hero-container">
             <h1 class="hero-text">Journal Logs</h1>
+            <a href="../hud.html" class="modal-btn secondary hub-return-top">Return to Hub</a>
         </header>
 
         <main class="app-dashboard journal-container">
             <div class="log-deck" id="log-deck">
                 <!-- Entries are injected here -->
-            </div>
-
-            <div style="margin-top: 20px;">
-                <a href="../hud.html" class="modal-btn secondary">Return to Hub</a>
             </div>
         </main>
     </div>
@@ -109,37 +153,38 @@
             <div id="blog-modal-content" class="journal-modal-body"></div>
             <div class="modal-actions" style="margin-top: 30px;">
                 <button onclick="VanguardOS.closeModals()" class="modal-btn secondary">Close</button>
-                <button onclick="VanguardOS.handleShare()" class="modal-btn secondary">Relay</button>
-                <button onclick="VanguardOS.handleReplyClick()" class="modal-btn primary">Reply</button>
+                <button onclick="VanguardOS.handleReplyClick()" class="modal-btn primary gold-action">Share link to social media post</button>
             </div>
         </div>
     </div>
 
-    <!-- AUTH & REPLY MODALS REMAIN THE SAME AS PREVIOUS BUILD -->
-    <div id="auth-modal" class="modal-overlay">
-        <div class="modal-window">
-            <h2 class="modal-title">Identity Check</h2>
-            <form onsubmit="VanguardOS.submitAuth(event)">
-                <div id="name-group"><input type="text" id="auth-name" class="tactical-input" placeholder="Callsign (Full Name)"></div>
-                <input type="email" id="auth-email" class="tactical-input" placeholder="Email" required>
-                <input type="password" id="auth-pass" class="tactical-input" placeholder="Access Key" required>
-                <button type="submit" id="auth-submit-btn" class="modal-btn primary" style="width: 100%;">Register</button>
+    <!-- REPLY WINDOW (Gold Accents) -->
+    <div id="reply-modal" class="modal-overlay">
+        <div class="modal-window gold-modal">
+            <h2 class="modal-title">Identify / Transmit</h2>
+            <form onsubmit="VanguardOS.submitReply(event)">
+                <textarea id="reply-text" class="tactical-input" placeholder="Enter your response or social link..." required style="min-height: 150px;"></textarea>
+                <div class="modal-actions">
+                    <button type="button" onclick="VanguardOS.closeModals()" class="modal-btn secondary">Cancel</button>
+                    <button type="submit" class="modal-btn primary gold-action">Confirm Signal</button>
+                </div>
             </form>
-            <p id="auth-toggle-text" style="font-size: 0.8rem; margin-top: 15px; color: var(--color-blue);">Already in system? <a href="#" onclick="VanguardOS.toggleAuthMode()">Login</a></p>
-            <button onclick="VanguardOS.closeModals()" class="modal-btn secondary" style="margin-top: 10px;">Abort</button>
         </div>
     </div>
 
-    <div id="reply-modal" class="modal-overlay">
-        <div class="modal-window">
-            <h2 class="modal-title">Submit Transmission</h2>
-            <form onsubmit="VanguardOS.submitReply(event)">
-                <textarea id="reply-text" class="tactical-input" placeholder="Write your message here..." required style="min-height: 150px;"></textarea>
-                <div class="modal-actions">
-                    <button type="button" onclick="VanguardOS.closeModals()" class="modal-btn secondary">Cancel</button>
-                    <button type="submit" class="modal-btn primary">Send Reply</button>
-                </div>
+    <!-- AUTH MODAL (Gold Accents) -->
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-window gold-modal">
+            <h2 class="modal-title">Clearance Required</h2>
+            <form onsubmit="VanguardOS.submitAuth(event)">
+                <div id="name-group"><input type="text" id="auth-name" class="tactical-input" placeholder="Callsign"></div>
+                <input type="email" id="auth-email" class="tactical-input" placeholder="Email" required>
+                <input type="password" id="auth-pass" class="tactical-input" placeholder="Access Key" required>
+                <button type="submit" id="auth-submit-btn" class="modal-btn primary gold-action" style="width: 100%;">Register</button>
             </form>
+            <p id="auth-toggle-text" style="font-size: 0.8rem; margin-top: 15px; color: var(--color-gold);">
+                Known Citizen? <a href="#" onclick="VanguardOS.toggleAuthMode()" style="color: #fff; text-decoration: underline;">Login</a>
+            </p>
         </div>
     </div>
 
@@ -148,49 +193,37 @@
     <script src="../vanguard-os.js"></script>
 
     <script>
-        /**
-         * JOURNAL DATA ARRAY
-         * To add a new entry: 
-         * 1. Copy the curly brackets { ... } 
-         * 2. Paste at the top of the list 
-         * 3. Change id, title, and content.
-         */
         const journalEntries = [
             {
                 id: "log_006",
                 title: "The Weight of the Tether",
-                content: `<p>Outgrowing the people I used to run with is a bittersweet realization because I have to admit that the version of them I love only exists in my memory and not in the room with me today. I find myself looking at friends I’ve known for years and realizing that the fire we used to share has burned out into a cold pile of ash that we are both just staring at out of habit.</p>
-                <p>Commander Q didn't survive a war by holding onto every piece of equipment or every person that slowed the mission down. I used to think that loyalty meant staying the same forever but now I see that staying in a circle that no longer fits is actually a form of disrespect to everyone involved.</p>`
+                content: `<p>Outgrowing the people I used to run with is a bittersweet realization because I have to admit that the version of them I love only exists in my memory and not in the room with me today.</p>
+                <p>Commander Q didn't survive a war by holding onto every piece of equipment or every person that slowed the mission down. Loyalty isn't staying the same forever; it's respecting the potential of the mission.</p>`
             },
             {
                 id: "log_005",
                 title: "The Shield of Self-Deprecation",
-                content: `<p>The most dangerous lies are the ones we tell ourselves under the guise of being realistic or humble. When you constantly downplay your abilities, you are not actually practicing humility, but are instead constructing a psychological barrier that keeps you safe from the risks of your own potential.</p>
-                <p>We use self-deprecation as a shield because if we admit that we are truly capable, then we are suddenly responsible for the outcomes of our lives.</p>`
+                content: `<p>The most dangerous lies are the ones we tell ourselves under the guise of being realistic or humble. We use self-deprecation as a shield because if we admit that we are truly capable, then we are suddenly responsible for the outcomes of our lives.</p>`
             },
             {
                 id: "log_004",
                 title: "The War Within",
-                content: `<p>The most difficult rule to follow is often the first one: you must respect yourself. This is the foundation because every other win in your life depends on the quality of your internal dialogue.</p>
-                <p>If you are constantly sabotaging your own confidence with self-put-downs, you are essentially fighting a war on two fronts: one against the world and one against the person in the mirror. You cannot win the external race if you are busy tripping yourself at the starting line.</p>`
+                content: `<p>The most difficult rule to follow is often the first one: you must respect yourself. If you are constantly sabotaging your own confidence, you are fighting a war on two fronts. You cannot win the external race if you are tripping yourself at the starting line.</p>`
             },
             {
                 id: "log_003",
                 title: "Survival and The Three Respects",
-                content: `<p>It is often easy to dismiss the idea of self-mastery when you are currently drowning in the practical demands of survival. However, the reality is that a personal code becomes more essential when the stakes are this high.</p>
-                <p>When you show up to a place you do not want to be so that your family can be safe, you are not failing at life, but are instead performing an act of high-level respect that transforms a paycheck into a testament of your character.</p>`
+                content: `<p>Respecting others is often expressed through the quiet dignity of providing for those who depend on us. Respecting yourself means maintaining an internal boundary between the work you perform and the identity you hold.</p>`
             },
             {
                 id: "log_002",
                 title: "Stagnation and Character",
-                content: `<p>Character isn't built when you have everything you need. It’s defined when you have nothing. If you can’t advance professionally right now, you should be expanding personally. There is no excuse for stagnation when the problem is internal.</p>
-                <p>Mastery of yourself is the only advancement that actually belongs to you.</p>`
+                content: `<p>Character isn't built when you have everything you need. It’s defined when you have nothing. Mastery of yourself is the only advancement that actually belongs to you.</p>`
             },
             {
                 id: "log_001",
                 title: "The Trap of External Victories",
-                content: `<p>Everyone is talking about the systems that hold us back: the wage gap, the lack of freedom, the rigged game. And they’re right. But there’s a trap here: we spend so much time fighting for the "win" that we’ve forgotten how to advance ourselves.</p>
-                <p>Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get to where you're going.</p>`
+                content: `<p>We spend so much time fighting for the "win" that we’ve forgotten how to advance ourselves. Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get there.</p>`
             }
         ];
 
