@@ -4,48 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vanguard_OS | Journal Archive</title>
-    <!-- Master Styles -->
     <link rel="stylesheet" href="../vanguard-os.css">
-    <!-- Local Overrides (Must be after master) -->
     <link rel="stylesheet" href="journal.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
     <div id="star-field"></div>
 
     <div class="interface-wrapper">
-        <header class="hero-container">
+        <header class="journal-header">
             <h1 class="hero-text">Journal Logs</h1>
             <a href="../hud.html" class="hub-return-btn">Return to Hub</a>
         </header>
 
-        <main class="app-dashboard" style="display: block; margin-top: 30px;">
-            <div id="log-deck" class="log-deck">
-                <!-- Data injected by journal.js -->
-            </div>
+        <main class="log-deck" id="log-deck">
+            <!-- Entries injected here -->
         </main>
     </div>
 
-    <!-- ENTRY MODAL -->
+    <!-- THE PULSING MODAL -->
     <div id="blog-modal" class="modal-overlay">
-        <div class="modal-window gold-modal" style="max-width: 700px;">
-            <button onclick="VanguardOS.closeModals()" class="purple-return-btn">Return</button>
-            <h2 id="blog-modal-title" class="modal-title"></h2>
+        <div class="modal-window gold-modal">
+            <h2 id="blog-modal-title" style="color: var(--color-purple); text-transform: uppercase;"></h2>
             <div id="blog-modal-content" class="journal-modal-body"></div>
             
-            <div class="modal-actions">
-                <button onclick="VanguardOS.closeModals()" class="modal-btn secondary">Close</button>
-                <button onclick="VanguardOS.handleShare()" class="modal-btn secondary">Copy Blog Link</button>
-                <button onclick="VanguardOS.handleReplyClick()" class="modal-btn primary">Post Comment</button>
+            <div style="display: flex; justify-content: center; gap: 15px;">
+                <button onclick="VanguardOS.closeModals()" class="modal-btn">Close</button>
+                <button onclick="VanguardOS.handleShare()" class="modal-btn">Copy Link</button>
+                <button onclick="VanguardOS.handleReplyClick()" class="modal-btn primary">Comment</button>
             </div>
         </div>
     </div>
 
-    <!-- ... Other Modals (Reply, Auth, ShareConfirm) same structure ... -->
+    <!-- Ensure Auth and Reply modals are also present here if needed -->
 
     <footer class="vanguard-footer">Powered by Vanguard Citizen Services</footer>
 
-    <!-- Scripts -->
+    <!-- Scripts: Global first, then Local -->
     <script src="../vanguard-os.js"></script>
     <script src="journal.js"></script>
 </body>
