@@ -15,11 +15,11 @@
             max-height: none !important;
         }
 
-        /* Grid for the "Cube" layout on mobile */
+        /* Desktop: Standard vertical list */
         .profile-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
             width: 100%;
             margin-bottom: 30px;
         }
@@ -27,8 +27,7 @@
         .collapsible-section {
             width: 100%;
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--window-border);
-            border-radius: 12px;
+            border-bottom: 1px solid var(--window-border);
             overflow: hidden;
             transition: all 0.3s ease;
         }
@@ -42,32 +41,32 @@
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 2px;
-            padding: 20px;
-            text-align: center;
+            padding: 20px 0;
+            text-align: left;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
         }
+
+        .drop-btn::after { content: '+'; transition: transform 0.3s; }
+        .active .drop-btn::after { transform: rotate(45deg); color: var(--color-purple); }
 
         .drop-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.4s ease;
+            transition: max-height 0.4s ease;
             color: rgba(255, 255, 255, 0.9);
-            padding: 0 20px;
             line-height: 1.6;
-            text-align: left;
         }
 
-        .active .drop-content {
-            max-height: 500px;
-            padding-bottom: 20px;
-        }
+        .active .drop-content { max-height: 500px; padding-bottom: 20px; }
 
-        /* Desktop specific: Long, centered button */
+        /* Centered & Long Button for Desktop */
         .back-btn {
             display: block;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
             margin: 0 auto;
             text-align: center;
             color: var(--color-purple);
@@ -79,7 +78,6 @@
             border-radius: 12px;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            white-space: nowrap;
         }
 
         .back-btn:hover {
@@ -88,19 +86,18 @@
             box-shadow: 0 0 20px var(--color-purple);
         }
 
+        /* Mobile: Cube Layout Revert */
         @media (max-width: 600px) {
             .profile-grid {
-                grid-template-columns: 1fr 1fr; /* Cube Layout */
+                display: grid;
+                grid-template-columns: 1fr 1fr;
                 gap: 10px;
             }
-            .drop-btn {
-                padding: 30px 10px; /* Make them more "square" */
-                font-size: 0.75rem;
-            }
-            /* When active on mobile, allow it to span full width to read easier */
-            .active {
-                grid-column: span 2;
-            }
+            .collapsible-section { border: 1px solid var(--window-border); border-radius: 12px; }
+            .drop-btn { text-align: center; justify-content: center; padding: 30px 10px; font-size: 0.75rem; }
+            .drop-btn::after { display: none; }
+            .active { grid-column: span 2; }
+            .drop-content { text-align: left; padding: 0 15px; }
         }
     </style>
 </head>
