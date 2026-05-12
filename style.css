@@ -1,0 +1,115 @@
+:root {
+    --light-purple: #e0c3fc;
+    --light-blue: #8ecae6;
+    --deep-space: #1a1a2e;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--deep-space);
+    color: white;
+    overflow-x: hidden;
+}
+
+/* Purple Gradient Sky */
+.gradient-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #2b1055, #7597de);
+    z-index: -1;
+    opacity: 0.8;
+}
+
+/* Starfield Animation */
+#starfield {
+    position: fixed;
+    width: 200%;
+    height: 200%;
+    background: transparent url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/123163/stars.png') repeat;
+    z-index: -2;
+    animation: move-stars 100s linear infinite;
+}
+
+@keyframes move-stars {
+    from { transform: translateY(0); }
+    to { transform: translateY(-1000px); }
+}
+
+/* Floating Animation for Commander Image */
+.float-animation {
+    width: 250px;
+    height: auto;
+    animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+/* Layout */
+#landing {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.intro-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+button {
+    background: transparent;
+    border: 2px solid var(--light-blue);
+    color: var(--light-blue);
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 50px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: var(--light-blue);
+    color: var(--deep-space);
+    box-shadow: 0 0 20px var(--light-blue);
+}
+
+/* 4-Column Menu Grid */
+#menu-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Mobile-First: Adjust to 2 columns or 1 on very small screens */
+@media (max-width: 600px) {
+    #menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.nav-link {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem 1rem;
+    text-align: center;
+    text-decoration: none;
+    color: var(--light-purple);
+    border-radius: 10px;
+    border: 1px solid rgba(224, 195, 252, 0.3);
+}
+
+.hidden { display: none; }
