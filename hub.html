@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commander Q | Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Settings | Commander Q</title>
     <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -11,225 +11,206 @@
             --light-purple: #e0c3fc;
             --light-blue: #8ecae6;
             --deep-space: #0f0c29;
-            --glass-bg: rgba(15, 15, 25, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(15, 15, 25, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.15);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         body {
             background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #7597de 100%);
             background-attachment: fixed;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             color: white;
-            /* Use dvh to account for mobile browser UI bars */
-            min-height: 100vh;
-            min-height: 100dvh; 
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-x: hidden;
-        }
-
-        /* --- Fade in from Black --- */
-        #boot-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
-            z-index: 1000;
-            pointer-events: none;
-            animation: fadeOut 1.5s forwards ease-in-out;
-        }
-
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-
-        /* --- Starfield --- */
-        #starfield {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .stars {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: transparent;
-            box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 95vw 80vh #fff, 
-                        25vw 90vh #fff, 55vw 50vh #fff, 75vw 30vh #fff, 15vw 15vh #fff;
-            animation: moveStars 150s linear infinite;
-        }
-
-        @keyframes moveStars {
-            from { transform: translateY(0); }
-            to { transform: translateY(-2000px); }
-        }
-
-        /* --- Header & Title --- */
-        header {
+            justify-content: center; /* Centering everything */
             text-align: center;
-            padding: 40px 20px 10px;
-            z-index: 10;
         }
 
-        .commander-title {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: bold;
+        /* --- Background Animation --- */
+        #boot-screen { position: fixed; inset: 0; background: black; z-index: 1000; pointer-events: none; animation: fadeOut 1.5s forwards; }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+        #starfield { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        .stars { position: absolute; width: 2px; height: 2px; background: transparent; 
+                  box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 25vw 90vh #fff;
+                  animation: moveStars 150s linear infinite; }
+        @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
+
+        /* --- Content Layout --- */
+        .settings-container {
+            width: 90%;
+            max-width: 450px;
+            z-index: 10;
+            padding: 20px 0;
+        }
+
+        .commander-title { 
+            font-size: clamp(1.8rem, 6vw, 2.5rem); font-weight: bold; 
             background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
-            background-size: 200% auto;
-            color: #8ecae6;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: sheen 3s linear infinite;
-            margin-bottom: 5px;
+            margin-bottom: 30px;
         }
+        @keyframes sheen { to { background-position: 200% center; } }
 
-        @keyframes sheen {
-            to { background-position: 200% center; }
-        }
-
-        .status-text {
-            font-size: 0.8rem;
-            color: var(--light-purple);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            opacity: 0.7;
-        }
-
-        /* --- The Hub Grid --- */
-        #menu-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            width: 95%;
-            max-width: 1000px;
-            padding: 20px 10px 40px; /* Increased bottom padding */
-            z-index: 10;
-            flex-grow: 1; /* Allows grid to take up space and push footer down */
-        }
-
-        @media (min-width: 800px) {
-            #menu-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 20px;
-            }
-        }
-
-        /* --- Dark Glass Cards --- */
-        .card {
+        /* --- Glass Console --- */
+        .settings-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 25px 10px;
-            text-align: center;
-            text-decoration: none;
-            color: var(--light-blue);
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 80px;
-            font-size: 0.95rem;
+            border-radius: 28px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            margin-bottom: 25px;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--light-blue);
-            background: rgba(142, 202, 230, 0.15);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-            color: white;
+        h2 { color: var(--light-blue); margin-bottom: 25px; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .user-info { margin-bottom: 30px; }
+        .user-info p { color: var(--light-purple); font-size: 0.9rem; margin-bottom: 8px; letter-spacing: 1px; text-transform: uppercase; }
+        .citizen-display { font-size: 1.5rem; font-weight: bold; color: white; letter-spacing: 2px; }
+        .user-email { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 5px; }
+
+        /* --- Form Elements --- */
+        input { 
+            width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; 
+            font-family: inherit; text-align: center;
         }
 
-        /* --- Pulsing White Footer --- */
-        footer {
-            z-index: 10;
-            width: 100%;
-            padding: 30px 20px;
-            text-align: center;
-            color: white;
-            font-size: 0.7rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            animation: pulse 4s ease-in-out infinite;
+        .btn {
+            width: 100%; padding: 14px; border-radius: 50px; border: 1px solid var(--light-blue); 
+            background: transparent; color: var(--light-blue); font-weight: bold; 
+            cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.85rem;
+            margin-bottom: 15px; text-decoration: none; display: inline-block;
         }
+        .btn:hover { background: var(--light-blue); color: var(--deep-space); box-shadow: 0 0 15px var(--light-blue); }
+        
+        .btn-danger { border-color: #ff6b6b; color: #ff6b6b; }
+        .btn-danger:hover { background: #ff6b6b; color: white; box-shadow: 0 0 15px #ff6b6b; }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.9; }
+        .hidden { display: none; }
+
+        footer { 
+            z-index: 10; padding: 40px 20px; text-align: center; color: white; 
+            font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase; 
+            animation: pulse 4s ease-in-out infinite; width: 100%;
         }
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
     </style>
 </head>
 <body>
 
     <div id="boot-screen"></div>
+    <div id="starfield"><div class="stars"></div></div>
 
-    <div id="starfield">
-        <div class="stars"></div>
+    <div class="settings-container">
+        <h1 class="commander-title">Settings</h1>
+
+        <main class="settings-card">
+            
+            <!-- Logged Out View -->
+            <div id="auth-form" class="hidden">
+                <h2>Access the Hideout</h2>
+                <input type="email" id="login-email" placeholder="Email Address">
+                <input type="password" id="login-pass" placeholder="Password">
+                <button class="btn" onclick="handleLogin()">Login</button>
+            </div>
+
+            <!-- Logged In View -->
+            <div id="user-profile" class="hidden">
+                <h2>Citizen Data</h2>
+                <div class="user-info">
+                    <p>Verified User</p>
+                    <div id="display-id" class="citizen-display">----</div>
+                    <div id="display-email" class="user-email">...</div>
+                </div>
+                <button class="btn" onclick="handleLogout()">Securely Exit</button>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 25px 0;">
+
+            <h2>System Control</h2>
+            <button class="btn btn-danger" onclick="wipeCache()">Clear Data Logs</button>
+
+        </main>
+
+        <a href="hub.html" class="btn" style="width: auto; padding: 10px 25px;">Return to Hub</a>
     </div>
 
-    <header>
-        <h1 class="commander-title">Commander Q</h1>
-        <p class="status-text">Hub Active</p>
-    </header>
-
-    <main id="menu-grid">
-        <!-- JS will inject links here -->
-    </main>
-
-    <footer>
-        Powered by Vanguard Citizen Services
-    </footer>
+    <footer>Powered by Vanguard Citizen Services</footer>
 
     <script>
-        const HUB_LINKS = [
-            { title: "About Me", url: "about.html" },
-            { title: "Journal", url: "journal.html" },
-            { title: "Settings",  url: "settings.html" }
-        ];
-
         const sbUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
         const sbKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
-        
-        if (typeof supabaseClient === 'undefined') {
-            var supabaseClient = supabase.createClient(sbUrl, sbKey);
-        }
+        const supabaseClient = supabase.createClient(sbUrl, sbKey);
 
-        function initHub() {
-            const grid = document.getElementById('menu-grid');
+        async function checkSession() {
+            const { data: { user } } = await supabaseClient.auth.getUser();
             
-            HUB_LINKS.forEach(item => {
-                const card = document.createElement('a');
-                card.href = item.url;
-                card.className = 'card';
-                card.innerText = item.title;
+            if (user) {
+                document.getElementById('user-profile').classList.remove('hidden');
+                document.getElementById('auth-form').classList.add('hidden');
+                document.getElementById('display-email').innerText = user.email;
+                
+                // Fetch Citizen Number from database
+                const { data, error } = await supabaseClient
+                    .from('citizens')
+                    .select('citizen_number')
+                    .eq('user_id', user.id)
+                    .single();
 
-                if (item.url.startsWith('http')) {
-                    card.target = "_blank";
-                    card.rel = "noopener noreferrer";
+                if (data && data.citizen_number) {
+                    document.getElementById('display-id').innerText = "#" + data.citizen_number;
+                } else {
+                    document.getElementById('display-id').innerText = "UNASSIGNED";
                 }
-
-                grid.appendChild(card);
-            });
+            } else {
+                document.getElementById('auth-form').classList.remove('hidden');
+                document.getElementById('user-profile').classList.add('hidden');
+            }
         }
 
-        window.addEventListener('DOMContentLoaded', initHub);
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+
+            const { error } = await supabaseClient.auth.signInWithPassword({ email, password: pass });
+            
+            if (error) {
+                alert("Access Denied: " + error.message);
+            } else {
+                checkSession();
+            }
+        }
+
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            checkSession();
+        }
+
+        function wipeCache() {
+            if (confirm("This will clear all local data logs. Are you sure?")) {
+                localStorage.clear();
+                sessionStorage.clear();
+                alert("Data logs cleared.");
+                location.reload();
+            }
+        }
+
+        window.onload = checkSession;
     </script>
 </body>
 </html>
