@@ -16,12 +16,12 @@ const VanguardOS = (() => {
     const openSocialModal = (url) => {
         const modal = document.getElementById('social-modal');
         const link = document.getElementById('modal-link');
-        link.href = url;
-        modal.style.display = 'flex';
+        if(modal && link) { link.href = url; modal.style.display = 'flex'; }
     };
 
     const closeSocialModal = () => {
-        document.getElementById('social-modal').style.display = 'none';
+        const modal = document.getElementById('social-modal');
+        if(modal) modal.style.display = 'none';
     };
 
     const renderApps = () => {
@@ -47,9 +47,14 @@ const VanguardOS = (() => {
             const star = document.createElement('div');
             star.className = 'star';
             const x = Math.random() * 100, y = Math.random() * 100;
+            const size = Math.random() * 2 + 0.5;
             star.style.left = `${x}%`; star.style.top = `${y}%`;
-            star.style.width = star.style.height = `${Math.random() * 2 + 0.5}px`;
-            star.animate([{ transform: 'scale(0)', opacity: 0 }, { transform: `translate(${(x-50)*15}px, ${(y-50)*15}px) scale(2)`, opacity: 0 }], { duration: (Math.random() * 3 + 2) * 1000, iterations: Infinity });
+            star.style.width = star.style.height = `${size}px`;
+            star.animate([
+                { transform: 'scale(0)', opacity: 0 },
+                { transform: `translate(${(x-50)*10}px, ${(y-50)*10}px) scale(2)`, opacity: 0.8, offset: 0.5 },
+                { transform: `translate(${(x-50)*25}px, ${(y-50)*25}px) scale(3)`, opacity: 0 }
+            ], { duration: (Math.random() * 4 + 2) * 1000, iterations: Infinity, easing: 'linear' });
             container.appendChild(star);
         }
     };
@@ -57,7 +62,7 @@ const VanguardOS = (() => {
     const setupSystemClock = () => {
         const clockEl = document.getElementById('system-clock');
         const dateEl = document.getElementById('system-date');
-        if (!clockEl) return;
+        if (!clockEl || !dateEl) return;
         const update = () => {
             const now = new Date();
             clockEl.textContent = now.toLocaleTimeString([], { hour12: true, hour: 'numeric', minute: '2-digit', second: '2-digit' });
@@ -68,4 +73,5 @@ const VanguardOS = (() => {
 
     return { init, closeSocialModal };
 })();
+
 VanguardOS.init();
