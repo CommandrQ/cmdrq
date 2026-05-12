@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal | Commander Q</title>
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --light-purple: #e0c3fc;
+            --light-blue: #8ecae6;
+            --deep-space: #0f0c29;
+            --glass-bg: rgba(15, 15, 25, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #7597de 100%);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: white;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* --- Animations & Background --- */
+        #boot-screen { position: fixed; inset: 0; background: black; z-index: 1000; pointer-events: none; animation: fadeOut 1.2s forwards; }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+        #starfield { position: fixed; inset: 0; z-index: -1; }
+        .stars { position: absolute; width: 2px; height: 2px; background: transparent; 
+                  box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 95vw 80vh #fff, 25vw 90vh #fff;
+                  animation: moveStars 150s linear infinite; }
+        @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
+
+        /* --- Header --- */
+        header { text-align: center; padding: 60px 20px 20px; z-index: 10; }
+        .commander-title { 
+            font-size: 2.5rem; font-weight: bold; 
+            background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: sheen 3s linear infinite;
+        }
+        @keyframes sheen { to { background-position: 200% center; } }
+
+        /* --- Journal Grid --- */
+        #journal-grid { 
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; 
+            width: 95%; max-width: 1000px; padding: 40px 10px; z-index: 10; flex-grow: 1; 
+        }
+        @media (min-width: 800px) { #journal-grid { grid-template-columns: repeat(3, 1fr); gap: 25px; } }
+
+        .entry-card { 
+            background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border);
+            border-radius: 15px; padding: 30px 20px; cursor: pointer; transition: 0.3s ease; text-align: center;
+        }
+        .entry-card:hover { transform: translateY(-5px); border-color: var(--light-blue); box-shadow: 0 0 15px var(--light-blue); }
+        .entry-date { font-size: 0.7rem; color: var(--light-purple); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+        .entry-title { color: var(--light-blue); font-weight: 500; font-size: 1.1rem; }
+
+        /* --- Modals --- */
+        .modal { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 500; 
+            display: none; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(8px);
+        }
+        .modal-content { 
+            background: var(--glass-bg); border: 1px solid var(--glass-border); width: 100%; max-width: 500px;
+            border-radius: 20px; padding: 40px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .modal-body { margin: 25px 0; line-height: 1.6; color: #e0e0e0; }
+
+        /* --- Buttons & Inputs --- */
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .btn { 
+            flex: 1; padding: 12px; border-radius: 50px; border: 1px solid var(--light-blue);
+            background: transparent; color: var(--light-blue); cursor: pointer; font-weight: bold;
+            text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; transition: 0.3s;
+        }
+        .btn:hover { background: var(--light-blue); color: var(--deep-space); }
+        .btn-close { position: absolute; top: 15px; right: 20px; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
+        input, textarea { 
+            width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.05); 
+            border: 1px solid var(--glass-border); border-radius: 10px; color: white; font-family: inherit;
+        }
+        .hidden { display: none; }
+
+        footer { padding: 40px; text-align: center; color: white; font-size: 0.7rem; letter-spacing: 1.5px; opacity: 0.5; animation: pulse 4s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+    </style>
+</head>
+<body>
+
+    <div id="boot-screen"></div>
+    <div id="starfield"><div class="stars"></div></div>
+
+    <header>
+        <h1 class="commander-title">Journal</h1>
+        <p style="color: var(--light-purple); font-size: 0.8rem; letter-spacing: 2px; margin-top: 5px;">MISSION LOG ENTRIES</p>
+    </header>
+
+    <main id="journal-grid"></main>
+
+    <!-- Entry View Modal -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <button class="btn-close" onclick="closeModal('viewModal')">&times;</button>
+            <h2 id="viewTitle" style="color: var(--light-blue);"></h2>
+            <div id="viewBody" class="modal-body"></div>
+            <div class="btn-group">
+                <button class="btn" onclick="openCommentFlow()">Comment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth/Comment Modal -->
+    <div id="commentModal" class="modal">
+        <div class="modal-content">
+            <button class="btn-close" onclick="closeModal('commentModal')">&times;</button>
+            
+            <!-- Registration Form (If not logged in) -->
+            <div id="regForm" class="hidden">
+                <h3 style="color: var(--light-purple); margin-bottom: 20px;">Citizen Enrollment</h3>
+                <input type="text" id="regName" placeholder="Full Name">
+                <input type="email" id="regEmail" placeholder="Email Address">
+                <input type="password" id="regPass" placeholder="Password">
+                <button class="btn" onclick="handleEnrollment()">Enroll Citizen</button>
+            </div>
+
+            <!-- Comment Form (If logged in) -->
+            <div id="replyForm" class="hidden">
+                <h3 style="color: var(--light-blue); margin-bottom: 20px;">Transmit Reply</h3>
+                <textarea id="replyMsg" rows="4" placeholder="Type your message to Commander Q..."></textarea>
+                <button class="btn" onclick="sendReply()">Transmit</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>Powered by Vanguard Citizen Services</footer>
+
+    <script>
+        const sbUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
+        const sbKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
+        const supabaseClient = supabase.createClient(sbUrl, sbKey);
+
+        const ENTRIES = [
+            { date: "May 12, 2026", title: "Starfield Navigation", body: "The nebula is glowing brighter today. Found a new pocket of light blue cosmic dust. Reminds me of home." },
+            { date: "May 10, 2026", title: "Hub Connectivity", body: "The Hub is fully operational. Vanguard Citizen Services have been helpful in maintaining the core." },
+            { date: "May 07, 2026", title: "Glass Architecture", body: "Tested the new dark glass interfaces. The blur effect helps with focus during high-speed jumps." },
+            { date: "May 04, 2026", title: "Energy Reserves", body: "Swapping to purple energy cores. They seem more stable for long-term hideout maintenance." },
+            { date: "May 01, 2026", title: "First Contact", body: "Detected a friendly signal from a nearby sector. Setting up the enrollment terminal for visitors." },
+            { date: "April 28, 2026", title: "Deep Space Quiet", body: "Sometimes the best part of the mission is the silence between the stars." }
+        ];
+
+        function init() {
+            const grid = document.getElementById('journal-grid');
+            ENTRIES.forEach((entry, i) => {
+                const el = document.createElement('div');
+                el.className = 'entry-card';
+                el.onclick = () => openEntry(i);
+                el.innerHTML = `<div class="entry-date">${entry.date}</div><div class="entry-title">${entry.title}</div>`;
+                grid.appendChild(el);
+            });
+        }
+
+        function openEntry(i) {
+            document.getElementById('viewTitle').innerText = ENTRIES[i].title;
+            document.getElementById('viewBody').innerText = ENTRIES[i].body;
+            document.getElementById('viewModal').style.display = 'flex';
+        }
+
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        async function openCommentFlow() {
+            closeModal('viewModal');
+            document.getElementById('commentModal').style.display = 'flex';
+            
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            
+            if (user) {
+                document.getElementById('replyForm').classList.remove('hidden');
+                document.getElementById('regForm').classList.add('hidden');
+            } else {
+                document.getElementById('regForm').classList.remove('hidden');
+                document.getElementById('replyForm').classList.add('hidden');
+            }
+        }
+
+        async function handleEnrollment() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const pass = document.getElementById('regPass').value;
+
+            // 1. Sign up user in Supabase Auth
+            const { data, error } = await supabaseClient.auth.signUp({
+                email: email,
+                password: pass,
+                options: { data: { full_name: name } }
+            });
+
+            if (error) {
+                alert("Enrollment Error: " + error.message);
+                return;
+            }
+
+            // 2. Insert into citizens table
+            const { error: dbError } = await supabaseClient.from('citizens').insert([{
+                email: email,
+                full_name: name,
+                user_id: data.user.id,
+                auth_id: data.user.id
+                // Other fields like handle, role, citizen_number can be added or set by DB defaults
+            }]);
+
+            if (dbError) console.warn("DB record error:", dbError.message);
+            
+            alert("Citizen Enrolled! Please log in (or refresh) to transmit your reply.");
+            location.reload();
+        }
+
+        async function sendReply() {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            const message = document.getElementById('replyMsg').value;
+
+            if (!message) return alert("Message cannot be empty.");
+
+            const { error } = await supabaseClient.from('blogreplies').insert([{
+                email: user.email,
+                full_name: user.user_metadata.full_name || "Citizen",
+                message: message
+            }]);
+
+            if (error) {
+                alert("Transmission failed: " + error.message);
+            } else {
+                alert("Reply Transmitted successfully.");
+                closeModal('commentModal');
+                document.getElementById('replyMsg').value = "";
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
