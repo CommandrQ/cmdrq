@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vanguard_OS | Hideout</title>
+    <title>Vanguard_OS | Command Center</title>
     <link rel="stylesheet" href="vanguard-os.css">
 </head>
 <body class="os-container">
 
     <div id="star-field"></div>
 
-    <!-- HUD READOUT -->
-    <div class="top-hud">
+    <!-- HUD READOUTS -->
+    <div class="hud-date-left">
+        <p id="system-date">INIT_DATE</p>
+    </div>
+    
+    <div class="hud-time-right">
         <p id="system-clock">00:00:00</p>
-        <p id="system-date">LOADING_SYSTEM_TIME</p>
     </div>
 
     <!-- HERO SECTION -->
@@ -21,8 +24,9 @@
         <h1 class="hero-text">Commander Q</h1>
     </header>
 
-    <!-- CENTERED CONTENT -->
-    <main class="desktop-grid">
+    <!-- TRANSLUCENT DASHBOARD PANEL -->
+    <main class="app-dashboard">
+        
         <div class="app-icon" data-label="Origins">
             <div class="icon-box">
                 <svg class="glyph" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
@@ -50,6 +54,7 @@
             </div>
             <span>Uplink</span>
         </div>
+
     </main>
 
     <!-- FOOTER -->
