@@ -11,7 +11,7 @@
             --light-purple: #e0c3fc;
             --light-blue: #8ecae6;
             --deep-space: #0f0c29;
-            --glass-bg: rgba(20, 20, 35, 0.75);
+            --glass-bg: rgba(15, 15, 25, 0.7);
             --glass-border: rgba(255, 255, 255, 0.1);
         }
 
@@ -26,7 +26,9 @@
             background-attachment: fixed;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
+            /* Mobile-friendly viewport height */
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -44,7 +46,7 @@
             background: black;
             z-index: 1000;
             pointer-events: none;
-            animation: fadeOut 1.2s forwards ease-in-out;
+            animation: fadeOut 1.5s forwards ease-in-out;
         }
 
         @keyframes fadeOut {
@@ -67,9 +69,9 @@
             width: 2px;
             height: 2px;
             background: transparent;
-            box-shadow: 5vw 15vh #fff, 40vw 35vh #fff, 70vw 25vh #fff, 90vw 70vh #fff, 
-                        20vw 80vh #fff, 60vw 55vh #fff, 85vw 10vh #fff, 10vw 90vh #fff;
-            animation: moveStars 140s linear infinite;
+            box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 95vw 80vh #fff, 
+                        25vw 90vh #fff, 55vw 50vh #fff, 75vw 30vh #fff, 15vw 15vh #fff;
+            animation: moveStars 150s linear infinite;
         }
 
         @keyframes moveStars {
@@ -77,12 +79,13 @@
             to { transform: translateY(-2000px); }
         }
 
-        /* --- Content Layout --- */
+        /* --- Layout Container --- */
         .container {
             width: 90%;
             max-width: 700px;
-            padding: 60px 0;
+            padding: 40px 0;
             z-index: 10;
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -90,11 +93,11 @@
 
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .commander-title {
-            font-size: 2.2rem;
+            font-size: clamp(2rem, 5vw, 2.5rem);
             font-weight: bold;
             background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
             background-size: 200% auto;
@@ -109,15 +112,16 @@
             to { background-position: 200% center; }
         }
 
-        /* --- Bio Card --- */
-        .bio-card {
+        /* --- Bio Console (Card) --- */
+        .bio-console {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
             text-align: left;
         }
 
@@ -125,23 +129,31 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            border: 3px solid var(--light-blue);
+            border: 2px solid var(--light-blue);
             margin: 0 auto 30px;
             display: block;
             object-fit: cover;
-            box-shadow: 0 0 20px var(--light-blue);
+            box-shadow: 0 0 15px var(--light-blue);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         h2 {
             color: var(--light-blue);
-            margin-bottom: 20px;
-            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            letter-spacing: 1px;
         }
 
         p {
             margin-bottom: 20px;
             color: #e0e0e0;
             font-size: 1.05rem;
+            line-height: 1.8;
         }
 
         .highlight {
@@ -149,34 +161,47 @@
             font-weight: bold;
         }
 
-        /* --- Back Button --- */
-        .back-btn {
-            margin-top: 40px;
+        /* --- Back UI Element --- */
+        .back-nav {
+            margin-top: 30px;
             text-decoration: none;
             color: var(--light-blue);
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 2px;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            transition: 0.3s;
+            font-size: 0.85rem;
+            padding: 10px 20px;
+            border: 1px solid transparent;
+            border-radius: 50px;
+            transition: all 0.3s ease;
         }
 
-        .back-btn:hover {
+        .back-nav:hover {
+            background: rgba(142, 202, 230, 0.1);
+            border-color: var(--light-blue);
+            box-shadow: 0 0 15px var(--light-blue);
+        }
+
+        /* --- Pulsing Footer --- */
+        footer {
+            z-index: 10;
+            padding: 30px 20px;
+            text-align: center;
             color: white;
-            text-shadow: 0 0 10px var(--light-blue);
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            animation: pulse 4s ease-in-out infinite;
         }
 
-        .back-btn span {
-            margin-right: 8px;
-            font-size: 1.2rem;
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.9; }
         }
 
-        /* Mobile specific spacing */
         @media (max-width: 600px) {
-            .bio-card { padding: 25px; }
-            .commander-title { font-size: 1.8rem; }
+            .bio-console { padding: 25px; }
+            .avatar { width: 100px; height: 100px; }
         }
     </style>
 </head>
@@ -193,27 +218,31 @@
             <h1 class="commander-title">Commander Q</h1>
         </header>
 
-        <main class="bio-card">
+        <main class="bio-console">
             <img src="images/commanderqhs.png" alt="Commander Q" class="avatar">
             
-            <h2>The Person Behind the Commms</h2>
-            
+            <h2>Mission Objective</h2>
             <p>Hello! I'm <span class="highlight">Commander Q</span>. I spend my time navigating the vast digital space, building lean interfaces and exploring new technologies.</p>
             
             <p>I believe that technology should feel as magical as a starry night, but as simple as a conversation. Whether it's coding, designing, or managing the hideout, I'm always looking for the beauty in the data.</p>
             
             <p>When I'm not at the command console, you can find me dreaming in <span style="color: var(--light-purple);">shades of purple and blue</span>, sipping tea, and planning the next big cosmic jump.</p>
             
-            <p style="font-style: italic; opacity: 0.8;">"Keep looking up. The stars are just the beginning."</p>
+            <p style="font-style: italic; opacity: 0.8; text-align: center; margin-top: 30px;">
+                "Keep looking up. The stars are just the beginning."
+            </p>
         </main>
 
-        <a href="hub.html" class="back-btn">
-            <span>←</span> Back to Hub
+        <a href="hub.html" class="back-nav">
+            Back to Hub
         </a>
     </div>
 
+    <footer>
+        Powered by Vanguard Citizen Services
+    </footer>
+
     <script>
-        // Supabase Initialization (Safe Declaration)
         const sbUrlAbout = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
         const sbKeyAbout = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
         
