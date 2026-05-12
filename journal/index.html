@@ -18,7 +18,7 @@
 
         .log-deck {
             width: 100%;
-            max-height: 500px;
+            max-height: 550px;
             overflow-y: auto;
             padding-right: 15px;
             scrollbar-width: thin;
@@ -55,7 +55,7 @@
 
         .log-entry-card h3 {
             margin: 0;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             letter-spacing: 2px;
             color: var(--color-white);
             text-transform: uppercase;
@@ -78,7 +78,7 @@
 
         @media (max-width: 600px) {
             .log-entry-card { padding: 20px; }
-            .log-entry-card h3 { font-size: 1rem; }
+            .log-entry-card h3 { font-size: 0.9rem; letter-spacing: 1px; }
         }
     </style>
 </head>
@@ -106,11 +106,7 @@
     <div id="blog-modal" class="modal-overlay">
         <div class="modal-window" style="max-width: 700px; text-align: left;">
             <h2 id="blog-modal-title" class="modal-title" style="margin-bottom: 25px;">Log Title</h2>
-            
-            <div id="blog-modal-content" class="journal-modal-body">
-                <!-- Text Injected Here -->
-            </div>
-
+            <div id="blog-modal-content" class="journal-modal-body"></div>
             <div class="modal-actions" style="margin-top: 30px;">
                 <button onclick="VanguardOS.closeModals()" class="modal-btn secondary">Close</button>
                 <button onclick="VanguardOS.handleShare()" class="modal-btn secondary">Relay</button>
@@ -119,26 +115,21 @@
         </div>
     </div>
 
-    <!-- AUTH MODAL (Implicit Trigger) -->
+    <!-- AUTH & REPLY MODALS REMAIN THE SAME AS PREVIOUS BUILD -->
     <div id="auth-modal" class="modal-overlay">
         <div class="modal-window">
             <h2 class="modal-title">Identity Check</h2>
             <form onsubmit="VanguardOS.submitAuth(event)">
-                <div id="name-group">
-                    <input type="text" id="auth-name" class="tactical-input" placeholder="Callsign (Full Name)">
-                </div>
+                <div id="name-group"><input type="text" id="auth-name" class="tactical-input" placeholder="Callsign (Full Name)"></div>
                 <input type="email" id="auth-email" class="tactical-input" placeholder="Email" required>
                 <input type="password" id="auth-pass" class="tactical-input" placeholder="Access Key" required>
                 <button type="submit" id="auth-submit-btn" class="modal-btn primary" style="width: 100%;">Register</button>
             </form>
-            <p id="auth-toggle-text" style="font-size: 0.8rem; margin-top: 15px; color: var(--color-blue);">
-                Already in system? <a href="#" onclick="VanguardOS.toggleAuthMode()">Login</a>
-            </p>
+            <p id="auth-toggle-text" style="font-size: 0.8rem; margin-top: 15px; color: var(--color-blue);">Already in system? <a href="#" onclick="VanguardOS.toggleAuthMode()">Login</a></p>
             <button onclick="VanguardOS.closeModals()" class="modal-btn secondary" style="margin-top: 10px;">Abort</button>
         </div>
     </div>
 
-    <!-- REPLY MODAL -->
     <div id="reply-modal" class="modal-overlay">
         <div class="modal-window">
             <h2 class="modal-title">Submit Transmission</h2>
@@ -158,29 +149,48 @@
 
     <script>
         /**
-         * JOURNAL DATA DECK
-         * Metadata (date/status) has been removed for a cleaner HUD experience.
+         * JOURNAL DATA ARRAY
+         * To add a new entry: 
+         * 1. Copy the curly brackets { ... } 
+         * 2. Paste at the top of the list 
+         * 3. Change id, title, and content.
          */
         const journalEntries = [
             {
-                id: "log_001",
-                title: "The Trap of External Victories",
-                content: `
-                    <p>Everyone is talking about the systems that hold us back: the wage gap, the lack of freedom, the rigged game. And they’re right. But there’s a trap here: we spend so much time fighting for the "win" that we’ve forgotten how to advance ourselves.</p>
-                    <p>We’re told that every "no" is an opportunity. But if you don’t understand who you are or what you actually want, that opportunity is just noise. It’s like an athlete training just to stay in second place, or a cook who never intends to run their own kitchen. Why bother?</p>
-                    <p>The truth is that self-mastery and professional growth are the same thing. You can’t have one without the other. If we finally beat the system but we aren't grounded in who we are, we’ll squander the victory the second we get it. We’ll have the equality we fought for and no idea what to do with it.</p>
-                    <p>Choosing to do one thing well, to really master a craft, is what builds your identity. It’s how you learn to be a "good person" in practice, not just in theory. Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get to where you're going.</p>
-                `
+                id: "log_006",
+                title: "The Weight of the Tether",
+                content: `<p>Outgrowing the people I used to run with is a bittersweet realization because I have to admit that the version of them I love only exists in my memory and not in the room with me today. I find myself looking at friends I’ve known for years and realizing that the fire we used to share has burned out into a cold pile of ash that we are both just staring at out of habit.</p>
+                <p>Commander Q didn't survive a war by holding onto every piece of equipment or every person that slowed the mission down. I used to think that loyalty meant staying the same forever but now I see that staying in a circle that no longer fits is actually a form of disrespect to everyone involved.</p>`
+            },
+            {
+                id: "log_005",
+                title: "The Shield of Self-Deprecation",
+                content: `<p>The most dangerous lies are the ones we tell ourselves under the guise of being realistic or humble. When you constantly downplay your abilities, you are not actually practicing humility, but are instead constructing a psychological barrier that keeps you safe from the risks of your own potential.</p>
+                <p>We use self-deprecation as a shield because if we admit that we are truly capable, then we are suddenly responsible for the outcomes of our lives.</p>`
+            },
+            {
+                id: "log_004",
+                title: "The War Within",
+                content: `<p>The most difficult rule to follow is often the first one: you must respect yourself. This is the foundation because every other win in your life depends on the quality of your internal dialogue.</p>
+                <p>If you are constantly sabotaging your own confidence with self-put-downs, you are essentially fighting a war on two fronts: one against the world and one against the person in the mirror. You cannot win the external race if you are busy tripping yourself at the starting line.</p>`
+            },
+            {
+                id: "log_003",
+                title: "Survival and The Three Respects",
+                content: `<p>It is often easy to dismiss the idea of self-mastery when you are currently drowning in the practical demands of survival. However, the reality is that a personal code becomes more essential when the stakes are this high.</p>
+                <p>When you show up to a place you do not want to be so that your family can be safe, you are not failing at life, but are instead performing an act of high-level respect that transforms a paycheck into a testament of your character.</p>`
             },
             {
                 id: "log_002",
-                title: "The First Frequency",
-                content: '
-                <p>Character isn't built when you have everything you need. It’s defined when you have nothing.
-I see people with "good jobs" and steady money who still claim they "can’t do it." They’re stuck, waiting for some external shift to fix their lives. But they’re looking in the wrong place. If you can’t advance professionally right now, you should be expanding personally. There is no excuse for stagnation when the problem is internal.</p>
-<p>The irony is that we have the entire world at our fingertips. We have access to every bit of human knowledge, yet when it comes to our own character, we act like we’re working with a few scraps of paper. We have the data, but we lack the discipline to use it.</p>
-<p>It comes down to the small choices. If you aren’t moving forward, it’s not because the information isn’t there; it’s because you’ve stopped looking at the tiny decisions that lead to a better future. Mastery of yourself is the only advancement that actually belongs to you.</p>
-                `
+                title: "Stagnation and Character",
+                content: `<p>Character isn't built when you have everything you need. It’s defined when you have nothing. If you can’t advance professionally right now, you should be expanding personally. There is no excuse for stagnation when the problem is internal.</p>
+                <p>Mastery of yourself is the only advancement that actually belongs to you.</p>`
+            },
+            {
+                id: "log_001",
+                title: "The Trap of External Victories",
+                content: `<p>Everyone is talking about the systems that hold us back: the wage gap, the lack of freedom, the rigged game. And they’re right. But there’s a trap here: we spend so much time fighting for the "win" that we’ve forgotten how to advance ourselves.</p>
+                <p>Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get to where you're going.</p>`
             }
         ];
 
@@ -190,10 +200,7 @@ I see people with "good jobs" and steady money who still claim they "can’t do 
                 const card = document.createElement('div');
                 card.className = 'log-entry-card';
                 card.style.animationDelay = `${index * 0.1}s`;
-                card.onclick = () => {
-                    VanguardOS.openBlogModal(entry.title, entry.content, entry.id);
-                };
-
+                card.onclick = () => VanguardOS.openBlogModal(entry.title, entry.content, entry.id);
                 card.innerHTML = `<h3>${entry.title}</h3>`;
                 deck.appendChild(card);
             });
