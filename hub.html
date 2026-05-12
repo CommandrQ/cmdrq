@@ -154,17 +154,22 @@
             color: white;
         }
 
-        /* --- Footer --- */
+        /* --- Pulsing White Footer --- */
         footer {
             z-index: 10;
             margin-top: auto;
             padding: 40px 20px;
             text-align: center;
-            color: var(--light-blue);
+            color: white;
             font-size: 0.75rem;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            opacity: 0.5;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.9; }
         }
     </style>
 </head>
