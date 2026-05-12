@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vanguard_OS | Journal Archive</title>
-    <!-- Pathing back to root -->
     <link rel="stylesheet" href="../vanguard-os.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -13,13 +12,13 @@
             max-width: 800px;
             display: flex;
             flex-direction: column;
+            align-items: center;
             gap: 20px;
         }
 
-        /* Animated Scroller Menu */
         .log-deck {
             width: 100%;
-            max-height: 450px;
+            max-height: 500px;
             overflow-y: auto;
             padding-right: 15px;
             scrollbar-width: thin;
@@ -33,59 +32,41 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--window-border);
             border-radius: 12px;
-            padding: 20px;
+            padding: 25px;
             margin-bottom: 15px;
             cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             animation: slideIn 0.5s ease forwards;
             opacity: 0;
         }
 
         @keyframes slideIn {
-            from { transform: translateX(-20px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .log-entry-card:hover {
             border-color: var(--color-blue);
             background: rgba(90, 200, 250, 0.08);
             transform: scale(1.02);
-            box-shadow: 0 0 15px rgba(90, 200, 250, 0.15);
+            box-shadow: 0 0 20px rgba(90, 200, 250, 0.1);
         }
 
-        .log-info h3 {
+        .log-entry-card h3 {
             margin: 0;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
             color: var(--color-white);
-        }
-
-        .log-info span {
-            font-size: 0.75rem;
-            color: var(--color-purple);
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        .status-tag {
-            font-size: 0.7rem;
-            padding: 4px 8px;
-            border: 1px solid var(--color-blue);
-            color: var(--color-blue);
-            border-radius: 4px;
             text-transform: uppercase;
         }
 
-        /* Reading Window Customization */
         .journal-modal-body {
-            max-height: 50vh;
+            max-height: 55vh;
             overflow-y: auto;
             line-height: 1.8;
-            font-size: 1.05rem;
-            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.95);
             padding-right: 10px;
         }
 
@@ -96,8 +77,8 @@
         }
 
         @media (max-width: 600px) {
-            .log-entry-card { padding: 15px; }
-            .log-info h3 { font-size: 0.95rem; }
+            .log-entry-card { padding: 20px; }
+            .log-entry-card h3 { font-size: 1rem; }
         }
     </style>
 </head>
@@ -112,10 +93,10 @@
 
         <main class="app-dashboard journal-container">
             <div class="log-deck" id="log-deck">
-                <!-- Entries are injected here by the engine -->
+                <!-- Entries are injected here -->
             </div>
 
-            <div style="width: 100%; display: flex; justify-content: center; margin-top: 20px;">
+            <div style="margin-top: 20px;">
                 <a href="../hud.html" class="modal-btn secondary">Return to Hub</a>
             </div>
         </main>
@@ -124,8 +105,7 @@
     <!-- READ MODAL -->
     <div id="blog-modal" class="modal-overlay">
         <div class="modal-window" style="max-width: 700px; text-align: left;">
-            <h2 id="blog-modal-title" class="modal-title" style="margin-bottom: 10px;">Log Title</h2>
-            <p id="blog-modal-date" style="font-size: 0.8rem; color: var(--color-purple); margin-bottom: 20px;">DATE</p>
+            <h2 id="blog-modal-title" class="modal-title" style="margin-bottom: 25px;">Log Title</h2>
             
             <div id="blog-modal-content" class="journal-modal-body">
                 <!-- Text Injected Here -->
@@ -139,7 +119,7 @@
         </div>
     </div>
 
-    <!-- AUTH MODAL -->
+    <!-- AUTH MODAL (Implicit Trigger) -->
     <div id="auth-modal" class="modal-overlay">
         <div class="modal-window">
             <h2 class="modal-title">Identity Check</h2>
@@ -174,32 +154,33 @@
 
     <footer class="vanguard-footer">Powered by Vanguard Citizen Services</footer>
 
-    <!-- Pathing back to root -->
     <script src="../vanguard-os.js"></script>
 
     <script>
         /**
          * JOURNAL DATA DECK
-         * Add your new entries here!
+         * Metadata (date/status) has been removed for a cleaner HUD experience.
          */
         const journalEntries = [
             {
-                id: "log_001",
-                title: "Starting Self Mastery",
+                id: "log_003",
+                title: "The Trap of External Victories",
                 content: `
                     <p>Everyone is talking about the systems that hold us back: the wage gap, the lack of freedom, the rigged game. And they’re right. But there’s a trap here: we spend so much time fighting for the "win" that we’ve forgotten how to advance ourselves.</p>
-
-<p>We’re told that every "no" is an opportunity. But if you don’t understand who you are or what you actually want, that opportunity is just noise. It’s like an athlete training just to stay in second place, or a cook who never intends to run their own kitchen. Why bother?</p>
-
-<p>The truth is that self-mastery and professional growth are the same thing. You can’t have one without the other. If we finally beat the system but we aren't grounded in who we are, we’ll squander the victory the second we get it. We’ll have the equality we fought for and no idea what to do with it.</p>
-
-<p>Choosing to do one thing well, to really master a craft, is what builds your identity. It’s how you learn to be a "good person" in practice, not just in theory. Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get to where you're going.</p>
+                    <p>We’re told that every "no" is an opportunity. But if you don’t understand who you are or what you actually want, that opportunity is just noise. It’s like an athlete training just to stay in second place, or a cook who never intends to run their own kitchen. Why bother?</p>
+                    <p>The truth is that self-mastery and professional growth are the same thing. You can’t have one without the other. If we finally beat the system but we aren't grounded in who we are, we’ll squander the victory the second we get it. We’ll have the equality we fought for and no idea what to do with it.</p>
+                    <p>Choosing to do one thing well, to really master a craft, is what builds your identity. It’s how you learn to be a "good person" in practice, not just in theory. Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get to where you're going.</p>
+                `
+            },
+            {
+                id: "log_001",
+                title: "The First Frequency",
+                content: `
+                    <p>Building the Vanguard_OS has been a journey in itself. It started with a simple idea: how do we reclaim our digital identity while staying connected to the world around us?</p>
                 `
             }
-            // To add more, copy the block above and paste it here!
         ];
 
-        // Engine to render the entries
         function loadJournal() {
             const deck = document.getElementById('log-deck');
             journalEntries.forEach((entry, index) => {
@@ -207,22 +188,14 @@
                 card.className = 'log-entry-card';
                 card.style.animationDelay = `${index * 0.1}s`;
                 card.onclick = () => {
-                    document.getElementById('blog-modal-date').textContent = entry.date;
                     VanguardOS.openBlogModal(entry.title, entry.content, entry.id);
                 };
 
-                card.innerHTML = `
-                    <div class="log-info">
-                        <span>${entry.date}</span>
-                        <h3>${entry.title}</h3>
-                    </div>
-                    <div class="status-tag">${entry.status}</div>
-                `;
+                card.innerHTML = `<h3>${entry.title}</h3>`;
                 deck.appendChild(card);
             });
         }
 
-        // Initialize
         window.addEventListener('DOMContentLoaded', loadJournal);
     </script>
 </body>
