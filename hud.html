@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanguard_OS | HUD</title>
+    <link rel="stylesheet" href="vanguard-os.css">
+</head>
+<body class="os-boot-sequence">
+
+    <div id="star-field"></div>
+
+    <div class="hud-container">
+        <!-- LEFT: NAVIGATION MENU -->
+        <aside class="glass-panel scroll-menu">
+            <div style="padding: 15px; border-bottom: 1px solid var(--glass-border);">
+                <small style="color: var(--neon-purple)">DIRECTIVE_LINKS</small>
+            </div>
+            <nav style="padding: 10px;">
+                <a href="#war-room" class="nav-link">War Room</a>
+                <a href="#frequency" class="nav-link">Frequency Chamber</a>
+                <a href="#archives" class="nav-link">The Archives</a>
+                <a href="#armory" class="nav-link">The Armory</a>
+                <a href="#comms" class="nav-link">Encrypted Comms</a>
+                <!-- Easy to add more links here -->
+            </nav>
+        </aside>
+
+        <!-- CENTER: MAIN VIEWPORT -->
+        <main class="glass-panel" style="min-height: 400px; padding: 30px;">
+            <header style="margin-bottom: 20px; display: flex; justify-content: space-between;">
+                <span>STATUS: <span style="color: var(--neon-blue)">CONNECTED</span></span>
+                <span id="os-clock">00:00:00</span>
+            </header>
+            
+            <section id="content-display">
+                <h2 style="letter-spacing: 5px;">WELCOME TO THE HIDEOUT</h2>
+                <p>Establishing secure link for Knight_User... success.</p>
+                <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 20px 0;">
+                <p>This is your tactical center. Use the left matrix to navigate the Vanguard sectors.</p>
+            </section>
+        </main>
+
+        <!-- RIGHT: STATUS/INTEL (Desktop Only) -->
+        <section class="glass-panel desktop-only" style="padding: 20px;">
+            <h4 style="color: var(--neon-purple); margin-top: 0;">TACTICAL_INTEL</h4>
+            <div style="font-size: 0.8rem; line-height: 1.6;">
+                > CURRENT MISSION: Recovery Phase I<br>
+                > ALLIES ONLINE: 1,204<br>
+                > SYSTEM LOAD: 14%
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Starfield logic (reuse from previous page)
+        const container = document.getElementById('star-field');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.style.position = 'absolute';
+            star.style.background = 'white';
+            star.style.width = Math.random() * 2 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.opacity = Math.random();
+            container.appendChild(star);
+        }
+
+        // System Clock
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('os-clock').innerText = now.toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
