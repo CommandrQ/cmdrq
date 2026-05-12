@@ -9,10 +9,40 @@ const VanguardOS = (() => {
 
     let currentPostId = null;
 
+    // --- STARFIELD ENGINE (Persistent & Radiating) ---
+    const setupStarfield = () => {
+        const container = document.getElementById('star-field');
+        if (!container) return;
+        container.innerHTML = ''; // Clear for fresh load
+        const starCount = 200;
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 50 + 50; 
+            const duration = (Math.random() * 8 + 4) * 1000;
+            star.style.left = `50%`; star.style.top = `50%`;
+            star.style.width = star.style.height = `2px`;
+            star.animate([
+                { transform: 'translate(-50%, -50%) scale(0)', opacity: 0 },
+                { opacity: 1, offset: 0.2 },
+                { transform: `translate(calc(-50% + ${Math.cos(angle) * velocity}vw), calc(-50% + ${Math.sin(angle) * velocity}vh)) scale(2.5)`, opacity: 0 }
+            ], { 
+                duration: duration, 
+                iterations: Infinity, 
+                easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)', 
+                delay: -Math.random() * duration // Continuous movement fix
+            });
+            container.appendChild(star);
+        }
+    };
+
     const openBlogModal = (title, content, id) => {
         currentPostId = id;
-        document.getElementById('blog-modal-title').textContent = title;
-        document.getElementById('blog-modal-content').innerHTML = content;
+        const titleEl = document.getElementById('blog-modal-title');
+        const contentEl = document.getElementById('blog-modal-content');
+        if (titleEl) titleEl.textContent = title;
+        if (contentEl) contentEl.innerHTML = content;
         document.getElementById('blog-modal').style.display = 'flex';
     };
 
@@ -29,7 +59,6 @@ const VanguardOS = (() => {
         const { data: { session } } = await supabase.auth.getSession();
         closeModals();
         if (session) {
-            // Pre-fill fields if signed in
             document.getElementById('reply-name').value = session.user.user_metadata.full_name || '';
             document.getElementById('reply-email').value = session.user.email || '';
             document.getElementById('reply-modal').style.display = 'flex';
@@ -46,7 +75,7 @@ const VanguardOS = (() => {
         const isLogin = document.getElementById('auth-submit-btn').textContent === "Login";
         let res = isLogin ? await supabase.auth.signInWithPassword({ email, password: pass }) : await supabase.auth.signUp({ email, password: pass, options: { data: { full_name: name } } });
         if (res.error) alert(res.error.message);
-        else handleReplyClick(); // Open reply window after auth
+        else handleReplyClick();
     };
 
     const submitReply = async (e) => {
@@ -70,7 +99,10 @@ const VanguardOS = (() => {
         else { btn.textContent = "Register"; nameGrp.style.display = 'block'; }
     };
 
-    // ... setupStarfield and renderApps logic remains the same ...
-
-    return { openBlogModal, closeModals, handleShare, handleReplyClick, submitAuth, submitReply, toggleAuthMode, init: () => { /* init logic */ } };
+    return { 
+        openBlogModal, closeModals, handleShare, handleReplyClick, submitAuth, submitReply, toggleAuthMode,
+        init: () => { setupStarfield(); } 
+    };
 })();
+
+document.addEventListener('DOMContentLoaded', VanguardOS.init);
