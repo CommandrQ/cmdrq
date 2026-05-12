@@ -98,21 +98,42 @@ body, html {
     to { background-position: 200% 0; }
 }
 
-/* --- 6. THE DASHBOARD WINDOW --- */
+/* --- 6. THE DASHBOARD WINDOW (GRID & SCROLL) --- */
 .app-dashboard {
     background: var(--window-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--window-border);
     border-radius: 24px;
-    padding: 30px;
+    padding: 30px 15px 30px 30px; /* Adjusted right padding for scrollbar */
     max-width: 900px;
     width: 90%;
-    display: flex;
-    justify-content: center;
+    
+    /* 4-Column Grid */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 30px;
-    flex-wrap: wrap;
+    
+    /* Fixed Height for 2 Rows (8 Apps) */
+    max-height: 380px; 
+    overflow-y: auto; /* Activates internal scrolling */
+    overflow-x: hidden;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+}
+
+/* Custom internal scrollbar for the dashboard */
+.app-dashboard::-webkit-scrollbar {
+    width: 8px;
+}
+.app-dashboard::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    margin-block: 10px; /* Padding top/bottom for scrollbar */
+}
+.app-dashboard::-webkit-scrollbar-thumb {
+    background: var(--color-purple);
+    border-radius: 10px;
+    box-shadow: 0 0 5px var(--color-purple);
 }
 
 /* --- 7. APP ICONS --- */
@@ -163,7 +184,7 @@ body, html {
 
 /* --- 9. RESPONSIVE QUERIES --- */
 @media (min-width: 1024px) {
-    .app-dashboard { padding: 50px; gap: 60px; max-width: 1000px; }
+    .app-dashboard { padding: 40px 20px 40px 40px; gap: 40px; max-width: 1000px; max-height: 480px; }
     .icon-box { width: 90px; height: 90px; border-radius: 24px; }
     .glyph { width: 44px; height: 44px; }
     .app-icon span { font-size: 1.1rem; letter-spacing: 4px; margin-top: 20px; }
@@ -177,7 +198,15 @@ body, html {
     .hud-top-left, .hud-top-right { top: 15px; }
     .hud-top-left { left: 15px; } .hud-top-right { right: 15px; }
     #system-clock { font-size: 1.2rem; }
-    .app-dashboard { gap: 20px; padding: 25px; border-radius: 18px; }
+    
+    .app-dashboard {
+        grid-template-columns: repeat(3, 1fr); /* 3 cols on mobile */
+        max-height: 320px;
+        gap: 15px;
+        padding: 20px 10px 20px 20px;
+        border-radius: 18px;
+    }
+    
     .icon-box { width: 65px; height: 65px; border-radius: 16px; }
     .glyph { width: 30px; height: 30px; }
     .vanguard-footer { font-size: 0.65rem; letter-spacing: 3px; }
