@@ -95,7 +95,6 @@
             display: block;
         }
 
-        /* Slice State */
         .btn-wrapper.sliced .enter-btn {
             opacity: 0;
             pointer-events: none;
@@ -124,20 +123,20 @@
 
         .part-top {
             clip-path: polygon(0 0, 100% 0, 100% 45%, 0 55%);
-            animation: sliceTop 0.8s forwards ease-out;
+            animation: sliceTop 0.8s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .part-bottom {
             clip-path: polygon(0 55%, 100% 45%, 100% 100%, 0 100%);
-            animation: sliceBottom 0.8s forwards ease-out;
+            animation: sliceBottom 0.8s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         @keyframes sliceTop {
-            to { transform: translate(-20px, -40px) rotate(-5deg); opacity: 0; }
+            to { transform: translate(-30px, -50px) rotate(-8deg); opacity: 0; }
         }
 
         @keyframes sliceBottom {
-            to { transform: translate(20px, 40px) rotate(5deg); opacity: 0; }
+            to { transform: translate(30px, 50px) rotate(8deg); opacity: 0; }
         }
 
         /* --- FULL SCREEN OVERLAY --- */
@@ -150,15 +149,15 @@
             pointer-events: none;
         }
 
-        .screen-cut {
-            animation: screenFadeOut 1s forwards ease-in;
+        .screen-fade {
+            animation: flashAndFade 1.2s forwards ease-in;
         }
 
-        @keyframes screenFadeOut {
+        @keyframes flashAndFade {
             0% { opacity: 0; }
-            10% { opacity: 1; background: white; } /* Initial Flash */
-            30% { background: black; clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
-            100% { opacity: 1; background: black; clip-path: polygon(0 50%, 100% 0, 100% 100%, 0 100%); }
+            15% { opacity: 1; background: white; } /* Instant Flash */
+            40% { background: black; } /* Shift to Black */
+            100% { opacity: 1; background: black; } /* Solid Blackout */
         }
 
     </style>
@@ -178,14 +177,13 @@
 
         <div class="btn-wrapper" id="target-btn" onclick="executeSlice()">
             <div class="enter-btn">>Enter The Hideout<</div>
-            <!-- These only show during the click -->
             <div class="slice-part part-top">>Enter The Hideout<</div>
             <div class="slice-part part-bottom">>Enter The Hideout<</div>
         </div>
     </div>
 
     <script>
-        // Starfield Init
+        // Starfield
         const starContainer = document.getElementById('star-container');
         for (let i = 0; i < 150; i++) {
             const star = document.createElement('div');
@@ -199,16 +197,16 @@
         }
 
         function executeSlice() {
-            // Trigger Button Animation
+            // Button Shatters
             document.getElementById('target-btn').classList.add('sliced');
             
-            // Trigger Screen Transition
+            // Screen Fades Clean to Black
             const overlay = document.getElementById('transition-overlay');
-            overlay.classList.add('screen-cut');
+            overlay.classList.add('screen-fade');
             
             setTimeout(() => {
                 window.location.href = 'hud.html'; 
-            }, 1000);
+            }, 1100);
         }
     </script>
 </body>
