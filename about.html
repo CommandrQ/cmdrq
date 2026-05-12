@@ -6,34 +6,71 @@
     <title>Vanguard_OS | Meet Commander Q</title>
     <link rel="stylesheet" href="vanguard-os.css">
     <style>
-        /* A little extra flair for your personal story! */
         .profile-content {
+            flex-direction: column;
+            justify-content: flex-start;
             text-align: left;
-            line-height: 1.8;
-            max-width: 750px;
-            padding: 40px !important;
+            padding: 30px !important;
         }
-        .profile-section {
-            margin-bottom: 30px;
+
+        /* Interactive Section Styling */
+        .collapsible-section {
+            width: 100%;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--window-border);
         }
-        .profile-label {
+
+        .drop-btn {
+            width: 100%;
+            background: none;
+            border: none;
             color: var(--color-blue);
+            font-family: var(--font-sys);
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 3px;
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-            text-shadow: 0 0 10px rgba(90, 200, 250, 0.4);
+            padding: 15px 0;
+            text-align: left;
+            cursor: url('images/pointer.png'), pointer !important;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
         }
-        .profile-text {
-            font-size: 1.05rem;
+
+        .drop-btn:hover {
+            color: var(--color-white);
+            text-shadow: 0 0 10px var(--color-blue);
+        }
+
+        .drop-btn::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .active .drop-btn::after {
+            transform: rotate(45deg);
+            color: var(--color-purple);
+        }
+
+        .drop-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             color: rgba(255, 255, 255, 0.9);
+            line-height: 1.7;
+            font-size: 1rem;
         }
+
+        .active .drop-content {
+            max-height: 300px; /* Adjust as needed */
+            padding-bottom: 20px;
+        }
+
         .back-btn {
             margin-top: 20px;
-            display: inline-flex;
-            align-items: center;
+            align-self: center;
             color: var(--color-purple);
             text-decoration: none;
             font-weight: bold;
@@ -44,23 +81,18 @@
             transition: all 0.3s ease;
             text-transform: uppercase;
         }
+
         .back-btn:hover {
             background: var(--color-purple);
             color: white;
             box-shadow: 0 0 20px var(--color-purple);
-            transform: scale(1.05);
-        }
-        strong {
-            color: var(--color-blue);
         }
     </style>
 </head>
 <body>
 
-    <!-- Our awesome star engine! -->
     <div id="star-field"></div>
 
-    <!-- HUD tracking your local time and date -->
     <div class="hud-top-left">
         <p id="system-date">INITIALIZING...</p>
     </div>
@@ -74,27 +106,34 @@
             <h1 class="hero-text">The Origin Log</h1>
         </header>
 
-        <!-- Your story lives in this beautiful blurry glass window -->
         <main class="app-dashboard profile-content">
             
-            <div class="profile-section">
-                <span class="profile-label">The Mission</span>
-                <p class="profile-text">I’m on a mission to fix the broken bits of our world—those <strong>human bonds</strong> that keep us all connected. I believe we’re stronger together, and I’m dedicated to rebuilding the community ties that have started to fray.</p>
+            <div class="collapsible-section">
+                <button class="drop-btn">The Mission</button>
+                <div class="drop-content">
+                    I’m on a mission to fix the broken bits of our world—those <strong>human bonds</strong> that keep us all connected. I believe we’re stronger together, and I’m dedicated to rebuilding the community ties that have started to fray.
+                </div>
             </div>
 
-            <div class="profile-section">
-                <span class="profile-label">The Journey</span>
-                <p class="profile-text">My path wasn't a straight line, and I love that about it! It was forged in the discipline of the <strong>Military</strong>, sharpened by the fast-paced world of <strong>Retail</strong>, and ignited by the endless possibilities of <strong>Digital Creation</strong>.</p>
+            <div class="collapsible-section">
+                <button class="drop-btn">The Journey</button>
+                <div class="drop-content">
+                    My path wasn't a straight line, and I love that about it! It was forged in the discipline of the <strong>Military</strong>, sharpened by the fast-paced world of <strong>Retail</strong>, and ignited by the endless possibilities of <strong>Digital Creation</strong>.
+                </div>
             </div>
 
-            <div class="profile-section">
-                <span class="profile-label">My Superpowers</span>
-                <p class="profile-text">I’m at my best when I’m breaking down complex processes, <strong>coaching</strong> teams to victory, and <strong>mentoring</strong> people to help them realize they've got exactly what it takes to thrive.</p>
+            <div class="collapsible-section">
+                <button class="drop-btn">My Superpowers</button>
+                <div class="drop-content">
+                    I’m at my best when I’m breaking down complex processes, <strong>coaching</strong> teams to victory, and <strong>mentoring</strong> people to help them realize they've got exactly what it takes to thrive.
+                </div>
             </div>
 
-            <div class="profile-section">
-                <span class="profile-label">Life in the Universe</span>
-                <p class="profile-text">When the "Commander" hat comes off, I’m all about my <strong>family</strong>. They’re my world. You’ll also find me documenting my journey through the stars—because every moment in this universe is worth remembering.</p>
+            <div class="collapsible-section">
+                <button class="drop-btn">Life in the Universe</button>
+                <div class="drop-content">
+                    When the "Commander" hat comes off, I’m all about my <strong>family</strong>. They’re my world. You’ll also find me documenting my journey through the stars—because every moment in this universe is worth remembering.
+                </div>
             </div>
 
             <a href="hud.html" class="back-btn">Back to Command Hub</a>
@@ -106,7 +145,15 @@
         Powered by The Vanguard Knights
     </footer>
 
-    <!-- Same great logic engine! -->
-    <script src="vanguard-os.js" defer></script>
+    <script src="vanguard-os.js"></script>
+    <script>
+        // Local logic for About Me dropdowns
+        document.querySelectorAll('.drop-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const parent = button.parentElement;
+                parent.classList.toggle('active');
+            });
+        });
+    </script>
 </body>
 </html>
