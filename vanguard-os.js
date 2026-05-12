@@ -1,106 +1,145 @@
 /* vanguard-os.js */
 document.addEventListener('DOMContentLoaded', () => {
-    initStars();
-    initDraggableIcons();
+    initWarpStars();
+    initVanguardTouch();
 });
 
-function initStars() {
+// 1. ANIMATED WARP STARS
+function initWarpStars() {
     const container = document.getElementById('star-field');
-    for (let i = 0; i < 150; i++) {
+    const starCount = 150;
+
+    for (let i = 0; i < starCount; i++) {
         const star = document.createElement('div');
         star.className = 'star';
-        const size = Math.random() * 3 + 'px';
-        star.style.width = size;
-        star.style.height = size;
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
+        
+        // Random positions
+        let x = Math.random() * 100;
+        let y = Math.random() * 100;
+        let size = Math.random() * 2 + 1;
+        let duration = Math.random() * 3 + 2;
+        let delay = Math.random() * 5;
+
+        star.style.left = `${x}%`;
+        star.style.top = `${y}%`;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        
+        // Custom animation for drifting movement
+        star.animate([
+            { transform: 'translateZ(0) scale(1)', opacity: 0.3 },
+            { transform: `translate(${(x-50)*0.5}px, ${(y-50)*0.5}px) scale(1.5)`, opacity: 1 },
+            { transform: `translate(${(x-50)*1.2}px, ${(y-50)*1.2}px) scale(2)`, opacity: 0 }
+        ], {
+            duration: duration * 1000,
+            iterations: Infinity,
+            delay: delay * 1000,
+            easing: 'ease-in'
+        });
+
         container.appendChild(star);
     }
 }
 
-function initDraggableIcons() {
+// 2. LONG-PRESS DRAG & CLICK NAVIGATION
+function initVanguardTouch() {
     const icons = document.querySelectorAll('.app-icon');
     const dock = document.querySelector('.vanguard-dock');
     const desktop = document.querySelector('.desktop-grid');
 
+    let pressTimer;
     let activeItem = null;
+    let isDragging = false;
     let offset = { x: 0, y: 0 };
 
     icons.forEach(icon => {
-        // Start Dragging (Mouse & Touch)
-        const startDrag = (e) => {
-            activeItem = icon;
-            const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-            const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+        const start = (e) => {
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
 
-            const rect = icon.getBoundingClientRect();
-            offset.x = clientX - rect.left;
-            offset.y = clientY - rect.top;
-
-            // Visual feedback
-            icon.style.position = 'fixed';
-            icon.style.zIndex = '1000';
-            icon.style.width = rect.width + 'px';
-            icon.style.pointerEvents = 'none'; // Allow detection of elements underneath
-            icon.classList.add('dragging');
-            
-            updatePosition(clientX, clientY);
+            // Start a 1-second timer for Drag Mode
+            pressTimer = window.setTimeout(() => {
+                activateDrag(icon, clientX, clientY);
+            }, 1000); 
         };
 
-        const updatePosition = (x, y) => {
+        const activateDrag = (target, x, y) => {
+            isDragging = true;
+            activeItem = target;
+            const rect = target.getBoundingClientRect();
+            offset.x = x - rect.left;
+            offset.y = y - rect.top;
+
+            target.classList.add('dragging');
+            target.style.position = 'fixed';
+            target.style.width = rect.width + 'px';
+            target.style.zIndex = '9999';
+            target.style.pointerEvents = 'none';
+            moveAt(x, y);
+        };
+
+        const moveAt = (x, y) => {
             if (!activeItem) return;
             activeItem.style.left = (x - offset.x) + 'px';
             activeItem.style.top = (y - offset.y) + 'px';
         };
 
         const onMove = (e) => {
-            if (!activeItem) return;
-            const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-            const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
-            updatePosition(clientX, clientY);
+            if (!isDragging) {
+                clearTimeout(pressTimer); // Cancel drag if finger moves before 1s
+                return;
+            }
+            const x = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const y = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            moveAt(x, y);
         };
 
-        const endDrag = (e) => {
-            if (!activeItem) return;
+        const end = (e) => {
+            clearTimeout(pressTimer);
+            if (!isDragging) {
+                // If they released before 1s, it's a NAV CLICK
+                if (e.type === 'mouseup' || e.type === 'touchend') {
+                    handleNavigation(icon.dataset.label);
+                }
+                return;
+            }
 
-            const clientX = e.type === 'touchend' ? e.changedTouches[0].clientX : e.clientX;
-            const clientY = e.type === 'touchend' ? e.changedTouches[0].clientY : e.clientY;
+            const x = e.type === 'touchend' ? e.changedTouches[0].clientX : e.clientX;
+            const y = e.type === 'touchend' ? e.changedTouches[0].clientY : e.clientY;
 
-            // Check if dropped on dock
+            finalizeDrop(x, y);
+        };
+
+        const finalizeDrop = (x, y) => {
             const dockRect = dock.getBoundingClientRect();
-            const isOverDock = (
-                clientX > dockRect.left &&
-                clientX < dockRect.right &&
-                clientY > dockRect.top &&
-                clientY < dockRect.bottom
-            );
+            const isOverDock = (x > dockRect.left && x < dockRect.right && y > dockRect.top && y < dockRect.bottom);
 
-            // Reset styles
+            activeItem.classList.remove('dragging');
             activeItem.style.position = '';
             activeItem.style.left = '';
             activeItem.style.top = '';
             activeItem.style.width = '';
-            activeItem.style.zIndex = '';
             activeItem.style.pointerEvents = 'auto';
-            activeItem.classList.remove('dragging');
 
-            if (isOverDock) {
-                dock.appendChild(activeItem);
-            } else {
-                desktop.appendChild(activeItem);
-            }
+            if (isOverDock) dock.appendChild(activeItem);
+            else desktop.appendChild(activeItem);
 
+            isDragging = false;
             activeItem = null;
         };
 
-        // Desktop Events
-        icon.addEventListener('mousedown', startDrag);
-        window.addEventListener('mousemove', onMove);
-        window.addEventListener('mouseup', endDrag);
+        const handleNavigation = (label) => {
+            console.log(`Navigating to: ${label}`);
+            // Logic for opening windows or redirection
+            alert(`Opening ${label} Module...`);
+        };
 
-        // Mobile Events
-        icon.addEventListener('touchstart', startDrag, { passive: false });
-        window.addEventListener('touchmove', onMove, { passive: false });
-        window.addEventListener('touchend', endDrag);
+        icon.addEventListener('mousedown', start);
+        icon.addEventListener('touchstart', start, {passive: false});
     });
+
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onMove, {passive: false});
+    window.addEventListener('mouseup', end);
+    window.addEventListener('touchend', end);
 }
