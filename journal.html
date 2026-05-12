@@ -54,14 +54,14 @@
         }
         @keyframes sheen { to { background-position: 200% center; } }
 
-        /* --- Journal Grid (2-Column Mobile) --- */
+        /* --- Journal Grid --- */
         #journal-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
             gap: 12px; 
             width: 95%; 
             max-width: 1000px; 
-            padding: 10px 10px 40px; 
+            padding: 10px 10px 20px; 
             z-index: 10; 
         }
         @media (min-width: 800px) { #journal-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
@@ -81,6 +81,7 @@
 
         .journal-title { font-size: 0.95rem; color: var(--light-purple); font-weight: 600; margin-bottom: 15px; line-height: 1.4; }
 
+        /* --- Buttons --- */
         .btn {
             background: none;
             border: 1px solid var(--light-blue);
@@ -92,10 +93,26 @@
             font-size: 0.75rem;
             text-transform: uppercase;
             transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
         .btn:hover { background: var(--light-blue); color: var(--deep-space); box-shadow: 0 0 15px var(--light-blue); }
 
-        /* --- Modals (Popups) --- */
+        .nav-footer {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 20px 0 40px;
+            z-index: 10;
+        }
+
+        .back-btn {
+            padding: 12px 30px;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+        }
+
+        /* --- Modals --- */
         .modal-overlay { 
             position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; 
             display: none; justify-content: center; align-items: center; 
@@ -116,14 +133,13 @@
         .close-x { position: absolute; top: 15px; right: 20px; background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; }
         .entry-content { line-height: 1.8; color: #f0f0f0; margin-top: 20px; font-size: 1.05rem; white-space: pre-line; }
 
-        /* --- Forms --- */
         input, textarea { 
             width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 12px; 
             border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; font-family: inherit;
         }
 
         footer { 
-            z-index: 10; padding: 40px 20px; text-align: center; color: white; 
+            z-index: 10; padding: 20px 20px 40px; text-align: center; color: white; 
             font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase; 
             animation: pulse 4s ease-in-out infinite; width: 100%; margin-top: auto;
         }
@@ -140,6 +156,11 @@
     </header>
 
     <main id="journal-grid"></main>
+
+    <!-- Centered Return Button -->
+    <div class="nav-footer">
+        <a href="hub.html" class="btn back-btn">Return to Hub</a>
+    </div>
 
     <!-- Reading Modal -->
     <div id="readModal" class="modal-overlay">
