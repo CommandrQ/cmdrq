@@ -2,7 +2,7 @@
     --color-purple: #bf5af2;
     --color-blue: #5ac8fa;
     --color-white: #ffffff;
-    --window-bg: rgba(15, 15, 25, 0.35); /* More transparent for better star visibility */
+    --window-bg: rgba(15, 15, 25, 0.3); 
     --window-border: rgba(255, 255, 255, 0.1);
     --font-sys: 'Courier New', Courier, monospace;
 }
@@ -15,7 +15,6 @@
 body, html {
     margin: 0; padding: 0;
     width: 100%; min-height: 100vh;
-    /* Static background behind the moving stars */
     background: radial-gradient(circle at center, #111122 0%, #050505 100%);
     color: var(--color-white);
     font-family: var(--font-sys);
@@ -26,7 +25,7 @@ body, html {
 /* STARFIELD ENGINE */
 #star-field {
     position: fixed; inset: 0;
-    z-index: 1; /* Above background, below UI */
+    z-index: 1; 
     pointer-events: none;
     background: transparent;
 }
@@ -35,47 +34,26 @@ body, html {
     position: absolute;
     background: var(--color-white);
     border-radius: 50%;
-    /* Added glow to make stars visible through the blur */
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
 }
 
 /* INTERFACE WRAPPER */
 .interface-wrapper {
     position: relative;
-    z-index: 2; /* Ensures UI is on top of stars */
+    z-index: 2; 
     display: flex; flex-direction: column; align-items: center;
-    flex: 1 0 auto; padding-top: 5vh; padding-bottom: 60px;
+    flex: 1 0 auto; padding-top: 10vh; 
+    padding-bottom: 100px; /* Added padding so footer never blocks content */
 }
 
 .hero-text {
     font-size: clamp(2.2rem, 8vw, 4.5rem); font-weight: 900; letter-spacing: clamp(8px, 2vw, 18px);
-    color: rgba(255, 255, 255, 0.2); text-transform: uppercase; margin-bottom: 20px; text-align: center;
+    color: rgba(255, 255, 255, 0.2); text-transform: uppercase; margin-bottom: 40px; text-align: center;
     background: linear-gradient(120deg, transparent 30%, var(--color-white) 50%, transparent 70%);
     background-size: 200% 100%; -webkit-background-clip: text; background-clip: text;
     animation: shine 3s infinite linear;
 }
 @keyframes shine { to { background-position: 200% 0; } }
-
-/* HUD HEADER - Anchored to Window edges */
-.hud-header {
-    width: 95%;
-    max-width: 900px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 10px;
-}
-
-#system-date, #system-clock {
-    color: var(--color-blue);
-    font-weight: bold;
-    letter-spacing: 2px;
-    margin: 0;
-    text-transform: uppercase;
-}
-
-#system-date { font-size: 0.9rem; }
-#system-clock { font-size: 1.4rem; }
 
 /* DASHBOARD WINDOW */
 .app-dashboard {
@@ -97,11 +75,29 @@ body, html {
 .modal-btn.primary { background: var(--color-blue); color: #000; }
 .modal-btn.secondary { background: transparent; color: var(--color-purple); border: 1px solid var(--color-purple); }
 
-/* FOOTER */
-.vanguard-footer { width: 100%; text-align: center; font-size: 0.8rem; letter-spacing: 5px; color: rgba(255, 255, 255, 0.7); text-transform: uppercase; font-weight: bold; padding: 40px 0; position: relative; z-index: 10; }
+/* STICKY FOOTER */
+.vanguard-footer { 
+    position: fixed; 
+    bottom: 0; 
+    left: 0;
+    width: 100%; 
+    text-align: center; 
+    font-size: 0.75rem; 
+    letter-spacing: 4px; 
+    color: rgba(255, 255, 255, 0.6); 
+    text-transform: uppercase; 
+    font-weight: bold; 
+    padding: 20px 0; 
+    z-index: 20; 
+    background: rgba(5, 5, 5, 0.4); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
 
 @media (max-width: 600px) {
-    .interface-wrapper { padding-top: 8vh; }
-    #system-date, #system-clock, .app-icon span { font-size: 0.9rem !important; }
+    .interface-wrapper { padding-top: 12vh; }
+    .app-icon span { font-size: 0.9rem !important; }
     .app-dashboard { grid-template-columns: repeat(2, 1fr); padding: 25px; gap: 20px; }
+    .vanguard-footer { font-size: 0.6rem; letter-spacing: 2px; padding: 15px 0; }
 }
