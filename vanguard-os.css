@@ -1,3 +1,7 @@
+/* =========================================
+   VANGUARD_OS SYSTEM STYLES
+   ========================================= */
+
 :root {
     --color-purple: #bf5af2;
     --color-blue: #5ac8fa;
@@ -7,7 +11,10 @@
     --font-sys: 'Courier New', Courier, monospace;
 }
 
-* { box-sizing: border-box; cursor: url('images/pointer.png'), default !important; }
+* {
+    box-sizing: border-box;
+    cursor: url('images/pointer.png'), default !important;
+}
 
 body, html {
     margin: 0; padding: 0;
@@ -17,12 +24,17 @@ body, html {
     color: var(--color-white);
     font-family: var(--font-sys);
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: auto; 
     display: flex;
     flex-direction: column;
 }
 
-#star-field { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+#star-field {
+    position: fixed; inset: 0;
+    z-index: 0; 
+    pointer-events: none;
+}
+
 .star { position: absolute; background: var(--color-white); border-radius: 50%; }
 
 /* HUD */
@@ -32,16 +44,16 @@ body, html {
 #system-date { font-size: 0.9rem; opacity: 0.9; }
 #system-clock { font-size: 1.6rem; }
 
-/* INTERFACE */
+/* INTERFACE WRAPPER */
 .interface-wrapper {
     position: relative;
     z-index: 1; 
     display: flex;
     flex-direction: column;
     align-items: center;
-    flex: 1;
+    flex: 1 0 auto; /* Allows content to push the footer */
     padding-top: 10vh;
-    padding-bottom: 50px;
+    padding-bottom: 60px; /* Buffer before the footer starts */
 }
 
 .hero-text {
@@ -68,7 +80,7 @@ body, html {
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--window-border);
     border-radius: 24px;
-    padding: 30px;
+    padding: 40px;
     max-width: 900px;
     width: 95%;
     display: grid;
@@ -97,18 +109,23 @@ body, html {
 
 /* FOOTER */
 .vanguard-footer {
+    flex-shrink: 0; /* Prevents footer from squishing */
     width: 100%;
     text-align: center;
     font-size: 0.8rem;
     letter-spacing: 5px;
-    color: var(--color-white);
+    color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
     font-weight: bold;
-    padding: 40px 0;
+    padding: 40px 0; /* Vertical buffer */
+    background: transparent;
     position: relative;
     z-index: 10;
 }
 
 @media (max-width: 600px) {
-    .app-dashboard { grid-template-columns: repeat(2, 1fr); }
+    .app-dashboard { grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 20px; }
+    .hud-top-left, .hud-top-right { top: 15px; }
+    .hud-top-left { left: 15px; } .hud-top-right { right: 15px; }
+    #system-clock { font-size: 1.2rem; }
 }
