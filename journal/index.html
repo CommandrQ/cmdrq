@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../vanguard-os.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* GOLD ACCENT PALETTE */
         :root {
             --color-gold: #D4AF37;
             --color-gold-glow: rgba(212, 175, 55, 0.3);
@@ -22,21 +21,49 @@
             gap: 20px;
         }
 
-        /* HEADER ADJUSTMENTS */
-        .hero-container {
-            display: flex;
-            flex-direction: column;
+        /* UNIFORM BUTTON REDESIGN */
+        .modal-btn {
+            display: inline-flex;
             align-items: center;
-            margin-bottom: 30px;
+            justify-content: center;
+            padding: 0 20px;
+            height: 48px; /* Uniform Height */
+            min-width: 160px; /* Uniform Minimum Width */
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid transparent;
         }
 
-        .hub-return-top {
-            margin-top: -15px;
-            font-size: 0.8rem;
-            letter-spacing: 3px;
-            padding: 10px 30px;
-            border-radius: 50px;
-            width: auto;
+        /* ACTIONS GRID FOR UNIFORMITY */
+        .modal-actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        @media (min-width: 600px) {
+            .modal-actions {
+                grid-template-columns: repeat(3, 1fr); /* Three across on desktop */
+            }
+        }
+
+        .gold-action {
+            background: var(--color-gold) !important;
+            color: #000 !important;
+            box-shadow: 0 4px 15px var(--color-gold-glow);
+        }
+
+        .gold-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
         }
 
         /* SCROLLABLE LOG DECK */
@@ -65,68 +92,18 @@
             opacity: 0;
         }
 
-        @keyframes slideIn {
-            from { transform: translateY(15px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+        @keyframes slideIn { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         .log-entry-card:hover {
             border-color: var(--color-gold);
             background: rgba(212, 175, 55, 0.05);
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px var(--color-gold-glow);
-        }
-
-        .log-entry-card h3 {
-            margin: 0;
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            color: var(--color-white);
-            text-transform: uppercase;
         }
 
         /* GOLD ACCENTED MODALS */
-        .gold-modal {
-            border: 1px solid var(--color-gold) !important;
-            box-shadow: 0 0 30px var(--color-gold-glow) !important;
-        }
-
-        .gold-modal .modal-title {
-            color: var(--color-white) !important;
-            border-bottom: 1px solid var(--color-gold);
-            padding-bottom: 10px;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-
-        .gold-modal .tactical-input {
-            border-color: rgba(212, 175, 55, 0.3);
-            color: #ffffff;
-        }
-
-        .gold-modal .tactical-input:focus {
-            border-color: var(--color-gold);
-            box-shadow: 0 0 10px var(--color-gold-glow);
-        }
-
-        .modal-btn.primary.gold-action {
-            background: var(--color-gold);
-            color: #000;
-            font-weight: 900;
-        }
-
-        .journal-modal-body {
-            max-height: 50vh;
-            overflow-y: auto;
-            line-height: 1.8;
-            font-size: 1.1rem;
-            color: #ffffff;
-        }
-
-        @media (max-width: 600px) {
-            .hub-return-top { margin-top: -5px; }
-            .log-entry-card h3 { font-size: 0.9rem; }
-        }
+        .gold-modal { border: 1px solid var(--color-gold) !important; box-shadow: 0 0 30px var(--color-gold-glow) !important; }
+        .gold-modal .modal-title { color: #fff !important; border-bottom: 1px solid var(--color-gold); padding-bottom: 10px; margin-bottom: 20px; display: inline-block; }
+        .tactical-input { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(0,0,0,0.4); border: 1px solid rgba(212, 175, 55, 0.3); color: white; font-family: var(--font-sys); border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -134,45 +111,46 @@
     <div id="star-field"></div>
 
     <div class="interface-wrapper">
-        <header class="hero-container">
+        <header class="hero-container" style="display: flex; flex-direction: column; align-items: center; margin-bottom: 40px;">
             <h1 class="hero-text">Journal Logs</h1>
-            <a href="../hud.html" class="modal-btn secondary hub-return-top">Return to Hub</a>
+            <a href="../hud.html" class="modal-btn secondary" style="min-width: 200px; height: 40px;">Return to Hub</a>
         </header>
 
         <main class="app-dashboard journal-container">
-            <div class="log-deck" id="log-deck">
-                <!-- Entries are injected here -->
-            </div>
+            <div class="log-deck" id="log-deck"></div>
         </main>
     </div>
 
     <!-- READ MODAL -->
     <div id="blog-modal" class="modal-overlay">
-        <div class="modal-window" style="max-width: 700px; text-align: left;">
+        <div class="modal-window" style="max-width: 800px; text-align: left;">
             <h2 id="blog-modal-title" class="modal-title" style="margin-bottom: 25px;">Log Title</h2>
-            <div id="blog-modal-content" class="journal-modal-body"></div>
-            <div class="modal-actions" style="margin-top: 30px;">
+            <div id="blog-modal-content" style="max-height: 45vh; overflow-y: auto; line-height: 1.8; color: #fff; padding-right: 10px;"></div>
+            
+            <!-- UNIFORM BUTTON ARRAY -->
+            <div class="modal-actions">
                 <button onclick="VanguardOS.closeModals()" class="modal-btn secondary">Close</button>
-                <button onclick="VanguardOS.handleReplyClick()" class="modal-btn primary gold-action">Share link to social media post</button>
+                <button onclick="VanguardOS.handleShare()" class="modal-btn gold-action">Share Link</button>
+                <button onclick="VanguardOS.handleReplyClick()" class="modal-btn gold-action">Write a Reply</button>
             </div>
         </div>
     </div>
 
-    <!-- REPLY WINDOW (Gold Accents) -->
+    <!-- REPLY WINDOW -->
     <div id="reply-modal" class="modal-overlay">
         <div class="modal-window gold-modal">
-            <h2 class="modal-title">Identify / Transmit</h2>
+            <h2 class="modal-title">Transmit Reply</h2>
             <form onsubmit="VanguardOS.submitReply(event)">
-                <textarea id="reply-text" class="tactical-input" placeholder="Enter your response or social link..." required style="min-height: 150px;"></textarea>
-                <div class="modal-actions">
-                    <button type="button" onclick="VanguardOS.closeModals()" class="modal-btn secondary">Cancel</button>
-                    <button type="submit" class="modal-btn primary gold-action">Confirm Signal</button>
+                <textarea id="reply-text" class="tactical-input" placeholder="Compose your response for the Blogreplies table..." required style="min-height: 150px;"></textarea>
+                <div class="modal-actions" style="grid-template-columns: 1fr 1fr;">
+                    <button type="button" onclick="VanguardOS.closeModals()" class="modal-btn secondary">Abort</button>
+                    <button type="submit" class="modal-btn gold-action">Log Reply</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- AUTH MODAL (Gold Accents) -->
+    <!-- AUTH MODAL -->
     <div id="auth-modal" class="modal-overlay">
         <div class="modal-window gold-modal">
             <h2 class="modal-title">Clearance Required</h2>
@@ -180,10 +158,10 @@
                 <div id="name-group"><input type="text" id="auth-name" class="tactical-input" placeholder="Callsign"></div>
                 <input type="email" id="auth-email" class="tactical-input" placeholder="Email" required>
                 <input type="password" id="auth-pass" class="tactical-input" placeholder="Access Key" required>
-                <button type="submit" id="auth-submit-btn" class="modal-btn primary gold-action" style="width: 100%;">Register</button>
+                <button type="submit" id="auth-submit-btn" class="modal-btn gold-action" style="width: 100%;">Register</button>
             </form>
-            <p id="auth-toggle-text" style="font-size: 0.8rem; margin-top: 15px; color: var(--color-gold);">
-                Known Citizen? <a href="#" onclick="VanguardOS.toggleAuthMode()" style="color: #fff; text-decoration: underline;">Login</a>
+            <p id="auth-toggle-text" style="font-size: 0.8rem; margin-top: 15px; color: var(--color-gold); text-align: center;">
+                Existing Citizen? <a href="#" onclick="VanguardOS.toggleAuthMode()" style="color: #fff;">Login</a>
             </p>
         </div>
     </div>
@@ -194,37 +172,12 @@
 
     <script>
         const journalEntries = [
-            {
-                id: "log_006",
-                title: "The Weight of the Tether",
-                content: `<p>Outgrowing the people I used to run with is a bittersweet realization because I have to admit that the version of them I love only exists in my memory and not in the room with me today.</p>
-                <p>Commander Q didn't survive a war by holding onto every piece of equipment or every person that slowed the mission down. Loyalty isn't staying the same forever; it's respecting the potential of the mission.</p>`
-            },
-            {
-                id: "log_005",
-                title: "The Shield of Self-Deprecation",
-                content: `<p>The most dangerous lies are the ones we tell ourselves under the guise of being realistic or humble. We use self-deprecation as a shield because if we admit that we are truly capable, then we are suddenly responsible for the outcomes of our lives.</p>`
-            },
-            {
-                id: "log_004",
-                title: "The War Within",
-                content: `<p>The most difficult rule to follow is often the first one: you must respect yourself. If you are constantly sabotaging your own confidence, you are fighting a war on two fronts. You cannot win the external race if you are tripping yourself at the starting line.</p>`
-            },
-            {
-                id: "log_003",
-                title: "Survival and The Three Respects",
-                content: `<p>Respecting others is often expressed through the quiet dignity of providing for those who depend on us. Respecting yourself means maintaining an internal boundary between the work you perform and the identity you hold.</p>`
-            },
-            {
-                id: "log_002",
-                title: "Stagnation and Character",
-                content: `<p>Character isn't built when you have everything you need. It’s defined when you have nothing. Mastery of yourself is the only advancement that actually belongs to you.</p>`
-            },
-            {
-                id: "log_001",
-                title: "The Trap of External Victories",
-                content: `<p>We spend so much time fighting for the "win" that we’ve forgotten how to advance ourselves. Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get there.</p>`
-            }
+            { id: "log_006", title: "The Weight of the Tether", content: `<p>Outgrowing the people I used to run with is a bittersweet realization... Loyalty isn't staying the same forever; it's respecting the potential of the mission.</p>` },
+            { id: "log_005", title: "The Shield of Self-Deprecation", content: `<p>The most dangerous lies are the ones we tell ourselves under the guise of being realistic or humble...</p>` },
+            { id: "log_004", title: "The War Within", content: `<p>The most difficult rule to follow is often the first one: you must respect yourself...</p>` },
+            { id: "log_003", title: "Survival and The Three Respects", content: `<p>Respecting others is often expressed through the quiet dignity of providing for those who depend on us...</p>` },
+            { id: "log_002", title: "Stagnation and Character", content: `<p>Character isn't built when you have everything you need. It’s defined when you have nothing...</p>` },
+            { id: "log_001", title: "The Trap of External Victories", content: `<p>Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get there.</p>` }
         ];
 
         function loadJournal() {
@@ -238,7 +191,6 @@
                 deck.appendChild(card);
             });
         }
-
         window.addEventListener('DOMContentLoaded', loadJournal);
     </script>
 </body>
