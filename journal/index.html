@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanguard_OS | Journal Archive</title>
+    <!-- Pathing back to root -->
+    <link rel="stylesheet" href="../vanguard-os.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .journal-container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Animated Scroller Menu */
+        .log-deck {
+            width: 100%;
+            max-height: 450px;
+            overflow-y: auto;
+            padding-right: 15px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-blue) transparent;
+        }
+
+        .log-deck::-webkit-scrollbar { width: 4px; }
+        .log-deck::-webkit-scrollbar-thumb { background: var(--color-blue); border-radius: 10px; }
+
+        .log-entry-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--window-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: slideIn 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .log-entry-card:hover {
+            border-color: var(--color-blue);
+            background: rgba(90, 200, 250, 0.08);
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(90, 200, 250, 0.15);
+        }
+
+        .log-info h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            color: var(--color-white);
+        }
+
+        .log-info span {
+            font-size: 0.75rem;
+            color: var(--color-purple);
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .status-tag {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border: 1px solid var(--color-blue);
+            color: var(--color-blue);
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Reading Window Customization */
+        .journal-modal-body {
+            max-height: 50vh;
+            overflow-y: auto;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            color: rgba(255,255,255,0.9);
+            padding-right: 10px;
+        }
+
+        .tactical-input {
+            width: 100%; padding: 12px; margin-bottom: 15px;
+            background: rgba(0,0,0,0.4); border: 1px solid var(--window-border);
+            color: white; font-family: var(--font-sys); border-radius: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .log-entry-card { padding: 15px; }
+            .log-info h3 { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="star-field"></div>
+
+    <div class="interface-wrapper">
+        <header class="hero-container">
+            <h1 class="hero-text">Journal Logs</h1>
+        </header>
+
+        <main class="app-dashboard journal-container">
+            <div class="log-deck" id="log-deck">
+                <!-- Entries are injected here by the engine -->
+            </div>
+
+            <div style="width: 100%; display: flex; justify-content: center; margin-top: 20px;">
+                <a href="../hud.html" class="modal-btn secondary">Return to Hub</a>
+            </div>
+        </main>
+    </div>
+
+    <!-- READ MODAL -->
+    <div id="blog-modal" class="modal-overlay">
+        <div class="modal-window" style="max-width: 700px; text-align: left;">
+            <h2 id="blog-modal-title" class="modal-title" style="margin-bottom: 10px;">Log Title</h2>
+            <p id="blog-modal-date" style="font-size: 0.8rem; color: var(--color-purple); margin-bottom: 20px;">DATE</p>
+            
+            <div id="blog-modal-content" class="journal-modal-body">
+                <!-- Text Injected Here -->
+            </div>
+
+            <div class="modal-actions" style="margin-top: 30px;">
+                <button onclick="VanguardOS.closeModals()" class="modal-btn secondary">Close</button>
+                <button onclick="VanguardOS.handleShare()" class="modal-btn secondary">Relay</button>
+                <button onclick="VanguardOS.handleReplyClick()" class="modal-btn primary">Reply</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTH MODAL -->
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-window">
+            <h2 class="modal-title">Identity Check</h2>
+            <form onsubmit="VanguardOS.submitAuth(event)">
+                <div id="name-group">
+                    <input type="text" id="auth-name" class="tactical-input" placeholder="Callsign (Full Name)">
+                </div>
+                <input type="email" id="auth-email" class="tactical-input" placeholder="Email" required>
+                <input type="password" id="auth-pass" class="tactical-input" placeholder="Access Key" required>
+                <button type="submit" id="auth-submit-btn" class="modal-btn primary" style="width: 100%;">Register</button>
+            </form>
+            <p id="auth-toggle-text" style="font-size: 0.8rem; margin-top: 15px; color: var(--color-blue);">
+                Already in system? <a href="#" onclick="VanguardOS.toggleAuthMode()">Login</a>
+            </p>
+            <button onclick="VanguardOS.closeModals()" class="modal-btn secondary" style="margin-top: 10px;">Abort</button>
+        </div>
+    </div>
+
+    <!-- REPLY MODAL -->
+    <div id="reply-modal" class="modal-overlay">
+        <div class="modal-window">
+            <h2 class="modal-title">Submit Transmission</h2>
+            <form onsubmit="VanguardOS.submitReply(event)">
+                <textarea id="reply-text" class="tactical-input" placeholder="Write your message here..." required style="min-height: 150px;"></textarea>
+                <div class="modal-actions">
+                    <button type="button" onclick="VanguardOS.closeModals()" class="modal-btn secondary">Cancel</button>
+                    <button type="submit" class="modal-btn primary">Send Reply</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="vanguard-footer">Powered by Vanguard Citizen Services</footer>
+
+    <!-- Pathing back to root -->
+    <script src="../vanguard-os.js"></script>
+
+    <script>
+        /**
+         * JOURNAL DATA DECK
+         * Add your new entries here!
+         */
+        const journalEntries = [
+            {
+                id: "log_001",
+                title: "Starting Self Mastery",
+                content: `
+                    <p>Everyone is talking about the systems that hold us back: the wage gap, the lack of freedom, the rigged game. And they’re right. But there’s a trap here: we spend so much time fighting for the "win" that we’ve forgotten how to advance ourselves.</p>
+
+<p>We’re told that every "no" is an opportunity. But if you don’t understand who you are or what you actually want, that opportunity is just noise. It’s like an athlete training just to stay in second place, or a cook who never intends to run their own kitchen. Why bother?</p>
+
+<p>The truth is that self-mastery and professional growth are the same thing. You can’t have one without the other. If we finally beat the system but we aren't grounded in who we are, we’ll squander the victory the second we get it. We’ll have the equality we fought for and no idea what to do with it.</p>
+
+<p>Choosing to do one thing well, to really master a craft, is what builds your identity. It’s how you learn to be a "good person" in practice, not just in theory. Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get to where you're going.</p>
+                `
+            }
+            // To add more, copy the block above and paste it here!
+        ];
+
+        // Engine to render the entries
+        function loadJournal() {
+            const deck = document.getElementById('log-deck');
+            journalEntries.forEach((entry, index) => {
+                const card = document.createElement('div');
+                card.className = 'log-entry-card';
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.onclick = () => {
+                    document.getElementById('blog-modal-date').textContent = entry.date;
+                    VanguardOS.openBlogModal(entry.title, entry.content, entry.id);
+                };
+
+                card.innerHTML = `
+                    <div class="log-info">
+                        <span>${entry.date}</span>
+                        <h3>${entry.title}</h3>
+                    </div>
+                    <div class="status-tag">${entry.status}</div>
+                `;
+                deck.appendChild(card);
+            });
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', loadJournal);
+    </script>
+</body>
+</html>
