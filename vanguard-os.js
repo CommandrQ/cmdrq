@@ -4,10 +4,16 @@
  */
 
 const VanguardOS = (() => {
-    // --- SUPABASE INIT ---
+    // --- SUPABASE INIT (With Safety Net) ---
     const supabaseUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
     const supabaseKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    let supabase = null;
+    
+    if (window.supabase) {
+        supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    } else {
+        console.error("Vanguard_OS Error: Supabase connection missing. Visuals will load, but data transfer is offline.");
+    }
 
     const appsConfig = [
         { name: "About Me", path: "about.html", glyph: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" },
@@ -21,10 +27,9 @@ const VanguardOS = (() => {
     const init = () => {
         renderApps();
         setupStarfield();
-        checkProfileStatus();
+        if (supabase) checkProfileStatus();
     };
 
-    // --- HUD LOGIC ---
     const renderApps = () => {
         const dashboard = document.getElementById('app-dashboard');
         if (!dashboard) return;
@@ -45,7 +50,6 @@ const VanguardOS = (() => {
         });
     };
 
-    // --- STARFIELD ENGINE (Radiating from Center) ---
     const setupStarfield = () => {
         const container = document.getElementById('star-field');
         if (!container) return;
@@ -67,7 +71,6 @@ const VanguardOS = (() => {
         }
     };
 
-    // --- BLOG & AUTH LOGIC ---
     let currentPostId = null;
 
     const openBlogModal = (title, content, id) => {
@@ -86,6 +89,7 @@ const VanguardOS = (() => {
     };
 
     const handleReplyClick = async () => {
+        if (!supabase) return alert("Database connection offline.");
         const { data: { session } } = await supabase.auth.getSession();
         closeModals();
         if (session) {
@@ -97,6 +101,7 @@ const VanguardOS = (() => {
 
     const submitAuth = async (e) => {
         e.preventDefault();
+        if (!supabase) return;
         const email = document.getElementById('auth-email').value;
         const pass = document.getElementById('auth-pass').value;
         const name = document.getElementById('auth-name') ? document.getElementById('auth-name').value : '';
@@ -119,26 +124,25 @@ const VanguardOS = (() => {
         }
     };
 
-    // --- UPDATED DB INSERT ---
     const submitReply = async (e) => {
         e.preventDefault();
+        if (!supabase) return;
         const msg = document.getElementById('reply-text').value;
         const { data: { session } } = await supabase.auth.getSession();
         
         if(!session) return;
 
-        // Custom Payload targeted directly to your existing setup
         const { error } = await supabase.from('Blogreplies').insert([{
-            post_id: currentPostId, // Still sending the post ID so you know which journal they replied to
+            post_id: currentPostId, 
             uuid: session.user.id,
             email: session.user.email,
             full_name: session.user.user_metadata.full_name || 'Citizen',
-            message: msg // I assumed the column for the actual text is named 'message'
+            message: msg 
         }]);
 
         if (error) {
             alert("Comm-Link Error: " + error.message);
-            console.error(error); // Good for debugging in your browser console
+            console.error(error); 
         } else {
             alert("Signal received. Your reply has been logged.");
             document.getElementById('reply-text').value = '';
@@ -162,8 +166,8 @@ const VanguardOS = (() => {
         }
     };
 
-    // --- PROFILE PAGE LOGIC ---
     const checkProfileStatus = async () => {
+        if (!supabase) return;
         const profileStatus = document.getElementById('profile-status');
         if(!profileStatus) return;
 
@@ -180,6 +184,7 @@ const VanguardOS = (() => {
     };
 
     const wipeCache = async () => {
+        if (!supabase) return;
         await supabase.auth.signOut();
         alert("Cache wiped. Cookies cleared. Signal terminated.");
         window.location.reload();
@@ -191,7 +196,6 @@ const VanguardOS = (() => {
     };
 })();
 
-// Initialize on DOM Load
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => VanguardOS.init(), 100); 
 });
