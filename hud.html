@@ -6,11 +6,11 @@
     <title>Vanguard_OS | Command Center</title>
     <link rel="stylesheet" href="vanguard-os.css">
 </head>
-<body class="os-container">
+<body>
 
+    <!-- The Starfield must be the first element -->
     <div id="star-field"></div>
 
-    <!-- HUD READOUTS -->
     <div class="hud-date-left">
         <p id="system-date">INIT_DATE</p>
     </div>
@@ -19,14 +19,12 @@
         <p id="system-clock">00:00:00</p>
     </div>
 
-    <!-- HERO SECTION -->
     <header class="hero-container">
         <h1 class="hero-text">Commander Q</h1>
     </header>
 
-    <!-- TRANSLUCENT DASHBOARD PANEL -->
     <main class="app-dashboard">
-        
+        <!-- ORIGINS -->
         <div class="app-icon" data-label="Origins">
             <div class="icon-box">
                 <svg class="glyph" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
@@ -34,6 +32,7 @@
             <span>Origins</span>
         </div>
 
+        <!-- WAR ROOM -->
         <div class="app-icon" data-label="WarRoom">
             <div class="icon-box">
                 <svg class="glyph" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
@@ -41,6 +40,7 @@
             <span>War Room</span>
         </div>
 
+        <!-- FREQUENCIES -->
         <div class="app-icon" data-label="Frequencies">
             <div class="icon-box">
                 <svg class="glyph" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
@@ -48,16 +48,15 @@
             <span>Frequencies</span>
         </div>
 
+        <!-- UPLINK -->
         <div class="app-icon" data-label="Uplink">
             <div class="icon-box">
                 <svg class="glyph" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-10 12.5v-9l6 4.5-6 4.5z"/></svg>
             </div>
             <span>Uplink</span>
         </div>
-
     </main>
 
-    <!-- FOOTER -->
     <footer class="vanguard-footer">
         Powered by The Vanguard Knights
     </footer>
