@@ -190,45 +190,27 @@
         const sbKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
         const supabaseClient = supabase.createClient(sbUrl, sbKey);
 
-        // System memory to track which data core is currently open
+        let ENTRIES = [];
         let activePostId = null;
 
-        // Note the addition of the 'id' field to match your DB logic
-        const ENTRIES = [
-            { 
-                id: 1,
-                title: "The Systems and the Self", 
-                text: `Everyone is talking about the systems that hold us back: the wage gap, the lack of freedom, the rigged game. And they’re right. But there’s a trap here: we spend so much time fighting for the "win" that we’ve forgotten how to advance ourselves.\n\nWe’re told that every "no" is an opportunity. But if you don’t understand who you are or what you actually want, that opportunity is just noise. It’s like an athlete training just to stay in second place, or a cook who never intends to run their own kitchen. Why bother?\n\nThe truth is that self-mastery and professional growth are the same thing. You can’t have one without the other. If we finally beat the system but we aren't grounded in who we are, we’ll squander the victory the second we get it. We’ll have the equality we fought for and no idea what to do with it.\n\nChoosing to do one thing well, to really master a craft, is what builds your identity. It’s how you learn to be a "good person" in practice, not just in theory. Success isn't just about changing the world. It’s about making sure you're someone worth being when you finally get to where you're going.` 
-            },
-            {
-                id: 2,
-                title: "Internal Mastery",
-                text: `Character isn't built when you have everything you need. It’s defined when you have nothing.\n\nI see people with "good jobs" and steady money who still claim they "can’t do it." They’re stuck, waiting for some external shift to fix their lives. But they’re looking in the wrong place. If you can’t advance professionally right now, you should be expanding personally. There is no excuse for stagnation when the problem is internal.\n\nThe irony is that we have the entire world at our fingertips. We have access to every bit of human knowledge, yet when it comes to our own character, we act like we’re working with a few scraps of paper. We have the data, but we lack the discipline to use it.\n\nIt comes down to the small choices. If you aren’t moving forward, it’s not because the information isn’t there; it’s because you’ve stopped looking at the tiny decisions that lead to a better future. Mastery of yourself is the only advancement that actually belongs to you.`
-            },
-            {
-                id: 3,
-                title: "The Three Respects",
-                text: `It is often easy to dismiss the idea of self-mastery when you are currently drowning in the practical demands of survival. When you are working a job simply because you have to keep the lights on and the fridge full, you might feel like the rules of personal growth are luxuries intended for people with more time and better bank accounts. However, the reality is that a personal code becomes more essential when the stakes are this high because without a foundation, the stress of your circumstances will eventually erode the very person you are trying to protect.\n\nWe must understand that respecting others is often expressed through the quiet dignity of providing for those who depend on us. When you show up to a place you do not want to be so that your family can be safe, you are not failing at life, but are instead performing an act of high-level respect that transforms a paycheck into a testament of your character. If you view your labor as a deliberate trade made to honor your responsibilities, then the job is no longer a cage but a tool that you are using to fulfill your word to the people who matter most.\n\nAt the same time, you must respect yourself by maintaining a clear internal boundary between the work you perform and the identity you hold. If you allow the frustrations of a difficult shift or a demanding boss to dictate your self-worth, you are essentially surrendering your freedom for free. Respecting yourself means acknowledging that while your time may be currently spoken for, your mind and your standards remain your own property, and this internal clarity is what prevents a "have-to" situation from becoming a permanent state of soul-crushing stagnation.\n\nFinally, respecting your environment requires you to accept the hard facts of your current reality without the added weight of useless bitterness. You cannot navigate a difficult season if you are busy pretending that the obstacles in your way should not exist, because fighting the physics of a bill or a job market only drains the energy you need to eventually create a better opportunity. When you align these three respects, you create a sense of harmony that is psychologically difficult to argue against. You are no longer just a victim of circumstance, but a person of substance who is navigating a brutal trade-off with their head held high, proving that endurance in the face of necessity is the ultimate form of advancement.`
-            },
-            {
-                id: 4,
-                title: "The War Within",
-                text: `The most difficult rule to follow is often the first one: you must respect yourself. This is the foundation because every other win in your life depends on the quality of your internal dialogue. When you tell yourself that you are trash or that you have no idea what you are doing, you are doing more than just venting frustration. You are effectively resigning from your own life before the struggle even has a chance to sharpen you into something better.\n\nWe are taught to dream big and imagine ourselves a hundred feet high in the clouds, yet we seem to lack the internal structure to survive a fall. The moment we hear a "no" or hit a wall, we collapse entirely because our worth was tied to a dream instead of a discipline. This dramatic fall happens because we haven't mastered the art of being our own ally. It is much easier to be your own greatest enemy, as that role requires nothing but a loud voice and a few harsh labels to keep you from ever taking a real risk again.\n\nYou have to realize that you are the only person who is present for every single second of your journey, which makes the choice to respect yourself a matter of basic survival. If you are constantly sabotaging your own confidence with self-put-downs, you are essentially fighting a war on two fronts: one against the world and one against the person in the mirror. You cannot win the external race if you are busy tripping yourself at the starting line.\n\nThe question of who you will conquer is the only one that actually matters. You can spend your energy trying to please a boss or beat a system, but until you conquer the impulse to devalue your own effort, you will always be stuck. Being your own ally means looking at the "no" and the "hard" and the "impossible" and deciding that you are worth the effort it takes to find a way through.`
-            },
-            {
-                id: 5,
-                title: "The Humility Shield",
-                text: `The most dangerous lies are the ones we tell ourselves under the guise of being realistic or humble. When you constantly downplay your abilities or shrug off your achievements, you are not actually practicing humility, but are instead constructing a psychological barrier that keeps you safe from the risks of your own potential. We use self-deprecation as a shield because if we admit that we are truly capable, then we are suddenly responsible for the outcomes of our lives. It is much easier to say that we are not ready than it is to face the weight of what we might actually achieve if we stopped standing in our own way.\n\nThis habit of internal sabotage creates a massive gap between where you are today and the goals you claim to pursue. You cannot reach for a better future if your hands are busy holding onto the idea that you are fundamentally flawed or that you don't know what you are doing. We often talk about changing the world as if it requires a massive external revolution, yet we ignore the most significant change that is actually within our immediate control. Changing the world does not mean you have to fix every broken system or solve every global crisis all at once. It simply means starting with the way you value your own existence and the quality of the respect you give to yourself.\n\nOnce you stop being your own most persistent critic, the external obstacles start to look like challenges rather than dead ends. The first victory has to happen inside your own mind before it can ever manifest in your career or your relationships. You have to decide that you are no longer willing to be the primary enemy of your own progress. If the world is already going to offer you plenty of resistance, there is no logical reason for you to join in and fight against yourself as well.`
-            },
-            {
-                id: 6,
-                title: "The Weight of the Tether",
-                text: `Outgrowing the people I used to run with is a bittersweet realization because I have to admit that the version of them I love only exists in my memory and not in the room with me today. I find myself looking at friends I’ve known for years and realizing that the fire we used to share has burned out into a cold pile of ash that we are both just staring at out of habit. It feels like a physical tether snapping inside my chest when I decide to finally walk away and become a stranger to people who used to know my every thought. Most people call that cold or selfish but if I am actually following my own rule to respect my environment then I have to be honest about the fact that a stagnant circle is just a graveyard for my potential.\n\nCommander Q didn't survive a war by holding onto every piece of equipment or every person that slowed the mission down and she certainly doesn't expect me to sacrifice my growth for the sake of someone else's comfort. She is the leader of the Vanguard Knights because she understands that you cannot empower a single soul if you are still standing in the same mud as the people you are trying to lift up. I used to think that loyalty meant staying the same forever but now I see that staying in a circle that no longer fits is actually a form of disrespect to everyone involved. I am lying to them by pretending I still value the things they value and I am disrespecting myself by trying to squeeze my new life into an old box that is way too small.\n\nThe guilt of leaving people behind is just the price I have to pay for deciding that I actually want to be someone worth being. If my environment is not actively pushing me to be better then it is actively pulling me back down to the baseline of everyone else's excuses. I am choosing to break the tether because the person I am becoming needs a different kind of oxygen to survive and I cannot breathe in a room full of people who are content with suffocating. I have to reach the higher ground alone before I can ever hope to reach back down and pull anyone else up with me.`
+        // Fetch entries from the external JSON file
+        async function fetchEntries() {
+            try {
+                const response = await fetch('entries.json');
+                if (!response.ok) throw new Error('Network response was not ok');
+                ENTRIES = await response.json();
+                buildGrid();
+            } catch (error) {
+                console.error("Failed to load journal logs:", error);
+                document.getElementById('journal-grid').innerHTML = '<p style="text-align: center; color: var(--light-purple); width: 100%; grid-column: 1 / -1;">Signal lost. Unable to load data cores.</p>';
             }
-        ];
+        }
 
-        function init() {
+        // Build the grid after data is loaded
+        function buildGrid() {
             const grid = document.getElementById('journal-grid');
+            grid.innerHTML = ''; 
+            
             ENTRIES.forEach((entry, i) => {
                 const card = document.createElement('div');
                 card.className = 'journal-card';
@@ -242,8 +224,6 @@
 
         function openReadModal(index) {
             document.getElementById('fullEntryText').innerText = ENTRIES[index].text;
-            
-            // Log which post is active
             activePostId = ENTRIES[index].id;
             
             const modal = document.getElementById('readModal');
@@ -272,7 +252,6 @@
             modal.classList.remove('active');
             setTimeout(() => modal.style.display = 'none', 300);
             
-            // Clear memory if the reply window closes
             if (id === 'replyModal') {
                 activePostId = null;
             }
@@ -307,7 +286,6 @@
             if (!message) return alert("Feel free to type something first.");
             if (!activePostId) return alert("System Error: Could not determine which entry you are replying to.");
             
-            // Pushing all required fields to the Supabase table
             const { error } = await supabaseClient.from('blogreplies').insert([{ 
                 post_id: activePostId,
                 uuid: user.id,
@@ -325,7 +303,8 @@
             }
         }
 
-        window.onload = init;
+        // Initialize by fetching the JSON file
+        window.onload = fetchEntries;
     </script>
 </body>
 </html>
