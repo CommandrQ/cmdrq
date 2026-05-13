@@ -3,233 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vanguard | Settings</title>
-    
+    <title>Settings | Commander Q</title>
+    <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <style>
         :root {
-            --gold: #D4AF37;
-            --white: #ffffff;
-            --glass: rgba(0, 0, 0, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.2);
+            --light-purple: #e0c3fc;
+            --light-blue: #8ecae6;
+            --deep-space: #0f0c29;
+            --glass-bg: rgba(15, 15, 25, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.15);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body, html {
+        html, body {
+            width: 100%;
             height: 100%;
-            background: #000;
-            color: var(--white);
-            font-family: 'Inter', sans-serif;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
-        /* --- GOLDEN STARFIELD --- */
-        #vanguard-universe {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            background: #000;
-        }
-
-        .star-layer {
-            position: absolute;
-            inset: -50%;
-            width: 200%;
-            height: 200%;
-            background-image: 
-                radial-gradient(2px 2px at 40px 60px, var(--gold), transparent),
-                radial-gradient(1.5px 1.5px at 150px 200px, #fff, transparent);
-            background-size: 400px 400px;
-            animation: rotate 220s linear infinite;
-        }
-
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        /* --- UI WRAPPER --- */
-        #app-wrapper {
-            position: relative;
-            z-index: 10;
+        body {
+            background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #7597de 100%);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 100vh;
-            width: 100%;
-            overflow-y: auto;
+            justify-content: center; /* Vertical and Horizontal centering */
             text-align: center;
-            scrollbar-width: none;
         }
 
-        header {
+        /* --- Background Animation --- */
+        #boot-screen { position: fixed; inset: 0; background: black; z-index: 1000; pointer-events: none; animation: fadeOut 1.5s forwards; }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+        #starfield { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        .stars { position: absolute; width: 2px; height: 2px; background: transparent; 
+                  box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 25vw 90vh #fff;
+                  animation: moveStars 150s linear infinite; }
+        @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
+
+        /* --- Settings Container --- */
+        .settings-container {
             width: 90%;
-            max-width: 500px;
-            margin-top: 30px;
-            padding: 25px;
-            background: var(--glass);
+            max-width: 450px;
+            z-index: 10;
+            padding: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .commander-title { 
+            font-size: clamp(2rem, 6vw, 2.8rem); font-weight: bold; 
+            background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: sheen 3s linear infinite;
+            margin-bottom: 30px;
+        }
+        @keyframes sheen { to { background-position: 200% center; } }
+
+        .settings-card {
+            background: var(--glass-bg);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-bottom: 2px solid var(--gold);
-        }
-
-        .user-name { font-size: 1.3rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; }
-        .id-number { color: var(--gold); font-size: 0.9rem; letter-spacing: 2px; font-weight: bold; margin-top: 5px; }
-
-        .window {
-            width: 90%;
-            max-width: 500px;
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
+            border-radius: 28px;
             padding: 40px 30px;
-            margin: 20px 0;
-            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            width: 100%;
+            margin-bottom: 30px;
         }
 
-        h2 { color: var(--gold); font-size: 1.2rem; text-transform: uppercase; margin-bottom: 25px; }
+        h2 { color: var(--light-blue); margin-bottom: 25px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 3px; }
 
-        .input-box {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid var(--glass-border);
-            color: var(--white);
-            padding: 16px;
-            margin-bottom: 15px;
-            border-radius: 2px;
-            text-align: center;
+        /* --- User Display --- */
+        .user-info { margin-bottom: 30px; }
+        .user-label { color: var(--light-purple); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+        .citizen-id { font-size: 2rem; font-weight: bold; color: white; letter-spacing: 3px; text-shadow: 0 0 10px rgba(142, 202, 230, 0.5); }
+        .user-email { font-size: 0.85rem; color: rgba(255, 255, 255, 0.4); margin-top: 8px; }
+
+        /* --- UI Elements --- */
+        input { 
+            width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; 
+            font-family: inherit; text-align: center; font-size: 1rem;
         }
 
         .btn {
-            width: 100%;
-            padding: 16px;
-            background: transparent;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            text-transform: uppercase;
-            font-weight: 900;
-            cursor: pointer;
-            transition: 0.3s;
-            text-decoration: none;
-            display: inline-block;
+            width: 100%; padding: 14px; border-radius: 50px; border: 1px solid var(--light-blue); 
+            background: transparent; color: var(--light-blue); font-weight: bold; 
+            cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.8rem;
+            margin-bottom: 15px; text-decoration: none; display: inline-block; letter-spacing: 1px;
         }
+        .btn:hover { background: var(--light-blue); color: var(--deep-space); box-shadow: 0 0 15px var(--light-blue); }
+        
+        .btn-danger { border-color: #ff6b6b; color: #ff6b6b; }
+        .btn-danger:hover { background: #ff6b6b; color: white; box-shadow: 0 0 15px #ff6b6b; }
 
-        .btn:hover { background: var(--gold); color: #000; }
+        .hidden { display: none; }
 
-        .link { margin-top: 15px; font-size: 0.8rem; cursor: pointer; text-decoration: underline; display: block; }
-
-        footer {
-            width: 100%;
-            padding: 30px;
-            margin-top: auto;
-            font-size: 0.7rem;
-            letter-spacing: 4px;
-            background: rgba(0, 0, 0, 0.9);
-            border-top: 1px solid var(--glass-border);
+        footer { 
+            z-index: 10; padding: 40px 20px; text-align: center; color: white; 
+            font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase; 
+            animation: pulse 4s ease-in-out infinite; width: 100%;
         }
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
     </style>
 </head>
 <body>
 
-    <div id="vanguard-universe"><div class="star-layer"></div></div>
+    <div id="boot-screen"></div>
+    <div id="starfield"><div class="stars"></div></div>
 
-    <main id="app-wrapper">
-        
-        <header>
-            <div style="font-size: 0.7rem; letter-spacing: 3px; margin-bottom: 8px;">IDENTITY CARD</div>
-            <div class="user-name" id="user-name">Guest</div>
-            <div class="id-number" id="user-id">VCS-OFFLINE</div>
-        </header>
+    <div class="settings-container">
+        <h1 class="commander-title">Settings</h1>
 
-        <div class="window">
-            <div id="login-view">
-                <h2>Sign In</h2>
-                <input type="email" id="login-email" class="input-box" placeholder="EMAIL">
-                <input type="password" id="login-pass" class="input-box" placeholder="PASSWORD">
-                <button class="btn" onclick="signIn()">Sign In</button>
-                <span class="link" onclick="toggle()">Need an account?</span>
-            </div>
-
-            <div id="reg-view" style="display: none;">
-                <h2>Register</h2>
-                <input type="text" id="reg-name" class="input-box" placeholder="FULL NAME">
-                <input type="email" id="reg-email" class="input-box" placeholder="EMAIL">
-                <input type="password" id="reg-pass" class="input-box" placeholder="PASSWORD">
-                <button class="btn" onclick="signUp()">Create Profile</button>
-                <span class="link" onclick="toggle()">Already have an account?</span>
-            </div>
+        <main class="settings-card">
             
-            <div id="signed-in-view" style="display: none;">
-                <h2>Welcome</h2>
-                <p style="margin-bottom: 20px;">You are currently signed in.</p>
-                <button class="btn" onclick="signOut()">Sign Out</button>
+            <!-- Login Interface -->
+            <div id="auth-form" class="hidden">
+                <h2>Secure Entry</h2>
+                <input type="email" id="login-email" placeholder="Email Address">
+                <input type="password" id="login-pass" placeholder="Access Code">
+                <button class="btn" onclick="handleLogin()">Login</button>
             </div>
-        </div>
 
-        <div style="margin-bottom: 60px; width: 90%; max-width: 500px;">
-            <a href="hub.html" class="btn" style="border-color: #fff; color: #fff;">Return to Hub</a>
-        </div>
+            <!-- Profile Interface -->
+            <div id="user-profile" class="hidden">
+                <h2>Citizen Data</h2>
+                <div class="user-info">
+                    <div class="user-label">Verified User</div>
+                    <div id="display-id" class="citizen-id">----</div>
+                    <div id="display-email" class="user-email">...</div>
+                </div>
+                <button class="btn" onclick="handleLogout()">Secure Logout</button>
+            </div>
 
-        <footer>Vanguard &copy; <span id="year"></span></footer>
-    </main>
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 30px 0;">
+
+            <h2>Maintenance</h2>
+            <button class="btn btn-danger" onclick="wipeCache()">Wipe Local Cache</button>
+
+        </main>
+
+        <a href="hub.html" class="btn" style="width: auto; padding: 12px 30px;">Return to Hub</a>
+    </div>
+
+    <footer>Powered by Vanguard Citizen Services</footer>
 
     <script>
-        const supabaseUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
-        const supabaseKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
-        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        const sbUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
+        const sbKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
+        const supabaseClient = supabase.createClient(sbUrl, sbKey);
 
-        function toggle() {
-            const l = document.getElementById('login-view'), r = document.getElementById('reg-view');
-            l.style.display = l.style.display === 'none' ? 'block' : 'none';
-            r.style.display = r.style.display === 'none' ? 'block' : 'none';
-        }
-
-        async function signUp() {
-            const name = document.getElementById('reg-name').value;
-            const email = document.getElementById('reg-email').value;
-            const pass = document.getElementById('reg-pass').value;
-
-            const { data, error } = await supabaseClient.auth.signUp({
-                email, password: pass, options: { data: { full_name: name } }
-            });
-
-            if (error) alert(error.message);
-            else if (data.user) {
-                // Attach details to the 'citizens' table
-                const newID = "VCS-" + Math.floor(1000 + Math.random() * 9000);
-                await supabaseClient.from('citizens').insert([{ id: data.user.id, full_name: name, citizen_number: newID }]);
-                alert("Profile created! Check your email to confirm.");
-            }
-        }
-
-        async function signIn() {
-            const email = document.getElementById('login-email').value, pass = document.getElementById('login-pass').value;
-            const { error } = await supabaseClient.auth.signInWithPassword({ email, password: pass });
-            if (error) alert(error.message); else window.location.reload();
-        }
-
-        async function signOut() { await supabaseClient.auth.signOut(); window.location.reload(); }
-
-        async function load() {
+        async function checkSession() {
             const { data: { user } } = await supabaseClient.auth.getUser();
+            
             if (user) {
-                document.getElementById('login-view').style.display = 'none';
-                document.getElementById('signed-in-view').style.display = 'block';
+                document.getElementById('user-profile').classList.remove('hidden');
+                document.getElementById('auth-form').classList.add('hidden');
+                document.getElementById('display-email').innerText = user.email;
+                
+                // Fetch the Citizen Number from the database
+                const { data, error } = await supabaseClient
+                    .from('citizens')
+                    .select('citizen_number')
+                    .eq('auth_id', user.id) // Maps user session to citizen record
+                    .single();
 
-                // Look up the citizen_number in the table using the user's ID
-                const { data: profile } = await supabaseClient
-                    .from('citizens').select('full_name, citizen_number').eq('id', user.id).single();
-
-                if (profile) {
-                    document.getElementById('user-name').innerText = profile.full_name;
-                    document.getElementById('user-id').innerText = profile.citizen_number;
+                if (data && data.citizen_number) {
+                    document.getElementById('display-id').innerText = "#" + data.citizen_number;
+                } else {
+                    document.getElementById('display-id').innerText = "PENDING";
                 }
+            } else {
+                document.getElementById('auth-form').classList.remove('hidden');
+                document.getElementById('user-profile').classList.add('hidden');
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('year').innerText = new Date().getFullYear();
-            load();
-        });
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+
+            const { error } = await supabaseClient.auth.signInWithPassword({ email, password: pass });
+            
+            if (error) {
+                alert("Login Failed: " + error.message);
+            } else {
+                checkSession();
+            }
+        }
+
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            checkSession();
+        }
+
+        function wipeCache() {
+            if (confirm("This will clear all local browser data for this site. Proceed?")) {
+                localStorage.clear();
+                sessionStorage.clear();
+                alert("Cache wiped.");
+                location.reload();
+            }
+        }
+
+        window.onload = checkSession;
     </script>
 </body>
 </html>
