@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dreamscape Drift | Commander Q</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Animated Background -->
+    <div id="starfield"><div class="stars"></div></div>
+
+    <header>
+        <h1 class="title">Dreamscape Drift</h1>
+        <p class="subtitle">PHASE INTO THE SIGNAL</p>
+    </header>
+
+    <!-- The Viewing Deck -->
+    <main class="video-deck" id="mainDeck">
+        <div class="scanlines"></div>
+        <div class="placeholder-content" id="placeholder">
+            <h2>AWAITING SIGNAL...</h2>
+            <p>SELECT A DATA CORE BELOW</p>
+        </div>
+        <iframe id="videoPlayer" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </main>
+
+    <!-- The Tape Grid (Populated by JS) -->
+    <div class="tape-grid" id="tapeGrid"></div>
+
+    <div class="nav-footer">
+        <a href="../hub.html" class="btn-hub">RETURN TO HUB</a>
+    </div>
+
+    <footer>VANGUARD MEDIA TRANSMISSION</footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
