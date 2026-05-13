@@ -12,7 +12,7 @@
             --border: rgba(255, 255, 255, 0.1);
         }
 
-        /* BASE */
+        /* BASE STYLES */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background: #0f0c29;
@@ -34,7 +34,7 @@
         }
         @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
 
-        /* MENU DECK */
+        /* MENU INTERFACE */
         .menu-deck {
             width: 90%;
             max-width: 400px;
@@ -46,9 +46,7 @@
             text-align: center;
             z-index: 10;
         }
-
         .menu-deck h1 { font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 30px; color: #8ecae6; }
-
         .station-list { display: flex; flex-direction: column; gap: 15px; }
 
         .station-btn {
@@ -63,7 +61,6 @@
             cursor: pointer;
             transition: 0.3s ease;
         }
-
         .station-btn:hover {
             background: rgba(142, 202, 230, 0.15);
             border-color: #8ecae6;
@@ -71,58 +68,54 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
-        /* MODAL OVERLAY */
+        /* MODAL WINDOW */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(15px);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 100;
-            opacity: 0;
-            transition: opacity 0.4s ease;
         }
-
-        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-overlay.active { display: flex; }
 
         .modal-content {
-            width: 90%;
-            max-width: 600px;
-            background: var(--glass);
+            width: 95%;
+            max-width: 640px;
+            background: #000;
             border: 2px solid var(--glow-color);
-            border-radius: 25px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 15px;
             position: relative;
-            box-shadow: 0 0 50px var(--glow-color);
+            box-shadow: 0 0 40px var(--glow-color);
         }
 
         .video-container {
             width: 100%;
             aspect-ratio: 16 / 9;
             background: #000;
-            border-radius: 15px;
+            border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 20px;
         }
         iframe { width: 100%; height: 100%; border: none; }
 
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 10px; }
-        .modal-header h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; color: var(--glow-color); }
+        /* MODAL HEADER */
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 0 5px; }
+        .modal-header h2 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; color: var(--glow-color); }
         
         .close-btn {
-            background: none;
-            border: 1px solid var(--glow-color);
-            color: var(--glow-color);
-            padding: 5px 15px;
+            background: var(--glow-color);
+            border: none;
+            color: #0f0c29;
+            padding: 6px 18px;
             border-radius: 20px;
             cursor: pointer;
             font-size: 0.7rem;
+            font-weight: bold;
             text-transform: uppercase;
-            transition: 0.3s;
         }
-        .close-btn:hover { background: var(--glow-color); color: #0f0c29; }
 
         .return-link { display: inline-block; margin-top: 30px; font-size: 0.7rem; opacity: 0.4; color: white; text-decoration: none; }
     </style>
@@ -131,19 +124,17 @@
 
     <div id="starfield"><div class="stars"></div></div>
 
-    <!-- MAIN MENU -->
     <div class="menu-deck">
         <h1>Select Frequency</h1>
         <div class="station-list" id="station-list"></div>
         <a href="../hub.html" class="return-link">RETURN TO HUB</a>
     </div>
 
-    <!-- MODAL WINDOW -->
     <div class="modal-overlay" id="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modal-title">Frequency Locked</h2>
-                <button class="close-btn" onclick="closeModal()">Close Uplink</button>
+                <h2 id="modal-title">Uplink Active</h2>
+                <button class="close-btn" onclick="closeModal()">Terminate Signal</button>
             </div>
             <div class="video-container">
                 <div id="yt-player"></div>
@@ -152,13 +143,13 @@
     </div>
 
     <script>
-        /* PLAYLIST DATA */
+        /* CATEGORY: DATA */
         const STATIONS = [
             { name: "Da Rave House", id: "PLwX0pb3GErekxR63LzwnP82HdlLcSowCi", color: "#8ecae6" },
             { name: "Freevibes FM", id: "PLwX0pb3GErelUOQaMntIwjrO1o8Y79qjw", color: "#e0c3fc" }
         ];
 
-        /* INIT */
+        /* CATEGORY: INITIALIZATION */
         let player;
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
@@ -168,7 +159,12 @@
             player = new YT.Player('yt-player', {
                 height: '100%',
                 width: '100%',
-                playerVars: { 'listType': 'playlist', 'modestbranding': 1, 'autoplay': 1 }
+                playerVars: { 
+                    'listType': 'playlist', 
+                    'modestbranding': 1, 
+                    'autoplay': 1,
+                    'rel': 0 
+                }
             });
             renderMenu();
         }
@@ -184,19 +180,16 @@
             });
         }
 
-        /* MODAL LOGIC */
+        /* CATEGORY: MODAL CONTROL */
         function openUplink(index) {
             const s = STATIONS[index];
             const modal = document.getElementById('modal');
             
-            // Set visuals
             document.documentElement.style.setProperty('--glow-color', s.color);
-            document.getElementById('modal-title').innerText = "Signal: " + s.name;
+            document.getElementById('modal-title').innerText = s.name + " // Online";
 
-            // Show Modal
             modal.classList.add('active');
 
-            // Load Playlist
             player.loadPlaylist({
                 list: s.id,
                 listType: 'playlist',
@@ -207,11 +200,14 @@
         function closeModal() {
             const modal = document.getElementById('modal');
             modal.classList.remove('active');
-            // Pause music when closing the window
-            if (player) player.pauseVideo();
+            
+            // KILL SWITCH: Stop and clear the stream
+            if (player && typeof player.stopVideo === 'function') {
+                player.stopVideo();
+            }
         }
 
-        // Close on clicking outside the box
+        // Click background to close
         window.onclick = (e) => {
             const modal = document.getElementById('modal');
             if (e.target == modal) closeModal();
