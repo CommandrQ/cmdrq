@@ -147,7 +147,8 @@
 
     <header>
         <h1 class="commander-title">Journal</h1>
-        <a href="hub.html" class="btn back-btn">Return to Hub</a>
+        <!-- Updated to ../hub.html so it points back out to the root directory -->
+        <a href="../hub.html" class="btn back-btn">Return to Hub</a>
     </header>
 
     <main id="journal-grid"></main>
@@ -193,7 +194,7 @@
         let ENTRIES = [];
         let activePostId = null;
 
-        // Fetch entries from the external JSON file
+        // Fetch entries from the external JSON file in the same folder
         async function fetchEntries() {
             try {
                 const response = await fetch('entries.json');
