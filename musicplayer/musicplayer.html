@@ -81,9 +81,12 @@
             50% { transform: scale(1.4); opacity: 0.6; }
         }
 
-        .track-display { z-index: 2; }
-        .track-display h2 { font-size: 1.2rem; font-weight: bold; margin-bottom: 8px; }
-        .track-display p { font-size: 0.85rem; color: var(--glow-color); opacity: 0.8; }
+        .track-display { z-index: 2; width: 100%; padding: 0 10px; }
+        .track-display h2 { 
+            font-size: 1.1rem; font-weight: bold; margin-bottom: 8px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+        }
+        .track-display p { font-size: 0.8rem; color: var(--glow-color); opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
 
         /* --- Controls --- */
         .controls { display: flex; justify-content: center; align-items: center; gap: 25px; margin-bottom: 35px; }
@@ -107,7 +110,6 @@
             max-height: 150px; overflow-y: auto; padding-right: 5px;
         }
         
-        /* Custom Scrollbar */
         .playlist-grid::-webkit-scrollbar { width: 4px; }
         .playlist-grid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 
@@ -138,8 +140,8 @@
         <div class="visualizer-area">
             <div class="core" id="glow-core"></div>
             <div class="track-display">
-                <h2 id="display-name">No Signal</h2>
-                <p id="display-sub">Awaiting Transmission</p>
+                <h2 id="display-name">Awaiting Signal</h2>
+                <p id="display-sub">Station Offline</p>
             </div>
         </div>
 
@@ -154,37 +156,31 @@
         <a href="../hub.html" class="return-link">RETURN TO COMMAND CENTER</a>
     </div>
 
-    <!-- Hidden YT Frame -->
     <div id="yt-api-frame" style="position: absolute; top: -9999px;"></div>
 
     <script>
-        /**
-         * 1. CONFIGURATION AREA
-         * Simply add your playlist name, URL, and the glow color you want.
-         */
+        // --- RENAMED TRANSMISSIONS ---
         const PLAYLISTS = [
             {
-                name: "Transmission 01",
+                name: "Da Rave House",
                 url: "https://youtube.com/playlist?list=PLwX0pb3GErekxR63LzwnP82HdlLcSowCi&si=v4E5IySA0KgpsYg1",
                 color: "#8ecae6"
             },
             {
-                name: "Transmission 02",
+                name: "Freevibes FM",
                 url: "https://youtube.com/playlist?list=PLwX0pb3GErelUOQaMntIwjrO1o8Y79qjw&si=-vcAkAOZ91-buqDb",
                 color: "#e0c3fc"
             }
-            // Add more here: { name: "Name", url: "Link", color: "HEX" }
         ];
 
         let player;
+        let activeStationName = "";
 
-        // Load YouTube API
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         const firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-        // Render the buttons
         function initGrid() {
             const grid = document.getElementById('grid');
             PLAYLISTS.forEach((pl, i) => {
@@ -196,51 +192,74 @@
             });
         }
 
-        // YouTube Player Setup
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('yt-api-frame', {
                 height: '0', width: '0',
-                playerVars: { 'listType': 'playlist', 'modestbranding': 1 },
+                playerVars: { 
+                    'listType': 'playlist', 
+                    'modestbranding': 1,
+                    'autoplay': 0
+                },
                 events: {
                     'onReady': () => { console.log("Uplink Active"); },
-                    'onStateChange': (e) => {
-                        const btn = document.getElementById('playBtn');
-                        if (e.data === 1) btn.innerText = "PAUSE";
-                        else btn.innerText = "PLAY";
-                    }
+                    'onStateChange': onPlayerStateChange
                 }
             });
         }
 
+        // Logic to update UI when song changes
+        function onPlayerStateChange(event) {
+            const btn = document.getElementById('playBtn');
+            const sub = document.getElementById('display-sub');
+            const nameDisplay = document.getElementById('display-name');
+
+            if (event.data === YT.PlayerState.PLAYING) {
+                btn.innerText = "PAUSE";
+                document.getElementById('status').innerText = "Streaming";
+                
+                // Fetch song title from the player
+                const videoData = player.getVideoData();
+                if (videoData && videoData.title) {
+                    nameDisplay.innerText = videoData.title;
+                    sub.innerText = activeStationName; // Shows station name as the sub-text
+                }
+            } 
+            else if (event.data === YT.PlayerState.PAUSED) {
+                btn.innerText = "PLAY";
+                document.getElementById('status').innerText = "Paused";
+            }
+        }
+
         function tuneIn(index) {
             const data = PLAYLISTS[index];
+            activeStationName = data.name;
             
-            // Smarter Regex to extract Playlist ID from links
             const match = data.url.match(/[&?]list=([^&]+)/);
             const listId = match ? match[1] : null;
 
             if (listId && player) {
-                // Update CSS Glow
                 document.documentElement.style.setProperty('--glow-color', data.color);
-                document.getElementById('display-name').innerText = data.name;
-                document.getElementById('display-sub').innerText = "Streaming Frequency";
-                document.getElementById('status').innerText = "Locked";
+                document.getElementById('status').innerText = "Connecting...";
 
-                // Load Playlist
+                // Load and automatically start playing to prevent the double-click issue
                 player.loadPlaylist({
                     list: listId,
                     listType: 'playlist',
-                    index: 0
+                    index: 0,
+                    suggestedQuality: 'small'
                 });
-            } else {
-                alert("Signal Error: Invalid Playlist Link.");
+                
+                // Adding a slight delay and force play to bypass "cued" state
+                setTimeout(() => {
+                    player.playVideo();
+                }, 500);
             }
         }
 
         function toggle() {
             if (!player) return;
             const state = player.getPlayerState();
-            if (state === 1) player.pauseVideo();
+            if (state === YT.PlayerState.PLAYING) player.pauseVideo();
             else player.playVideo();
         }
 
