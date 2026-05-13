@@ -8,11 +8,11 @@
         /* CONFIGURATION */
         :root {
             --glow-color: #8ecae6;
-            --glass: rgba(15, 15, 25, 0.85);
-            --border: rgba(255, 255, 255, 0.15);
+            --glass: rgba(15, 15, 25, 0.9);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
-        /* RESET & BASE */
+        /* BASE */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background: #0f0c29;
@@ -34,137 +34,131 @@
         }
         @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
 
-        /* PLAYER LAYOUT */
-        .player-deck {
-            width: 95%;
-            max-width: 500px;
+        /* MENU DECK */
+        .menu-deck {
+            width: 90%;
+            max-width: 400px;
             background: var(--glass);
-            backdrop-filter: blur(25px);
+            backdrop-filter: blur(20px);
             border: 1px solid var(--border);
             border-radius: 30px;
-            padding: 30px;
+            padding: 40px;
             text-align: center;
-            box-shadow: 0 0 40px rgba(0,0,0,0.5);
             z-index: 10;
         }
 
-        .title-area { margin-bottom: 20px; }
-        .title-area h1 { font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; color: var(--glow-color); transition: 0.5s; }
-        .status-text { font-size: 0.7rem; opacity: 0.5; letter-spacing: 2px; margin-top: 5px; }
+        .menu-deck h1 { font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 30px; color: #8ecae6; }
 
-        /* NATIVE PLAYER & PULSE EFFECT */
-        .video-container {
+        .station-list { display: flex; flex-direction: column; gap: 15px; }
+
+        .station-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .station-btn:hover {
+            background: rgba(142, 202, 230, 0.15);
+            border-color: #8ecae6;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* MODAL OVERLAY */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-overlay.active { display: flex; opacity: 1; }
+
+        .modal-content {
+            width: 90%;
+            max-width: 600px;
+            background: var(--glass);
+            border: 2px solid var(--glow-color);
+            border-radius: 25px;
+            padding: 20px;
             position: relative;
+            box-shadow: 0 0 50px var(--glow-color);
+        }
+
+        .video-container {
             width: 100%;
             aspect-ratio: 16 / 9;
             background: #000;
             border-radius: 15px;
             overflow: hidden;
-            border: 2px solid var(--border);
-            transition: 0.5s;
             margin-bottom: 20px;
         }
+        iframe { width: 100%; height: 100%; border: none; }
 
-        .video-container.pulse {
-            border-color: var(--glow-color);
-            box-shadow: 0 0 30px var(--glow-color);
-            animation: terminalPulse 1.5s infinite;
-        }
-
-        @keyframes terminalPulse {
-            0% { transform: scale(1); box-shadow: 0 0 10px var(--glow-color); }
-            50% { transform: scale(1.02); box-shadow: 0 0 30px var(--glow-color); }
-            100% { transform: scale(1); box-shadow: 0 0 10px var(--glow-color); }
-        }
-
-        iframe { width: 100%; height: 100%; border: none; pointer-events: auto; }
-
-        /* UPLINK OVERLAY */
-        .sync-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 5;
-            pointer-events: none;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: bold;
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 10px; }
+        .modal-header h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; color: var(--glow-color); }
+        
+        .close-btn {
+            background: none;
+            border: 1px solid var(--glow-color);
             color: var(--glow-color);
-            font-size: 0.9rem;
-        }
-
-        .video-container.pulse .sync-overlay { display: flex; }
-
-        /* STATION GRID */
-        .playlist-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 12px; 
-            margin-bottom: 20px;
-        }
-        .pl-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 0.75rem;
+            padding: 5px 15px;
+            border-radius: 20px;
             cursor: pointer;
-            transition: 0.3s;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            transition: 0.3s;
         }
-        .pl-card:hover { 
-            background: rgba(255,255,255,0.1); 
-            border-color: var(--glow-color); 
-            color: var(--glow-color);
-        }
+        .close-btn:hover { background: var(--glow-color); color: #0f0c29; }
 
-        .return-link { 
-            display: inline-block; margin-top: 10px; font-size: 0.7rem; color: white; 
-            text-decoration: none; opacity: 0.4; transition: 0.3s;
-        }
+        .return-link { display: inline-block; margin-top: 30px; font-size: 0.7rem; opacity: 0.4; color: white; text-decoration: none; }
     </style>
 </head>
 <body>
 
     <div id="starfield"><div class="stars"></div></div>
 
-    <div class="player-deck">
-        <header class="title-area">
-            <h1>Audio Uplink</h1>
-            <p class="status-text" id="status">Select Transmission</p>
-        </header>
+    <!-- MAIN MENU -->
+    <div class="menu-deck">
+        <h1>Select Frequency</h1>
+        <div class="station-list" id="station-list"></div>
+        <a href="../hub.html" class="return-link">RETURN TO HUB</a>
+    </div>
 
-        <div class="video-container" id="player-box">
-            <div class="sync-overlay">Tap to Sync Audio</div>
-            <div id="yt-player"></div>
+    <!-- MODAL WINDOW -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Frequency Locked</h2>
+                <button class="close-btn" onclick="closeModal()">Close Uplink</button>
+            </div>
+            <div class="video-container">
+                <div id="yt-player"></div>
+            </div>
         </div>
-
-        <div class="playlist-grid" id="grid"></div>
-
-        <a href="../hub.html" class="return-link">RETURN TO COMMAND CENTER</a>
     </div>
 
     <script>
         /* PLAYLIST DATA */
         const STATIONS = [
-            {
-                name: "Da Rave House",
-                id: "PLwX0pb3GErekxR63LzwnP82HdlLcSowCi",
-                color: "#8ecae6"
-            },
-            {
-                name: "Freevibes FM",
-                id: "PLwX0pb3GErelUOQaMntIwjrO1o8Y79qjw",
-                color: "#e0c3fc"
-            }
+            { name: "Da Rave House", id: "PLwX0pb3GErekxR63LzwnP82HdlLcSowCi", color: "#8ecae6" },
+            { name: "Freevibes FM", id: "PLwX0pb3GErelUOQaMntIwjrO1o8Y79qjw", color: "#e0c3fc" }
         ];
 
-        /* PLAYER INITIALIZATION */
+        /* INIT */
         let player;
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
@@ -174,55 +168,53 @@
             player = new YT.Player('yt-player', {
                 height: '100%',
                 width: '100%',
-                playerVars: {
-                    'listType': 'playlist',
-                    'modestbranding': 1,
-                    'autoplay': 1
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
+                playerVars: { 'listType': 'playlist', 'modestbranding': 1, 'autoplay': 1 }
             });
+            renderMenu();
         }
 
-        function onPlayerReady() {
-            const grid = document.getElementById('grid');
+        function renderMenu() {
+            const list = document.getElementById('station-list');
             STATIONS.forEach((s, i) => {
-                const card = document.createElement('div');
-                card.className = 'pl-card';
-                card.innerText = s.name;
-                card.onclick = () => tuneIn(i);
-                grid.appendChild(card);
+                const btn = document.createElement('button');
+                btn.className = 'station-btn';
+                btn.innerText = s.name;
+                btn.onclick = () => openUplink(i);
+                list.appendChild(btn);
             });
         }
 
-        /* STATE HANDLING */
-        function onPlayerStateChange(event) {
-            const box = document.getElementById('player-box');
-            // Remove pulse and overlay once the music starts playing
-            if (event.data === YT.PlayerState.PLAYING) {
-                box.classList.remove('pulse');
-                document.getElementById('status').innerText = "Frequency Locked";
-            }
-        }
-
-        /* STATION SWITCHING */
-        function tuneIn(index) {
-            const station = STATIONS[index];
-            const box = document.getElementById('player-box');
+        /* MODAL LOGIC */
+        function openUplink(index) {
+            const s = STATIONS[index];
+            const modal = document.getElementById('modal');
             
-            document.documentElement.style.setProperty('--glow-color', station.color);
-            document.getElementById('status').innerText = "Syncing: " + station.name;
+            // Set visuals
+            document.documentElement.style.setProperty('--glow-color', s.color);
+            document.getElementById('modal-title').innerText = "Signal: " + s.name;
 
-            // Trigger the Pulse UI
-            box.classList.add('pulse');
+            // Show Modal
+            modal.classList.add('active');
 
+            // Load Playlist
             player.loadPlaylist({
-                list: station.id,
+                list: s.id,
                 listType: 'playlist',
                 index: 0
             });
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+            // Pause music when closing the window
+            if (player) player.pauseVideo();
+        }
+
+        // Close on clicking outside the box
+        window.onclick = (e) => {
+            const modal = document.getElementById('modal');
+            if (e.target == modal) closeModal();
         }
     </script>
 </body>
