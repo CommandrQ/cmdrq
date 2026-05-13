@@ -9,10 +9,10 @@
         :root {
             --glow-color: #8ecae6;
             --glass: rgba(15, 15, 25, 0.85);
-            --border: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.15);
         }
 
-        /* GLOBAL RESET */
+        /* RESET & BASE */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background: #0f0c29;
@@ -34,89 +34,69 @@
         }
         @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
 
-        /* PLAYER LAYOUT */
+        /* PLAYER CONTAINER */
         .player-deck {
-            width: 90%;
-            max-width: 420px;
+            width: 95%;
+            max-width: 500px;
             background: var(--glass);
             backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--border);
-            border-radius: 40px;
-            padding: 40px 30px;
+            border-radius: 30px;
+            padding: 30px;
             text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
             z-index: 10;
         }
 
-        .title-area h1 { 
-            font-size: 1.4rem; letter-spacing: 4px; text-transform: uppercase; 
-            color: var(--glow-color); transition: 0.5s; margin-bottom: 5px;
-        }
-        .status-text { font-size: 0.7rem; opacity: 0.5; letter-spacing: 2px; text-transform: uppercase; }
+        .title-area { margin-bottom: 25px; }
+        .title-area h1 { font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; color: var(--glow-color); transition: 0.5s; }
+        .status-text { font-size: 0.7rem; opacity: 0.5; letter-spacing: 2px; }
 
-        /* AUDIO VISUALIZER */
-        .visualizer-area {
-            position: relative;
-            height: 180px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 25px 0;
+        /* NATIVE PLAYER BOX */
+        .video-container {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--glow-color);
+            box-shadow: 0 0 20px -5px var(--glow-color);
+            transition: 0.5s;
+            margin-bottom: 25px;
         }
-        .core {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background: var(--glow-color);
-            border-radius: 50%;
-            filter: blur(35px);
-            opacity: 0.4;
-            animation: pulse 4s infinite ease-in-out;
-            transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.4); opacity: 0.6; }
-        }
-        .track-display { z-index: 2; width: 100%; padding: 0 10px; }
-        .track-display h2 { 
-            font-size: 1.1rem; font-weight: bold; margin-bottom: 8px;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
-        }
-        .track-display p { font-size: 0.8rem; color: var(--glow-color); opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
+        iframe { width: 100%; height: 100%; border: none; }
 
-        /* PLAYBACK CONTROLS */
-        .controls { display: flex; justify-content: center; align-items: center; gap: 25px; margin-bottom: 20px; }
-        .btn-side { 
-            background: none; border: 1px solid var(--border); color: white; 
-            width: 45px; height: 45px; border-radius: 50%; cursor: pointer; transition: 0.3s;
-        }
-        .btn-side:hover { border-color: var(--glow-color); color: var(--glow-color); }
-        .btn-main {
-            background: var(--glow-color); border: none; color: #0f0c29;
-            padding: 15px 45px; border-radius: 50px; font-weight: bold; font-size: 0.9rem;
-            cursor: pointer; box-shadow: 0 0 20px rgba(142, 202, 230, 0.4); transition: 0.3s;
-        }
-
-        /* INSTRUCTION LABEL */
-        .sync-note { font-size: 0.6rem; opacity: 0.4; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* STATION SELECTION */
+        /* STATION GRID */
         .playlist-grid { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; 
-            max-height: 150px; overflow-y: auto; padding-right: 5px;
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+            margin-bottom: 20px;
         }
         .pl-card {
-            background: rgba(255,255,255,0.03); border: 1px solid var(--border);
-            padding: 12px; border-radius: 15px; font-size: 0.75rem; cursor: pointer;
-            transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .pl-card:hover { background: rgba(255,255,255,0.1); border-color: var(--glow-color); }
+        .pl-card:hover { 
+            background: rgba(255,255,255,0.1); 
+            border-color: var(--glow-color); 
+            color: var(--glow-color);
+            transform: translateY(-2px);
+        }
+
         .return-link { 
-            display: inline-block; margin-top: 30px; font-size: 0.7rem; color: white; 
+            display: inline-block; margin-top: 10px; font-size: 0.7rem; color: white; 
             text-decoration: none; opacity: 0.4; transition: 0.3s;
         }
+        .return-link:hover { opacity: 1; color: var(--glow-color); }
     </style>
 </head>
 <body>
@@ -126,125 +106,83 @@
     <div class="player-deck">
         <header class="title-area">
             <h1>Audio Uplink</h1>
-            <p class="status-text" id="status">System Ready</p>
+            <p class="status-text" id="status">Select Frequency</p>
         </header>
 
-        <section class="visualizer-area">
-            <div class="core" id="glow-core"></div>
-            <div class="track-display">
-                <h2 id="display-name">Awaiting Signal</h2>
-                <p id="display-sub">Station Offline</p>
-            </div>
-        </section>
-
-        <nav class="controls">
-            <button class="btn-side" onclick="prev()">«</button>
-            <button class="btn-main" id="playBtn" onclick="toggle()">PLAY</button>
-            <button class="btn-side" onclick="next()">»</button>
-        </nav>
-
-        <div class="sync-note">Note: If audio fails to sync, click PLAY</div>
+        <!-- THE NATIVE PLAYER -->
+        <div class="video-container" id="player-box">
+            <div id="yt-player"></div>
+        </div>
 
         <div class="playlist-grid" id="grid"></div>
 
         <a href="../hub.html" class="return-link">RETURN TO COMMAND CENTER</a>
     </div>
 
-    <div id="yt-api-frame" style="position: absolute; top: -9999px;"></div>
-
     <script>
         /* PLAYLIST DATA */
-        const PLAYLISTS = [
+        const STATIONS = [
             {
                 name: "Da Rave House",
-                url: "https://youtube.com/playlist?list=PLwX0pb3GErekxR63LzwnP82HdlLcSowCi",
+                id: "PLwX0pb3GErekxR63LzwnP82HdlLcSowCi",
                 color: "#8ecae6"
             },
             {
                 name: "Freevibes FM",
-                url: "https://youtube.com/playlist?list=PLwX0pb3GErelUOQaMntIwjrO1o8Y79qjw",
+                id: "PLwX0pb3GErelUOQaMntIwjrO1o8Y79qjw",
                 color: "#e0c3fc"
             }
         ];
 
         /* PLAYER INITIALIZATION */
         let player;
-        let activeStationName = "";
-
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        function initGrid() {
-            const grid = document.getElementById('grid');
-            PLAYLISTS.forEach((pl, i) => {
-                const item = document.createElement('div');
-                item.className = 'pl-card';
-                item.innerText = pl.name;
-                item.onclick = () => tuneIn(i);
-                grid.appendChild(item);
-            });
-        }
+        document.body.appendChild(tag);
 
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('yt-api-frame', {
-                height: '0', width: '0',
-                playerVars: { 'listType': 'playlist', 'modestbranding': 1 },
+            player = new YT.Player('yt-player', {
+                height: '100%',
+                width: '100%',
+                playerVars: {
+                    'listType': 'playlist',
+                    'modestbranding': 1,
+                    'rel': 0,
+                    'showinfo': 0
+                },
                 events: {
-                    'onStateChange': onPlayerStateChange
+                    'onReady': onPlayerReady
                 }
             });
         }
 
-        /* STATE HANDLING */
-        function onPlayerStateChange(event) {
-            const btn = document.getElementById('playBtn');
-            const sub = document.getElementById('display-sub');
-            const nameDisplay = document.getElementById('display-name');
-
-            if (event.data === 1) {
-                btn.innerText = "PAUSE";
-                document.getElementById('status').innerText = "Streaming";
-                const videoData = player.getVideoData();
-                if (videoData) {
-                    nameDisplay.innerText = videoData.title;
-                    sub.innerText = activeStationName;
-                }
-            } else {
-                btn.innerText = "PLAY";
-                document.getElementById('status').innerText = (event.data === 2) ? "Paused" : "Ready";
-            }
+        function onPlayerReady() {
+            const grid = document.getElementById('grid');
+            STATIONS.forEach((s, i) => {
+                const card = document.createElement('div');
+                card.className = 'pl-card';
+                card.innerText = s.name;
+                card.onclick = () => tuneIn(i);
+                grid.appendChild(card);
+            });
         }
 
-        /* AUDIO FUNCTIONS */
+        /* STATION SWITCHING */
         function tuneIn(index) {
-            const data = PLAYLISTS[index];
-            activeStationName = data.name;
-            const match = data.url.match(/[&?]list=([^&]+)/);
-            const listId = match ? match[1] : null;
+            const station = STATIONS[index];
+            
+            // Update Visuals
+            document.documentElement.style.setProperty('--glow-color', station.color);
+            document.getElementById('status').innerText = "Frequency: " + station.name;
 
-            if (listId && player) {
-                document.documentElement.style.setProperty('--glow-color', data.color);
-                document.getElementById('status').innerText = "Syncing...";
-                player.loadPlaylist({
-                    list: listId,
-                    listType: 'playlist',
-                    index: 0
-                });
-            }
+            // Load Playlist
+            player.loadPlaylist({
+                list: station.id,
+                listType: 'playlist',
+                index: 0,
+                suggestedQuality: 'medium'
+            });
         }
-
-        function toggle() {
-            if (!player) return;
-            const state = player.getPlayerState();
-            state === 1 ? player.pauseVideo() : player.playVideo();
-        }
-
-        function next() { if(player) player.nextVideo(); }
-        function prev() { if(player) player.previousVideo(); }
-
-        window.onload = initGrid;
     </script>
 </body>
 </html>
