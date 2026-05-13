@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vanguard Audio Uplink</title>
     <style>
-        /* CSS VARIABLES */
+        /* CONFIGURATION */
         :root {
             --glow-color: #8ecae6;
             --glass: rgba(15, 15, 25, 0.85);
@@ -25,7 +25,7 @@
             overflow: hidden;
         }
 
-        /* BACKGROUND EFFECTS */
+        /* BACKGROUND */
         #starfield { position: fixed; inset: 0; z-index: -1; }
         .stars { 
             position: absolute; width: 2px; height: 2px; background: white; 
@@ -34,7 +34,7 @@
         }
         @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
 
-        /* PLAYER CONTAINER */
+        /* PLAYER LAYOUT */
         .player-deck {
             width: 95%;
             max-width: 500px;
@@ -48,23 +48,56 @@
             z-index: 10;
         }
 
-        .title-area { margin-bottom: 25px; }
+        .title-area { margin-bottom: 20px; }
         .title-area h1 { font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; color: var(--glow-color); transition: 0.5s; }
-        .status-text { font-size: 0.7rem; opacity: 0.5; letter-spacing: 2px; }
+        .status-text { font-size: 0.7rem; opacity: 0.5; letter-spacing: 2px; margin-top: 5px; }
 
-        /* NATIVE PLAYER BOX */
+        /* NATIVE PLAYER & PULSE EFFECT */
         .video-container {
+            position: relative;
             width: 100%;
             aspect-ratio: 16 / 9;
             background: #000;
             border-radius: 15px;
             overflow: hidden;
-            border: 1px solid var(--glow-color);
-            box-shadow: 0 0 20px -5px var(--glow-color);
+            border: 2px solid var(--border);
             transition: 0.5s;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
-        iframe { width: 100%; height: 100%; border: none; }
+
+        .video-container.pulse {
+            border-color: var(--glow-color);
+            box-shadow: 0 0 30px var(--glow-color);
+            animation: terminalPulse 1.5s infinite;
+        }
+
+        @keyframes terminalPulse {
+            0% { transform: scale(1); box-shadow: 0 0 10px var(--glow-color); }
+            50% { transform: scale(1.02); box-shadow: 0 0 30px var(--glow-color); }
+            100% { transform: scale(1); box-shadow: 0 0 10px var(--glow-color); }
+        }
+
+        iframe { width: 100%; height: 100%; border: none; pointer-events: auto; }
+
+        /* UPLINK OVERLAY */
+        .sync-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+            pointer-events: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            color: var(--glow-color);
+            font-size: 0.9rem;
+        }
+
+        .video-container.pulse .sync-overlay { display: flex; }
 
         /* STATION GRID */
         .playlist-grid { 
@@ -79,7 +112,6 @@
             padding: 15px;
             border-radius: 12px;
             font-size: 0.75rem;
-            font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
             text-transform: uppercase;
@@ -89,14 +121,12 @@
             background: rgba(255,255,255,0.1); 
             border-color: var(--glow-color); 
             color: var(--glow-color);
-            transform: translateY(-2px);
         }
 
         .return-link { 
             display: inline-block; margin-top: 10px; font-size: 0.7rem; color: white; 
             text-decoration: none; opacity: 0.4; transition: 0.3s;
         }
-        .return-link:hover { opacity: 1; color: var(--glow-color); }
     </style>
 </head>
 <body>
@@ -106,11 +136,11 @@
     <div class="player-deck">
         <header class="title-area">
             <h1>Audio Uplink</h1>
-            <p class="status-text" id="status">Select Frequency</p>
+            <p class="status-text" id="status">Select Transmission</p>
         </header>
 
-        <!-- THE NATIVE PLAYER -->
         <div class="video-container" id="player-box">
+            <div class="sync-overlay">Tap to Sync Audio</div>
             <div id="yt-player"></div>
         </div>
 
@@ -147,11 +177,11 @@
                 playerVars: {
                     'listType': 'playlist',
                     'modestbranding': 1,
-                    'rel': 0,
-                    'showinfo': 0
+                    'autoplay': 1
                 },
                 events: {
-                    'onReady': onPlayerReady
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
                 }
             });
         }
@@ -167,20 +197,31 @@
             });
         }
 
+        /* STATE HANDLING */
+        function onPlayerStateChange(event) {
+            const box = document.getElementById('player-box');
+            // Remove pulse and overlay once the music starts playing
+            if (event.data === YT.PlayerState.PLAYING) {
+                box.classList.remove('pulse');
+                document.getElementById('status').innerText = "Frequency Locked";
+            }
+        }
+
         /* STATION SWITCHING */
         function tuneIn(index) {
             const station = STATIONS[index];
+            const box = document.getElementById('player-box');
             
-            // Update Visuals
             document.documentElement.style.setProperty('--glow-color', station.color);
-            document.getElementById('status').innerText = "Frequency: " + station.name;
+            document.getElementById('status').innerText = "Syncing: " + station.name;
 
-            // Load Playlist
+            // Trigger the Pulse UI
+            box.classList.add('pulse');
+
             player.loadPlaylist({
                 list: station.id,
                 listType: 'playlist',
-                index: 0,
-                suggestedQuality: 'medium'
+                index: 0
             });
         }
     </script>
