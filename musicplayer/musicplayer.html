@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vanguard Audio Uplink</title>
     <style>
-        /* CONFIGURATION */
+        /* CSS VARIABLES */
         :root {
             --glow-color: #8ecae6;
             --glass: rgba(15, 15, 25, 0.85);
             --border: rgba(255, 255, 255, 0.1);
         }
 
-        /* RESET & BASE */
+        /* GLOBAL RESET */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background: #0f0c29;
@@ -25,7 +25,7 @@
             overflow: hidden;
         }
 
-        /* BACKGROUND */
+        /* BACKGROUND EFFECTS */
         #starfield { position: fixed; inset: 0; z-index: -1; }
         .stars { 
             position: absolute; width: 2px; height: 2px; background: white; 
@@ -34,7 +34,7 @@
         }
         @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
 
-        /* PLAYER DECK */
+        /* PLAYER LAYOUT */
         .player-deck {
             width: 90%;
             max-width: 420px;
@@ -55,7 +55,7 @@
         }
         .status-text { font-size: 0.7rem; opacity: 0.5; letter-spacing: 2px; text-transform: uppercase; }
 
-        /* VISUALIZER */
+        /* AUDIO VISUALIZER */
         .visualizer-area {
             position: relative;
             height: 180px;
@@ -86,8 +86,8 @@
         }
         .track-display p { font-size: 0.8rem; color: var(--glow-color); opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* CONTROLS */
-        .controls { display: flex; justify-content: center; align-items: center; gap: 25px; margin-bottom: 35px; }
+        /* PLAYBACK CONTROLS */
+        .controls { display: flex; justify-content: center; align-items: center; gap: 25px; margin-bottom: 20px; }
         .btn-side { 
             background: none; border: 1px solid var(--border); color: white; 
             width: 45px; height: 45px; border-radius: 50%; cursor: pointer; transition: 0.3s;
@@ -99,7 +99,10 @@
             cursor: pointer; box-shadow: 0 0 20px rgba(142, 202, 230, 0.4); transition: 0.3s;
         }
 
-        /* GRID */
+        /* INSTRUCTION LABEL */
+        .sync-note { font-size: 0.6rem; opacity: 0.4; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* STATION SELECTION */
         .playlist-grid { 
             display: grid; grid-template-columns: 1fr 1fr; gap: 12px; 
             max-height: 150px; overflow-y: auto; padding-right: 5px;
@@ -140,6 +143,8 @@
             <button class="btn-side" onclick="next()">»</button>
         </nav>
 
+        <div class="sync-note">Note: If audio fails to sync, click PLAY</div>
+
         <div class="playlist-grid" id="grid"></div>
 
         <a href="../hub.html" class="return-link">RETURN TO COMMAND CENTER</a>
@@ -148,21 +153,21 @@
     <div id="yt-api-frame" style="position: absolute; top: -9999px;"></div>
 
     <script>
-        /* DATA SET */
+        /* PLAYLIST DATA */
         const PLAYLISTS = [
             {
                 name: "Da Rave House",
-                url: "https://youtube.com/playlist?list=PLwX0pb3GErekxR63LzwnP82HdlLcSowCi&si=v4E5IySA0KgpsYg1",
+                url: "https://youtube.com/playlist?list=PLwX0pb3GErekxR63LzwnP82HdlLcSowCi",
                 color: "#8ecae6"
             },
             {
                 name: "Freevibes FM",
-                url: "https://youtube.com/playlist?list=PLwX0pb3GErelUOQaMntIwjrO1o8Y79qjw&si=-vcAkAOZ91-buqDb",
+                url: "https://youtube.com/playlist?list=PLwX0pb3GErelUOQaMntIwjrO1o8Y79qjw",
                 color: "#e0c3fc"
             }
         ];
 
-        /* CORE LOGIC */
+        /* PLAYER INITIALIZATION */
         let player;
         let activeStationName = "";
 
@@ -185,13 +190,14 @@
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('yt-api-frame', {
                 height: '0', width: '0',
-                playerVars: { 'listType': 'playlist', 'autoplay': 1, 'modestbranding': 1 },
+                playerVars: { 'listType': 'playlist', 'modestbranding': 1 },
                 events: {
                     'onStateChange': onPlayerStateChange
                 }
             });
         }
 
+        /* STATE HANDLING */
         function onPlayerStateChange(event) {
             const btn = document.getElementById('playBtn');
             const sub = document.getElementById('display-sub');
@@ -205,14 +211,13 @@
                     nameDisplay.innerText = videoData.title;
                     sub.innerText = activeStationName;
                 }
-            } else if (event.data === 2) {
+            } else {
                 btn.innerText = "PLAY";
-                document.getElementById('status').innerText = "Paused";
-            } else if (event.data === 5) {
-                player.playVideo();
+                document.getElementById('status').innerText = (event.data === 2) ? "Paused" : "Ready";
             }
         }
 
+        /* AUDIO FUNCTIONS */
         function tuneIn(index) {
             const data = PLAYLISTS[index];
             activeStationName = data.name;
@@ -220,14 +225,12 @@
             const listId = match ? match[1] : null;
 
             if (listId && player) {
-                player.playVideo(); 
                 document.documentElement.style.setProperty('--glow-color', data.color);
                 document.getElementById('status').innerText = "Syncing...";
                 player.loadPlaylist({
                     list: listId,
                     listType: 'playlist',
-                    index: 0,
-                    suggestedQuality: 'small'
+                    index: 0
                 });
             }
         }
