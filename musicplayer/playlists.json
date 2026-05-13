@@ -1,90 +1,12 @@
 [
-  {
-    "station_name": "Vi-bration Radio",
-    "playlists": [
-      {
-        "title": "Beyond The Pen",
-        "id": "PLwX0pb3GEremC1vfOY7jLfNqdfR2cTVi7"
-      },
-      {
-        "title": "The Fall Of Cain",
-        "id": "PLwX0pb3GErek3NOvUZzKMk5hp1G_USaHW"
-      },
-      {
-        "title": "Dreamscape",
-        "id": "PLwX0pb3GErenzlrerMLur84f2JfArD1fK"
-      }
-    ]
-  },
-  {
-    "station_name": "Ki-netic Radio",
-    "playlists": [
-      {
-        "title": "Stylish Threadarts",
-        "id": "PLwX0pb3GEren9SyOR122ezYC8jkDeBQVB"
-      },
-      {
-        "title": "Shred Masters",
-        "id": "PLwX0pb3GErelQXQur1jMvW2bxaK_0Q9H8"
-      },
-      {
-        "title": "Redline FM",
-        "id": "PLwX0pb3GErel9qOq9jOVVscX_mxXzkGOK"
-      },
-      {
-        "title": "Drift Central",
-        "id": "PLwX0pb3GEreniBp2uNyHbV7Eh4euCbQQS"
-      },
-      {
-        "title": "Bmore Brick City",
-        "id": "PLwX0pb3GErekChtYZB_HejDEP3FWZ6o-l"
-      },
-      {
-        "title": "Blaze's Cool Mixtape",
-        "id": "PLwX0pb3GErekhqHtx2E2WMrB4DhdDJhlu"
-      }
-    ]
-  },
-  {
-    "station_name": "Chi-erful Radio",
-    "playlists": [
-      {
-        "title": "Starship FM",
-        "id": "PLwX0pb3GErengziTGztMV5k6jypR6mwkf"
-      },
-       {
-        "title": "Neon Cities",
-        "id": "PLwX0pb3GErensoCj0ooRyGbTXRvenbolF"
-      },
-      {
-        "title": "House Party",
-        "id": "PLwX0pb3GErelK0luUOAZVX4-6Ifp7Tq4_"
-      },
-      {
-        "title": "Freevibes FM",
-        "id": "PLwX0pb3GErekzDDrb9BzpjtrI5XdR6tU9"
-      },
-      {
-        "title": "The Hustle Tour",
-        "id": "PLwX0pb3GErelMaHVNimXqv0-B1-K8omNg"
-      },
-      {
-        "title": "Karaoke Nights",
-        "id": "PLwX0pb3GErenbRB8BeBmGS_uW49p_rv5M"
-      }
-    ]
-  },
-  {
-    "station_name": "Commander Q Radio",
-    "playlists": [
-      {
-        "title": "Band Hero",
-        "id": "PLwX0pb3GErenuZ-svCLPUcN9xW24Fgdok"
-      },
-      {
-        "title": "Sir Ira",
-        "id": "PLwX0pb3GEreluQsisKD_S-dT2nOkhhnRq"
-      }
-    ]
-  }
+    {
+        "name": "Freevibes FM",
+        "url": "https://www.youtube.com/playlist?list=PLwX0pb3GErelUOQaMntIwjrO1o8Y79qjw",
+        "glow": "#8ecae6"
+    },
+    {
+        "name": "Da Rave House",
+        "url": "https://www.youtube.com/playlist?list=PLwX0pb3GErekxR63LzwnP82HdlLcSowCi",
+        "glow": "#e0c3fc"
+    }
 ]
