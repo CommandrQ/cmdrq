@@ -55,7 +55,6 @@
         }
         @keyframes sheen { to { background-position: 200% center; } }
 
-        /* --- Buttons --- */
         .btn {
             background: none;
             border: 1px solid var(--light-blue);
@@ -79,7 +78,6 @@
             margin-bottom: 20px;
         }
 
-        /* --- Journal Grid (2-column Mobile) --- */
         #journal-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
@@ -106,7 +104,6 @@
 
         .journal-title { font-size: 0.95rem; color: var(--light-purple); font-weight: 600; margin-bottom: 15px; line-height: 1.4; }
 
-        /* --- Modals --- */
         .modal-overlay { 
             position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; 
             display: none; justify-content: center; align-items: center; 
@@ -125,7 +122,10 @@
         .modal-overlay.active .modal-window { transform: translateY(0); opacity: 1; }
 
         .close-x { position: absolute; top: 15px; right: 20px; background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; }
-        .entry-content { line-height: 1.8; color: #f0f0f0; margin-top: 20px; font-size: 1.05rem; white-space: pre-line; }
+        
+        /* Changed to allow for paragraph spacing */
+        .entry-content { line-height: 1.8; color: #f0f0f0; margin-top: 20px; font-size: 1.05rem; }
+        .entry-content p { margin-bottom: 1.5em; }
 
         input, textarea { 
             width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 12px; 
@@ -152,7 +152,6 @@
 
     <main id="journal-grid"></main>
 
-    <!-- Reading Modal -->
     <div id="readModal" class="modal-overlay">
         <div class="modal-window">
             <button class="close-x" onclick="closeModal('readModal')">&times;</button>
@@ -161,7 +160,6 @@
         </div>
     </div>
 
-    <!-- Identity/Reply Modal -->
     <div id="replyModal" class="modal-overlay">
         <div class="modal-window">
             <button class="close-x" onclick="closeModal('replyModal')">&times;</button>
@@ -193,42 +191,34 @@
         let ENTRIES = [];
         let activePostId = null;
 
-        // Fetch entries from the entries.json in the same folder
         async function fetchEntries() {
             try {
-                // Since journal.html is in /journal/ and entries.json is too, just use the filename
                 const response = await fetch('entries.json');
-                if (!response.ok) throw new Error('Signal weak. Could not find data core.');
-                
+                if (!response.ok) throw new Error('Signal weak.');
                 ENTRIES = await response.json();
                 buildGrid();
             } catch (error) {
                 console.error("Journal loading error:", error);
-                document.getElementById('journal-grid').innerHTML = '<p style="text-align: center; color: var(--light-purple); width: 100%; grid-column: 1 / -1;">Signal lost. Data cores are currently offline.</p>';
+                document.getElementById('journal-grid').innerHTML = '<p style="text-align: center; color: var(--light-purple); width: 100%; grid-column: 1 / -1;">Signal lost.</p>';
             }
         }
 
-        // Generate the visual grid
         function buildGrid() {
             const grid = document.getElementById('journal-grid');
             grid.innerHTML = ''; 
-            
             ENTRIES.forEach((entry, i) => {
                 const card = document.createElement('div');
                 card.className = 'journal-card';
-                card.innerHTML = `
-                    <div class="journal-title">${entry.title}</div>
-                    <button class="btn" onclick="openReadModal(${i})">Read</button>
-                `;
+                card.innerHTML = `<div class="journal-title">${entry.title}</div><button class="btn" onclick="openReadModal(${i})">Read</button>`;
                 grid.appendChild(card);
             });
         }
 
         function openReadModal(index) {
-            // Failsafe for key naming variations
-            const content = ENTRIES[index].text || ENTRIES[index].content || ENTRIES[index].body;
+            const content = ENTRIES[index].text || ENTRIES[index].content;
             
-            document.getElementById('fullEntryText').innerText = content || "This log appears to be corrupted or empty.";
+            // Using .innerHTML allows the <p> tags in your JSON to actually work
+            document.getElementById('fullEntryText').innerHTML = content || "Entry corrupted.";
             activePostId = ENTRIES[index].id;
             
             const modal = document.getElementById('readModal');
@@ -256,10 +246,7 @@
             const modal = document.getElementById(id);
             modal.classList.remove('active');
             setTimeout(() => modal.style.display = 'none', 300);
-            
-            if (id === 'replyModal') {
-                activePostId = null;
-            }
+            if (id === 'replyModal') activePostId = null;
         }
 
         async function joinHideout() {
@@ -269,13 +256,10 @@
             const { data, error } = await supabaseClient.auth.signUp({
                 email, password: pass, options: { data: { full_name: name } }
             });
-            if (error) {
-                if (error.message.includes("already registered")) {
-                    return alert("This email is already in the Vanguard archives. Please login via settings.");
-                }
-                return alert("Sync error: " + error.message);
-            }
             
+            if (error) return alert("Sync error: " + error.message);
+            
+            // Ensure record is created in citizens table to satisfy foreign key later
             await supabaseClient.from('citizens').insert([{ 
                 email, full_name: name, user_id: data.user.id, auth_id: data.user.id 
             }]);
@@ -290,12 +274,14 @@
             const message = messageInput.value;
             
             if (!message) return alert("Feel free to type something first.");
-            if (!activePostId) return alert("System Error: Could not determine which entry you are replying to.");
+            if (!activePostId) return alert("System Error: activePostId lost.");
             
-            // Sending payload to blogreplies
+            // TACTICAL FIX: If your foreign key blogreplies_uuid_fkey references 
+            // the 'citizens' table instead of 'auth.users', you need to make sure 
+            // a record exists in citizens with this user.id.
             const { error } = await supabaseClient.from('blogreplies').insert([{ 
                 post_id: activePostId,
-                uuid: user.id,
+                uuid: user.id, // This MUST exist in the referenced table (auth.users or citizens)
                 email: user.email, 
                 full_name: user.user_metadata.full_name, 
                 message: message 
@@ -303,8 +289,9 @@
             
             if (error) {
                 alert("Submission failed: " + error.message);
+                console.error("FK Error Details:", error);
             } else { 
-                alert("Your signal has been sent to the Commander."); 
+                alert("Signal sent."); 
                 closeModal('replyModal'); 
                 messageInput.value = ""; 
             }
