@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vanguard Audio Uplink</title>
     <style>
+        /* CONFIGURATION */
         :root {
             --glow-color: #8ecae6;
             --glass: rgba(15, 15, 25, 0.85);
             --border: rgba(255, 255, 255, 0.1);
         }
 
+        /* RESET & BASE */
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             background: #0f0c29;
             font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -24,7 +25,7 @@
             overflow: hidden;
         }
 
-        /* --- Animated Starfield --- */
+        /* BACKGROUND */
         #starfield { position: fixed; inset: 0; z-index: -1; }
         .stars { 
             position: absolute; width: 2px; height: 2px; background: white; 
@@ -33,7 +34,7 @@
         }
         @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
 
-        /* --- Player UI --- */
+        /* PLAYER DECK */
         .player-deck {
             width: 90%;
             max-width: 420px;
@@ -54,7 +55,7 @@
         }
         .status-text { font-size: 0.7rem; opacity: 0.5; letter-spacing: 2px; text-transform: uppercase; }
 
-        /* --- The Glowing Core --- */
+        /* VISUALIZER */
         .visualizer-area {
             position: relative;
             height: 180px;
@@ -63,7 +64,6 @@
             align-items: center;
             margin: 25px 0;
         }
-
         .core {
             position: absolute;
             width: 100px;
@@ -75,12 +75,10 @@
             animation: pulse 4s infinite ease-in-out;
             transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         @keyframes pulse {
             0%, 100% { transform: scale(1); opacity: 0.3; }
             50% { transform: scale(1.4); opacity: 0.6; }
         }
-
         .track-display { z-index: 2; width: 100%; padding: 0 10px; }
         .track-display h2 { 
             font-size: 1.1rem; font-weight: bold; margin-bottom: 8px;
@@ -88,43 +86,34 @@
         }
         .track-display p { font-size: 0.8rem; color: var(--glow-color); opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* --- Controls --- */
+        /* CONTROLS */
         .controls { display: flex; justify-content: center; align-items: center; gap: 25px; margin-bottom: 35px; }
-        
         .btn-side { 
             background: none; border: 1px solid var(--border); color: white; 
             width: 45px; height: 45px; border-radius: 50%; cursor: pointer; transition: 0.3s;
         }
         .btn-side:hover { border-color: var(--glow-color); color: var(--glow-color); }
-
         .btn-main {
             background: var(--glow-color); border: none; color: #0f0c29;
             padding: 15px 45px; border-radius: 50px; font-weight: bold; font-size: 0.9rem;
             cursor: pointer; box-shadow: 0 0 20px rgba(142, 202, 230, 0.4); transition: 0.3s;
         }
-        .btn-main:hover { transform: scale(1.05); box-shadow: 0 0 30px var(--glow-color); }
 
-        /* --- Selection Grid --- */
+        /* GRID */
         .playlist-grid { 
             display: grid; grid-template-columns: 1fr 1fr; gap: 12px; 
             max-height: 150px; overflow-y: auto; padding-right: 5px;
         }
-        
-        .playlist-grid::-webkit-scrollbar { width: 4px; }
-        .playlist-grid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-
         .pl-card {
             background: rgba(255,255,255,0.03); border: 1px solid var(--border);
             padding: 12px; border-radius: 15px; font-size: 0.75rem; cursor: pointer;
             transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
         }
         .pl-card:hover { background: rgba(255,255,255,0.1); border-color: var(--glow-color); }
-
         .return-link { 
             display: inline-block; margin-top: 30px; font-size: 0.7rem; color: white; 
             text-decoration: none; opacity: 0.4; transition: 0.3s;
         }
-        .return-link:hover { opacity: 1; color: var(--glow-color); }
     </style>
 </head>
 <body>
@@ -132,24 +121,24 @@
     <div id="starfield"><div class="stars"></div></div>
 
     <div class="player-deck">
-        <div class="title-area">
+        <header class="title-area">
             <h1>Audio Uplink</h1>
             <p class="status-text" id="status">System Ready</p>
-        </div>
+        </header>
 
-        <div class="visualizer-area">
+        <section class="visualizer-area">
             <div class="core" id="glow-core"></div>
             <div class="track-display">
                 <h2 id="display-name">Awaiting Signal</h2>
                 <p id="display-sub">Station Offline</p>
             </div>
-        </div>
+        </section>
 
-        <div class="controls">
+        <nav class="controls">
             <button class="btn-side" onclick="prev()">«</button>
             <button class="btn-main" id="playBtn" onclick="toggle()">PLAY</button>
             <button class="btn-side" onclick="next()">»</button>
-        </div>
+        </nav>
 
         <div class="playlist-grid" id="grid"></div>
 
@@ -159,7 +148,7 @@
     <div id="yt-api-frame" style="position: absolute; top: -9999px;"></div>
 
     <script>
-        // --- RENAMED TRANSMISSIONS ---
+        /* DATA SET */
         const PLAYLISTS = [
             {
                 name: "Da Rave House",
@@ -173,6 +162,7 @@
             }
         ];
 
+        /* CORE LOGIC */
         let player;
         let activeStationName = "";
 
@@ -195,72 +185,57 @@
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('yt-api-frame', {
                 height: '0', width: '0',
-                playerVars: { 
-                    'listType': 'playlist', 
-                    'modestbranding': 1,
-                    'autoplay': 0
-                },
+                playerVars: { 'listType': 'playlist', 'autoplay': 1, 'modestbranding': 1 },
                 events: {
-                    'onReady': () => { console.log("Uplink Active"); },
                     'onStateChange': onPlayerStateChange
                 }
             });
         }
 
-        // Logic to update UI when song changes
         function onPlayerStateChange(event) {
             const btn = document.getElementById('playBtn');
             const sub = document.getElementById('display-sub');
             const nameDisplay = document.getElementById('display-name');
 
-            if (event.data === YT.PlayerState.PLAYING) {
+            if (event.data === 1) {
                 btn.innerText = "PAUSE";
                 document.getElementById('status').innerText = "Streaming";
-                
-                // Fetch song title from the player
                 const videoData = player.getVideoData();
-                if (videoData && videoData.title) {
+                if (videoData) {
                     nameDisplay.innerText = videoData.title;
-                    sub.innerText = activeStationName; // Shows station name as the sub-text
+                    sub.innerText = activeStationName;
                 }
-            } 
-            else if (event.data === YT.PlayerState.PAUSED) {
+            } else if (event.data === 2) {
                 btn.innerText = "PLAY";
                 document.getElementById('status').innerText = "Paused";
+            } else if (event.data === 5) {
+                player.playVideo();
             }
         }
 
         function tuneIn(index) {
             const data = PLAYLISTS[index];
             activeStationName = data.name;
-            
             const match = data.url.match(/[&?]list=([^&]+)/);
             const listId = match ? match[1] : null;
 
             if (listId && player) {
+                player.playVideo(); 
                 document.documentElement.style.setProperty('--glow-color', data.color);
-                document.getElementById('status').innerText = "Connecting...";
-
-                // Load and automatically start playing to prevent the double-click issue
+                document.getElementById('status').innerText = "Syncing...";
                 player.loadPlaylist({
                     list: listId,
                     listType: 'playlist',
                     index: 0,
                     suggestedQuality: 'small'
                 });
-                
-                // Adding a slight delay and force play to bypass "cued" state
-                setTimeout(() => {
-                    player.playVideo();
-                }, 500);
             }
         }
 
         function toggle() {
             if (!player) return;
             const state = player.getPlayerState();
-            if (state === YT.PlayerState.PLAYING) player.pauseVideo();
-            else player.playVideo();
+            state === 1 ? player.pauseVideo() : player.playVideo();
         }
 
         function next() { if(player) player.nextVideo(); }
