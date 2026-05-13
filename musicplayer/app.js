@@ -1,56 +1,69 @@
 let player;
 let playlists = [];
-let currentPlaylistIndex = 0;
-let currentTrackIndex = 0;
 
+// 1. Fetch JSON
 async function loadData() {
-    const res = await fetch('playlists.json');
-    playlists = await res.json();
-    renderPlaylists();
+    try {
+        const res = await fetch('playlists.json');
+        if (!res.ok) throw new Error('Could not find playlists.json');
+        playlists = await res.json();
+        renderPlaylistButtons();
+    } catch (e) {
+        console.error("Vanguard Data Error:", e);
+    }
 }
 
-// YT API Ready
-function onYouTubeIframeAPIReady() {
+// 2. Setup YouTube Player
+window.onYouTubeIframeAPIReady = function() {
     player = new YT.Player('youtube-player', {
         height: '0', width: '0',
-        events: { 'onStateChange': onPlayerStateChange }
+        playerVars: { 'listType': 'playlist' },
+        events: {
+            'onReady': () => console.log("Uplink Established"),
+            'onStateChange': onPlayerStateChange
+        }
     });
-}
+};
 
-function renderPlaylists() {
+function renderPlaylistButtons() {
     const grid = document.getElementById('playlistGrid');
+    grid.innerHTML = ''; 
     playlists.forEach((pl, i) => {
-        const div = document.createElement('div');
-        div.className = 'pl-item';
-        div.innerText = pl.playlistName;
-        div.onclick = () => selectPlaylist(i);
-        grid.appendChild(div);
+        const btn = document.createElement('div');
+        btn.className = 'pl-item';
+        btn.innerText = pl.name;
+        btn.onclick = () => tuneToFrequency(i);
+        grid.appendChild(btn);
     });
 }
 
-function selectPlaylist(index) {
-    currentPlaylistIndex = index;
-    currentTrackIndex = 0;
+function tuneToFrequency(index) {
+    const target = playlists[index];
     
-    // Update UI Theme
-    const themeColor = playlists[index].color;
-    document.documentElement.style.setProperty('--active-color', themeColor);
-    document.getElementById('playlist-desc').innerText = playlists[index].description;
-    
-    loadTrack();
-}
+    // This part grabs the ID from your YouTube link automatically
+    const urlObj = new URL(target.url);
+    const playlistId = urlObj.searchParams.get('list');
 
-function loadTrack() {
-    const track = playlists[currentPlaylistIndex].tracks[currentTrackIndex];
-    player.loadVideoById(track.id);
-    document.getElementById('now-playing').innerText = track.title;
-    document.getElementById('current-artist').innerText = playlists[currentPlaylistIndex].playlistName;
-    document.getElementById('playBtn').innerText = "PAUSE";
+    if (playlistId && player) {
+        // Apply your sleek glow effect
+        document.documentElement.style.setProperty('--active-color', target.glow || '#8ecae6');
+        document.getElementById('now-playing').innerText = target.name;
+        document.getElementById('playlist-desc').innerText = "FREQUENCY LOCKED";
+
+        // COMMAND: Load the full YouTube playlist
+        player.loadPlaylist({
+            list: playlistId,
+            listType: 'playlist',
+            index: 0
+        });
+
+        document.getElementById('playBtn').innerText = "PAUSE";
+    }
 }
 
 function togglePlay() {
     const state = player.getPlayerState();
-    if (state === 1) {
+    if (state === 1) { // 1 is 'playing'
         player.pauseVideo();
         document.getElementById('playBtn').innerText = "PLAY";
     } else {
@@ -59,18 +72,11 @@ function togglePlay() {
     }
 }
 
-function nextTrack() {
-    currentTrackIndex = (currentTrackIndex + 1) % playlists[currentPlaylistIndex].tracks.length;
-    loadTrack();
-}
-
-function prevTrack() {
-    currentTrackIndex = (currentTrackIndex - 1 + playlists[currentPlaylistIndex].tracks.length) % playlists[currentPlaylistIndex].tracks.length;
-    loadTrack();
-}
+function nextTrack() { player.nextVideo(); }
+function prevTrack() { player.previousVideo(); }
 
 function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.ENDED) nextTrack();
+    // If the playlist ends or a video is cued, update UI as needed
 }
 
 window.onload = loadData;
