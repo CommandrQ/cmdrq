@@ -79,7 +79,7 @@
             margin-bottom: 20px;
         }
 
-        /* --- Journal Grid --- */
+        /* --- Journal Grid (2-column Mobile) --- */
         #journal-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
@@ -147,7 +147,6 @@
 
     <header>
         <h1 class="commander-title">Journal</h1>
-        <!-- Updated to ../hub.html so it points back out to the root directory -->
         <a href="../hub.html" class="btn back-btn">Return to Hub</a>
     </header>
 
@@ -194,20 +193,22 @@
         let ENTRIES = [];
         let activePostId = null;
 
-        // Fetch entries from the external JSON file in the same folder
+        // Fetch entries from the entries.json in the same folder
         async function fetchEntries() {
             try {
+                // Since journal.html is in /journal/ and entries.json is too, just use the filename
                 const response = await fetch('entries.json');
-                if (!response.ok) throw new Error('Network response was not ok');
+                if (!response.ok) throw new Error('Signal weak. Could not find data core.');
+                
                 ENTRIES = await response.json();
                 buildGrid();
             } catch (error) {
-                console.error("Failed to load journal logs:", error);
-                document.getElementById('journal-grid').innerHTML = '<p style="text-align: center; color: var(--light-purple); width: 100%; grid-column: 1 / -1;">Signal lost. Unable to load data cores.</p>';
+                console.error("Journal loading error:", error);
+                document.getElementById('journal-grid').innerHTML = '<p style="text-align: center; color: var(--light-purple); width: 100%; grid-column: 1 / -1;">Signal lost. Data cores are currently offline.</p>';
             }
         }
 
-        // Build the grid after data is loaded
+        // Generate the visual grid
         function buildGrid() {
             const grid = document.getElementById('journal-grid');
             grid.innerHTML = ''; 
@@ -224,7 +225,10 @@
         }
 
         function openReadModal(index) {
-            document.getElementById('fullEntryText').innerText = ENTRIES[index].text;
+            // Failsafe for key naming variations
+            const content = ENTRIES[index].text || ENTRIES[index].content || ENTRIES[index].body;
+            
+            document.getElementById('fullEntryText').innerText = content || "This log appears to be corrupted or empty.";
             activePostId = ENTRIES[index].id;
             
             const modal = document.getElementById('readModal');
@@ -282,11 +286,13 @@
 
         async function postMessage() {
             const { data: { user } } = await supabaseClient.auth.getUser();
-            const message = document.getElementById('replyMsg').value;
+            const messageInput = document.getElementById('replyMsg');
+            const message = messageInput.value;
             
             if (!message) return alert("Feel free to type something first.");
             if (!activePostId) return alert("System Error: Could not determine which entry you are replying to.");
             
+            // Sending payload to blogreplies
             const { error } = await supabaseClient.from('blogreplies').insert([{ 
                 post_id: activePostId,
                 uuid: user.id,
@@ -296,15 +302,14 @@
             }]);
             
             if (error) {
-                alert("Oops: " + error.message);
+                alert("Submission failed: " + error.message);
             } else { 
                 alert("Your signal has been sent to the Commander."); 
                 closeModal('replyModal'); 
-                document.getElementById('replyMsg').value = ""; 
+                messageInput.value = ""; 
             }
         }
 
-        // Initialize by fetching the JSON file
         window.onload = fetchEntries;
     </script>
 </body>
