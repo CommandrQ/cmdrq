@@ -1,0 +1,19 @@
+{
+  "categories": [
+    {
+      "id": "inso-01",
+      "title": "The Inso Series",
+      "description": "Foundational concepts of the Mind, Body, and Soul."
+    },
+    {
+      "id": "cog-02",
+      "title": "Cognitive Architecture",
+      "description": "Building mental maps to manage complex information."
+    },
+    {
+      "id": "univ-03",
+      "title": "Universal Mechanics",
+      "description": "Understanding the core laws of systems and stories."
+    }
+  ]
+}
