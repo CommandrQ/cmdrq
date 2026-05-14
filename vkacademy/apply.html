@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply | Vanguard University</title>
+    <style>
+        :root { --navy: #0A192F; --gold: #D4AF37; --white: #FFFFFF; }
+        body { font-family: sans-serif; background: #F4F4F6; margin: 0; padding: 20px; color: var(--navy); }
+        .form-container { max-width: 400px; margin: 40px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { font-family: 'Georgia', serif; text-align: center; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
+        .checkbox-group { display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; margin: 15px 0; }
+        .disclaimer { font-size: 0.8rem; color: #666; background: #eee; padding: 10px; border-radius: 4px; margin-top: 20px; }
+        .btn-submit { width: 100%; padding: 15px; background: var(--navy); color: var(--gold); border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Apply to Vanguard</h2>
+        <form id="applyForm">
+            <input type="email" id="email" placeholder="Email Address" required>
+            <input type="password" id="password" placeholder="Create Password" required>
+            <input type="text" id="firstName" placeholder="Legal First Name" required>
+            <input type="text" id="lastName" placeholder="Legal Last Name" required>
+            <input type="text" id="displayName" placeholder="Display Name (Username)" required>
+            <input type="number" id="birthYear" placeholder="Legal Birth Year (YYYY)" required>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="ageCheck" required>
+                <label for="ageCheck">I confirm I am 18 years of age or older.</label>
+            </div>
+
+            <button type="submit" class="btn-submit">Submit Application</button>
+
+            <div class="disclaimer">
+                <strong>Disclaimer:</strong> This information is used for internal verification only. We do not share your data with third parties.
+            </div>
+        </form>
+    </div>
+
+    <!-- Supabase Integration Script will go here -->
+</body>
+</html>
