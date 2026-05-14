@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vanguard Academy | Learn Faster</title>
+    <title>Vanguard University | Learn Faster</title>
     <style>
         :root {
             --navy: #0A192F;
@@ -19,10 +19,11 @@
             margin: 0;
             background-color: var(--light-grey);
             color: #333;
-            line-height: 1.5;
+            line-height: 1.6;
+            font-size: 16px; /* Base size */
         }
 
-        /* NAVIGATION - Simple & Mobile Friendly */
+        /* NAVIGATION */
         header {
             background: var(--navy);
             padding: 15px 5%;
@@ -37,22 +38,24 @@
         .logo { 
             color: var(--gold); 
             font-weight: bold; 
-            font-size: 1.2rem; 
+            font-size: 1.05rem; /* Reduced for mobile */
             text-decoration: none;
             font-family: 'Georgia', serif;
+            letter-spacing: 0.5px;
         }
 
         nav a {
             color: var(--white);
             text-decoration: none;
-            margin-left: 15px;
-            font-size: 0.9rem;
+            margin-left: 12px;
+            font-size: 0.85rem;
             font-weight: 500;
+            cursor: pointer;
         }
 
         .account-btn {
             border: 1px solid var(--gold);
-            padding: 5px 10px;
+            padding: 4px 8px;
             border-radius: 4px;
             color: var(--gold);
         }
@@ -77,21 +80,19 @@
             font-weight: bold;
             border-radius: 5px;
             display: inline-block;
-            width: 100%; /* Full width on mobile */
+            width: 100%;
             max-width: 300px;
         }
 
-        /* STATS SECTION - 2x2 Grid on Mobile */
+        /* STATS */
         .stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             padding: 20px 5%;
             background: var(--white);
-            margin-top: -30px;
+            margin: -30px auto 0 auto;
             width: 90%;
-            margin-left: auto;
-            margin-right: auto;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             text-align: center;
@@ -100,15 +101,9 @@
         .stat-item h2 { color: var(--navy); margin: 0; font-size: 1.5rem; }
         .stat-item p { font-size: 0.7rem; color: #666; text-transform: uppercase; margin: 5px 0 0 0; font-weight: bold; }
 
-        /* VISION SECTION - Simple vertical layout */
-        .vision {
-            padding: 40px 5%;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
+        /* VISION BOXES */
+        .vision { padding: 40px 5%; max-width: 800px; margin: 0 auto; }
         .vision h2 { color: var(--navy); font-family: 'Georgia', serif; font-size: 1.8rem; text-align: center; }
-
         .section-box {
             background: white;
             padding: 25px;
@@ -117,33 +112,78 @@
             border-radius: 0 8px 8px 0;
         }
 
-        .section-box h3 { margin-top: 0; color: var(--navy); }
-        .section-box p { font-size: 1rem; color: #444; margin-bottom: 0; }
-
-        footer {
-            background: var(--navy);
-            color: #aaa;
-            text-align: center;
-            padding: 30px;
-            font-size: 0.8rem;
+        /* MODAL STYLES */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
+
+        .modal-content {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px; right: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--navy);
+            cursor: pointer;
+        }
+
+        .modal h2 { font-family: 'Georgia', serif; color: var(--navy); margin-top: 0; border-bottom: 2px solid var(--gold); padding-bottom: 10px; }
+
+        .scroll-area {
+            overflow-y: auto;
+            margin-top: 15px;
+            padding-right: 10px;
+        }
+
+        .study-list { list-style: none; padding: 0; }
+        .study-list li {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            color: var(--navy);
+            font-weight: 500;
+        }
+        .study-list li span { display: block; font-size: 0.85rem; color: #666; font-weight: 400; margin-top: 4px; }
+
+        footer { background: var(--navy); color: #aaa; text-align: center; padding: 30px; font-size: 0.8rem; }
 
         /* DESKTOP TWEAKS */
         @media (min-width: 768px) {
-            .hero h1 { font-size: 3.5rem; }
+            body { font-size: 18px; } /* Slightly bigger font on desktop */
+            .logo { font-size: 1.4rem; }
+            .hero h1 { font-size: 3.8rem; }
+            .hero p { font-size: 1.3rem; }
             .stats { grid-template-columns: repeat(4, 1fr); padding: 40px; }
             .btn-main { width: auto; }
-            nav a { margin-left: 30px; }
+            nav a { margin-left: 30px; font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <a href="#" class="logo">VANGUARD</a>
+        <a href="#" class="logo">Vanguard University</a>
         <nav>
             <a href="#">Apply</a>
-            <a href="#">Studies</a>
+            <a id="studiesLink">Studies</a>
             <a href="#" class="account-btn">Login</a>
         </nav>
     </header>
@@ -151,7 +191,7 @@
     <section class="hero">
         <h1>Learn Faster. Solve Sooner.</h1>
         <p>We help you skip the boring parts of learning so you can start solving real-world problems today.</p>
-        <a href="#" class="btn-main">Start Now</a>
+        <a href="#" class="btn-main">Start Your Impact</a>
     </section>
 
     <section class="stats">
@@ -174,27 +214,64 @@
     </section>
 
     <section class="vision">
-        <h2>Our Simple Goal</h2>
-        
+        <h2>The Efficiency Path</h2>
         <div class="section-box">
             <h3>Skip the Slog</h3>
             <p>Traditional schools make you wait years before you do anything real. We give you the "Inso" framework to help you understand big ideas in minutes, not months.</p>
         </div>
-
         <div class="section-box">
             <h3>Get Straight to Work</h3>
             <p>We believe your time is valuable. Our lessons focus on the "General Concepts" first. Once you see the big picture, the small details become easy to learn as you go.</p>
         </div>
-
-        <div class="section-box">
-            <h3>Build Your Future</h3>
-            <p>Vanguard doesn't replace university—it prepares you for it. Our students arrive at college ready to lead because they already know how to handle complex tasks.</p>
-        </div>
     </section>
 
+    <!-- STUDIES MODAL -->
+    <div id="studiesModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2>Vanguard Studies</h2>
+            <div class="scroll-area">
+                <ul class="study-list">
+                    <li>The Inso Series (Core)<span>A 4-part series on Foundation, Mind, Body, and Soul.</span></li>
+                    <li>Cognitive Mapping<span>Learn to reduce cognitive load and organize complex data.</span></li>
+                    <li>Universal Problem Solving<span>Bypassing theory to address real-world system issues.</span></li>
+                    <li>Rapid Concept Anchoring<span>Master the art of learning any new subject in record time.</span></li>
+                    <li>Digital Architecture<span>Building the foundations of the digital world.</span></li>
+                    <li>Strategic Leadership<span>How to move from a learner to a decider in any field.</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <footer>
-        &copy; 2026 Vanguard Academy. Ready to change the way you learn?
+        &copy; 2026 Vanguard University. Ready to change the way you learn?
     </footer>
+
+    <script>
+        const modal = document.getElementById("studiesModal");
+        const btn = document.getElementById("studiesLink");
+        const span = document.getElementById("closeModal");
+
+        // Open modal
+        btn.onclick = function() {
+            modal.style.display = "flex";
+            document.body.style.overflow = "hidden"; // Stop background scroll
+        }
+
+        // Close modal
+        span.onclick = function() {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
+        // Close if clicking outside the box
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        }
+    </script>
 
 </body>
 </html>
