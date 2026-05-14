@@ -3,23 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up | Vanguard University</title>
+    <title>Apply | Vanguard University</title>
     <style>
-        :root { --navy: #0A192F; --gold: #D4AF37; --white: #FFFFFF; }
-        body { font-family: sans-serif; background: #F4F4F6; margin: 0; padding: 20px; color: var(--navy); }
-        header { display: flex; justify-content: flex-start; max-width: 400px; margin: 0 auto 20px auto; }
-        header a { color: var(--navy); text-decoration: none; font-weight: bold; font-size: 0.9rem; }
-        
-        .form-container { max-width: 400px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2 { font-family: 'Georgia', serif; text-align: center; margin-top: 0; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; box-sizing: border-box; }
-        
-        .btn-submit { width: 100%; padding: 15px; background: var(--navy); color: var(--gold); border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1rem; margin-top: 10px; }
-        
-        .signin-footer { text-align: center; margin-top: 20px; font-size: 0.9rem; color: #666; }
-        .signin-footer a { color: var(--navy); font-weight: bold; text-decoration: none; border-bottom: 1px solid var(--gold); }
-        
-        .disclaimer { font-size: 0.75rem; color: #777; background: #eee; padding: 10px; border-radius: 4px; margin-top: 25px; line-height: 1.3; }
+        :root {
+            --navy: #0A192F;
+            --gold: #D4AF37;
+            --white: #FFFFFF;
+            --light-grey: #F4F4F6;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            background-color: var(--light-grey);
+            color: var(--navy);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 20px 5%;
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        header a {
+            color: var(--navy);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        header a:hover { color: var(--gold); }
+
+        .form-container {
+            max-width: 450px;
+            margin: 0 auto 40px auto;
+            background: var(--white);
+            padding: 40px 30px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-top: 6px solid var(--gold);
+        }
+
+        h2 {
+            font-family: 'Georgia', serif;
+            text-align: center;
+            margin-top: 0;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+        }
+
+        .input-group { margin-bottom: 15px; }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            color: #666;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus { border-color: var(--gold); }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: var(--navy);
+            color: var(--gold);
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+
+        .btn-submit:active { transform: scale(0.98); }
+
+        #message-box {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 0.9rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .error { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; display: block !important; }
+        .success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; display: block !important; }
+
+        .signin-footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .signin-footer a {
+            color: var(--navy);
+            font-weight: bold;
+            text-decoration: none;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .disclaimer {
+            font-size: 0.7rem;
+            color: #888;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 30px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        hr { border: 0; border-top: 1px solid #eee; margin: 25px 0; }
     </style>
 </head>
 <body>
@@ -30,27 +148,136 @@
 
     <div class="form-container">
         <h2>Begin Your Journey</h2>
+        
+        <div id="message-box"></div>
+
         <form id="signupForm">
-            <input type="email" id="email" placeholder="Email Address" required>
-            <input type="password" id="password" placeholder="Create Password" required>
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-            <input type="text" id="firstName" placeholder="Legal First Name" required>
-            <input type="text" id="lastName" placeholder="Legal Last Name" required>
-            <input type="text" id="preferredName" placeholder="Preferred Name" required>
-            <input type="number" id="birthYear" placeholder="Legal Birth Year (YYYY)" required>
+            <!-- Auth Credentials -->
+            <div class="input-group">
+                <label>Institutional Email</label>
+                <input type="email" id="email" placeholder="email@example.com" required>
+            </div>
+            <div class="input-group">
+                <label>Secure Password</label>
+                <input type="password" id="password" placeholder="Min. 6 characters" required minlength="6">
+            </div>
 
-            <button type="submit" class="btn-submit">Sign Up & Apply</button>
+            <hr>
 
-            <!-- ADDED SIGN IN LINK -->
+            <!-- Legal/Citizen Details -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="input-group">
+                    <label>Legal First Name</label>
+                    <input type="text" id="firstName" required>
+                </div>
+                <div class="input-group">
+                    <label>Legal Last Name</label>
+                    <input type="text" id="lastName" required>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Preferred Name</label>
+                <input type="text" id="preferredName" placeholder="What should we call you?" required>
+            </div>
+
+            <div class="input-group">
+                <label>Legal Birth Year</label>
+                <input type="number" id="birthYear" placeholder="YYYY" required min="1900" max="2008">
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">Sign Up & Apply</button>
+
             <div class="signin-footer">
                 Already a Citizen? <a href="login.html">Sign In</a>
             </div>
 
             <div class="disclaimer">
-                <strong>Internal Verification:</strong> Your data is used for internal identity verification. We do not share your information with third parties.
+                <strong>Internal Verification:</strong> Vanguard University uses your legal data for identity and age verification only. We do not sell or share citizen records with third parties.
             </div>
         </form>
     </div>
 
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+        const SUPABASE_URL = 'https://dvyjupytbwbrcoyouxpf.supabase.co/'
+        const SUPABASE_KEY = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk'
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+
+        const signupForm = document.getElementById('signupForm');
+        const messageBox = document.getElementById('message-box');
+        const submitBtn = document.getElementById('submitBtn');
+
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // UI State
+            messageBox.className = '';
+            messageBox.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Processing...";
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const first = document.getElementById('firstName').value;
+            const last = document.getElementById('lastName').value;
+            const preferred = document.getElementById('preferredName').value;
+            const birth = parseInt(document.getElementById('birthYear').value);
+
+            // 1. Final Age Validation
+            const currentYear = new Date().getFullYear();
+            if (currentYear - birth < 18) {
+                showMessage("You must be 18 or older to apply.", "error");
+                resetButton();
+                return;
+            }
+
+            // 2. Supabase Sign Up
+            // This handles the 'Email Exists' check and writes to master_roster via SQL Trigger
+            const { data, error } = await supabase.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    data: {
+                        first_name: first,
+                        last_name: last,
+                        preferred_name: preferred,
+                        birth_year: birth
+                    }
+                }
+            });
+
+            if (error) {
+                showMessage(error.message, "error");
+                resetButton();
+            } else if (data.user) {
+                // Check if user is "fake" (already exists but email confirmation is on)
+                // Supabase returns a user object even for existing emails for security (obfuscation),
+                // but checking data.user.identities usually reveals if it's new.
+                
+                if (data.user.identities && data.user.identities.length === 0) {
+                    showMessage("This email is already registered. Please sign in.", "error");
+                    resetButton();
+                } else {
+                    showMessage("Success! Redirecting to your account...", "success");
+                    setTimeout(() => {
+                        window.location.href = "account.html";
+                    }, 1500);
+                }
+            }
+        });
+
+        function showMessage(text, type) {
+            messageBox.textContent = text;
+            messageBox.className = type;
+            messageBox.style.display = 'block';
+        }
+
+        function resetButton() {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Sign Up & Apply";
+        }
+    </script>
 </body>
 </html>
