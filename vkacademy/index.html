@@ -20,7 +20,7 @@
             background-color: var(--light-grey);
             color: #333;
             line-height: 1.6;
-            font-size: 16px; /* Base size */
+            font-size: 16px;
         }
 
         /* NAVIGATION */
@@ -38,7 +38,7 @@
         .logo { 
             color: var(--gold); 
             font-weight: bold; 
-            font-size: 1.05rem; /* Reduced for mobile */
+            font-size: 1.05rem;
             text-decoration: none;
             font-family: 'Georgia', serif;
             letter-spacing: 0.5px;
@@ -53,7 +53,9 @@
             cursor: pointer;
         }
 
-        .account-btn {
+        /* HIDDEN BY DEFAULT */
+        #account-link { 
+            display: none; 
             border: 1px solid var(--gold);
             padding: 4px 8px;
             border-radius: 4px;
@@ -66,11 +68,11 @@
             background-size: cover;
             color: white;
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
         }
 
         .hero h1 { font-size: 2.2rem; margin-bottom: 15px; font-family: 'Georgia', serif; }
-        .hero p { font-size: 1.1rem; margin-bottom: 25px; opacity: 0.9; }
+        .hero p { font-size: 1.1rem; margin-bottom: 25px; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto; }
 
         .btn-main {
             background: var(--gold);
@@ -101,18 +103,13 @@
         .stat-item h2 { color: var(--navy); margin: 0; font-size: 1.5rem; }
         .stat-item p { font-size: 0.7rem; color: #666; text-transform: uppercase; margin: 5px 0 0 0; font-weight: bold; }
 
-        /* VISION BOXES */
-        .vision { padding: 40px 5%; max-width: 800px; margin: 0 auto; }
-        .vision h2 { color: var(--navy); font-family: 'Georgia', serif; font-size: 1.8rem; text-align: center; }
-        .section-box {
-            background: white;
-            padding: 25px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--gold);
-            border-radius: 0 8px 8px 0;
-        }
+        /* VISION */
+        .vision { padding: 60px 10%; max-width: 1000px; margin: 0 auto; }
+        .vision h2 { color: var(--navy); font-family: 'Georgia', serif; font-size: 1.8rem; text-align: center; margin-bottom: 40px; }
+        .vision-text { margin-bottom: 40px; }
+        .vision-text h3 { color: var(--navy); border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 5px; }
 
-        /* MODAL STYLES */
+        /* MODAL */
         .modal {
             display: none; 
             position: fixed;
@@ -146,28 +143,15 @@
             cursor: pointer;
         }
 
-        .modal h2 { font-family: 'Georgia', serif; color: var(--navy); margin-top: 0; border-bottom: 2px solid var(--gold); padding-bottom: 10px; }
+        .study-list { list-style: none; padding: 0; overflow-y: auto; }
+        .study-list li { padding: 15px; border-bottom: 1px solid #eee; }
+        .study-list li b { display: block; color: var(--navy); }
+        .study-list li span { font-size: 0.85rem; color: #666; }
 
-        .scroll-area {
-            overflow-y: auto;
-            margin-top: 15px;
-            padding-right: 10px;
-        }
+        footer { background: var(--navy); color: #aaa; text-align: center; padding: 40px; font-size: 0.8rem; }
 
-        .study-list { list-style: none; padding: 0; }
-        .study-list li {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            color: var(--navy);
-            font-weight: 500;
-        }
-        .study-list li span { display: block; font-size: 0.85rem; color: #666; font-weight: 400; margin-top: 4px; }
-
-        footer { background: var(--navy); color: #aaa; text-align: center; padding: 30px; font-size: 0.8rem; }
-
-        /* DESKTOP TWEAKS */
         @media (min-width: 768px) {
-            body { font-size: 18px; } /* Slightly bigger font on desktop */
+            body { font-size: 18px; }
             .logo { font-size: 1.4rem; }
             .hero h1 { font-size: 3.8rem; }
             .hero p { font-size: 1.3rem; }
@@ -180,18 +164,18 @@
 <body>
 
     <header>
-        <a href="#" class="logo">Vanguard University</a>
+        <a href="index.html" class="logo">Vanguard University</a>
         <nav>
-            <a href="account.html">Apply</a>
+            <a href="apply.html">Apply</a>
             <a id="studiesLink">Studies</a>
-            <a href="#" class="account-btn">Login</a>
+            <a href="account.html" id="account-link">Account</a>
         </nav>
     </header>
 
     <section class="hero">
         <h1>Learn Faster. Solve Sooner.</h1>
-        <p>We help you skip the boring parts of learning so you can start solving real-world problems today.</p>
-        <a href="account.html" class="btn-main">Start Your Impact</a>
+        <p>Skip the academic slog. Master the foundations of the universe with the Inso framework and start making an impact today.</p>
+        <a href="apply.html" class="btn-main">Start Your Impact</a>
     </section>
 
     <section class="stats">
@@ -205,72 +189,66 @@
         </div>
         <div class="stat-item">
             <h2>94%</h2>
-            <p>Success Rate</p>
+            <p>Direct Impact</p>
         </div>
         <div class="stat-item">
             <h2>Active</h2>
-            <p>Problem Solving</p>
+            <p>Solving</p>
         </div>
     </section>
 
     <section class="vision">
-        <h2>The Efficiency Path</h2>
-        <div class="section-box">
-            <h3>Skip the Slog</h3>
-            <p>Traditional schools make you wait years before you do anything real. We give you the "Inso" framework to help you understand big ideas in minutes, not months.</p>
+        <h2>The Vanguard Leap</h2>
+        <div class="vision-text">
+            <h3>Breaking the Inertia</h3>
+            <p>Traditional education is built on a 19th-century schedule. We've removed the filler. Our curriculum is designed to get you to the center of a problem on day one, not year four.</p>
         </div>
-        <div class="section-box">
-            <h3>Get Straight to Work</h3>
-            <p>We believe your time is valuable. Our lessons focus on the "General Concepts" first. Once you see the big picture, the small details become easy to learn as you go.</p>
+        <div class="vision-text">
+            <h3>Conceptual Anchoring</h3>
+            <p>Using the Inso framework, we teach you how to anchor general concepts instantly. This allows you to pivot between biology, code, or social engineering without feeling lost.</p>
         </div>
     </section>
 
-    <!-- STUDIES MODAL -->
     <div id="studiesModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" id="closeModal">&times;</span>
-            <h2>Vanguard Studies</h2>
-            <div class="scroll-area">
-                <ul class="study-list">
-                    <li>The Inso Series (Core)<span>A 4-part series on Foundation, Mind, Body, and Soul.</span></li>
-                    <li>Cognitive Mapping<span>Learn to reduce cognitive load and organize complex data.</span></li>
-                    <li>Universal Problem Solving<span>Bypassing theory to address real-world system issues.</span></li>
-                    <li>Rapid Concept Anchoring<span>Master the art of learning any new subject in record time.</span></li>
-                    <li>Digital Architecture<span>Building the foundations of the digital world.</span></li>
-                    <li>Strategic Leadership<span>How to move from a learner to a decider in any field.</span></li>
-                </ul>
-            </div>
+            <h2 style="font-family: Georgia, serif; border-bottom: 2px solid var(--gold); padding-bottom: 10px;">Vanguard Studies</h2>
+            <ul class="study-list">
+                <li><b>The Inso Series (Core)</b><span>A 4-part journey through Foundation, Mind, Body, and Soul.</span></li>
+                <li><b>Cognitive Architecture</b><span>Building mental maps to manage high-complexity data.</span></li>
+                <li><b>Universal Mechanics</b><span>Understanding the core laws of systems and storytelling.</span></li>
+                <li><b>Rapid Concept Anchoring</b><span>Mastering any new subject in record time.</span></li>
+            </ul>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 Vanguard University. Ready to change the way you learn?
+        &copy; 2026 Vanguard University. Forging the next generation of problem-solvers.
     </footer>
 
-    <script>
+    <script type="module">
+        // Import your initialized Supabase client here
+        
+        // MODAL LOGIC
         const modal = document.getElementById("studiesModal");
         const btn = document.getElementById("studiesLink");
         const span = document.getElementById("closeModal");
 
-        // Open modal
-        btn.onclick = function() {
-            modal.style.display = "flex";
-            document.body.style.overflow = "hidden"; // Stop background scroll
-        }
+        btn.onclick = () => { modal.style.display = "flex"; document.body.style.overflow = "hidden"; }
+        span.onclick = () => { modal.style.display = "none"; document.body.style.overflow = "auto"; }
+        window.onclick = (e) => { if (e.target == modal) { modal.style.display = "none"; document.body.style.overflow = "auto"; } }
 
-        // Close modal
-        span.onclick = function() {
-            modal.style.display = "none";
-            document.body.style.overflow = "auto";
-        }
+        // AUTH VISIBILITY LOGIC
+        async function checkAuth() {
+            // This is where you call your Supabase Auth session check
+            // const { data: { user } } = await supabase.auth.getUser();
+            const user = null; // Replace with actual auth check
 
-        // Close if clicking outside the box
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-                document.body.style.overflow = "auto";
+            if (user) {
+                document.getElementById('account-link').style.display = 'inline-block';
             }
         }
+        checkAuth();
     </script>
 
 </body>
