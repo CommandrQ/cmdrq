@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen Account | Vanguard University</title>
+    <style>
+        :root { --navy: #0A192F; --gold: #D4AF37; --white: #FFFFFF; --light-grey: #F4F4F6; }
+        body { font-family: -apple-system, sans-serif; background: var(--light-grey); margin: 0; padding: 20px; color: var(--navy); }
+        
+        .nav-header { max-width: 600px; margin: 0 auto 20px auto; display: flex; justify-content: space-between; }
+        .nav-header a { color: var(--navy); text-decoration: none; font-weight: bold; }
+        .nav-header a:hover { color: var(--gold); }
+
+        .account-card { max-width: 500px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; border-top: 5px solid var(--gold); }
+        .card-header { background: var(--navy); color: var(--gold); padding: 20px; text-align: center; }
+        .card-header h2 { margin: 0; font-family: 'Georgia', serif; }
+        .card-header a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--gold); }
+
+        .info-section { padding: 25px; }
+        .field { margin-bottom: 20px; }
+        .label { font-size: 0.75rem; font-weight: bold; text-transform: uppercase; color: #777; letter-spacing: 1px; }
+        .value { font-size: 1.1rem; font-weight: 500; margin-top: 5px; }
+        .locked { color: #999; }
+
+        /* Editable Field Styling */
+        .editable-group { display: flex; gap: 10px; margin-top: 5px; }
+        input[type="text"] { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; }
+        .btn-save { background: var(--navy); color: var(--gold); border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: opacity 0.3s; }
+        .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .support-notice { background: #eee; padding: 15px; font-size: 0.85rem; color: #555; text-align: center; border-top: 1px solid #ddd; }
+        .support-link { color: var(--navy); font-weight: bold; text-decoration: none; }
+
+        #status-msg { text-align: center; font-size: 0.9rem; margin-top: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="nav-header">
+        <a href="index.html">← Back to Campus</a>
+        <a href="#" onclick="logout()">Logout</a>
+    </div>
+
+    <div class="account-card">
+        <div class="card-header">
+            <h2><a href="account.html">Account</a> Record</h2>
+        </div>
+
+        <div class="info-section">
+            <!-- Citizenship ID -->
+            <div class="field">
+                <div class="label">Citizenship Number</div>
+                <div id="display-cn" class="value" style="color: var(--gold); font-weight: bold;">Loading...</div>
+            </div>
+
+            <!-- Role -->
+            <div class="field">
+                <div class="label">Institutional Role</div>
+                <div id="display-role" class="value">Loading...</div>
+            </div>
+
+            <!-- Email (Locked) -->
+            <div class="field">
+                <div class="label">Verified Email</div>
+                <div id="display-email" class="value locked">Loading...</div>
+            </div>
+
+            <!-- Legal Name (Locked) -->
+            <div class="field">
+                <div class="label">Legal Name (Verification Required for Changes)</div>
+                <div id="display-legal-name" class="value locked">Loading...</div>
+            </div>
+
+            <!-- Preferred Name (Editable) -->
+            <div class="field">
+                <div class="label">Preferred Name</div>
+                <div class="editable-group">
+                    <input type="text" id="input-preferred-name" placeholder="Preferred Name">
+                    <button class="btn-save" id="save-btn" onclick="updatePreferredName()">Update</button>
+                </div>
+                <div id="status-msg"></div>
+            </div>
+        </div>
+
+        <div class="support-notice">
+            Need to change legal info? Visit our <a href="#" class="support-link">Support Channel</a>.
+        </div>
+    </div>
+
+    <!-- SUPABASE INTEGRATION -->
+    <script type="module">
+        // Assuming your Supabase script is initialized here
+        async function loadProfile() {
+            // 1. Get current user
+            // 2. Fetch from 'master_roster' where id = user.id
+            
+            // SECURITY: Using .textContent to prevent XSS
+            document.getElementById('display-cn').textContent = data.citizenship_number;
+            document.getElementById('display-role').textContent = data.role;
+            document.getElementById('display-email').textContent = data.email;
+            document.getElementById('display-legal-name').textContent = `${data.legal_first_name} ${data.legal_last_name}`;
+            document.getElementById('input-preferred-name').value = data.preferred_name;
+        }
+
+        async function updatePreferredName() {
+            const newName = document.getElementById('input-preferred-name').value;
+            const msg = document.getElementById('status-msg');
+            
+            // Logic to update ONLY preferred_name in Supabase
+            // RLS will block other fields even if the frontend tried to send them
+            
+            msg.textContent = "Updating profile...";
+            msg.style.color = "var(--navy)";
+            
+            // On Success:
+            msg.textContent = "Profile updated successfully.";
+            msg.style.color = "green";
+        }
+    </script>
+</body>
+</html>
