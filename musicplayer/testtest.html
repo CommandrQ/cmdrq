@@ -1,162 +1,223 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commander QHS | Command Center</title>
+    <title>Commander QHS | Official Terminal</title>
     <style>
         :root {
-            --neon-cyan: #00f2ff;
-            --retro-pink: #ff00ff;
-            --dark-space: #05050a;
-            --tech-green: #39ff14;
-            --glass: rgba(255, 255, 255, 0.05);
-            /* Custom Cursor Implementation */
+            --primary-gradient: linear-gradient(135deg, #7b2ff7 0%, #2bd1ff 100%);
+            --neon-blue: #2bd1ff;
+            --bg-dark: #020205;
+            --text-main: #ffffff;
+            /* Custom Pointer */
             cursor: url('images/pointer.png'), auto;
         }
 
         body {
-            background-color: var(--dark-space);
-            background-image: 
-                linear-gradient(var(--glass) 1px, transparent 1px),
-                linear-gradient(90deg, var(--glass) 1px, transparent 1px);
-            background-size: 30px 30px; /* Retro grid background */
-            color: white;
-            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            /* SF Pro / System Font Stack */
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             overflow-x: hidden;
+            line-height: 1.5;
         }
 
-        /* --- DECORATIVE SIDE ELEMENTS (Desktop Only) --- */
-        .side-hud {
+        /* --- SIDE HUD WITH WAVEFORMS (Desktop) --- */
+        .hud-sidebar {
             position: fixed;
             top: 50%;
             transform: translateY(-50%);
-            width: 150px;
-            height: 70vh;
-            border: 1px solid var(--neon-cyan);
-            background: linear-gradient(180deg, rgba(0, 242, 255, 0.1), transparent);
+            width: 120px;
+            height: 300px;
             display: none;
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 20px;
+            border: 1px solid rgba(43, 209, 255, 0.2);
+            background: rgba(255, 255, 255, 0.02);
         }
 
-        @media (min-width: 1024px) {
-            .side-hud { display: block; }
-            .left-hud { left: 5vw; border-right: 4px solid var(--neon-cyan); }
-            .right-hud { right: 5vw; border-left: 4px solid var(--neon-cyan); }
+        @media (min-width: 1100px) {
+            .hud-sidebar { display: flex; }
+            .left-hud { left: 4vw; }
+            .right-hud { right: 4vw; }
         }
 
-        /* --- CENTRAL CONTAINER --- */
-        .main-container {
+        .wave-bar {
+            width: 8px;
+            background: var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+            animation: wave-pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes wave-pulse {
+            0%, 100% { height: 20%; opacity: 0.4; }
+            50% { height: 80%; opacity: 1; }
+        }
+
+        /* --- MAIN LAYOUT --- */
+        .container {
             width: 90%;
-            max-width: 450px;
+            max-width: 480px;
+            padding: 60px 0;
             text-align: center;
-            z-index: 10;
+            z-index: 5;
         }
 
-        .profile-photo {
-            width: 150px;
-            height: 150px;
+        .profile-img {
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            border: 3px solid var(--retro-pink);
-            box-shadow: 0 0 20px var(--retro-pink);
-            margin-bottom: 20px;
-            object-fit: cover;
+            border: 2px solid var(--neon-blue);
+            padding: 5px;
+            margin-bottom: 15px;
+        }
+
+        .mini-intro {
+            font-size: 0.95rem;
+            color: #a0a0a0;
+            margin-bottom: 25px;
+            padding: 0 20px;
         }
 
         /* --- SHIMMER TEXT --- */
-        .shimmer-text {
-            font-size: 1.5rem;
-            font-weight: bold;
+        .shimmer {
+            font-weight: 800;
+            font-size: 1.8rem;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            color: rgba(255, 255, 255, 0.5);
-            background: linear-gradient(90deg, #555, #fff, #555);
+            letter-spacing: -0.5px;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #555 0%, #fff 50%, #555 100%);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shimmer 3s infinite linear;
-            margin-bottom: 40px;
+            animation: shimmer-effect 3s infinite linear;
         }
 
-        @keyframes shimmer {
-            to { background-position: 200% center; }
+        @keyframes shimmer-effect {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
         }
 
-        /* --- LINK BUTTONS --- */
-        .link-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        /* --- BUTTON STYLES --- */
+        .stack { display: flex; flex-direction: column; gap: 16px; }
 
-        .link-btn {
-            padding: 15px;
-            border: 1px solid var(--neon-cyan);
-            background: var(--glass);
-            color: var(--neon-cyan);
+        .btn {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 18px;
+            border-radius: 12px;
             text-decoration: none;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            display: block;
         }
 
-        .link-btn:hover {
-            background: var(--neon-cyan);
-            color: var(--dark-space);
-            box-shadow: 0 0 15px var(--neon-cyan);
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(123, 47, 247, 0.4);
         }
 
-        .link-btn::after {
-            content: '>>';
-            position: absolute;
-            right: 10px;
-            opacity: 0.5;
+        .btn-primary-offer {
+            border: 2px solid #fff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .lead-magnet-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 16px;
+            margin: 20px 0;
+            border: 1px dashed rgba(43, 209, 255, 0.3);
+        }
+
+        .input-mini {
+            width: 80%;
+            padding: 10px;
+            background: #000;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 6px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Decorative HUD -->
-    <div class="side-hud left-hud"></div>
-    <div class="side-hud right-hud"></div>
+    <!-- Waveform HUDs -->
+    <div class="hud-sidebar left-hud">
+        <div class="wave-bar" style="animation-delay: 0.1s"></div>
+        <div class="wave-bar" style="animation-delay: 0.4s"></div>
+        <div class="wave-bar" style="animation-delay: 0.2s"></div>
+        <div class="wave-bar" style="animation-delay: 0.6s"></div>
+    </div>
 
-    <div class="main-container">
-        <!-- Profile Section -->
-        <img src="images/commanderqhs.png" alt="Commander QHS" class="profile-photo">
-        <div class="shimmer-text">System Online</div>
+    <div class="hud-sidebar right-hud">
+        <div class="wave-bar" style="animation-delay: 0.3s"></div>
+        <div class="wave-bar" style="animation-delay: 0.0s"></div>
+        <div class="wave-bar" style="animation-delay: 0.5s"></div>
+        <div class="wave-bar" style="animation-delay: 0.2s"></div>
+    </div>
 
-        <!-- Links Section -->
-        <div id="links-list" class="link-container">
-            <!-- Links will be injected here by JS -->
+    <div class="container">
+        <!-- Profile & Intro -->
+        <img src="images/commanderqhs.png" alt="Commander QHS" class="profile-img">
+        <div class="shimmer">Commander QHS</div>
+        <p class="mini-intro">Mastering the digital frontier. Mission: Bridging the gap between retro aesthetics and future tech for the modern creator.</p>
+
+        <div id="content-stack" class="stack">
+            <!-- JS will inject Primary Offer, Lead Magnet, and Content here -->
         </div>
     </div>
 
     <script>
-        // CONFIGURATION: Easily add/remove or toggle links here
-        const linkConfig = [
-            { name: "Main Database", url: "#", active: true },
-            { name: "Project: WeatherMX", url: "#", active: true },
-            { name: "Citizen Services", url: "#", active: true },
-            { name: "Archived Comms", url: "#", active: false }, // This one won't show
-            { name: "GitHub Terminal", url: "#", active: true }
-        ];
+        // CONFIGURATION: Set 'active: false' to hide any element
+        const siteConfig = {
+            primaryOffer: {
+                title: "🚀 JOIN THE ACADEMY",
+                url: "#",
+                active: true
+            },
+            leadMagnet: {
+                title: "Free Retro-Tech Asset Pack",
+                active: true
+            },
+            links: [
+                { title: "Latest YouTube Video", url: "#", active: true },
+                { title: "Twitter Terminal", url: "#", active: true },
+                { title: "GitHub Repository", url: "#", active: true },
+                { title: "Old Blog Post", url: "#", active: false }
+            ]
+        };
 
-        const container = document.getElementById('links-list');
+        const stack = document.getElementById('content-stack');
 
-        linkConfig.forEach(link => {
+        // 1. Render Primary Offer
+        if (siteConfig.primaryOffer.active) {
+            stack.innerHTML += `<a href="${siteConfig.primaryOffer.url}" class="btn btn-primary-offer">${siteConfig.primaryOffer.title}</a>`;
+        }
+
+        // 2. Render Lead Magnet
+        if (siteConfig.leadMagnet.active) {
+            stack.innerHTML += `
+                <div class="lead-magnet-box">
+                    <h4 style="margin-top:0">${siteConfig.leadMagnet.title}</h4>
+                    <input type="email" placeholder="Enter your transmission ID (Email)" class="input-mini">
+                    <button class="btn" style="width:100%; padding:10px;">Download Now</button>
+                </div>`;
+        }
+
+        // 3. Render General Links
+        siteConfig.links.forEach(link => {
             if (link.active) {
-                const a = document.createElement('a');
-                a.href = link.url;
-                a.className = 'link-btn';
-                a.innerText = link.name;
-                container.appendChild(a);
+                stack.innerHTML += `<a href="${link.url}" class="btn">${link.title}</a>`;
             }
         });
     </script>
