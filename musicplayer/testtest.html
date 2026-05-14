@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commander QHS | Command Center</title>
+    <style>
+        :root {
+            --neon-cyan: #00f2ff;
+            --retro-pink: #ff00ff;
+            --dark-space: #05050a;
+            --tech-green: #39ff14;
+            --glass: rgba(255, 255, 255, 0.05);
+            /* Custom Cursor Implementation */
+            cursor: url('images/pointer.png'), auto;
+        }
+
+        body {
+            background-color: var(--dark-space);
+            background-image: 
+                linear-gradient(var(--glass) 1px, transparent 1px),
+                linear-gradient(90deg, var(--glass) 1px, transparent 1px);
+            background-size: 30px 30px; /* Retro grid background */
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- DECORATIVE SIDE ELEMENTS (Desktop Only) --- */
+        .side-hud {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+            height: 70vh;
+            border: 1px solid var(--neon-cyan);
+            background: linear-gradient(180deg, rgba(0, 242, 255, 0.1), transparent);
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .side-hud { display: block; }
+            .left-hud { left: 5vw; border-right: 4px solid var(--neon-cyan); }
+            .right-hud { right: 5vw; border-left: 4px solid var(--neon-cyan); }
+        }
+
+        /* --- CENTRAL CONTAINER --- */
+        .main-container {
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid var(--retro-pink);
+            box-shadow: 0 0 20px var(--retro-pink);
+            margin-bottom: 20px;
+            object-fit: cover;
+        }
+
+        /* --- SHIMMER TEXT --- */
+        .shimmer-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.5);
+            background: linear-gradient(90deg, #555, #fff, #555);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s infinite linear;
+            margin-bottom: 40px;
+        }
+
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+
+        /* --- LINK BUTTONS --- */
+        .link-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .link-btn {
+            padding: 15px;
+            border: 1px solid var(--neon-cyan);
+            background: var(--glass);
+            color: var(--neon-cyan);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-btn:hover {
+            background: var(--neon-cyan);
+            color: var(--dark-space);
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .link-btn::after {
+            content: '>>';
+            position: absolute;
+            right: 10px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Decorative HUD -->
+    <div class="side-hud left-hud"></div>
+    <div class="side-hud right-hud"></div>
+
+    <div class="main-container">
+        <!-- Profile Section -->
+        <img src="images/commanderqhs.png" alt="Commander QHS" class="profile-photo">
+        <div class="shimmer-text">System Online</div>
+
+        <!-- Links Section -->
+        <div id="links-list" class="link-container">
+            <!-- Links will be injected here by JS -->
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURATION: Easily add/remove or toggle links here
+        const linkConfig = [
+            { name: "Main Database", url: "#", active: true },
+            { name: "Project: WeatherMX", url: "#", active: true },
+            { name: "Citizen Services", url: "#", active: true },
+            { name: "Archived Comms", url: "#", active: false }, // This one won't show
+            { name: "GitHub Terminal", url: "#", active: true }
+        ];
+
+        const container = document.getElementById('links-list');
+
+        linkConfig.forEach(link => {
+            if (link.active) {
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.className = 'link-btn';
+                a.innerText = link.name;
+                container.appendChild(a);
+            }
+        });
+    </script>
+</body>
+</html>
