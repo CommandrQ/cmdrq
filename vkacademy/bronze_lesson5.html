@@ -14,13 +14,23 @@
     </script>
     <style>
         /* --- HIGH-RESOLUTION PRINT / PDF OVERRIDE MATRIX --- */
+        @page {
+            size: letter portrait; /* Forces a standard document sheet scale */
+            margin: 0mm;           /* CRITICAL: Hard-forces the browser to drop URLs, dates, and page numbers */
+        }
+
         @media print {
-            body {
-                background: white !important;
-                color: black !important;
+            html, body {
+                background: #ffffff !important;
+                background-color: #ffffff !important;
+                color: #000000 !important;
                 font-family: 'Times New Roman', serif !important;
+                width: 100% !important;
+                height: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
-            /* Hide entire interactive app interface from the PDF printout */
+            /* Hide entire app interface, sky backgrounds, and buttons from the PDF */
             #starfield, .progress-container, .container footer, button, .next-btn, .experiment-box, .subtitle, .intro-text {
                 display: none !important;
             }
@@ -29,29 +39,39 @@
                 margin: 0 !important;
                 width: 100% !important;
                 max-width: 100% !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                height: 100vh !important; /* Centers the card perfectly on the blank sheet */
             }
             .console-card {
                 background: transparent !important;
                 border: none !important;
                 box-shadow: none !important;
                 padding: 0 !important;
+                width: 100% !important;
             }
-            /* Isolate and scale only the certificate container to full horizontal aspect sheet */
+            /* Isolate, clean, and crop just the certificate element */
             #certificate-area {
                 display: block !important;
                 opacity: 1 !important;
                 visibility: visible !important;
-                width: 100% !important;
+                box-sizing: border-box !important;
+                width: 85% !important; /* Creates an elegant, even border gap around the page */
+                max-width: 750px !important;
+                margin: 0 auto !important;
                 border: 4px double #111111 !important;
-                padding: 40px !important;
+                padding: 60px 40px !important;
                 text-align: center !important;
-                margin-top: 50px !important;
-                background: white !important;
-                color: black !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+                box-shadow: none !important;
             }
             .cert-title { color: #000000 !important; font-size: 2.2rem !important; }
-            .cert-name { color: #000000 !important; font-size: 2.5rem !important; border-bottom: 2px solid #333 !important; }
+            .cert-name { color: #000000 !important; font-size: 2.5rem !important; border-bottom: 2px solid #111111 !important; }
+            .cert-statement { color: #000000 !important; opacity: 1 !important; font-size: 1.1rem !important; }
             .cert-signature { color: #000000 !important; font-family: 'Georgia', serif !important; font-style: italic !important; }
+            .cert-rank { border-top: 1px solid #111111 !important; color: #000000 !important; opacity: 1 !important; }
         }
 
         /* Ambient On-Screen Certificate Preview Styling */
