@@ -84,6 +84,7 @@
             margin: 20px auto;
             max-width: 80%;
             padding-bottom: 5px;
+            text-transform: capitalize;
         }
         .cert-statement {
             font-size: 0.95rem;
@@ -206,7 +207,7 @@
             <button class="next-btn show" onclick="compileAndLoadEndCapstone(5, 100)">Lock in the Mindset</button>
         </main>
 
-        <!-- SLIDE 5: TIERS WRAP UP & DYNAMIC CERTIFICATE INTERACTION -->
+        <!-- SLIDE 5: TIERS WRAP UP & DEEP PERSONALIZED CERTIFICATE -->
         <main class="console-card slide" id="slide-5">
             <h2 class="subtitle">The Compass is Yours</h2>
             <p class="intro-text">You have completed the foundational sequence of Master Yourself, Master The World. You now possess the basic diagnostic system required to organize any sudden chaos back into structured order.</p>
@@ -216,19 +217,23 @@
                 <p class="experiment-text">From this point forward, stop asking the world to be less chaotic. Your only responsibility is to look at every disruption and ask your inner voice: <strong>"Where exactly is the breakdown?"</strong> Trust the discovery process. Your armor is fully operational.</p>
             </div>
 
-            <!-- The High-End Printable Roster Certificate Matrix Component -->
+            <!-- Personalized Roster Certificate Matrix Component -->
             <div id="certificate-area" class="cert-preview-box">
-                <div class="cert-title">Vanguard Academy Core Alignment</div>
-                <div class="cert-sub">Certificate of Completion</div>
-                <div id="dynamic-cert-target-name" class="cert-name">Vanguard Citizen</div>
-                <p class="cert-statement">Has successfully integrated and locked in the operational principles of the Bronze Tier Mindset. Having mastered the initial configurations of Mind, Body, and Soul, they are hereby qualified to navigate real-world chaos with deliberate logic, balance, and absolute order.</p>
+                <div class="cert-title">Vanguard Academy Alignment</div>
+                <div class="cert-sub">Recognition of Internal Sovereignty</div>
+                
+                <!-- Dynamic Target Element for User's First and Last Name -->
+                <div id="dynamic-cert-target-name" class="cert-name"></div>
+                
+                <p class="cert-statement">This document honors your personal breakthrough in structural clarity. By stepping out of background thinking loops, confronting points of physical stagnation, and learning to guard your energetic boundaries, you have successfully stabilized your personal baseline. You have proven that you do not need the world to hand you a script because you have uncovered the internal logic required to navigate any storm from within.</p>
+                
                 <div class="cert-signature-block">
                     <div class="cert-signature">Captain Commander Q</div>
                     <div class="cert-rank">Vanguard Knights</div>
                 </div>
             </div>
             
-            <!-- Dual Branch Control Group Layout Row -->
+            <!-- Control Group Layout Row -->
             <div class="button-group-row">
                 <button class="next-btn show" onclick="window.print()">Print / PDF</button>
                 <button class="next-btn show finish-btn" onclick="finishLesson5()">Return to Hub</button>
@@ -261,9 +266,9 @@
 
         function sparkComet() {
             const comet = document.createElement('div');
-            comet.classList.add('comet');
             const startX = Math.random() * 40 + 60; 
             const startY = Math.random() * 30; 
+            comet.classList.add('comet');
             comet.style.right = `${100 - startX}vw`;
             comet.style.top = `${startY}vh`;
             starfield.appendChild(comet);
@@ -304,15 +309,16 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        /* --- 3. DYNAMIC CAPSTONE LOADER WITH CACHE PROFILE INJECTION --- */
+        /* --- 3. DYNAMIC PROFILE INJECTION --- */
         function compileAndLoadEndCapstone(slideId, progressTarget) {
-            // Check local storage for the user's authentic verified roster identity name
+            // Extracts the full name stored at account generation in Lesson 1
             const explicitStoredName = localStorage.getItem('vanguard_citizen_name');
             if (explicitStoredName && explicitStoredName.trim().length > 2) {
                 document.getElementById('dynamic-cert-target-name').innerText = explicitStoredName;
+            } else {
+                document.getElementById('dynamic-cert-target-name').innerText = "Vanguard Graduate";
             }
             
-            // Advance slide frame layout normal criteria rules
             goToSlide(slideId, progressTarget);
         }
 
@@ -343,7 +349,6 @@
             document.body.style.transition = 'opacity 0.6s ease';
             document.body.style.opacity = '0';
             setTimeout(() => {
-                // Returns users securely back out to root dashboard file node
                 window.location.href = 'hub.html'; 
             }, 600);
         }
