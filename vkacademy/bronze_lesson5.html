@@ -22,7 +22,6 @@
             padding: 30px;
             text-align: center;
             box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
-            transition: all 0.5s ease;
         }
         .cert-title {
             font-size: 1.2rem;
@@ -85,26 +84,14 @@
         }
         .button-group-row {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            justify-content: center;
             width: 100%;
+            margin-top: 25px;
         }
-        @media (min-width: 600px) {
-            .button-group-row {
-                flex-direction: row;
-                justify-content: center;
-                max-width: 500px;
-                margin: 25px auto 0 auto;
-            }
-            .button-group-row .next-btn {
-                margin: 0;
-                width: 50%;
-            }
-        }
-        /* State for when request is successful */
-        .request-success {
-            border-color: #a7f3d0 !important;
-            background: rgba(16, 185, 129, 0.05) !important;
+        .button-group-row .next-btn {
+            margin: 0;
+            width: 100%;
+            max-width: 320px;
         }
     </style>
 </head>
@@ -180,7 +167,7 @@
             <button class="next-btn show" onclick="compileAndLoadEndCapstone(5, 100)">Lock in the Mindset</button>
         </main>
 
-        <!-- SLIDE 5: TIERS WRAP UP & CERTIFICATE REQUEST -->
+        <!-- SLIDE 5: TIERS WRAP UP & PROGRESS LOGGING -->
         <main class="console-card slide" id="slide-5">
             <h2 class="subtitle">The Compass is Yours</h2>
             <p class="intro-text">You have completed the foundational sequence of Master Yourself, Master The World. You now possess the basic diagnostic system required to organize any sudden chaos back into structured order.</p>
@@ -190,37 +177,27 @@
                 <p class="experiment-text">From this point forward, stop asking the world to be less chaotic. Your only responsibility is to look at every disruption and ask your inner voice: <strong>"Where exactly is the breakdown?"</strong> Trust the discovery process. Your armor is fully operational.</p>
             </div>
 
-            <!-- Personalized Roster Certificate Matrix Component -->
+            <!-- Personalized Reward Preview Matrix Component -->
             <div id="certificate-area" class="cert-preview-box">
-                <div id="cert-content-box">
-                    <div class="cert-title">Vanguard Academy Alignment</div>
-                    <div class="cert-sub">Recognition of Internal Sovereignty</div>
-                    
-                    <!-- Dynamic Target Element for User's First and Last Name -->
-                    <div id="dynamic-cert-target-name" class="cert-name"></div>
-                    
-                    <p class="cert-statement">This document honors your personal breakthrough in structural clarity. By stepping out of background thinking loops, confronting points of physical stagnation, and learning to guard your energetic boundaries, you have successfully stabilized your personal baseline.</p>
-                    
-                    <div class="cert-signature-block">
-                        <div class="cert-signature">Captain Commander Q</div>
-                        <div class="cert-rank">Vanguard Knights</div>
-                    </div>
-                </div>
+                <div class="cert-title">Vanguard Academy Alignment</div>
+                <div class="cert-sub">Recognition of Internal Sovereignty</div>
                 
-                <!-- Success Message (Hidden by default) -->
-                <div id="request-success-msg" style="display:none;">
-                    <i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 3rem; margin-bottom: 15px;"></i>
-                    <h3 style="color: white; margin-bottom: 10px;">Request Received</h3>
-                    <p style="color: #e2e8f0; font-size: 0.9rem;">Captain Commander Q has been notified. Your official record is being processed.</p>
+                <!-- Dynamic Target Element for User's First and Last Name -->
+                <div id="dynamic-cert-target-name" class="cert-name"></div>
+                
+                <p class="cert-statement">This document honors your personal breakthrough in structural clarity. By stepping out of background thinking loops, confronting points of physical stagnation, and learning to guard your energetic boundaries, you have successfully stabilized your personal baseline. You have proven that you do not need the world to hand you a script because you have uncovered the internal logic required to navigate any storm from within.</p>
+                
+                <div class="cert-signature-block">
+                    <div class="cert-signature">Captain Commander Q</div>
+                    <div class="cert-rank">Vanguard Knights</div>
                 </div>
             </div>
 
-            <!-- Global Resource Notice Component -->
+            <!-- Global Resource Notice Disclaimer Component -->
             <p class="disclaimer-text">Notice: Certificates are available on request.</p>
             
-            <!-- Control Group Layout Row -->
+            <!-- Centralized Action Layout Row -->
             <div class="button-group-row">
-                <button id="request-cert-btn" class="next-btn show" onclick="requestOfficialCertificate()">Request Certificate</button>
                 <button class="next-btn show finish-btn" onclick="finishLesson5()">Return to Hub</button>
             </div>
         </main>
@@ -311,43 +288,8 @@
             goToSlide(slideId, progressTarget);
         }
 
-        /* --- 5. CERTIFICATE REQUEST ENGINE --- */
-        async function requestOfficialCertificate() {
-            const btn = document.getElementById('request-cert-btn');
-            btn.innerText = "Requesting...";
-            btn.style.pointerEvents = "none";
 
-            try {
-                const { data: { user } } = await _supabase.auth.getUser();
-                
-                if (user) {
-                    const { error } = await _supabase
-                        .from('master_roster')
-                        .update({ 
-                            bronze_status: 'complete',
-                            cert_requested_at: new Date().toISOString()
-                        })
-                        .eq('id', user.id);
-
-                    if (error) throw error;
-
-                    document.getElementById('cert-content-box').style.display = 'none';
-                    document.getElementById('request-success-msg').style.display = 'block';
-                    document.getElementById('certificate-area').classList.add('request-success');
-                    btn.style.display = 'none';
-                    
-                } else {
-                    alert("Session expired. Please return to hub and sign in again.");
-                }
-            } catch (err) {
-                console.error(err);
-                btn.innerText = "Error - Try Again";
-                btn.style.pointerEvents = "auto";
-            }
-        }
-
-
-        /* --- 6. INPUT AND INTERACTION RULES --- */
+        /* --- 5. INPUT AND INTERACTION RULES --- */
         function activateSlide2Button(selection) {
             document.querySelectorAll('#slide-2 .option-box').forEach(box => {
                 box.classList.remove('active');
@@ -367,9 +309,27 @@
             }
         }
 
-        function finishLesson5() {
+        async function finishLesson5() {
+            // Set tracking markers inside local client storage cache
             localStorage.setItem('ordo_bronze_tier_complete', 'true');
             
+            try {
+                // Background update to database ledger tracking system
+                const { data: { user } } = await _supabase.auth.getUser();
+                if (user) {
+                    await _supabase
+                        .from('master_roster')
+                        .update({ 
+                            bronze_status: 'complete',
+                            cert_requested_at: new Date().toISOString()
+                        })
+                        .eq('id', user.id);
+                }
+            } catch (err) {
+                console.warn("Database status auto-log bypassed:", err);
+            }
+
+            // Beautiful clean application container out-fade transitions
             document.body.style.transition = 'opacity 0.6s ease';
             document.body.style.opacity = '0';
             setTimeout(() => {
