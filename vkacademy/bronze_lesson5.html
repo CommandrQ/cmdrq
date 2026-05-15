@@ -12,6 +12,127 @@
             window.location.href = 'intro.html';
         }
     </script>
+    <style>
+        /* --- HIGH-RESOLUTION PRINT / PDF OVERRIDE MATRIX --- */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+                font-family: 'Times New Roman', serif !important;
+            }
+            /* Hide entire interactive app interface from the PDF printout */
+            #starfield, .progress-container, .container footer, button, .next-btn, .experiment-box, .subtitle, .intro-text {
+                display: none !important;
+            }
+            .container {
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            .console-card {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+            }
+            /* Isolate and scale only the certificate container to full horizontal aspect sheet */
+            #certificate-area {
+                display: block !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                width: 100% !important;
+                border: 4px double #111111 !important;
+                padding: 40px !important;
+                text-align: center !important;
+                margin-top: 50px !important;
+                background: white !important;
+                color: black !important;
+            }
+            .cert-title { color: #000000 !important; font-size: 2.2rem !important; }
+            .cert-name { color: #000000 !important; font-size: 2.5rem !important; border-bottom: 2px solid #333 !important; }
+            .cert-signature { color: #000000 !important; font-family: 'Georgia', serif !important; font-style: italic !important; }
+        }
+
+        /* Ambient On-Screen Certificate Preview Styling */
+        .cert-preview-box {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed rgba(142, 202, 230, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        .cert-title {
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--light-blue);
+            margin-bottom: 15px;
+        }
+        .cert-sub {
+            font-size: 0.85rem;
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .cert-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            margin: 20px auto;
+            max-width: 80%;
+            padding-bottom: 5px;
+        }
+        .cert-statement {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            opacity: 0.8;
+            max-width: 90%;
+            margin: 0 auto 35px auto;
+        }
+        .cert-signature-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .cert-signature {
+            font-size: 1.4rem;
+            font-family: 'Lucida Handwriting', 'Courier New', cursive;
+            color: var(--light-purple);
+            letter-spacing: 1px;
+        }
+        .cert-rank {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-top: 5px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 5px;
+            width: 200px;
+        }
+        .button-group-row {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+        @media (min-width: 600px) {
+            .button-group-row {
+                flex-direction: row;
+                justify-content: center;
+                max-width: 500px;
+                margin: 35px auto 0 auto;
+            }
+            .button-group-row .next-btn {
+                margin: 0;
+                width: 50%;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -31,7 +152,7 @@
 
     <div class="container">
         
-        <!-- SLIDE 1: THE TRAP OF THE CHEAT CODE (RELATABILITY) -->
+        <!-- SLIDE 1: THE TRAP OF THE CHEAT CODE -->
         <main class="console-card slide active" id="slide-1">
             <h2 class="subtitle">The Flashlight, Not the Script</h2>
             <p class="intro-text">When life throws a curveball, most people look for a magic formula, a specific checklist, or a piece of advice that tells them exactly what to do. We want a perfect script to tell us how to fix the tangle instantly.</p>
@@ -41,10 +162,10 @@
             <button class="next-btn show" onclick="goToSlide(2, 25)">See the Lens</button>
         </main>
 
-        <!-- SLIDE 2: PARSING THE CRISIS (WHAT THEY NEED) -->
+        <!-- SLIDE 2: PARSING THE CRISIS -->
         <main class="console-card slide" id="slide-2">
             <h2 class="subtitle">Deconstructing the Event</h2>
-            <p class="intro-text">When an unexpected event happens—a canceled contract, an unexpected bill, or a sudden disagreement—the uncalibrated mind panic because it sees a massive wall of text. It experiences the problem as a single, overwhelming blow.</p>
+            <p class="intro-text">When an unexpected event happens—a canceled contract, an unexpected bill, or a sudden disagreement—the uncalibrated mind panics because it sees a massive wall of text. It experiences the problem as a single, overwhelming blow.</p>
             <p class="intro-text">The Ordo mindset takes that event and automatically splits it apart. You stop looking at the catastrophe as a whole and start inspecting the underlying layers:</p>
             <p class="intro-text">You ask: Did the architecture of the plan change? Is my current physical setup or stamina falling short? Or did the emotional atmosphere shift? By tracking down where the actual knot lives, you prevent the panic from spreading to the rest of your life.</p>
             
@@ -75,27 +196,43 @@
             <button id="btn-slide-3" class="next-btn" onclick="goToSlide(4, 75)">Filter the Chaos</button>
         </main>
 
-        <!-- SLIDE 4: THE CALIBRATION (VAGUE & NEUTRAL) -->
+        <!-- SLIDE 4: THE CALIBRATION -->
         <main class="console-card slide" id="slide-4">
             <h2 class="subtitle">The Discovery Engine</h2>
             <p class="intro-text">Look quietly at <span class="highlight-text" id="user-event-recall">the disruption you named</span>. Notice that the event itself is completely neutral text on a screen. It has no power to break your internal peace unless you allow it to remain a giant, unparsed cloud.</p>
             <p class="intro-text">Ordo does not sweep that event away or fix it for you. Instead, it prompts you to look through the layers. Is your strategy broken, is your body exhausted, or is the environment's mood throwing you off?</p>
             <p class="intro-text">The moment you stop treating the situation like a tragedy and start treating it as a set of separate components, the right choice reveals itself. The confusion drops away, and you find your bearing. You didn't find a template; you discovered your own logic.</p>
             
-            <button class="next-btn show" onclick="goToSlide(5, 100)">Lock in the Mindset</button>
+            <button class="next-btn show" onclick="compileAndLoadEndCapstone(5, 100)">Lock in the Mindset</button>
         </main>
 
-        <!-- SLIDE 5: TIERS WRAP UP & COMPASS EXPERIMENT -->
+        <!-- SLIDE 5: TIERS WRAP UP & DYNAMIC CERTIFICATE INTERACTION -->
         <main class="console-card slide" id="slide-5">
             <h2 class="subtitle">The Compass is Yours</h2>
             <p class="intro-text">You have completed the foundational sequence of Master Yourself, Master The World. You now possess the basic diagnostic system required to organize any sudden chaos back into structured order.</p>
             
             <div class="experiment-box">
                 <span class="experiment-tag">INTEGRATION EXPERIMENT</span>
-                <p class="experiment-text">From this point forward, stop asking the world to be less chaotic. Accept that storms will happen. Your only responsibility is to look at every disruption and ask your inner voice: <strong>"Where exactly is the breakdown?"</strong> Trust the discovery process. Your armor is fully operational.</p>
+                <p class="experiment-text">From this point forward, stop asking the world to be less chaotic. Your only responsibility is to look at every disruption and ask your inner voice: <strong>"Where exactly is the breakdown?"</strong> Trust the discovery process. Your armor is fully operational.</p>
+            </div>
+
+            <!-- The High-End Printable Roster Certificate Matrix Component -->
+            <div id="certificate-area" class="cert-preview-box">
+                <div class="cert-title">Vanguard Academy Core Alignment</div>
+                <div class="cert-sub">Certificate of Completion</div>
+                <div id="dynamic-cert-target-name" class="cert-name">Vanguard Citizen</div>
+                <p class="cert-statement">Has successfully integrated and locked in the operational principles of the Bronze Tier Mindset. Having mastered the initial configurations of Mind, Body, and Soul, they are hereby qualified to navigate real-world chaos with deliberate logic, balance, and absolute order.</p>
+                <div class="cert-signature-block">
+                    <div class="cert-signature">Captain Commander Q</div>
+                    <div class="cert-rank">Vanguard Knights</div>
+                </div>
             </div>
             
-            <button class="next-btn show finish-btn" onclick="finishLesson5()">Return to the Hub</button>
+            <!-- Dual Branch Control Group Layout Row -->
+            <div class="button-group-row">
+                <button class="next-btn show" onclick="window.print()">Print / PDF</button>
+                <button class="next-btn show finish-btn" onclick="finishLesson5()">Return to Hub</button>
+            </div>
         </main>
 
     </div>
@@ -167,8 +304,20 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        /* --- 3. DYNAMIC CAPSTONE LOADER WITH CACHE PROFILE INJECTION --- */
+        function compileAndLoadEndCapstone(slideId, progressTarget) {
+            // Check local storage for the user's authentic verified roster identity name
+            const explicitStoredName = localStorage.getItem('vanguard_citizen_name');
+            if (explicitStoredName && explicitStoredName.trim().length > 2) {
+                document.getElementById('dynamic-cert-target-name').innerText = explicitStoredName;
+            }
+            
+            // Advance slide frame layout normal criteria rules
+            goToSlide(slideId, progressTarget);
+        }
 
-        /* --- 3. INPUT AND INTERACTION RULES --- */
+
+        /* --- 4. INPUT AND INTERACTION RULES --- */
         function activateSlide2Button(selection) {
             document.querySelectorAll('#slide-2 .option-box').forEach(box => {
                 box.classList.remove('active');
@@ -189,12 +338,12 @@
         }
 
         function finishLesson5() {
-            // Signal tier completion flag locally for database or hub tracking later
             localStorage.setItem('ordo_bronze_tier_complete', 'true');
             
             document.body.style.transition = 'opacity 0.6s ease';
             document.body.style.opacity = '0';
             setTimeout(() => {
+                // Returns users securely back out to root dashboard file node
                 window.location.href = 'hub.html'; 
             }, 600);
         }
