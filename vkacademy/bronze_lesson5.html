@@ -29,21 +29,44 @@
                 height: 100% !important;
                 margin: 0 !important;
                 padding: 0 !important;
+                overflow: hidden !important; /* CRITICAL: Prevents any accidental trailing page bleed */
+                -webkit-print-color-adjust: exact; /* Forces background colors/borders to stay alive */
+                print-color-adjust: exact;
             }
-            /* Hide entire app interface, sky backgrounds, and buttons from the PDF */
-            #starfield, .progress-container, .container footer, button, .next-btn, .experiment-box, .subtitle, .intro-text {
+            
+            /* Completely erase all screen interface elements from print memory */
+            #starfield, .progress-container, footer, .container footer, 
+            button, .next-btn, .experiment-box, .subtitle, .intro-text, .button-group-row {
+                display: none !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Hard-delete slides 1-4 from the layout math so they don't generate blank pages */
+            .slide {
                 display: none !important;
             }
+
+            /* Force only the final active capstone slide to render as a perfectly centered viewport box */
+            .slide.active {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 100vw !important;
+                height: 100vh !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
             .container {
                 padding: 0 !important;
                 margin: 0 !important;
                 width: 100% !important;
                 max-width: 100% !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                height: 100vh !important; /* Centers the card perfectly on the blank sheet */
+                height: 100% !important;
             }
+
             .console-card {
                 background: transparent !important;
                 border: none !important;
@@ -51,27 +74,37 @@
                 padding: 0 !important;
                 width: 100% !important;
             }
-            /* Isolate, clean, and crop just the certificate element */
+
+            /* Isolate, tightly scale, and center the certificate graphic element */
             #certificate-area {
                 display: block !important;
                 opacity: 1 !important;
                 visibility: visible !important;
                 box-sizing: border-box !important;
-                width: 85% !important; /* Creates an elegant, even border gap around the page */
-                max-width: 750px !important;
+                
+                /* Clamped dimensions ensure the certificate strictly scales onto one page */
+                width: 85% !important;
+                max-width: 660px !important;
+                max-height: 85% !important;
                 margin: 0 auto !important;
+                
                 border: 4px double #111111 !important;
-                padding: 60px 40px !important;
+                padding: 45px 35px !important; /* Slightly tighter internal padding */
                 text-align: center !important;
                 background: #ffffff !important;
                 color: #000000 !important;
                 box-shadow: none !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
-            .cert-title { color: #000000 !important; font-size: 2.2rem !important; }
-            .cert-name { color: #000000 !important; font-size: 2.5rem !important; border-bottom: 2px solid #111111 !important; }
-            .cert-statement { color: #000000 !important; opacity: 1 !important; font-size: 1.1rem !important; }
-            .cert-signature { color: #000000 !important; font-family: 'Georgia', serif !important; font-style: italic !important; }
-            .cert-rank { border-top: 1px solid #111111 !important; color: #000000 !important; opacity: 1 !important; }
+
+            /* Finely scaled typography to guarantee zero text layout spilling */
+            .cert-title { color: #000000 !important; font-size: 1.8rem !important; margin-bottom: 8px !important; letter-spacing: 2px !important; }
+            .cert-sub { color: #333333 !important; font-size: 0.8rem !important; }
+            .cert-name { color: #000000 !important; font-size: 2.2rem !important; margin: 15px auto !important; border-bottom: 2px solid #111111 !important; padding-bottom: 4px !important; }
+            .cert-statement { color: #000000 !important; opacity: 1 !important; font-size: 0.95rem !important; line-height: 1.5 !important; margin: 0 auto 25px auto !important; }
+            .cert-signature { color: #000000 !important; font-family: 'Georgia', serif !important; font-style: italic !important; font-size: 1.2rem !important; }
+            .cert-rank { border-top: 1px solid #111111 !important; color: #000000 !important; opacity: 1 !important; font-size: 0.7rem !important; width: 160px !important; margin-top: 4px !important; }
         }
 
         /* Ambient On-Screen Certificate Preview Styling */
