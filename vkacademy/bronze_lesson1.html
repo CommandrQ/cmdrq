@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ordo | Lesson 1: Introduction</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Supabase Official CDN Integration -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // CRITICAL AUTH GATE: Intercept page load instantly if already signed in
+        if (localStorage.getItem('vanguard_session_status') === 'active') {
+            window.location.href = 'bronze_lesson2.html';
+        }
+    </script>
 </head>
 <body>
 
@@ -31,7 +39,7 @@
             <p class="intro-text"><strong>Ordo</strong> is a Latin word that simply means <em>Order</em> or <em>Arrangement</em>. It is not a religion, and it is not a complex academic theory. </p>
             <p class="intro-text">It is a practical, three-part mindset designed to stop your brain from spinning out of control by organizing chaos into clean, workable parts.</p>
             
-            <button class="next-btn show" onclick="goToSlide(2, 25)">Where It Comes From</button>
+            <button class="next-btn show" onclick="goToSlide(2, 20)">Where It Comes From</button>
         </main>
 
         <!-- SLIDE 2: THE SIMPLE ORIGINS -->
@@ -59,7 +67,7 @@
                 </div>
             </div>
             
-            <button id="btn-slide-2" class="next-btn" onclick="goToSlide(3, 50)">See How It Works</button>
+            <button id="btn-slide-2" class="next-btn" onclick="goToSlide(3, 40)">See How It Works</button>
         </main>
 
         <!-- SLIDE 3: REAL WORLD USES -->
@@ -72,10 +80,10 @@
             <p class="prompt-text">Think of a recent situation in your own life that felt completely overwhelming. Give it a short name below:</p>
             <input type="text" id="chaos-env-input" class="text-input" placeholder="e.g., Moving to a new apartment, my team's deadline..." oninput="validateSlide3Input()">
             
-            <button id="btn-slide-3" class="next-btn" onclick="goToSlide(4, 75)">Look Closer At It</button>
+            <button id="btn-slide-3" class="next-btn" onclick="goToSlide(4, 60)">Look Closer At It</button>
         </main>
 
-        <!-- SLIDE 4: THE CALIBRATION (HUMANIZED & INTELLIGENT IDK FILTER) -->
+        <!-- SLIDE 4: THE CALIBRATION -->
         <main class="console-card slide" id="slide-4">
             <h2 class="subtitle">Isolating the Break</h2>
             <p class="intro-text">Take a look at what you just wrote down: <span class="highlight-text" id="user-env-recall">your situation</span>.</p>
@@ -83,7 +91,7 @@
             <p class="intro-text">But Ordo teaches us to slow down and take a closer look. Most of the time, everything isn't actually ruined. You usually just have one single piece out of alignment that needs a little attention.</p>
             <p class="intro-text">Once you clear away the noise and spot exactly what is actually wrong, that giant wave of anxiety starts to lift, and you get your grip back.</p>
             
-            <button class="next-btn show" onclick="goToSlide(5, 100)">Take the First Step</button>
+            <button class="next-btn show" onclick="goToSlide(5, 80)">Take the First Step</button>
         </main>
 
         <!-- SLIDE 5: THE CONCLUSION & EXPERIMENT -->
@@ -96,7 +104,27 @@
                 <p class="experiment-text">For the next 24 hours, whenever a small problem tries to stress you out, do not react immediately. Ask your inner voice: <strong>"Is this a problem with the plan, a problem with the effort, or a problem with the vibe?"</strong> Watch how fast the drama disappears.</p>
             </div>
             
-            <button class="next-btn show finish-btn" onclick="finishLesson()">Complete Introduction</button>
+            <button class="next-btn show" onclick="goToSlide(6, 90)">Secure Your Progress</button>
+        </main>
+
+        <!-- SLIDE 6: QUICK ACCOUNT CREATION -->
+        <main class="console-card slide" id="slide-6">
+            <h2 class="subtitle">Create Your Account</h2>
+            <p class="intro-text" style="text-align: center; margin-bottom: 25px;">Let's log your initial alignment settings and lock in your progress so you don't lose your place in the next classes.</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div style="display: flex; gap: 12px;">
+                    <input type="text" id="first-name-input" class="text-input" placeholder="First Name" oninput="validateSignupForm()" style="margin-top:0;">
+                    <input type="text" id="last-name-input" class="text-input" placeholder="Last Name" oninput="validateSignupForm()" style="margin-top:0;">
+                </div>
+                <input type="email" id="email-input" class="text-input" placeholder="Email Address" oninput="validateSignupForm()" style="margin-top:0;">
+                <input type="password" id="password-input" class="text-input" placeholder="Create Password" oninput="validateSignupForm()" style="margin-top:0;">
+            </div>
+
+            <!-- Error Feedback Console -->
+            <p id="auth-error-msg" style="color: #ff6b6b; font-size: 0.9rem; margin-top: 15px; text-align: center; display: none;"></p>
+            
+            <button id="signup-submit-btn" class="next-btn finish-btn" onclick="handleSupabaseSignup()">Complete Introduction</button>
         </main>
 
     </div>
@@ -104,7 +132,12 @@
     <footer>Powered by Vanguard Citizen Services</footer>
 
     <script>
-        /* --- 1. AMBIENT BACKGROUND ENGINE --- */
+        /* --- 1. SUPABASE INITIALIZATION ENGINE --- */
+        const supabaseUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
+        const supabaseKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        /* --- 2. AMBIENT BACKGROUND MATRIX --- */
         const starfield = document.getElementById('starfield');
         
         for (let i = 0; i < 75; i++) {
@@ -145,30 +178,19 @@
         }
         queueNextComet();
 
-
-        /* --- 2. LESSON PROGRESSION ENGINE --- */
+        /* --- 3. LESSON SLIDE SYSTEM ENGINE --- */
         function goToSlide(slideId, progressTarget) {
             document.getElementById('progress-bar').style.width = `${progressTarget}%`;
             document.getElementById('progress-percentage').innerText = `${progressTarget}%`;
             
-            // Dynamic text validation logic for Slide 4
             if (slideId === 4) {
                 const rawInput = document.getElementById('chaos-env-input').value.trim();
-                
-                // Clean input for comparison (lowercase, strip weird spaces and punctuation)
                 const cleanInput = rawInput.toLowerCase().replace(/[^a-z ]/g, '').replace(/\s+/g, ' ');
-                
-                // Catch common blank expressions
-                const unsurePhrases = [
-                    'i dont know', 'idk', 'i do not know', 'not sure', 
-                    'nothing', 'no idea', 'none', 'dont know', 'cant tell'
-                ];
+                const unsurePhrases = ['i dont know', 'idk', 'i do not know', 'not sure', 'nothing', 'no idea', 'none', 'dont know', 'cant tell'];
                 
                 if (unsurePhrases.includes(cleanInput) || rawInput.length < 2) {
-                    // Smooth alternative phrase for uncertain users
                     document.getElementById('user-env-recall').innerText = "that feeling of not knowing where to begin";
                 } else {
-                    // Standard insertion path
                     document.getElementById('user-env-recall').innerText = `"${rawInput}"`;
                 }
             }
@@ -177,12 +199,10 @@
                 slide.classList.remove('active');
             });
             document.getElementById(`slide-${slideId}`).classList.add('active');
-            
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-
-        /* --- 3. INTERACTION & VALIDATION --- */
+        /* --- 4. FORM LOGIC & STAGE SELECTION VALIDATIONS --- */
         function activateSlide2Button(selection) {
             document.querySelectorAll('#slide-2 .option-box').forEach(box => {
                 box.classList.remove('active');
@@ -195,20 +215,87 @@
         function validateSlide3Input() {
             const val = document.getElementById('chaos-env-input').value.trim();
             const nextBtn = document.getElementById('btn-slide-3');
-            
-            if (val.length >= 2) { // Dropped threshold slightly to catch quick entries like "idk"
+            if (val.length >= 2) {
                 nextBtn.classList.add('show');
             } else {
                 nextBtn.classList.remove('show');
             }
         }
 
-        function finishLesson() {
-            document.body.style.transition = 'opacity 0.6s ease';
-            document.body.style.opacity = '0';
-            setTimeout(() => {
-                window.location.href = 'hub.html'; 
-            }, 600);
+        function validateSignupForm() {
+            const first = document.getElementById('first-name-input').value.trim();
+            const last = document.getElementById('last-name-input').value.trim();
+            const email = document.getElementById('email-input').value.trim();
+            const pass = document.getElementById('password-input').value.trim();
+            const submitBtn = document.getElementById('signup-submit-btn');
+
+            if(first.length > 1 && last.length > 1 && email.includes('@') && pass.length >= 6) {
+                submitBtn.classList.add('show');
+            } else {
+                submitBtn.classList.remove('show');
+            }
+        }
+
+        /* --- 5. SUPABASE AUTH & RECORD INSERTER --- */
+        async function handleSupabaseSignup() {
+            const first = document.getElementById('first-name-input').value.trim();
+            const last = document.getElementById('last-name-input').value.trim();
+            const email = document.getElementById('email-input').value.trim();
+            const password = document.getElementById('password-input').value.trim();
+            
+            const errorConsole = document.getElementById('auth-error-msg');
+            const submitBtn = document.getElementById('signup-submit-btn');
+            
+            errorConsole.style.display = "none";
+            submitBtn.innerText = "Securing Path...";
+            submitBtn.style.pointerEvents = "none";
+
+            try {
+                // Step A: Trigger native Supabase User Registration
+                const { data: authData, error: authError } = await _supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                });
+
+                if (authError) throw authError;
+
+                // Step B: Write variables into user 'master_record' schema
+                const { error: dbError } = await _supabase
+                    .from('master_record')
+                    .insert([
+                        { 
+                            first_name: first, 
+                            last_name: last, 
+                            email: email,
+                            initial_focus: localStorage.getItem('ordo_intro_default_type') || 'unspecified'
+                        }
+                    ]);
+
+                if (dbError) throw dbError;
+
+                // Step C: Save cookie criteria into localStorage for cache bypass
+                localStorage.setItem('vanguard_session_status', 'active');
+                localStorage.setItem('vanguard_citizen_name', `${first} ${last}`);
+
+                // Bring progress metrics directly to ceiling completion
+                document.getElementById('progress-bar').style.width = '100%';
+                document.getElementById('progress-percentage').innerText = '100%';
+
+                // Run beautiful out fade sequence
+                document.body.style.transition = 'opacity 0.6s ease';
+                document.body.style.opacity = '0';
+                
+                setTimeout(() => {
+                    // Forwarding users right into lesson 2 files
+                    window.location.href = 'bronze_lesson2.html'; 
+                }, 600);
+
+            } catch (error) {
+                errorConsole.innerText = error.message || "An external synchronization error occurred.";
+                errorConsole.style.display = "block";
+                submitBtn.innerText = "Complete Introduction";
+                submitBtn.style.pointerEvents = "auto";
+            }
         }
     </script>
 </body>
