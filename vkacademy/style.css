@@ -55,6 +55,10 @@ body {
     100% { transform: translate(-400px, 280px) rotate(-35deg); width: 0px; opacity: 0; }
 }
 
+@keyframes sheen { 
+    to { background-position: 200% center; } 
+}
+
 @keyframes heartbeat { 
     0%, 100% { opacity: 0.3; } 
     50% { opacity: 0.6; } 
@@ -103,13 +107,29 @@ body {
 .container {
     width: 90%;
     max-width: 650px;
-    padding: 85px 0 30px; /* Offset for fixed progress bar */
+    padding: 85px 0 30px; 
     z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
     flex-grow: 1;
     justify-content: center;
+}
+
+.tier-title {
+    font-size: clamp(1.5rem, 3.5vw, 2.2rem); 
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
+    background-size: 200% auto;
+    color: #8ecae6;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: sheen 4s linear infinite;
+    margin-bottom: 25px;
+    text-align: center;
 }
 
 .console-card {
@@ -297,19 +317,19 @@ body {
 }
 
 /* ===================================================================
-   8. BUTTONS & ANIMATIONS
+   8. BUTTONS & ANIMATIONS (FIXED & CENTERED)
    =================================================================== */
-.next-btn {
-    display: block;            /* Forces the button to respect margin centering */
-    width: 80%;                /* Shrinks it slightly from the edges */
-    max-width: 300px;          /* Prevents it from getting too wide on desktop */
-    margin: 35px auto 0 auto;  /* Perfectly centers the button horizontally */
+.start-btn, .next-btn {
+    display: block;
+    width: 80%;
+    max-width: 300px;
+    margin: 35px auto 0 auto; /* Perfect horizontal centering */
     padding: 16px 24px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 50px;
     color: var(--light-blue);
-    font-family: inherit;      /* Inherits your clean system font */
+    font-family: inherit;
     font-size: 1.05rem;
     font-weight: bold;
     text-transform: uppercase;
@@ -317,15 +337,15 @@ body {
     cursor: pointer;
     text-align: center;
     
-    /* Subtle Animation defaults */
+    /* Default hidden state */
     opacity: 0;
     transform: translateY(15px);
     pointer-events: none;
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* When the button is activated, it gets the vibrant glass gradient */
-.next-btn.show {
+/* Active visible state with vibrant gradient */
+.start-btn.show, .next-btn.show {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
@@ -335,26 +355,20 @@ body {
     box-shadow: 0 8px 25px rgba(142, 202, 230, 0.25);
 }
 
-/* Hover & Click Animations */
-.next-btn.show:hover {
+/* Hover effect */
+.start-btn.show:hover, .next-btn.show:hover {
     background: linear-gradient(135deg, #9fd5ee 0%, #ecd7fd 100%);
     transform: translateY(-3px) scale(1.02);
     box-shadow: 0 12px 30px rgba(142, 202, 230, 0.4);
 }
 
-.next-btn.show:active {
+/* Click down effect */
+.start-btn.show:active, .next-btn.show:active {
     transform: translateY(1px);
     box-shadow: 0 4px 10px rgba(142, 202, 230, 0.1);
 }
 
-/* Finish Capstone Button Variant (Inherits the same shape now) */
-.finish-btn {
-    width: 80%;
-    max-width: 300px;
-    margin: 35px auto 0 auto;
-}
-
-
+/* ===================================================================
    9. CALLOUT BOXES
    =================================================================== */
 .experiment-box {
@@ -428,7 +442,9 @@ footer {
         font-size: 0.95rem;
     }
     
-    .next-btn { 
+    /* Ensure buttons stay centered and scale down properly on small phones */
+    .start-btn, .next-btn { 
+        width: 90%;
         padding: 16px; 
         font-size: 0.9rem; 
         margin-top: 25px; 
