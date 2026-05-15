@@ -8,7 +8,7 @@
     <!-- Supabase Official CDN Integration -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // CRITICAL AUTH GATE: Intercept page load instantly if custom cookie is active
+        // CRITICAL AUTH GATE: Intercept page load instantly if custom session token is active
         if (localStorage.getItem('vanguard_session_status') === 'active') {
             window.location.href = 'bronze_lesson2.html';
         }
@@ -237,8 +237,8 @@
                         document.body.style.opacity = '0';
                         
                         setTimeout(() => {
-                            window.location.href = 'bronze_lesson2.html';
-                        }, 600);
+                            window.location.reload();
+                        }, 400);
                     } else {
                         const scanner = document.getElementById('scanner-state');
                         const formState = document.getElementById('signup-form-state');
@@ -355,18 +355,20 @@
                 if (error) throw error;
 
                 if (data && data.length > 0) {
+                    // Cache session signatures locally in global memory map
                     localStorage.setItem('vanguard_session_status', 'active');
                     localStorage.setItem('vanguard_citizen_name', `${data[0].first_name} ${data[0].last_name}`);
 
                     document.getElementById('progress-bar').style.width = '100%';
                     document.getElementById('progress-percentage').innerText = '100%';
 
-                    document.body.style.transition = 'opacity 0.6s ease';
+                    document.body.style.transition = 'opacity 0.4s ease';
                     document.body.style.opacity = '0';
                     
+                    // Safely reload the layout tree to catch the top-level gate
                     setTimeout(() => {
-                        window.location.href = 'bronze_lesson2.html'; 
-                    }, 600);
+                        window.location.reload(); 
+                    }, 400);
                 } else {
                     throw new Error("No matching entry found. Please check spelling or toggle back to register a new account.");
                 }
@@ -414,12 +416,13 @@
                 document.getElementById('progress-bar').style.width = '100%';
                 document.getElementById('progress-percentage').innerText = '100%';
 
-                document.body.style.transition = 'opacity 0.6s ease';
+                document.body.style.transition = 'opacity 0.4s ease';
                 document.body.style.opacity = '0';
                 
+                // Safely reload the layout tree to catch the top-level gate
                 setTimeout(() => {
-                    window.location.href = 'bronze_lesson2.html'; 
-                }, 600);
+                    window.location.reload(); 
+                }, 400);
 
             } catch (error) {
                 errorConsole.innerText = error.message || "An external synchronization error occurred.";
