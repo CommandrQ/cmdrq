@@ -277,3 +277,180 @@ footer {
     .option-text { font-size: 0.95rem; }
     .start-btn { padding: 16px; font-size: 0.95rem; margin-top: 20px; }
 }
+/* ===================================================================
+   LESSON ENGINE STYLES (SLIDES, PROGRESS & TEXT FORMS)
+   =================================================================== */
+
+/* Progress Bar Header Component */
+.progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(15, 12, 35, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px 20px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.progress-text {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--light-blue);
+    font-weight: bold;
+}
+
+.progress-track {
+    width: 100%;
+    max-width: 500px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #8ecae6 0%, #e0c3fc 100%);
+    border-radius: 10px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Slide Visibility Management Rules */
+.slide {
+    display: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.5s ease-out;
+}
+
+.slide.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Form Input Element */
+.text-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 16px;
+    color: white;
+    font-size: 1rem;
+    font-family: inherit;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.text-input:focus {
+    outline: none;
+    border-color: var(--light-blue);
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 15px rgba(142, 202, 230, 0.1);
+}
+
+/* Text Callouts Styles */
+.highlight-text {
+    color: var(--light-purple);
+    font-weight: bold;
+    font-style: italic;
+}
+
+/* Lesson Slide Controller Buttons */
+.next-btn {
+    width: 100%;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    color: var(--light-blue);
+    font-size: 0.95rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    margin-top: 30px;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.next-btn.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.next-btn:hover {
+    background: rgba(142, 202, 230, 0.1);
+    border-color: var(--light-blue);
+    color: white;
+}
+
+/* Finish Capstone Button Variant */
+.finish-btn {
+    background: linear-gradient(135deg, #8ecae6 0%, #e0c3fc 100%);
+    color: #0d0921;
+    border: none;
+    box-shadow: 0 8px 25px rgba(142, 202, 230, 0.2);
+}
+
+.finish-btn:hover {
+    color: #0d0921;
+    filter: brightness(1.08);
+    box-shadow: 0 12px 30px rgba(142, 202, 230, 0.35);
+}
+
+/* Experiment Callout Box */
+.experiment-box {
+    margin-top: 30px;
+    background: rgba(224, 195, 252, 0.05);
+    border-left: 3px solid var(--light-purple);
+    padding: 20px;
+    border-radius: 0 16px 16px 0;
+}
+
+.experiment-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    color: var(--light-purple);
+    background: rgba(224, 195, 252, 0.15);
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.experiment-text {
+    color: #e2e8f0;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+/* Mobile Alignment Padding Modifications */
+@media (max-width: 600px) {
+    .container {
+        padding: 80px 0 20px; /* Gives space so fixed header tracker doesn't clip content card text blocks */
+    }
+    .next-btn {
+        padding: 15px;
+        font-size: 0.85rem;
+        margin-top: 20px;
+    }
+    .experiment-box {
+        padding: 15px;
+        margin-top: 20px;
+    }
+}
