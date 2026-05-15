@@ -1,100 +1,128 @@
--- ==========================================
--- 1. THE PURGE (Clean Slate)
--- ==========================================
-DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-DROP FUNCTION IF EXISTS public.handle_new_citizen();
-DROP TABLE IF EXISTS public.master_roster CASCADE;
-DROP SEQUENCE IF EXISTS public.citizenship_seq;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ordo | Bronze Tier Intro</title>
+    <!-- External CSS file linked here -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
--- ==========================================
--- 2. THE INFRASTRUCTURE
--- ==========================================
--- Create the sequencer for the cn- IDs
-CREATE SEQUENCE public.citizenship_seq START 1;
+    <div id="boot-screen"></div>
+    <div id="starfield"></div>
 
--- Create the master roster table with strict rules
-CREATE TABLE public.master_roster (
-    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-    citizenship_number TEXT UNIQUE NOT NULL,
-    role TEXT NOT NULL DEFAULT 'Citizen',
-    email TEXT UNIQUE NOT NULL,
-    legal_first_name TEXT NOT NULL,
-    legal_last_name TEXT NOT NULL,
-    preferred_name TEXT NOT NULL,
-    legal_birth_year INT NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
+    <div class="container">
+        <h1 class="tier-title">Ordo // Bronze Tier</h1>
+        
+        <main class="console-card">
+            <h2 class="subtitle">Build Your Armor</h2>
+            <p class="intro-text">The world out there is exhausting. It constantly asks for your energy, and right now, you might feel like you are running on empty.</p>
+            <p class="intro-text">For the next 60 minutes, stop trying to fix everything out there. Let's focus entirely on right here. Let's build your armor.</p>
+            
+            <p class="prompt-text">What brought you here today?</p>
+            
+            <div class="options-container">
+                <div class="option-box" onclick="selectOption(this, 'exhausted')">
+                    <div class="radio-dot"></div>
+                    <span class="option-text">I am completely exhausted.</span>
+                </div>
+                <div class="option-box" onclick="selectOption(this, 'falling-apart')">
+                    <div class="radio-dot"></div>
+                    <span class="option-text">My plans keep falling apart.</span>
+                </div>
+                <div class="option-box" onclick="selectOption(this, 'clear-head')">
+                    <div class="radio-dot"></div>
+                    <span class="option-text">I just want to keep my head clear.</span>
+                </div>
+            </div>
 
--- ==========================================
--- 3. ROW LEVEL SECURITY (RLS)
--- ==========================================
--- Turn on the security vault
-ALTER TABLE public.master_roster ENABLE ROW LEVEL SECURITY;
+            <button id="start-button" class="start-btn" onclick="executeStart()">Get Started</button>
+        </main>
+    </div>
 
--- Policy 1: Citizens can only read their own data
-CREATE POLICY "Citizens can view own record" 
-ON public.master_roster FOR SELECT 
-TO authenticated 
-USING (auth.uid() = id);
+    <footer>Powered by Vanguard Citizen Services</footer>
 
--- Policy 2: Citizens can update their own data (e.g., preferred name)
-CREATE POLICY "Citizens can update own record" 
-ON public.master_roster FOR UPDATE 
-TO authenticated 
-USING (auth.uid() = id);
+    <script>
+        // Dynamically populate individual twinkling stars
+        const starfield = document.getElementById('starfield');
+        const starCount = 75;
 
--- Policy 3: Admins can see everything
-CREATE POLICY "Admins have full access" 
-ON public.master_roster FOR ALL 
-TO authenticated 
-USING (
-    auth.uid() IN (SELECT id FROM public.master_roster WHERE role = 'Admin')
-);
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const size = Math.random() * 2 + 1; 
+            const duration = Math.random() * 3 + 2; 
+            const delay = Math.random() * 5;
 
--- ==========================================
--- 4. THE BIRTH TRIGGER (Automation)
--- ==========================================
--- This function runs the millisecond a new user signs up
-CREATE OR REPLACE FUNCTION public.handle_new_citizen()
-RETURNS trigger AS $$
-DECLARE
-    new_cn TEXT;
-BEGIN
-    -- Generate the next cn- ID
-    new_cn := 'cn-' || nextval('public.citizenship_seq')::TEXT;
+            star.style.left = `${x}vw`;
+            star.style.top = `${y}vh`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.setProperty('--duration', `${duration}s`);
+            star.style.animationDelay = `${delay}s`;
 
-    -- Insert the exact data sent from the apply.html form
-    INSERT INTO public.master_roster (
-        id,
-        citizenship_number,
-        role,
-        email,
-        legal_first_name,
-        legal_last_name,
-        preferred_name,
-        legal_birth_year
-    ) VALUES (
-        new.id,
-        new_cn,
-        'Citizen', -- Default role
-        new.email,
-        new.raw_user_meta_data->>'first_name',
-        new.raw_user_meta_data->>'last_name',
-        new.raw_user_meta_data->>'preferred_name',
-        (new.raw_user_meta_data->>'birth_year')::INT
-    );
-    
-    RETURN new;
+            starfield.appendChild(star);
+        }
 
-EXCEPTION WHEN OTHERS THEN
-    -- If ANYTHING fails, it logs the exact error so we can read it, 
-    -- but allows the Auth user to be created so the app doesn't crash with a 500.
-    RAISE LOG 'VANGUARD TRIGGER ERROR: % - %', SQLSTATE, SQLERRM;
-    RETURN new;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+        // Logic for firing random comets across the sky matrix
+        function sparkComet() {
+            const comet = document.createElement('div');
+            comet.classList.add('comet');
+            
+            const startX = Math.random() * 40 + 60; 
+            const startY = Math.random() * 30; 
+            
+            comet.style.right = `${100 - startX}vw`;
+            comet.style.top = `${startY}vh`;
+            
+            starfield.appendChild(comet);
+            
+            setTimeout(() => {
+                comet.remove();
+            }, 1500);
+        }
 
--- Attach the trigger to Supabase Auth
-CREATE TRIGGER on_auth_user_created
-    AFTER INSERT ON auth.users
-    FOR EACH ROW EXECUTE FUNCTION public.handle_new_citizen();
+        function queueNextComet() {
+            const nextInterval = Math.random() * 4000 + 4000;
+            setTimeout(() => {
+                sparkComet();
+                queueNextComet();
+            }, nextInterval);
+        }
+        queueNextComet();
+
+        // Handle interactive option selection state modifications
+        let selectedReason = '';
+        
+        function selectOption(element, reasonCode) {
+            document.querySelectorAll('.option-box').forEach(box => {
+                box.classList.remove('active');
+            });
+            
+            element.classList.add('active');
+            selectedReason = reasonCode;
+            
+            const startBtn = document.getElementById('start-button');
+            startBtn.classList.add('show');
+        }
+
+        // Page Forwarding Execution Sequence
+        function executeStart() {
+            if(!selectedReason) return;
+            
+            localStorage.setItem('ordo_bronze_init_reason', selectedReason);
+            
+            document.body.style.transition = 'opacity 0.5s ease';
+            document.body.style.opacity = '0';
+            
+            setTimeout(() => {
+                window.location.href = 'bronze_lesson1.html'; 
+            }, 500);
+        }
+    </script>
+</body>
+</html>
