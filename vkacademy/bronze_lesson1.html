@@ -104,11 +104,10 @@
                 <p class="experiment-text">For the next 24 hours, whenever a small problem tries to stress you out, do not react immediately. Ask your inner voice: <strong>"Is this a problem with the plan, a problem with the effort, or a problem with the vibe?"</strong> Watch how fast the drama disappears.</p>
             </div>
             
-            <!-- Trigger smooth scanning delay matrix instead of loading the form directly -->
             <button class="next-btn show" onclick="triggerDatabaseScan()">Secure Your Progress</button>
         </main>
 
-        <!-- SLIDE 6: DYNAMIC SCANNING AND QUICK ACCOUNT CREATION -->
+        <!-- SLIDE 6: DYNAMIC SCANNING AND CREDENTIAL ENTRY -->
         <main class="console-card slide" id="slide-6">
             
             <!-- Dynamic State A: The Smooth Scanner Overlay -->
@@ -117,10 +116,10 @@
                 <p class="intro-text" style="text-align: center; opacity: 0.7; font-style: italic; margin-top: 20px;">Scanning database for existing deployment signatures...</p>
             </div>
 
-            <!-- Dynamic State B: The Real Signup Form Containers (Hidden by default) -->
+            <!-- Dynamic State B: The Interactive Form Gateway -->
             <div id="signup-form-state" style="display: none; opacity: 0; transition: opacity 0.5s ease;">
-                <h2 class="subtitle">Create Your Account</h2>
-                <p class="intro-text" style="text-align: center; margin-bottom: 25px;">Let's log your initial alignment settings and lock in your progress so you don't lose your place in the next classes.</p>
+                <h2 class="subtitle" id="form-title-text">Create Your Account</h2>
+                <p class="intro-text" id="form-desc-text" style="text-align: center; margin-bottom: 25px;">Let's log your initial alignment settings and lock in your progress so you don't lose your place in the next classes.</p>
                 
                 <div style="display: flex; flex-direction: column; gap: 15px;">
                     <div style="display: flex; gap: 12px;">
@@ -134,7 +133,13 @@
                 <!-- Error Feedback Console -->
                 <p id="auth-error-msg" style="color: #ff6b6b; font-size: 0.9rem; margin-top: 15px; text-align: center; display: none;"></p>
                 
+                <!-- Dynamic Submission Button Layout -->
                 <button id="signup-submit-btn" class="next-btn finish-btn" onclick="handleSupabaseSignup()">Complete Introduction</button>
+
+                <!-- Authentication Mode Toggle Link Component -->
+                <p id="auth-toggle-link" style="text-align: center; margin-top: 25px; font-size: 0.9rem; color: var(--light-blue); cursor: pointer; text-decoration: underline; opacity: 0.8;" onclick="toggleAuthMode()">
+                    Already on the roster? Verify entry here
+                </p>
             </div>
         </main>
 
@@ -147,6 +152,8 @@
         const supabaseUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
         const supabaseKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        let isSignUpMode = true; // Global state tracking flag
 
         /* --- 2. AMBIENT BACKGROUND MATRIX --- */
         const starfield = document.getElementById('starfield');
@@ -215,19 +222,14 @@
 
         /* --- 4. PRE-LOAD BACKGROUND ROSTER SIGNATURE SCANNER --- */
         async function triggerDatabaseScan() {
-            // First, load Slide 6 layout structure immediately to display the Scanning animation
             goToSlide(6, 90);
 
-            // Execute requested execution delay (1200ms) for ultra-smooth aesthetic feel
             setTimeout(async () => {
                 try {
-                    // Ask Supabase client cache layer if an active session profile exists
                     const { data: { user } } = await _supabase.auth.getUser();
 
                     if (user) {
-                        // User database record verified! Bypass signup sequence entirely
                         localStorage.setItem('vanguard_session_status', 'active');
-                        
                         document.getElementById('progress-bar').style.width = '100%';
                         document.getElementById('progress-percentage').innerText = '100%';
 
@@ -238,7 +240,6 @@
                             window.location.href = 'bronze_lesson2.html';
                         }, 600);
                     } else {
-                        // No active entry located. Smoothly cross-fade scanner out and bring input form forward
                         const scanner = document.getElementById('scanner-state');
                         const formState = document.getElementById('signup-form-state');
 
@@ -248,12 +249,10 @@
                         setTimeout(() => {
                             scanner.style.display = 'none';
                             formState.style.display = 'block';
-                            // Trigger layout flow repaint engine smoothly
                             setTimeout(() => { formState.style.opacity = '1'; }, 50);
                         }, 400);
                     }
                 } catch (e) {
-                    // Fallback to form rendering upon systemic validation crashes
                     document.getElementById('scanner-state').style.display = 'none';
                     document.getElementById('signup-form-state').style.display = 'block';
                     document.getElementById('signup-form-state').style.opacity = '1';
@@ -261,7 +260,35 @@
             }, 1200);
         }
 
-        /* --- 5. FORM LOGIC & STAGE SELECTION VALIDATIONS --- */
+        /* --- 5. INTERACTION & AUTH MODE TOGGLE RULES --- */
+        function toggleAuthMode() {
+            isSignUpMode = !isSignUpMode;
+            
+            const titleText = document.getElementById('form-title-text');
+            const descText = document.getElementById('form-desc-text');
+            const passwordField = document.getElementById('password-input');
+            const submitBtn = document.getElementById('signup-submit-btn');
+            const toggleLink = document.getElementById('auth-toggle-link');
+            const errorConsole = document.getElementById('auth-error-msg');
+            
+            errorConsole.style.display = "none";
+
+            if (isSignUpMode) {
+                titleText.innerText = "Create Your Account";
+                descText.innerText = "Let's log your initial alignment settings and lock in your progress so you don't lose your place in the next classes.";
+                passwordField.style.display = "block";
+                toggleLink.innerText = "Already on the roster? Verify entry here";
+                submitBtn.setAttribute('onclick', 'handleSupabaseSignup()');
+            } else {
+                titleText.innerText = "Verify Roster Entry";
+                descText.innerText = "Enter your deployment details below to verify your existing profile inside the system master roster.";
+                passwordField.style.display = "none";
+                toggleLink.innerText = "Need to set up a new profile? Register here";
+                submitBtn.setAttribute('onclick', 'handleRosterVerification()');
+            }
+            validateSignupForm();
+        }
+
         function activateSlide2Button(selection) {
             document.querySelectorAll('#slide-2 .option-box').forEach(box => {
                 box.classList.remove('active');
@@ -288,14 +315,70 @@
             const pass = document.getElementById('password-input').value.trim();
             const submitBtn = document.getElementById('signup-submit-btn');
 
-            if(first.length > 1 && last.length > 1 && email.includes('@') && pass.length >= 6) {
-                submitBtn.classList.add('show');
+            if (isSignUpMode) {
+                if(first.length > 1 && last.length > 1 && email.includes('@') && pass.length >= 6) {
+                    submitBtn.classList.add('show');
+                } else {
+                    submitBtn.classList.remove('show');
+                }
             } else {
-                submitBtn.classList.remove('show');
+                if(first.length > 1 && last.length > 1 && email.includes('@')) {
+                    submitBtn.classList.add('show');
+                } else {
+                    submitBtn.classList.remove('show');
+                }
             }
         }
 
-        /* --- 6. SUPABASE AUTH & RECORD INSERTER --- */
+        /* --- 6. SUPABASE TRANSACTION GATEWAYS --- */
+        async function handleRosterVerification() {
+            const first = document.getElementById('first-name-input').value.trim();
+            const last = document.getElementById('last-name-input').value.trim();
+            const email = document.getElementById('email-input').value.trim();
+            
+            const errorConsole = document.getElementById('auth-error-msg');
+            const submitBtn = document.getElementById('signup-submit-btn');
+            
+            errorConsole.style.display = "none";
+            submitBtn.innerText = "Searching Roster...";
+            submitBtn.style.pointerEvents = "none";
+
+            try {
+                // Perform target query lookup filtering only name parameters and email structures
+                const { data, error } = await _supabase
+                    .from('master_roster')
+                    .select('*')
+                    .eq('email', email)
+                    .ilike('first_name', first)
+                    .ilike('last_name', last);
+
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    // Record verified successfully. Log session indicators and dispatch forward
+                    localStorage.setItem('vanguard_session_status', 'active');
+                    localStorage.setItem('vanguard_citizen_name', `${data[0].first_name} ${data[0].last_name}`);
+
+                    document.getElementById('progress-bar').style.width = '100%';
+                    document.getElementById('progress-percentage').innerText = '100%';
+
+                    document.body.style.transition = 'opacity 0.6s ease';
+                    document.body.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'bronze_lesson2.html'; 
+                    }, 600);
+                } else {
+                    throw new Error("No matching entry found. Please check spelling or toggle back to register a new account.");
+                }
+            } catch (error) {
+                errorConsole.innerText = error.message || "An account query exception occurred.";
+                errorConsole.style.display = "block";
+                submitBtn.innerText = "Complete Introduction";
+                submitBtn.style.pointerEvents = "auto";
+            }
+        }
+
         async function handleSupabaseSignup() {
             const first = document.getElementById('first-name-input').value.trim();
             const last = document.getElementById('last-name-input').value.trim();
@@ -310,7 +393,6 @@
             submitBtn.style.pointerEvents = "none";
 
             try {
-                // Step A: Trigger native Supabase User Registration
                 const { data: authData, error: authError } = await _supabase.auth.signUp({
                     email: email,
                     password: password,
@@ -318,7 +400,6 @@
 
                 if (authError) throw authError;
 
-                // Step B: Write variables into user 'master_roster' schema
                 const { error: dbError } = await _supabase
                     .from('master_roster')
                     .insert([
@@ -332,15 +413,12 @@
 
                 if (dbError) throw dbError;
 
-                // Step C: Save cookie criteria into localStorage for cache bypass
                 localStorage.setItem('vanguard_session_status', 'active');
                 localStorage.setItem('vanguard_citizen_name', `${first} ${last}`);
 
-                // Bring progress metrics directly to ceiling completion
                 document.getElementById('progress-bar').style.width = '100%';
                 document.getElementById('progress-percentage').innerText = '100%';
 
-                // Run beautiful out fade sequence
                 document.body.style.transition = 'opacity 0.6s ease';
                 document.body.style.opacity = '0';
                 
