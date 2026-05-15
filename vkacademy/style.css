@@ -300,19 +300,22 @@ body {
    8. BUTTONS & ANIMATIONS
    =================================================================== */
 .next-btn {
-    width: 100%;
-    padding: 18px;
+    display: block;            /* Forces the button to respect margin centering */
+    width: 80%;                /* Shrinks it slightly from the edges */
+    max-width: 300px;          /* Prevents it from getting too wide on desktop */
+    margin: 35px auto 0 auto;  /* Perfectly centers the button horizontally */
+    padding: 16px 24px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 50px;
     color: var(--light-blue);
+    font-family: inherit;      /* Inherits your clean system font */
     font-size: 1.05rem;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 2px;
     cursor: pointer;
     text-align: center;
-    margin-top: 35px;
     
     /* Subtle Animation defaults */
     opacity: 0;
@@ -321,44 +324,37 @@ body {
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* When button is activated/shown */
+/* When the button is activated, it gets the vibrant glass gradient */
 .next-btn.show {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
-}
-
-/* Subtle Hover Animation */
-.next-btn.show:hover {
-    background: rgba(142, 202, 230, 0.15);
-    border-color: var(--light-blue);
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(142, 202, 230, 0.2);
-}
-
-/* Click Animation */
-.next-btn.show:active {
-    transform: translateY(1px);
-    box-shadow: 0 4px 10px rgba(142, 202, 230, 0.1);
-}
-
-/* Gradient Capstone Button */
-.finish-btn {
     background: linear-gradient(135deg, #8ecae6 0%, #e0c3fc 100%);
     color: #0d0921;
     border: none;
     box-shadow: 0 8px 25px rgba(142, 202, 230, 0.25);
 }
 
-.finish-btn.show:hover {
+/* Hover & Click Animations */
+.next-btn.show:hover {
     background: linear-gradient(135deg, #9fd5ee 0%, #ecd7fd 100%);
-    color: #0d0921;
-    transform: translateY(-3px) scale(1.01);
+    transform: translateY(-3px) scale(1.02);
     box-shadow: 0 12px 30px rgba(142, 202, 230, 0.4);
 }
 
-/* ===================================================================
+.next-btn.show:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px rgba(142, 202, 230, 0.1);
+}
+
+/* Finish Capstone Button Variant (Inherits the same shape now) */
+.finish-btn {
+    width: 80%;
+    max-width: 300px;
+    margin: 35px auto 0 auto;
+}
+
+
    9. CALLOUT BOXES
    =================================================================== */
 .experiment-box {
