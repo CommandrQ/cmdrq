@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ordo | Lesson 1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="boot-screen"></div>
+    <div id="starfield"></div>
+
+    <!-- Progress Tracker -->
+    <div class="progress-container">
+        <div class="progress-text">Lesson Progress: <span id="progress-percentage">0%</span></div>
+        <div class="progress-track">
+            <div id="progress-bar" class="progress-fill"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <!-- SLIDE 1: THE ALARM (RELATABILITY) -->
+        <main class="console-card slide active" id="slide-1">
+            <h2 class="subtitle">The 1% Warning</h2>
+            <p class="intro-text">Imagine your phone screen flashes a **1% Battery** warning. What do you do? You don't get angry at the phone. You don't try to force it to run heavy games. You look for a charger.</p>
+            <p class="intro-text">Yet, when your own body and mind flash a warning light, you do the exact opposite. You tell yourself: <em>"Just push through it. Keep running."</em></p>
+            <p class="intro-text">Burnout isn't a sign that you are weak. It's just your system shutting down because you ignored the warning lights.</p>
+            
+            <button class="next-btn show" onclick="goToSlide(2, 25)">Understand</button>
+        </main>
+
+        <!-- SLIDE 2: THE CORES (WHAT THEY NEED) -->
+        <main class="console-card slide" id="slide-2">
+            <h2 class="subtitle">Rule 1: Respect Yourself</h2>
+            <p class="intro-text">Under the Ordo mindset, respecting yourself doesn't mean spa days or buying things. It means something much harder: **Ruthless Self-Honesty**.</p>
+            <p class="intro-text">It means looking in the mirror and admitting your true capacity. If you only have 20% left to give today, trying to pretend you have 100% isn't brave. It's a lie.</p>
+            <p class="prompt-text">To unlock the armor, we have to clear the noise. Choose the statement that hits closest to home right now:</p>
+            
+            <div class="options-container">
+                <div class="option-box" onclick="activateSlide2Button('overwhelmed')">
+                    <div class="radio-dot"></div>
+                    <span class="option-text">I am carrying too many things that aren't my job.</span>
+                </div>
+                <div class="option-box" onclick="activateSlide2Button('afraid')">
+                    <div class="radio-dot"></div>
+                    <span class="option-text">I am afraid of letting people down if I say no.</span>
+                </div>
+            </div>
+            
+            <button id="btn-slide-2" class="next-btn" onclick="goToSlide(3, 50)">Acknowledge Truth</button>
+        </main>
+
+        <!-- SLIDE 3: THE INTERACTION (THE ENGAGEMENT) -->
+        <main class="console-card slide" id="slide-3">
+            <h2 class="subtitle">Name the Heavy Thing</h2>
+            <p class="intro-text">Anxiety likes to hide in a big, messy cloud. When a problem stays vague, it stays terrifying. The moment you use logic to name it exactly, it loses half its power.</p>
+            <p class="prompt-text">What is the single heaviest project, task, or conversation hanging over your head this week? Write it down below (Keep it short, just 1 sentence):</p>
+            
+            <input type="text" id="heavy-thing-input" class="text-input" placeholder="e.g., The unrealistic deadline on the marketing project..." oninput="validateSlide3Input()">
+            
+            <button id="btn-slide-3" class="next-btn" onclick="goToSlide(4, 75)">Bring to Light</button>
+        </main>
+
+        <!-- SLIDE 4: THE WHY -->
+        <main class="console-card slide" id="slide-4">
+            <h2 class="subtitle">Why We Do This</h2>
+            <p class="intro-text">Why did we just make you write down <span class="highlight-text" id="user-heavy-recall">that heavy thing</span>? Because look at it carefully.</p>
+            <p class="intro-text">That task is external to you. It is a puzzle to be solved, not an identity. You have been treating it like a life-or-death situation, allowing your internal peace to shatter over an outside event.</p>
+            <p class="intro-text">By practicing **Self-Honesty**, your mind draws a line between <em>Who You Are</em> and <em>What You Are Doing</em>. That line is your suit of armor.</p>
+            
+            <button class="next-btn show" onclick="goToSlide(5, 100)">Equip Armor</button>
+        </main>
+
+        <!-- SLIDE 5: THE MICRO-EXPERIMENT (COMPLETION) -->
+        <main class="console-card slide" id="slide-5">
+            <h2 class="subtitle">Armor Equipped</h2>
+            <p class="intro-text">You have completed your first micro-calibration. You have stepped off the treadmill for just a moment to look at the facts. You have restored a small piece of **Ordo** to your mind.</p>
+            
+            <div class="experiment-box">
+                <span class="experiment-tag">BRONZE EXPERIMENT</span>
+                <p class="experiment-text">For the next 24 hours, whenever you feel that tightness in your chest, repeat your inner voice baseline: <strong>"This is a task outside of me. I am only responsible for my next logical step."</strong></p>
+            </div>
+            
+            <button class="next-btn show finish-btn" onclick="finishLesson()">Complete Lesson 1</button>
+        </main>
+
+    </div>
+
+    <footer>Powered by Vanguard Citizen Services</footer>
+
+    <script>
+        // Setup background stars identically to introduction file
+        const starfield = document.getElementById('starfield');
+        const starCount = 75;
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const size = Math.random() * 2 + 1; 
+            const duration = Math.random() * 3 + 2; 
+            const delay = Math.random() * 5;
+
+            star.style.left = `${x}vw`;
+            star.style.top = `${y}vh`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.setProperty('--duration', `${duration}s`);
+            star.style.animationDelay = `${delay}s`;
+            starfield.appendChild(star);
+        }
+
+        // Slide Navigation & Progress Bar Logic
+        function goToSlide(slideId, progressTarget) {
+            // Update Progress UI elements
+            document.getElementById('progress-bar').style.width = `${progressTarget}%`;
+            document.getElementById('progress-percentage').innerText = `${progressTarget}%`;
+            
+            // Recall user dynamic typing to output on slide 4
+            if (slideId === 4) {
+                const heavyThing = document.getElementById('heavy-thing-input').value;
+                document.getElementById('user-heavy-recall').innerText = `"${heavyThing}"`;
+            }
+
+            // Simple slide switching transition sequence
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            document.getElementById(`slide-${slideId}`).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Interaction Check Validation Rules
+        function activateSlide2Button(selection) {
+            document.querySelectorAll('#slide-2 .option-box').forEach(box => {
+                box.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            document.getElementById('btn-slide-2').classList.add('show');
+            localStorage.setItem('ordo_bronze_l1_trap', selection);
+        }
+
+        function validateSlide3Input() {
+            const val = document.getElementById('heavy-thing-input').value.trim();
+            const nextBtn = document.getElementById('btn-slide-3');
+            if (val.length >= 5) {
+                nextBtn.classList.add('show');
+            } else {
+                nextBtn.classList.remove('show');
+            }
+        }
+
+        function finishLesson() {
+            document.body.style.transition = 'opacity 0.5s ease';
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                // Return to main dashboard or unlock next file step
+                window.location.href = 'hub.html'; 
+            }, 500);
+        }
+    </script>
+</body>
+</html>
