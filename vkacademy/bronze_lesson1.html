@@ -8,7 +8,7 @@
     <!-- Supabase Official CDN Integration -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // CRITICAL AUTH GATE: Intercept page load instantly if already signed in
+        // CRITICAL AUTH GATE: Intercept page load instantly if custom cookie is active
         if (localStorage.getItem('vanguard_session_status') === 'active') {
             window.location.href = 'bronze_lesson2.html';
         }
@@ -104,27 +104,38 @@
                 <p class="experiment-text">For the next 24 hours, whenever a small problem tries to stress you out, do not react immediately. Ask your inner voice: <strong>"Is this a problem with the plan, a problem with the effort, or a problem with the vibe?"</strong> Watch how fast the drama disappears.</p>
             </div>
             
-            <button class="next-btn show" onclick="goToSlide(6, 90)">Secure Your Progress</button>
+            <!-- Trigger smooth scanning delay matrix instead of loading the form directly -->
+            <button class="next-btn show" onclick="triggerDatabaseScan()">Secure Your Progress</button>
         </main>
 
-        <!-- SLIDE 6: QUICK ACCOUNT CREATION -->
+        <!-- SLIDE 6: DYNAMIC SCANNING AND QUICK ACCOUNT CREATION -->
         <main class="console-card slide" id="slide-6">
-            <h2 class="subtitle">Create Your Account</h2>
-            <p class="intro-text" style="text-align: center; margin-bottom: 25px;">Let's log your initial alignment settings and lock in your progress so you don't lose your place in the next classes.</p>
             
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div style="display: flex; gap: 12px;">
-                    <input type="text" id="first-name-input" class="text-input" placeholder="First Name" oninput="validateSignupForm()" style="margin-top:0;">
-                    <input type="text" id="last-name-input" class="text-input" placeholder="Last Name" oninput="validateSignupForm()" style="margin-top:0;">
-                </div>
-                <input type="email" id="email-input" class="text-input" placeholder="Email Address" oninput="validateSignupForm()" style="margin-top:0;">
-                <input type="password" id="password-input" class="text-input" placeholder="Create Password" oninput="validateSignupForm()" style="margin-top:0;">
+            <!-- Dynamic State A: The Smooth Scanner Overlay -->
+            <div id="scanner-state">
+                <h2 class="subtitle" style="animation: heartbeat 1.5s ease-in-out infinite;">Verifying Roster Status...</h2>
+                <p class="intro-text" style="text-align: center; opacity: 0.7; font-style: italic; margin-top: 20px;">Scanning database for existing deployment signatures...</p>
             </div>
 
-            <!-- Error Feedback Console -->
-            <p id="auth-error-msg" style="color: #ff6b6b; font-size: 0.9rem; margin-top: 15px; text-align: center; display: none;"></p>
-            
-            <button id="signup-submit-btn" class="next-btn finish-btn" onclick="handleSupabaseSignup()">Complete Introduction</button>
+            <!-- Dynamic State B: The Real Signup Form Containers (Hidden by default) -->
+            <div id="signup-form-state" style="display: none; opacity: 0; transition: opacity 0.5s ease;">
+                <h2 class="subtitle">Create Your Account</h2>
+                <p class="intro-text" style="text-align: center; margin-bottom: 25px;">Let's log your initial alignment settings and lock in your progress so you don't lose your place in the next classes.</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="display: flex; gap: 12px;">
+                        <input type="text" id="first-name-input" class="text-input" placeholder="First Name" oninput="validateSignupForm()" style="margin-top:0;">
+                        <input type="text" id="last-name-input" class="text-input" placeholder="Last Name" oninput="validateSignupForm()" style="margin-top:0;">
+                    </div>
+                    <input type="email" id="email-input" class="text-input" placeholder="Email Address" oninput="validateSignupForm()" style="margin-top:0;">
+                    <input type="password" id="password-input" class="text-input" placeholder="Create Password" oninput="validateSignupForm()" style="margin-top:0;">
+                </div>
+
+                <!-- Error Feedback Console -->
+                <p id="auth-error-msg" style="color: #ff6b6b; font-size: 0.9rem; margin-top: 15px; text-align: center; display: none;"></p>
+                
+                <button id="signup-submit-btn" class="next-btn finish-btn" onclick="handleSupabaseSignup()">Complete Introduction</button>
+            </div>
         </main>
 
     </div>
@@ -202,7 +213,55 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        /* --- 4. FORM LOGIC & STAGE SELECTION VALIDATIONS --- */
+        /* --- 4. PRE-LOAD BACKGROUND ROSTER SIGNATURE SCANNER --- */
+        async function triggerDatabaseScan() {
+            // First, load Slide 6 layout structure immediately to display the Scanning animation
+            goToSlide(6, 90);
+
+            // Execute requested execution delay (1200ms) for ultra-smooth aesthetic feel
+            setTimeout(async () => {
+                try {
+                    // Ask Supabase client cache layer if an active session profile exists
+                    const { data: { user } } = await _supabase.auth.getUser();
+
+                    if (user) {
+                        // User database record verified! Bypass signup sequence entirely
+                        localStorage.setItem('vanguard_session_status', 'active');
+                        
+                        document.getElementById('progress-bar').style.width = '100%';
+                        document.getElementById('progress-percentage').innerText = '100%';
+
+                        document.body.style.transition = 'opacity 0.6s ease';
+                        document.body.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            window.location.href = 'bronze_lesson2.html';
+                        }, 600);
+                    } else {
+                        // No active entry located. Smoothly cross-fade scanner out and bring input form forward
+                        const scanner = document.getElementById('scanner-state');
+                        const formState = document.getElementById('signup-form-state');
+
+                        scanner.style.transition = 'opacity 0.4s ease';
+                        scanner.style.opacity = '0';
+
+                        setTimeout(() => {
+                            scanner.style.display = 'none';
+                            formState.style.display = 'block';
+                            // Trigger layout flow repaint engine smoothly
+                            setTimeout(() => { formState.style.opacity = '1'; }, 50);
+                        }, 400);
+                    }
+                } catch (e) {
+                    // Fallback to form rendering upon systemic validation crashes
+                    document.getElementById('scanner-state').style.display = 'none';
+                    document.getElementById('signup-form-state').style.display = 'block';
+                    document.getElementById('signup-form-state').style.opacity = '1';
+                }
+            }, 1200);
+        }
+
+        /* --- 5. FORM LOGIC & STAGE SELECTION VALIDATIONS --- */
         function activateSlide2Button(selection) {
             document.querySelectorAll('#slide-2 .option-box').forEach(box => {
                 box.classList.remove('active');
@@ -236,7 +295,7 @@
             }
         }
 
-        /* --- 5. SUPABASE AUTH & RECORD INSERTER --- */
+        /* --- 6. SUPABASE AUTH & RECORD INSERTER --- */
         async function handleSupabaseSignup() {
             const first = document.getElementById('first-name-input').value.trim();
             const last = document.getElementById('last-name-input').value.trim();
@@ -261,7 +320,7 @@
 
                 // Step B: Write variables into user 'master_roster' schema
                 const { error: dbError } = await _supabase
-                    .from('master_roster') // Corrected table name
+                    .from('master_roster')
                     .insert([
                         { 
                             first_name: first, 
