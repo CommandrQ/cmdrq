@@ -5,7 +5,7 @@
     --light-purple: #e0c3fc;
     --light-blue: #8ecae6;
     --deep-space: #0f0c29;
-    --glass-bg: rgba(15, 15, 25, 0.6);
+    --glass-bg: rgba(15, 15, 25, 0.65);
     --glass-border: rgba(255, 255, 255, 0.08);
 }
 
@@ -24,7 +24,6 @@ html, body {
 }
 
 body {
-    /* Smooth twilight sky: Velvet deep purple blending to cosmic blue */
     background: linear-gradient(180deg, #120b24 0%, #25114d 60%, #18335c 100%);
     background-attachment: fixed;
     font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -41,7 +40,7 @@ body {
    =================================================================== */
 @keyframes fadeOut { 
     from { opacity: 1; } 
-    to { opacity: 0; } 
+    to { opacity: 0; display: none;} 
 }
 
 @keyframes twinkle {
@@ -56,17 +55,13 @@ body {
     100% { transform: translate(-400px, 280px) rotate(-35deg); width: 0px; opacity: 0; }
 }
 
-@keyframes sheen { 
-    to { background-position: 200% center; } 
-}
-
 @keyframes heartbeat { 
     0%, 100% { opacity: 0.3; } 
     50% { opacity: 0.6; } 
 }
 
 /* ===================================================================
-   3. COSMIC CANVAS (BACKGROUND ELEMENTS)
+   3. COSMIC CANVAS (BACKGROUND)
    =================================================================== */
 #boot-screen { 
     position: fixed; 
@@ -108,29 +103,13 @@ body {
 .container {
     width: 90%;
     max-width: 650px;
-    padding: 50px 0 20px;
+    padding: 85px 0 30px; /* Offset for fixed progress bar */
     z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
     flex-grow: 1;
     justify-content: center;
-}
-
-.tier-title {
-    font-size: clamp(1.5rem, 3.5vw, 2.2rem); 
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
-    background-size: 200% auto;
-    color: #8ecae6;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: sheen 4s linear infinite;
-    margin-bottom: 25px;
-    text-align: center;
 }
 
 .console-card {
@@ -146,10 +125,11 @@ body {
 
 .subtitle {
     color: var(--light-blue);
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     margin-bottom: 20px;
-    font-weight: 600;
+    font-weight: bold;
     text-align: center; 
+    letter-spacing: 1px;
 }
 
 .intro-text {
@@ -168,96 +148,12 @@ body {
 }
 
 .highlight-text {
-    color: var(--light-purple);
+    color: var(--light-blue);
     font-weight: bold;
-    font-style: italic;
 }
 
 /* ===================================================================
-   5. INTERACTIVE COMPONENT ELEMENT FORM RULES
-   =================================================================== */
-.options-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 10px;
-}
-
-.option-box {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
-    padding: 18px 22px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.option-box:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(142, 202, 230, 0.4);
-    transform: translateY(-1px);
-}
-
-.option-box.active {
-    background: rgba(142, 202, 230, 0.12);
-    border-color: var(--light-blue);
-    box-shadow: 0 0 20px rgba(142, 202, 230, 0.15);
-}
-
-.radio-dot {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-}
-
-.option-box.active .radio-dot {
-    border-color: var(--light-blue);
-    background: var(--light-blue);
-    box-shadow: 0 0 8px var(--light-blue);
-}
-
-.option-text {
-    color: #f1f5f9;
-    font-size: 1rem;
-    transition: color 0.3s ease;
-}
-
-.option-box.active .option-text {
-    color: white;
-    font-weight: 500;
-}
-
-.text-input {
-    width: 100%;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 12px;
-    padding: 16px;
-    color: white;
-    font-size: 1rem;
-    font-family: inherit;
-    margin-top: 10px;
-    transition: all 0.3s ease;
-}
-
-.text-input:focus {
-    outline: none;
-    border-color: var(--light-blue);
-    background: rgba(0, 0, 0, 0.3);
-    box-shadow: 0 0 15px rgba(142, 202, 230, 0.1);
-}
-
-/* ===================================================================
-   6. LESSON SLIDE FRAMEWORK ENGINE
+   5. PROGRESS TRACKER
    =================================================================== */
 .progress-container {
     position: fixed;
@@ -301,10 +197,13 @@ body {
     transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ===================================================================
+   6. SLIDE LOGIC
+   =================================================================== */
 .slide {
     display: none;
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(15px);
     transition: all 0.5s ease-out;
 }
 
@@ -315,13 +214,96 @@ body {
 }
 
 /* ===================================================================
-   7. CONTROL BUTTONS & MODULES
+   7. INTERACTIVE INPUTS & OPTIONS
    =================================================================== */
-.start-btn, .next-btn {
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.option-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 18px 22px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.option-box:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(142, 202, 230, 0.4);
+    transform: translateY(-2px);
+}
+
+.option-box.active {
+    background: rgba(142, 202, 230, 0.12);
+    border-color: var(--light-blue);
+    box-shadow: 0 0 20px rgba(142, 202, 230, 0.15);
+}
+
+.radio-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.option-box.active .radio-dot {
+    border-color: var(--light-blue);
+    background: var(--light-blue);
+    box-shadow: 0 0 8px var(--light-blue);
+}
+
+.option-text {
+    color: #f1f5f9;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.option-box.active .option-text {
+    color: white;
+    font-weight: 500;
+}
+
+.text-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 18px;
+    color: white;
+    font-size: 1rem;
+    font-family: inherit;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.text-input:focus {
+    outline: none;
+    border-color: var(--light-blue);
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 15px rgba(142, 202, 230, 0.15);
+}
+
+/* ===================================================================
+   8. BUTTONS & ANIMATIONS
+   =================================================================== */
+.next-btn {
     width: 100%;
     padding: 18px;
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 50px;
     color: var(--light-blue);
     font-size: 1.05rem;
@@ -330,54 +312,55 @@ body {
     letter-spacing: 2px;
     cursor: pointer;
     text-align: center;
-    text-decoration: none;
+    margin-top: 35px;
+    
+    /* Subtle Animation defaults */
     opacity: 0;
     transform: translateY(15px);
     pointer-events: none;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    margin-top: 25px;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.start-btn.show, .next-btn.show {
+/* When button is activated/shown */
+.next-btn.show {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
 }
 
-.start-btn:hover, .next-btn:hover {
-    background: rgba(142, 202, 230, 0.1);
+/* Subtle Hover Animation */
+.next-btn.show:hover {
+    background: rgba(142, 202, 230, 0.15);
     border-color: var(--light-blue);
     color: white;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(142, 202, 230, 0.2);
 }
 
-/* Filled Button Variants */
-.start-btn.show {
+/* Click Animation */
+.next-btn.show:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px rgba(142, 202, 230, 0.1);
+}
+
+/* Gradient Capstone Button */
+.finish-btn {
     background: linear-gradient(135deg, #8ecae6 0%, #e0c3fc 100%);
     color: #0d0921;
     border: none;
     box-shadow: 0 8px 25px rgba(142, 202, 230, 0.25);
 }
 
-.start-btn.show:hover {
+.finish-btn.show:hover {
+    background: linear-gradient(135deg, #9fd5ee 0%, #ecd7fd 100%);
+    color: #0d0921;
+    transform: translateY(-3px) scale(1.01);
     box-shadow: 0 12px 30px rgba(142, 202, 230, 0.4);
-    filter: brightness(1.05);
 }
 
-.finish-btn {
-    background: linear-gradient(135deg, #8ecae6 0%, #e0c3fc 100%);
-    color: #0d0921;
-    border: none;
-    box-shadow: 0 8px 25px rgba(142, 202, 230, 0.2);
-}
-
-.finish-btn:hover {
-    color: #0d0921;
-    filter: brightness(1.08);
-    box-shadow: 0 12px 30px rgba(142, 202, 230, 0.35);
-}
-
-/* Experiment Component Blocks */
+/* ===================================================================
+   9. CALLOUT BOXES
+   =================================================================== */
 .experiment-box {
     margin-top: 30px;
     background: rgba(224, 195, 252, 0.05);
@@ -388,19 +371,19 @@ body {
 
 .experiment-tag {
     display: inline-block;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: bold;
     letter-spacing: 1.5px;
     color: var(--light-purple);
     background: rgba(224, 195, 252, 0.15);
-    padding: 4px 8px;
-    border-radius: 4px;
-    margin-bottom: 10px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    margin-bottom: 12px;
 }
 
 .experiment-text {
     color: #e2e8f0;
-    line-height: 1.5;
+    line-height: 1.6;
     font-size: 0.95rem;
 }
 
@@ -415,18 +398,11 @@ footer {
 }
 
 /* ===================================================================
-   8. RESPONDENT MOBILE ADAPTIVE BREAKPOINTS
+   10. MOBILE RESPONSIVE
    =================================================================== */
 @media (max-width: 600px) {
-    /* Main body padding offsets to allow layout clear space under fixed header metrics */
     .container { 
         padding: 85px 0 20px; 
-    }
-    
-    .tier-title { 
-        font-size: 1.4rem; 
-        margin-bottom: 15px; 
-        letter-spacing: 1px; 
     }
     
     .console-card { 
@@ -435,8 +411,8 @@ footer {
     }
     
     .subtitle { 
-        font-size: 1.15rem; 
-        margin-bottom: 12px; 
+        font-size: 1.25rem; 
+        margin-bottom: 15px; 
     }
     
     .intro-text { 
@@ -451,10 +427,15 @@ footer {
         font-size: 0.95rem; 
     }
     
-    .start-btn, .next-btn { 
-        padding: 15px; 
-        font-size: 0.85rem; 
-        margin-top: 20px; 
+    .text-input {
+        padding: 15px;
+        font-size: 0.95rem;
+    }
+    
+    .next-btn { 
+        padding: 16px; 
+        font-size: 0.9rem; 
+        margin-top: 25px; 
     }
     
     .experiment-box {
