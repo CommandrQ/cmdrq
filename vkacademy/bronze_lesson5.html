@@ -13,102 +13,6 @@
         }
     </script>
     <style>
-        /* --- HIGH-RESOLUTION PRINT / PDF OVERRIDE MATRIX --- */
-        @page {
-            size: letter portrait; /* Forces a standard document sheet scale */
-            margin: 0mm;           /* Hard-forces the browser to drop URLs, dates, and page numbers */
-        }
-
-        @media print {
-            /* 1. Force the absolute root architecture to be completely naked and white */
-            html, body, .container, .slide, main, .console-card {
-                background: transparent !important;
-                background-color: transparent !important;
-                background-image: none !important;
-                box-shadow: none !important;
-                text-shadow: none !important;
-                border: none !important;
-            }
-            
-            html, body {
-                background: #ffffff !important;
-                background-color: #ffffff !important;
-                color: #000000 !important;
-                font-family: 'Times New Roman', serif !important;
-                width: 100% !important;
-                height: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                overflow: hidden !important; /* Prevents trailing page bleed completely */
-                -webkit-print-color-adjust: economy; 
-                print-color-adjust: economy;
-            }
-            
-            /* 2. Erase screen interfaces and decorations entirely from printer memory */
-            #starfield, .progress-container, footer, .container footer, 
-            button, .next-btn, .experiment-box, .subtitle, .intro-text, .button-group-row {
-                display: none !important;
-                visibility: hidden !important;
-                height: 0 !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            /* 3. Drop inactive slides out of structural geometry math */
-            .slide {
-                display: none !important;
-            }
-
-            /* 4. Center only the final active slide viewport on the printed page */
-            .slide.active {
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                width: 100vw !important;
-                height: 100vh !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-
-            .container {
-                width: 100% !important;
-                max-width: 100% !important;
-                height: 100% !important;
-            }
-
-            /* 5. Isolate, tightly scale, and safely confine the document box */
-            #certificate-area {
-                display: block !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-                box-sizing: border-box !important;
-                
-                width: 82% !important;
-                max-width: 640px !important;
-                margin: 0 auto !important;
-                
-                /* Crisp legacy double border styling */
-                border: 4px double #111111 !important;
-                padding: 50px 40px !important; 
-                text-align: center !important;
-                
-                /* Explicitly enforce crisp white card space */
-                background: #ffffff !important;
-                background-color: #ffffff !important;
-                color: #000000 !important;
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-            }
-
-            /* Finely scaled print typography rules */
-            .cert-title { color: #000000 !important; font-size: 1.7rem !important; margin-bottom: 8px !important; letter-spacing: 2px !important; font-weight: bold !important; }
-            .cert-sub { color: #333333 !important; font-size: 0.8rem !important; font-weight: normal !important; text-transform: uppercase !important; }
-            .cert-name { color: #000000 !important; font-size: 2.3rem !important; margin: 20px auto !important; border-bottom: 2px solid #111111 !important; padding-bottom: 4px !important; font-weight: bold !important; width: fit-content !important; min-width: 250px !important; }
-            .cert-statement { color: #000000 !important; opacity: 1 !important; font-size: 1rem !important; line-height: 1.6 !important; margin: 0 auto 30px auto !important; text-align: center !important; }
-            .cert-signature { color: #000000 !important; font-family: 'Georgia', serif !important; font-style: italic !important; font-size: 1.3rem !important; margin-top: 10px !important; }
-            .cert-rank { border-top: 1px solid #111111 !important; color: #000000 !important; opacity: 1 !important; font-size: 0.7rem !important; width: 160px !important; margin-top: 4px !important; padding-top: 4px !important; }
-        }
-
         /* Ambient On-Screen Certificate Preview Styling */
         .cert-preview-box {
             margin-top: 30px;
@@ -118,6 +22,7 @@
             padding: 30px;
             text-align: center;
             box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s ease;
         }
         .cert-title {
             font-size: 1.2rem;
@@ -170,6 +75,14 @@
             padding-top: 5px;
             width: 200px;
         }
+        .disclaimer-text {
+            font-size: 0.8rem;
+            opacity: 0.4;
+            text-align: center;
+            margin: 20px auto 10px auto;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
         .button-group-row {
             display: flex;
             flex-direction: column;
@@ -181,12 +94,17 @@
                 flex-direction: row;
                 justify-content: center;
                 max-width: 500px;
-                margin: 35px auto 0 auto;
+                margin: 25px auto 0 auto;
             }
             .button-group-row .next-btn {
                 margin: 0;
                 width: 50%;
             }
+        }
+        /* State for when request is successful */
+        .request-success {
+            border-color: #a7f3d0 !important;
+            background: rgba(16, 185, 129, 0.05) !important;
         }
     </style>
 </head>
@@ -262,7 +180,7 @@
             <button class="next-btn show" onclick="compileAndLoadEndCapstone(5, 100)">Lock in the Mindset</button>
         </main>
 
-        <!-- SLIDE 5: TIERS WRAP UP & DEEP PERSONALIZED CERTIFICATE -->
+        <!-- SLIDE 5: TIERS WRAP UP & CERTIFICATE REQUEST -->
         <main class="console-card slide" id="slide-5">
             <h2 class="subtitle">The Compass is Yours</h2>
             <p class="intro-text">You have completed the foundational sequence of Master Yourself, Master The World. You now possess the basic diagnostic system required to organize any sudden chaos back into structured order.</p>
@@ -274,23 +192,35 @@
 
             <!-- Personalized Roster Certificate Matrix Component -->
             <div id="certificate-area" class="cert-preview-box">
-                <div class="cert-title">Vanguard Academy Alignment</div>
-                <div class="cert-sub">Recognition of Internal Sovereignty</div>
+                <div id="cert-content-box">
+                    <div class="cert-title">Vanguard Academy Alignment</div>
+                    <div class="cert-sub">Recognition of Internal Sovereignty</div>
+                    
+                    <!-- Dynamic Target Element for User's First and Last Name -->
+                    <div id="dynamic-cert-target-name" class="cert-name"></div>
+                    
+                    <p class="cert-statement">This document honors your personal breakthrough in structural clarity. By stepping out of background thinking loops, confronting points of physical stagnation, and learning to guard your energetic boundaries, you have successfully stabilized your personal baseline.</p>
+                    
+                    <div class="cert-signature-block">
+                        <div class="cert-signature">Captain Commander Q</div>
+                        <div class="cert-rank">Vanguard Knights</div>
+                    </div>
+                </div>
                 
-                <!-- Dynamic Target Element for User's First and Last Name -->
-                <div id="dynamic-cert-target-name" class="cert-name"></div>
-                
-                <p class="cert-statement">This document honors your personal breakthrough in structural clarity. By stepping out of background thinking loops, confronting points of physical stagnation, and learning to guard your energetic boundaries, you have successfully stabilized your personal baseline. You have proven that you do not need the world to hand you a script because you have uncovered the internal logic required to navigate any storm from within.</p>
-                
-                <div class="cert-signature-block">
-                    <div class="cert-signature">Captain Commander Q</div>
-                    <div class="cert-rank">Vanguard Knights</div>
+                <!-- Success Message (Hidden by default) -->
+                <div id="request-success-msg" style="display:none;">
+                    <i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 3rem; margin-bottom: 15px;"></i>
+                    <h3 style="color: white; margin-bottom: 10px;">Request Received</h3>
+                    <p style="color: #e2e8f0; font-size: 0.9rem;">Captain Commander Q has been notified. Your official record is being processed.</p>
                 </div>
             </div>
+
+            <!-- Global Resource Notice Component -->
+            <p class="disclaimer-text">Notice: Certificates are available on request.</p>
             
             <!-- Control Group Layout Row -->
             <div class="button-group-row">
-                <button class="next-btn show" onclick="window.print()">Print / PDF</button>
+                <button id="request-cert-btn" class="next-btn show" onclick="requestOfficialCertificate()">Request Certificate</button>
                 <button class="next-btn show finish-btn" onclick="finishLesson5()">Return to Hub</button>
             </div>
         </main>
@@ -300,7 +230,12 @@
     <footer>Powered by Vanguard Citizen Services</footer>
 
     <script>
-        /* --- 1. AMBIENT BACKGROUND MATRIX --- */
+        /* --- 1. SUPABASE INITIALIZATION --- */
+        const supabaseUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
+        const supabaseKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        /* --- 2. AMBIENT BACKGROUND MATRIX --- */
         const starfield = document.getElementById('starfield');
         for (let i = 0; i < 75; i++) {
             const star = document.createElement('div');
@@ -340,7 +275,7 @@
         queueNextComet();
 
 
-        /* --- 2. DECK PROGRESSION ENGINE --- */
+        /* --- 3. DECK PROGRESSION ENGINE --- */
         function goToSlide(slideId, progressTarget) {
             document.getElementById('progress-bar').style.width = `${progressTarget}%`;
             document.getElementById('progress-percentage').innerText = `${progressTarget}%`;
@@ -364,7 +299,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        /* --- 3. DYNAMIC PROFILE INJECTION --- */
+        /* --- 4. DYNAMIC PROFILE INJECTION --- */
         function compileAndLoadEndCapstone(slideId, progressTarget) {
             const explicitStoredName = localStorage.getItem('vanguard_citizen_name');
             if (explicitStoredName && explicitStoredName.trim().length > 2) {
@@ -376,8 +311,43 @@
             goToSlide(slideId, progressTarget);
         }
 
+        /* --- 5. CERTIFICATE REQUEST ENGINE --- */
+        async function requestOfficialCertificate() {
+            const btn = document.getElementById('request-cert-btn');
+            btn.innerText = "Requesting...";
+            btn.style.pointerEvents = "none";
 
-        /* --- 4. INPUT AND INTERACTION RULES --- */
+            try {
+                const { data: { user } } = await _supabase.auth.getUser();
+                
+                if (user) {
+                    const { error } = await _supabase
+                        .from('master_roster')
+                        .update({ 
+                            bronze_status: 'complete',
+                            cert_requested_at: new Date().toISOString()
+                        })
+                        .eq('id', user.id);
+
+                    if (error) throw error;
+
+                    document.getElementById('cert-content-box').style.display = 'none';
+                    document.getElementById('request-success-msg').style.display = 'block';
+                    document.getElementById('certificate-area').classList.add('request-success');
+                    btn.style.display = 'none';
+                    
+                } else {
+                    alert("Session expired. Please return to hub and sign in again.");
+                }
+            } catch (err) {
+                console.error(err);
+                btn.innerText = "Error - Try Again";
+                btn.style.pointerEvents = "auto";
+            }
+        }
+
+
+        /* --- 6. INPUT AND INTERACTION RULES --- */
         function activateSlide2Button(selection) {
             document.querySelectorAll('#slide-2 .option-box').forEach(box => {
                 box.classList.remove('active');
