@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vanguard University | Learn Faster</title>
+    <title>Vanguard University | Inso Foundation</title>
     <style>
         :root {
             --navy: #0A192F;
@@ -20,8 +20,20 @@
             background-color: var(--light-grey);
             color: #333;
             line-height: 1.6;
-            font-size: 16px;
+            overflow-x: hidden;
         }
+
+        /* 1. PALATE CLEANSER (WHITE FADE) */
+        #fade-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: white;
+            z-index: 10000;
+            transition: opacity 0.8s ease-in-out;
+            pointer-events: none;
+        }
+        .fade-hidden { opacity: 0; }
 
         /* NAVIGATION */
         header {
@@ -38,215 +50,221 @@
         .logo { 
             color: var(--gold); 
             font-weight: bold; 
-            font-size: 1.05rem;
+            font-size: 1.2rem;
             text-decoration: none;
             font-family: 'Georgia', serif;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
+
+        nav { display: flex; align-items: center; gap: 20px; }
 
         nav a {
             color: var(--white);
             text-decoration: none;
-            margin-left: 12px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 500;
+            transition: color 0.3s;
             cursor: pointer;
         }
 
-        /* HIDDEN BY DEFAULT */
-        #account-link { 
-            display: none; 
+        nav a:hover { color: var(--gold); }
+
+        /* BUTTON STYLES */
+        .nav-btn {
             border: 1px solid var(--gold);
-            padding: 4px 8px;
+            padding: 6px 15px;
             border-radius: 4px;
             color: var(--gold);
         }
 
         /* HERO SECTION */
         .hero {
-            background: linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.9)), url('https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=80');
+            background: linear-gradient(rgba(10, 25, 47, 0.85), rgba(10, 25, 47, 0.85)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80');
             background-size: cover;
+            background-position: center;
             color: white;
             text-align: center;
-            padding: 80px 20px;
+            padding: 120px 20px;
         }
 
-        .hero h1 { font-size: 2.2rem; margin-bottom: 15px; font-family: 'Georgia', serif; }
-        .hero p { font-size: 1.1rem; margin-bottom: 25px; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .hero h1 { font-size: 3rem; font-family: 'Georgia', serif; margin-bottom: 20px; }
+        .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 30px auto; opacity: 0.9; }
 
-        .btn-main {
+        .cta-btn {
             background: var(--gold);
             color: var(--navy);
-            padding: 15px 30px;
+            padding: 18px 40px;
             text-decoration: none;
             font-weight: bold;
-            border-radius: 5px;
+            border-radius: 4px;
+            font-size: 1.1rem;
             display: inline-block;
-            width: 100%;
-            max-width: 300px;
+            transition: transform 0.2s;
         }
+        .cta-btn:hover { transform: translateY(-2px); }
 
-        /* STATS */
-        .stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            padding: 20px 5%;
-            background: var(--white);
-            margin: -30px auto 0 auto;
-            width: 90%;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .stat-item h2 { color: var(--navy); margin: 0; font-size: 1.5rem; }
-        .stat-item p { font-size: 0.7rem; color: #666; text-transform: uppercase; margin: 5px 0 0 0; font-weight: bold; }
-
-        /* VISION */
-        .vision { padding: 60px 10%; max-width: 1000px; margin: 0 auto; }
-        .vision h2 { color: var(--navy); font-family: 'Georgia', serif; font-size: 1.8rem; text-align: center; margin-bottom: 40px; }
-        .vision-text { margin-bottom: 40px; }
-        .vision-text h3 { color: var(--navy); border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 5px; }
-
-        /* MODAL */
+        /* STUDIES MODAL */
         .modal {
-            display: none; 
-            position: fixed;
-            z-index: 2000;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            align-items: center;
-            justify-content: center;
+            display: none; position: fixed; z-index: 2000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center;
             padding: 20px;
         }
 
         .modal-content {
-            background-color: var(--white);
-            padding: 30px;
+            background: var(--white);
+            padding: 40px;
             border-radius: 8px;
-            width: 100%;
-            max-width: 500px;
+            width: 100%; max-width: 650px;
+            max-height: 85vh; overflow-y: auto;
             position: relative;
-            max-height: 80vh;
-            display: flex;
-            flex-direction: column;
+            border-top: 6px solid var(--gold);
         }
 
-        .close-modal {
-            position: absolute;
-            top: 15px; right: 15px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--navy);
-            cursor: pointer;
+        .close { position: absolute; top: 20px; right: 20px; font-size: 1.8rem; cursor: pointer; color: var(--navy); }
+
+        .category-group { margin-bottom: 35px; }
+        .category-title { 
+            font-family: 'Georgia', serif; 
+            color: var(--navy); 
+            border-bottom: 2px solid var(--gold); 
+            padding-bottom: 8px; margin-bottom: 20px; 
+            font-size: 1.4rem;
         }
 
-        .study-list { list-style: none; padding: 0; overflow-y: auto; }
-        .study-list li { padding: 15px; border-bottom: 1px solid #eee; }
-        .study-list li b { display: block; color: var(--navy); }
-        .study-list li span { font-size: 0.85rem; color: #666; }
+        .study-item { padding: 15px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .study-item-info b { display: block; color: var(--navy); font-size: 1.1rem; }
+        .study-item-info span { font-size: 0.85rem; color: #666; }
+        .time-tag { font-size: 0.75rem; font-weight: bold; color: var(--gold); background: var(--navy); padding: 4px 8px; border-radius: 3px; }
 
-        footer { background: var(--navy); color: #aaa; text-align: center; padding: 40px; font-size: 0.8rem; }
+        footer { text-align: center; padding: 60px; background: var(--navy); color: #556677; font-size: 0.8rem; letter-spacing: 0.5px; }
 
-        @media (min-width: 768px) {
-            body { font-size: 18px; }
-            .logo { font-size: 1.4rem; }
-            .hero h1 { font-size: 3.8rem; }
-            .hero p { font-size: 1.3rem; }
-            .stats { grid-template-columns: repeat(4, 1fr); padding: 40px; }
-            .btn-main { width: auto; }
-            nav a { margin-left: 30px; font-size: 1rem; }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1rem; }
+            nav { gap: 12px; }
+            nav a { font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- PALATE CLEANSER OVERLAY -->
+    <div id="fade-overlay"></div>
+
     <header>
-        <a href="index.html" class="logo">Vanguard Academy</a>
-        <nav>
-            <a href="apply.html">Apply</a>
-            <a id="studiesLink">Studies List</a>
-            <a href="account.html" id="account-link">Account</a>
+        <a href="index.html" class="logo">VANGUARD</a>
+        <nav id="main-nav">
+            <a href="apply.html" id="apply-link">Apply</a>
+            <a id="studiesBtn">Studies</a>
+            <!-- Only visible when logged in -->
+            <a href="dashboard.html" id="academy-home-link" class="nav-btn" style="display:none;">Academy Home</a>
+            <a href="account.html" id="account-link" style="display:none;">Account</a>
         </nav>
     </header>
 
     <section class="hero">
-        <h1>Let's Get Started</h1>
-        <p>Skip the academic slog. Master the foundations of the universe with our framework and start making an impact today.</p>
-        <a href="apply.html" class="btn-main">Start Your Impact</a>
+        <h1 id="hero-title">Forge the Future.</h1>
+        <p id="hero-desc">The specialized academy for those who refuse the slow path. Master the Inso framework and anchor reality in record time.</p>
+        <a href="apply.html" class="cta-btn" id="hero-cta">Begin Application</a>
     </section>
 
-    <section class="stats">
-        <div class="stat-item">
-            <h2>70%</h2>
-            <p>Faster Learning</p>
-        </div>
-        <div class="stat-item">
-            <h2>2 Years</h2>
-            <p>Time Saved</p>
-        </div>
-        <div class="stat-item">
-            <h2>94%</h2>
-            <p>Direct Impact</p>
-        </div>
-        <div class="stat-item">
-            <h2>Higher Self Confidence</h2>
-            <p>Accessible education</p>
-        </div>
-    </section>
-
-    <section class="vision">
-        <h2>The Vanguard Leap</h2>
-        <div class="vision-text">
-            <h3>Breaking the Status Quo</h3>
-            <p>Our world is fast evolving. Our students need to evolve with it. With courses designed from the ground up to be simple and easy to understand, we stand ready to meet a new future.</p>
-        </div>
-        <div class="vision-text">
-            <h3>Conceptual Anchoring</h3>
-            <p>Using our unique framework, we teach you how to anchor general concepts instantly. This allows you to pivot between biology, technology, or engineering without feeling lost.</p>
-        </div>
-    </section>
-
+    <!-- STUDIES MODAL -->
     <div id="studiesModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" id="closeModal">&times;</span>
-            <h2 style="font-family: Georgia, serif; border-bottom: 2px solid var(--gold); padding-bottom: 10px;">Vanguard Studies</h2>
-            <ul class="study-list">
-                <li><b>The Inso Series (Core)</b><span>A 4-part journey through Foundation, Mind, Body, and Soul.</span></li>
-            </ul>
+            <span class="close" id="closeModal">&times;</span>
+            
+            <div class="category-group">
+                <div class="category-title">Genesis Tier (Core)</div>
+                <div class="study-item">
+                    <div class="study-item-info"><b>Inso Foundation</b><span>The bedrock of the universal framework.</span></div>
+                    <div class="time-tag">4 MIN</div>
+                </div>
+                <div class="study-item">
+                    <div class="study-item-info"><b>Inso Mind</b><span>Mapping the internal engine of intent.</span></div>
+                    <div class="time-tag">6 MIN</div>
+                </div>
+            </div>
+
+            <div class="category-group">
+                <div class="category-title">Cognitive Architecture</div>
+                <div class="study-item">
+                    <div class="study-item-info"><b>Synthesis Mapping</b><span>Managing high-density complex data.</span></div>
+                    <div class="time-tag">8 MIN</div>
+                </div>
+            </div>
+
+            <div class="category-group">
+                <div class="category-title">Universal Mechanics</div>
+                <div class="study-item">
+                    <div class="study-item-info"><b>Systemic Impact</b><span>Solving problems at the root source.</span></div>
+                    <div class="time-tag">10 MIN</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 Vanguard University. Powered by Vanguard Citizen Services.
+        &copy; 2026 VANGUARD UNIVERSITY. FORGING IMPACT IN REAL-TIME.
     </footer>
 
     <script type="module">
-        // Import your initialized Supabase client here
-        
-        // MODAL LOGIC
-        const modal = document.getElementById("studiesModal");
-        const btn = document.getElementById("studiesLink");
-        const span = document.getElementById("closeModal");
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-        btn.onclick = () => { modal.style.display = "flex"; document.body.style.overflow = "hidden"; }
-        span.onclick = () => { modal.style.display = "none"; document.body.style.overflow = "auto"; }
-        window.onclick = (e) => { if (e.target == modal) { modal.style.display = "none"; document.body.style.overflow = "auto"; } }
+        const SUPABASE_URL = 'https://dvyjupytbwbrcoyouxpf.supabase.co/'
+        const SUPABASE_KEY = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk'
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-        // AUTH VISIBILITY LOGIC
+        // 1. WHITE-IN TRANSITION
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('fade-overlay').classList.add('fade-hidden');
+            }, 1000);
+        });
+
+        // 2. AUTH STATE & NAV SWAP
         async function checkAuth() {
-            // This is where you call your Supabase Auth session check
-            // const { data: { user } } = await supabase.auth.getUser();
-            const user = null; // Replace with actual auth check
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            const applyLink = document.getElementById('apply-link');
+            const academyLink = document.getElementById('academy-home-link');
+            const accountLink = document.getElementById('account-link');
+            const heroCta = document.getElementById('hero-cta');
+            const heroTitle = document.getElementById('hero-title');
 
-            if (user) {
-                document.getElementById('account-link').style.display = 'inline-block';
+            if (session) {
+                // Citizen is Logged In
+                applyLink.style.display = 'none';
+                academyLink.style.display = 'inline-block';
+                accountLink.style.display = 'inline-block';
+
+                // Personalized Hero for Citizens
+                const preferredName = session.user.user_metadata.preferred_name || "Citizen";
+                heroTitle.textContent = `Welcome back, ${preferredName}`;
+                heroCta.textContent = "Enter Academy Home";
+                heroCta.href = "dashboard.html";
             }
         }
         checkAuth();
-    </script>
 
+        // 3. MODAL LOGIC
+        const modal = document.getElementById("studiesModal");
+        const btn = document.getElementById("studiesBtn");
+        const span = document.getElementById("closeModal");
+
+        btn.onclick = (e) => { 
+            e.preventDefault(); 
+            modal.style.display = "flex"; 
+            document.body.style.overflow = "hidden"; // Prevent background scroll
+        }
+        
+        const closeBox = () => { 
+            modal.style.display = "none"; 
+            document.body.style.overflow = "auto"; 
+        }
+
+        span.onclick = closeBox;
+        window.onclick = (event) => { if (event.target == modal) closeBox(); }
+    </script>
 </body>
 </html>
