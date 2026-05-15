@@ -16,10 +16,20 @@
         /* --- HIGH-RESOLUTION PRINT / PDF OVERRIDE MATRIX --- */
         @page {
             size: letter portrait; /* Forces a standard document sheet scale */
-            margin: 0mm;           /* CRITICAL: Hard-forces the browser to drop URLs, dates, and page numbers */
+            margin: 0mm;           /* Hard-forces the browser to drop URLs, dates, and page numbers */
         }
 
         @media print {
+            /* 1. Force the absolute root architecture to be completely naked and white */
+            html, body, .container, .slide, main, .console-card {
+                background: transparent !important;
+                background-color: transparent !important;
+                background-image: none !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+                border: none !important;
+            }
+            
             html, body {
                 background: #ffffff !important;
                 background-color: #ffffff !important;
@@ -29,26 +39,27 @@
                 height: 100% !important;
                 margin: 0 !important;
                 padding: 0 !important;
-                overflow: hidden !important; /* CRITICAL: Prevents any accidental trailing page bleed */
-                -webkit-print-color-adjust: exact; /* Forces background colors/borders to stay alive */
-                print-color-adjust: exact;
+                overflow: hidden !important; /* Prevents trailing page bleed completely */
+                -webkit-print-color-adjust: economy; 
+                print-color-adjust: economy;
             }
             
-            /* Completely erase all screen interface elements from print memory */
+            /* 2. Erase screen interfaces and decorations entirely from printer memory */
             #starfield, .progress-container, footer, .container footer, 
             button, .next-btn, .experiment-box, .subtitle, .intro-text, .button-group-row {
                 display: none !important;
+                visibility: hidden !important;
                 height: 0 !important;
                 margin: 0 !important;
                 padding: 0 !important;
             }
 
-            /* Hard-delete slides 1-4 from the layout math so they don't generate blank pages */
+            /* 3. Drop inactive slides out of structural geometry math */
             .slide {
                 display: none !important;
             }
 
-            /* Force only the final active capstone slide to render as a perfectly centered viewport box */
+            /* 4. Center only the final active slide viewport on the printed page */
             .slide.active {
                 display: flex !important;
                 align-items: center !important;
@@ -60,51 +71,42 @@
             }
 
             .container {
-                padding: 0 !important;
-                margin: 0 !important;
                 width: 100% !important;
                 max-width: 100% !important;
                 height: 100% !important;
             }
 
-            .console-card {
-                background: transparent !important;
-                border: none !important;
-                box-shadow: none !important;
-                padding: 0 !important;
-                width: 100% !important;
-            }
-
-            /* Isolate, tightly scale, and center the certificate graphic element */
+            /* 5. Isolate, tightly scale, and safely confine the document box */
             #certificate-area {
                 display: block !important;
                 opacity: 1 !important;
                 visibility: visible !important;
                 box-sizing: border-box !important;
                 
-                /* Clamped dimensions ensure the certificate strictly scales onto one page */
-                width: 85% !important;
-                max-width: 660px !important;
-                max-height: 85% !important;
+                width: 82% !important;
+                max-width: 640px !important;
                 margin: 0 auto !important;
                 
+                /* Crisp legacy double border styling */
                 border: 4px double #111111 !important;
-                padding: 45px 35px !important; /* Slightly tighter internal padding */
+                padding: 50px 40px !important; 
                 text-align: center !important;
+                
+                /* Explicitly enforce crisp white card space */
                 background: #ffffff !important;
+                background-color: #ffffff !important;
                 color: #000000 !important;
-                box-shadow: none !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
             }
 
-            /* Finely scaled typography to guarantee zero text layout spilling */
-            .cert-title { color: #000000 !important; font-size: 1.8rem !important; margin-bottom: 8px !important; letter-spacing: 2px !important; }
-            .cert-sub { color: #333333 !important; font-size: 0.8rem !important; }
-            .cert-name { color: #000000 !important; font-size: 2.2rem !important; margin: 15px auto !important; border-bottom: 2px solid #111111 !important; padding-bottom: 4px !important; }
-            .cert-statement { color: #000000 !important; opacity: 1 !important; font-size: 0.95rem !important; line-height: 1.5 !important; margin: 0 auto 25px auto !important; }
-            .cert-signature { color: #000000 !important; font-family: 'Georgia', serif !important; font-style: italic !important; font-size: 1.2rem !important; }
-            .cert-rank { border-top: 1px solid #111111 !important; color: #000000 !important; opacity: 1 !important; font-size: 0.7rem !important; width: 160px !important; margin-top: 4px !important; }
+            /* Finely scaled print typography rules */
+            .cert-title { color: #000000 !important; font-size: 1.7rem !important; margin-bottom: 8px !important; letter-spacing: 2px !important; font-weight: bold !important; }
+            .cert-sub { color: #333333 !important; font-size: 0.8rem !important; font-weight: normal !important; text-transform: uppercase !important; }
+            .cert-name { color: #000000 !important; font-size: 2.3rem !important; margin: 20px auto !important; border-bottom: 2px solid #111111 !important; padding-bottom: 4px !important; font-weight: bold !important; width: fit-content !important; min-width: 250px !important; }
+            .cert-statement { color: #000000 !important; opacity: 1 !important; font-size: 1rem !important; line-height: 1.6 !important; margin: 0 auto 30px auto !important; text-align: center !important; }
+            .cert-signature { color: #000000 !important; font-family: 'Georgia', serif !important; font-style: italic !important; font-size: 1.3rem !important; margin-top: 10px !important; }
+            .cert-rank { border-top: 1px solid #111111 !important; color: #000000 !important; opacity: 1 !important; font-size: 0.7rem !important; width: 160px !important; margin-top: 4px !important; padding-top: 4px !important; }
         }
 
         /* Ambient On-Screen Certificate Preview Styling */
@@ -364,7 +366,6 @@
 
         /* --- 3. DYNAMIC PROFILE INJECTION --- */
         function compileAndLoadEndCapstone(slideId, progressTarget) {
-            // Extracts the full name stored at account generation in Lesson 1
             const explicitStoredName = localStorage.getItem('vanguard_citizen_name');
             if (explicitStoredName && explicitStoredName.trim().length > 2) {
                 document.getElementById('dynamic-cert-target-name').innerText = explicitStoredName;
