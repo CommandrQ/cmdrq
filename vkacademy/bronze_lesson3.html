@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ordo | Lesson 3: The Body</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // AUTH GATE: Ensure an active session is in place before loading
+        if (localStorage.getItem('vanguard_session_status') !== 'active') {
+            window.location.href = 'intro.html';
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Cinematic Fade In -->
+    <div id="boot-screen"></div>
+    
+    <!-- Dynamic Sky Matrix -->
+    <div id="starfield"></div>
+
+    <!-- Persistent Progress Tracker -->
+    <div class="progress-container">
+        <div class="progress-text">Lesson 3: The Body | Progress: <span id="progress-percentage">0%</span></div>
+        <div class="progress-track">
+            <div id="progress-bar" class="progress-fill"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <!-- SLIDE 1: THE FROZEN ENGINE (RELATABILITY) -->
+        <main class="console-card slide active" id="slide-1">
+            <h2 class="subtitle">The Frozen Engine</h2>
+            <p class="intro-text">Have you ever known exactly what you need to do, but your body just refuses to move? Your mind has the perfect plan layout, but you find yourself staring at a screen or stuck on the couch, feeling completely heavy.</p>
+            <p class="intro-text">We often think procrastination is a mental problem. Most of the time, it is actually a physical one. We are treating our body like a machine with frozen gears, expecting it to go from zero to sixty instantly without clearing out the rust first.</p>
+            <p class="intro-text">The second layer of your armor belongs to <span class="highlight-text">The Body</span>. It is about understanding how to remove physical friction so your energy can flow smoothly into the real world.</p>
+            
+            <button class="next-btn show" onclick="goToSlide(2, 25)">Clear the Friction</button>
+        </main>
+
+        <!-- SLIDE 2: MICROSCOPIC ACTION (WHAT THEY NEED) -->
+        <main class="console-card slide" id="slide-2">
+            <h2 class="subtitle">The Law of Momentum</h2>
+            <p class="intro-text">Ancient action philosophies taught a very simple truth: physical order cannot coexist with physical chaos. When your immediate physical surroundings are messy or incomplete, they act like tiny gravity wells draining your energy.</p>
+            <p class="intro-text">A half-done chore, a pile of laundry, a workspace covered in trash—these are not neutral objects. They are visual alarms constantly going off in your peripheral vision, stealing your presence.</p>
+            <p class="intro-text">Ordo tells us that to fix a massive, heavy project, you do not start with the biggest problem. You start by restoring physical order to the single square foot right in front of you.</p>
+            
+            <p class="prompt-text">Look around you right now, or think about your immediate environment. Where is the friction building up?</p>
+            
+            <div class="options-container">
+                <div class="option-box" onclick="activateSlide2Button('environment')">
+                    <div class="radio-dot"></div>
+                    <span class="option-text">My physical workspace or room is cluttered and messy.</span>
+                </div>
+                <div class="option-box" onclick="activateSlide2Button('stuck')">
+                    <div class="radio-dot"></div>
+                    <span class="option-text">My physical body feels completely sluggish and exhausted.</span>
+                </div>
+            </div>
+            
+            <button id="btn-slide-2" class="next-btn" onclick="goToSlide(3, 50)">Isolate the Weight</button>
+        </main>
+
+        <!-- SLIDE 3: INTERACTIVE ENGAGEMENT -->
+        <main class="console-card slide" id="slide-3">
+            <h2 class="subtitle">Locate the Physical Anchor</h2>
+            <p class="intro-text">There is usually one specific, dull physical task or messy spot that you have been putting off. Every time you walk past it, your chest feels just a little bit tighter.</p>
+            <p class="prompt-text">Name a small physical task, chore, or space you have been ignoring lately. Write it down plainly:</p>
+            
+            <input type="text" id="body-friction-input" class="text-input" placeholder="e.g., Cleaning off the kitchen counter, clearing my desktop files..." oninput="validateSlide3Input()">
+            
+            <button id="btn-slide-3" class="next-btn" onclick="goToSlide(4, 75)">Drop the Anchor</button>
+        </main>
+
+        <!-- SLIDE 4: THE CALIBRATION (VAGUE & NEUTRAL) -->
+        <main class="console-card slide" id="slide-4">
+            <h2 class="subtitle">Breaking the Friction</h2>
+            <p class="intro-text">Take a simple look at <span class="highlight-text" id="user-friction-recall">the physical anchor you named</span>. The exact details do not matter. What matters is recognizing that this item is holding a small piece of your daily momentum hostage.</p>
+            <p class="intro-text">When a task sits in a half-done or ignored state, your brain spends background energy keeping track of it. You are trying to run a high-performance engine while dragging a heavy weight behind you.</p>
+            <p class="intro-text">You do not need to fix your entire life today. You just need to break the spell of staying still. The moment you take one small, clean physical action, the gears click into place, and the heavy feeling begins to dissolve.</p>
+            
+            <button class="next-btn show" onclick="goToSlide(5, 100)">See the Results</button>
+        </main>
+
+        <!-- SLIDE 5: MICRO-EXPERIMENT & COMPLETION -->
+        <main class="console-card slide" id="slide-5">
+            <h2 class="subtitle">Body Calibration Complete</h2>
+            <p class="intro-text">You have completed your alignment with the second root of Ordo. By recognizing how physical environments control our internal flow, you have unlocked the power of clean action.</p>
+            
+            <div class="experiment-box">
+                <span class="experiment-tag">BODY EXPERIMENT</span>
+                <p class="experiment-text">For the next 24 hours, practice the rule of clean completion. If you open something, close it. If you move something, put it exactly where it belongs. Pick one tiny physical space and make it perfectly orderly. Watch how fast your physical energy returns.</p>
+            </div>
+            
+            <button class="next-btn show finish-btn" onclick="finishLesson3()">Move to Lesson 4: The Soul</button>
+        </main>
+
+    </div>
+
+    <footer>Powered by Vanguard Citizen Services</footer>
+
+    <script>
+        /* --- 1. AMBIENT BACKGROUND MATRIX --- */
+        const starfield = document.getElementById('starfield');
+        for (let i = 0; i < 75; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const size = Math.random() * 2 + 1; 
+            const duration = Math.random() * 3 + 2; 
+            const delay = Math.random() * 5;
+            star.style.left = `${x}vw`;
+            star.style.top = `${y}vh`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.setProperty('--duration', `${duration}s`);
+            star.style.animationDelay = `${delay}s`;
+            starfield.appendChild(star);
+        }
+
+        function sparkComet() {
+            const comet = document.createElement('div');
+            comet.classList.add('comet');
+            const startX = Math.random() * 40 + 60; 
+            const startY = Math.random() * 30; 
+            comet.style.right = `${100 - startX}vw`;
+            comet.style.top = `${startY}vh`;
+            starfield.appendChild(comet);
+            setTimeout(() => { comet.remove(); }, 1500);
+        }
+
+        function queueNextComet() {
+            const nextInterval = Math.random() * 4000 + 4000;
+            setTimeout(() => {
+                sparkComet();
+                queueNextComet();
+            }, nextInterval);
+        }
+        queueNextComet();
+
+
+        /* --- 2. DECK PROGRESSION ENGINE --- */
+        function goToSlide(slideId, progressTarget) {
+            document.getElementById('progress-bar').style.width = `${progressTarget}%`;
+            document.getElementById('progress-percentage').innerText = `${progressTarget}%`;
+            
+            if (slideId === 4) {
+                const rawInput = document.getElementById('body-friction-input').value.trim();
+                const cleanInput = rawInput.toLowerCase().replace(/[^a-z ]/g, '').replace(/\s+/g, ' ');
+                const unsurePhrases = ['i dont know', 'idk', 'i do not know', 'not sure', 'nothing', 'no idea', 'none', 'dont know', 'cant tell', 'everything'];
+                
+                if (unsurePhrases.includes(cleanInput) || rawInput.length < 2) {
+                    document.getElementById('user-friction-recall').innerText = "that specific point of physical friction";
+                } else {
+                    document.getElementById('user-friction-recall').innerText = `"${rawInput}"`;
+                }
+            }
+
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            document.getElementById(`slide-${slideId}`).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+
+        /* --- 3. INPUT AND INTERACTION RULES --- */
+        function activateSlide2Button(selection) {
+            document.querySelectorAll('#slide-2 .option-box').forEach(box => {
+                box.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            document.getElementById('btn-slide-2').classList.add('show');
+            localStorage.setItem('ordo_l3_friction_type', selection);
+        }
+
+        function validateSlide3Input() {
+            const val = document.getElementById('body-friction-input').value.trim();
+            const nextBtn = document.getElementById('btn-slide-3');
+            if (val.length >= 2) {
+                nextBtn.classList.add('show');
+            } else {
+                nextBtn.classList.remove('show');
+            }
+        }
+
+        function finishLesson3() {
+            document.body.style.transition = 'opacity 0.6s ease';
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = 'bronze_lesson4.html'; 
+            }, 600);
+        }
+    </script>
+</body>
+</html>
