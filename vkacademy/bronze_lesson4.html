@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ordo | Lesson 4: The Soul</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // AUTH GATE: Ensure an active session is in place before loading
+        if (localStorage.getItem('vanguard_session_status') !== 'active') {
+            window.location.href = 'intro.html';
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Cinematic Fade In -->
+    <div id="boot-screen"></div>
+    
+    <!-- Dynamic Sky Matrix -->
+    <div id="starfield"></div>
+
+    <!-- Persistent Progress Tracker -->
+    <div class="progress-container">
+        <div class="progress-text">Lesson 4: The Soul | Progress: <span id="progress-percentage">0%</span></div>
+        <div class="progress-track">
+            <div id="progress-bar" class="progress-fill"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <!-- SLIDE 1: THE EMOTIONAL SPONGE (RELATABILITY) -->
+        <main class="console-card slide active" id="slide-1">
+            <h2 class="subtitle">The Emotional Sponge</h2>
+            <p class="intro-text">Have you ever walked into a room feeling completely fine, but walked out an hour later feeling totally drained, heavy, or annoyed? You didn't do anything physically exhausting, yet your battery is suddenly bottomed out.</p>
+            <p class="intro-text">When we don't protect our internal peace, we act like emotional sponges. We quietly absorb the background static, the unvented stress, the complaints, and the heavy moods of the people and environments around us without even realizing it.</p>
+            <p class="intro-text">The third and final layer of your armor belongs to <span class="highlight-text">The Soul</span>. This isn't about being fragile. It's about protecting your core wavelength so you don't drown in everyone else's noise.</p>
+            
+            <button class="next-btn show" onclick="goToSlide(2, 25)">Check Your Filters</button>
+        </main>
+
+        <!-- SLIDE 2: THE ENERGY DRAINS (WHAT THEY NEED) -->
+        <main class="console-card slide" id="slide-2">
+            <h2 class="subtitle">Guarded Openness</h2>
+            <p class="intro-text">Ancient connection philosophies didn't tell people to isolate themselves in caves or stop caring about others. Ordo teaches us that we are all deeply connected to the vibe of our environment.</p>
+            <p class="intro-text">But there is a massive difference between genuine empathy and toxic absorption. You can care about someone without setting yourself on fire to keep them warm. If your emotional windows are completely open all the time, every passing storm will ruin your interior.</p>
+            <p class="intro-text">To lock in your armor, you have to build an emotional filter. You have to start noticing exactly which environments or interactions are quietly siphoning off your life force.</p>
+            
+            <p class="prompt-text">Think about your social interactions lately. Where is your energy leaking out the fastest?</p>
+            
+            <div class="options-container">
+                <div class="option-box" onclick="activateSlide2Button('absorption')">
+                    <div class="radio-dot"></div>
+                    <span class="option-text">Absorbing the venting, drama, or heavy moods of others.</span>
+                </div>
+                <div class="option-box" onclick="activateSlide2Button('isolation')">
+                    <div class="radio-dot"></div>
+                    <span class="option-text">Isolating entirely and letting my pride turn into loneliness.</span>
+                </div>
+            </div>
+            
+            <button id="btn-slide-2" class="next-btn" onclick="goToSlide(3, 50)">Locate the Static</button>
+        </main>
+
+        <!-- SLIDE 3: INTERACTIVE ENGAGEMENT -->
+        <main class="console-card slide" id="slide-3">
+            <h2 class="subtitle">Identify the Static Generator</h2>
+            <p class="intro-text">We all have a specific relationship, text thread, workplace dynamic, or social environment that leaves an uncomfortable lingering weight in our chest the moment we engage with it.</p>
+            <p class="prompt-text">Name a recent interaction, relationship, or social environment that has left you feeling emotionally cloudy or tired. Write it down plainly:</p>
+            
+            <input type="text" id="soul-static-input" class="text-input" placeholder="e.g., The tension in my family chat, a draining conversation..." oninput="validateSlide3Input()">
+            
+            <button id="btn-slide-3" class="next-btn" onclick="goToSlide(4, 75)">Filter the Vibe</button>
+        </main>
+
+        <!-- SLIDE 4: THE CALIBRATION (VAGUE & NEUTRAL) -->
+        <main class="console-card slide" id="slide-4">
+            <h2 class="subtitle">Protecting the Wavelength</h2>
+            <p class="intro-text">Take a simple look at <span class="highlight-text" id="user-static-recall">the interaction you named</span>. The specific details or the history behind it don't actually matter right now. What matters is the reality of how it makes you feel.</p>
+            <p class="intro-text">When you absorb that heavy energy, your brain starts to confuse their mood with your identity. You begin carrying their stress as if it is your own personal problem to solve. It isn't.</p>
+            <p class="intro-text">You cannot control how other people choose to process their chaos, but you can control how much of it you let take root inside you. The moment you recognize that their weight belongs to them, your soul naturally detaches from the drama and steps back into balance.</p>
+            
+            <button class="next-btn show" onclick="goToSlide(5, 100)">Complete the Loop</button>
+        </main>
+
+        <!-- SLIDE 5: MICRO-EXPERIMENT & COMPLETION -->
+        <main class="console-card slide" id="slide-5">
+            <h2 class="subtitle">Bronze Calibration Complete</h2>
+            <p class="intro-text">You have successfully mastered the final root of Ordo. By aligning your Mind (Stoic focus), your Body (Clean momentum), and your Soul (Guarded openness), your baseline armor is now fully online.</p>
+            
+            <div class="experiment-box">
+                <span class="experiment-tag">SOUL EXPERIMENT</span>
+                <p class="experiment-text">For the next 24 hours, guard your presence like a scarce resource. When someone tries to dump their unrefined stress or chaotic static onto you, breathe out and remind your inner voice: <strong>"I can hear you without absorbing you. Your storm belongs to your yard."</strong> Keep your internal space clean.</p>
+            </div>
+            
+            <button class="next-btn show finish-btn" onclick="finishLesson4()">Enter the Hub</button>
+        </main>
+
+    </div>
+
+    <footer>Powered by Vanguard Citizen Services</footer>
+
+    <script>
+        /* --- 1. AMBIENT BACKGROUND MATRIX --- */
+        const starfield = document.getElementById('starfield');
+        for (let i = 0; i < 75; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const size = Math.random() * 2 + 1; 
+            const duration = Math.random() * 3 + 2; 
+            const delay = Math.random() * 5;
+            star.style.left = `${x}vw`;
+            star.style.top = `${y}vh`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.setProperty('--duration', `${duration}s`);
+            star.style.animationDelay = `${delay}s`;
+            starfield.appendChild(star);
+        }
+
+        function sparkComet() {
+            const comet = document.createElement('div');
+            comet.classList.add('comet');
+            const startX = Math.random() * 40 + 60; 
+            const startY = Math.random() * 30; 
+            comet.style.right = `${100 - startX}vw`;
+            comet.style.top = `${startY}vh`;
+            starfield.appendChild(comet);
+            setTimeout(() => { comet.remove(); }, 1500);
+        }
+
+        function queueNextComet() {
+            const nextInterval = Math.random() * 4000 + 4000;
+            setTimeout(() => {
+                sparkComet();
+                queueNextComet();
+            }, nextInterval);
+        }
+        queueNextComet();
+
+
+        /* --- 2. DECK PROGRESSION ENGINE --- */
+        function goToSlide(slideId, progressTarget) {
+            document.getElementById('progress-bar').style.width = `${progressTarget}%`;
+            document.getElementById('progress-percentage').innerText = `${progressTarget}%`;
+            
+            if (slideId === 4) {
+                const rawInput = document.getElementById('soul-static-input').value.trim();
+                const cleanInput = rawInput.toLowerCase().replace(/[^a-z ]/g, '').replace(/\s+/g, ' ');
+                const unsurePhrases = ['i dont know', 'idk', 'i do not know', 'not sure', 'nothing', 'no idea', 'none', 'dont know', 'cant tell', 'everything'];
+                
+                if (unsurePhrases.includes(cleanInput) || rawInput.length < 2) {
+                    document.getElementById('user-static-recall').innerText = "that specific point of emotional friction";
+                } else {
+                    document.getElementById('user-static-recall').innerText = `"${rawInput}"`;
+                }
+            }
+
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            document.getElementById(`slide-${slideId}`).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+
+        /* --- 3. INPUT AND INTERACTION RULES --- */
+        function activateSlide2Button(selection) {
+            document.querySelectorAll('#slide-2 .option-box').forEach(box => {
+                box.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            document.getElementById('btn-slide-2').classList.add('show');
+            localStorage.setItem('ordo_l4_soul_leak', selection);
+        }
+
+        function validateSlide3Input() {
+            const val = document.getElementById('soul-static-input').value.trim();
+            const nextBtn = document.getElementById('btn-slide-3');
+            if (val.length >= 2) {
+                nextBtn.classList.add('show');
+            } else {
+                nextBtn.classList.remove('show');
+            }
+        }
+
+        function finishLesson4() {
+            document.body.style.transition = 'opacity 0.6s ease';
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                // Returns users safely to the main centralized application dashboard 
+                window.location.href = 'hub.html'; 
+            }, 600);
+        }
+    </script>
+</body>
+</html>
