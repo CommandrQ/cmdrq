@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ordo | Lesson 2: The Mind</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Supabase CDN included just in case you want to pull data later -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // AUTH GATE: Ensure they are logged in before letting them take Lesson 2
         if (localStorage.getItem('vanguard_session_status') !== 'active') {
             window.location.href = 'intro.html';
         }
@@ -16,13 +14,9 @@
 </head>
 <body>
 
-    <!-- Cinematic Fade In -->
     <div id="boot-screen"></div>
-    
-    <!-- Dynamic Sky Matrix -->
     <div id="starfield"></div>
 
-    <!-- Persistent Progress Tracker -->
     <div class="progress-container">
         <div class="progress-text">Lesson 2: The Mind | Progress: <span id="progress-percentage">0%</span></div>
         <div class="progress-track">
@@ -32,33 +26,33 @@
 
     <div class="container">
         
-        <!-- SLIDE 1: THE OVERTHINKING SPIRAL (RELATABILITY) -->
+        <!-- SLIDE 1: THE OVERTHINKING SPIRAL -->
         <main class="console-card slide active" id="slide-1">
             <h2 class="subtitle">Too Many Open Tabs</h2>
             <p class="intro-text">Have you ever felt like your brain has 50 different browser tabs open at the exact same time? You can hear loud music playing from one of them, but you have no idea which tab it's coming from.</p>
             <p class="intro-text">That is mental exhaustion. It happens when we treat every single thought, notification, comment, and future worry as if it's an emergency requiring our immediate attention.</p>
-            <p class="intro-text">The first layer of your armor starts with **The Mind**. It's about learning how to close the tabs you don't need right now so you can actually hear yourself think.</p>
+            <p class="intro-text">The first layer of your armor starts with <span class="highlight-text">The Mind</span>. It's about learning how to close the tabs you don't need right now so you can actually hear yourself think.</p>
             
             <button class="next-btn show" onclick="goToSlide(2, 25)">How to Close the Tabs</button>
         </main>
 
-        <!-- SLIDE 2: INSIDE VS OUTSIDE THE FENCE (WHAT THEY NEED) -->
+        <!-- SLIDE 2: INSIDE VS OUTSIDE THE FENCE -->
         <main class="console-card slide" id="slide-2">
             <h2 class="subtitle">Drawing Your Fence Line</h2>
             <p class="intro-text">The ancient masters used a simple trick to protect their focus. They imaginary drew a fence line right around themselves.</p>
-            <p class="intro-text"><strong>Inside your fence</strong> is your territory. It contains the only things you actually own: your current choices, your effort, and how you choose to react to bad news.</p>
-            <p class="intro-text"><strong>Outside your fence</strong> is literally everything else. Other people's moods, traffic, the past, the future, and whether people like you or not. It's not your yard. You don't have to mow it.</p>
+            <p class="intro-text">Everything <span class="highlight-text">inside your fence</span> is your territory. It contains the only things you actually own: your current choices, your effort, and how you choose to react to bad news.</p>
+            <p class="intro-text">Everything <span class="highlight-text">outside your fence</span> is literally everything else. Other people's moods, traffic, the past, the future, and whether people like you or not. It's not your yard. You don't have to mow it.</p>
             
             <p class="prompt-text">Honestly look at your mental energy this past week. Where have you been spending most of it?</p>
             
             <div class="options-container">
                 <div class="option-box" onclick="activateSlide2Button('outside')">
                     <div class="radio-dot"></div>
-                    <span class="option-text">Outside my fence: Stressing over things I cannot change or control.</span>
+                    <span class="option-text">Stressing over things I cannot change or control.</span>
                 </div>
                 <div class="option-box" onclick="activateSlide2Button('inside')">
                     <div class="radio-dot"></div>
-                    <span class="option-text">Inside my fence: Focusing purely on my own next move.</span>
+                    <span class="option-text">Focusing purely on my own next move.</span>
                 </div>
             </div>
             
@@ -71,19 +65,18 @@
             <p class="intro-text">When we don't actively watch our mind, a single stressful thought can play on a loop in the background all day, quietly draining our battery.</p>
             <p class="prompt-text">What is a specific thought, scenario, or worry that has been looping in your head today? Write it down plainly:</p>
             
-            <input type="text" id="mind-worry-input" class="text-input" placeholder="e.g., Wondering if my boss was mad at that email response..." oninput="validateSlide3Input()">
+            <input type="text" id="mind-worry-input" class="text-input" placeholder="e.g., Thinking about a conversation from earlier..." oninput="validateSlide3Input()">
             
             <button id="btn-slide-3" class="next-btn" onclick="goToSlide(4, 75)">Apply the Filter</button>
         </main>
 
-        <!-- SLIDE 4: THE CALIBRATION -->
+        <!-- SLIDE 4: THE CALIBRATION (VAGUE & HUMANIZED) -->
         <main class="console-card slide" id="slide-4">
             <h2 class="subtitle">Whose Yard is This?</h2>
-            <p class="intro-text">Look directly at that loop: <span class="highlight-text" id="user-worry-recall">your thought</span>.</p>
-            <p class="intro-text">Now, let's apply the Mind armor to it. Ask yourself the absolute factual truth: **Is this thought inside your fence line, or outside of it?**</p>
-            
-            <p class="intro-text">If it's someone else's opinion, a past mistake, or an unpredictable future event—it is 100% outside your fence. Worrying about it is like getting mad at the sky for raining.</p>
-            <p class="intro-text">You don't need to fight the thought or force it to vanish. You just have to label it accurately: <em>"This is outside my fence."</em> The second you do that, your brain naturally stops pouring fuel on it.</p>
+            <p class="intro-text">Take a quiet look at <span class="highlight-text" id="user-worry-recall">the thought you named</span>. It doesn't actually matter what the words are. What matters is the direction the energy is flowing.</p>
+            <p class="intro-text">Ask yourself the simple truth of the situation. Does this specific thing live inside your fence line, or is it sitting somewhere out in the world where you can't reach it?</p>
+            <p class="intro-text">If it belongs to someone else, or if it has already happened, or if it is a "maybe" in the future, then it is simply not in your yard. You have been trying to mow a lawn that isn't yours.</p>
+            <p class="intro-text">You don't need to fight the thought or make it disappear. You just have to see it for what it is. The moment you realize it's outside your fence, your mind naturally lets go of the weight.</p>
             
             <button class="next-btn show" onclick="goToSlide(5, 100)">See the Results</button>
         </main>
@@ -91,7 +84,7 @@
         <!-- SLIDE 5: MICRO-EXPERIMENT & COMPLETION -->
         <main class="console-card slide" id="slide-5">
             <h2 class="subtitle">Mind Calibration Complete</h2>
-            <p class="intro-text">You have successfully mastered the first root of Ordo. By stepping outside the browser-tab chaos, you have reclaimed control over your internal territory.</p>
+            <p class="intro-text">You have successfully mastered the first root of Ordo. By stepping outside the browser tab chaos, you have reclaimed control over your internal territory.</p>
             
             <div class="experiment-box">
                 <span class="experiment-tag">MIND EXPERIMENT</span>
@@ -106,10 +99,8 @@
     <footer>Powered by Vanguard Citizen Services</footer>
 
     <script>
-        /* --- 1. AMBIENT BACKGROUND CANVAS STYLES --- */
+        /* --- 1. AMBIENT BACKGROUND CANVAS --- */
         const starfield = document.getElementById('starfield');
-        
-        // Generate Star Matrix
         for (let i = 0; i < 75; i++) {
             const star = document.createElement('div');
             star.classList.add('star');
@@ -118,7 +109,6 @@
             const size = Math.random() * 2 + 1; 
             const duration = Math.random() * 3 + 2; 
             const delay = Math.random() * 5;
-
             star.style.left = `${x}vw`;
             star.style.top = `${y}vh`;
             star.style.width = `${size}px`;
@@ -128,7 +118,6 @@
             starfield.appendChild(star);
         }
 
-        // Generate Random Comets
         function sparkComet() {
             const comet = document.createElement('div');
             comet.classList.add('comet');
@@ -155,14 +144,13 @@
             document.getElementById('progress-bar').style.width = `${progressTarget}%`;
             document.getElementById('progress-percentage').innerText = `${progressTarget}%`;
             
-            // Intelligent check for uncertain responses on Slide 4
             if (slideId === 4) {
                 const rawInput = document.getElementById('mind-worry-input').value.trim();
                 const cleanInput = rawInput.toLowerCase().replace(/[^a-z ]/g, '').replace(/\s+/g, ' ');
                 const unsurePhrases = ['i dont know', 'idk', 'i do not know', 'not sure', 'nothing', 'no idea', 'none', 'dont know', 'cant tell', 'everything'];
                 
                 if (unsurePhrases.includes(cleanInput) || rawInput.length < 2) {
-                    document.getElementById('user-worry-recall').innerText = "that abstract heavy noise spinning in the background";
+                    document.getElementById('user-worry-recall').innerText = "that feeling of internal noise";
                 } else {
                     document.getElementById('user-worry-recall').innerText = `"${rawInput}"`;
                 }
@@ -200,7 +188,6 @@
             document.body.style.transition = 'opacity 0.6s ease';
             document.body.style.opacity = '0';
             setTimeout(() => {
-                // Forwards cleanly directly onto the third lesson file
                 window.location.href = 'bronze_lesson3.html'; 
             }, 600);
         }
