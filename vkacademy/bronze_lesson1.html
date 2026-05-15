@@ -259,9 +259,9 @@
 
                 if (authError) throw authError;
 
-                // Step B: Write variables into user 'master_record' schema
+                // Step B: Write variables into user 'master_roster' schema
                 const { error: dbError } = await _supabase
-                    .from('master_record')
+                    .from('master_roster') // Corrected table name
                     .insert([
                         { 
                             first_name: first, 
@@ -286,7 +286,6 @@
                 document.body.style.opacity = '0';
                 
                 setTimeout(() => {
-                    // Forwarding users right into lesson 2 files
                     window.location.href = 'bronze_lesson2.html'; 
                 }, 600);
 
