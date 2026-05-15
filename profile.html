@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ordo | Citizen Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Supabase Official CDN Integration -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- Cinematic Fade In -->
+    <div id="boot-screen"></div>
+    
+    <!-- Dynamic Sky Matrix -->
+    <div id="starfield"></div>
+
+    <div class="container">
+        
+        <!-- STATE A: THE WELCOME PANEL (Visible if authenticated) -->
+        <main class="console-card" id="authenticated-profile-state" style="display: none;">
+            <h2 class="subtitle">Sovereignty Confirmed</h2>
+            <p class="intro-text" style="font-size: 1.5rem; text-align: center; margin: 30px 0; color: white;">
+                Hello, <span class="highlight-text" id="profile-display-name">Citizen</span>.
+            </p>
+            <p class="intro-text" style="text-align: center; opacity: 0.8;">Your internal baseline calibration data remains active. Continue guarding your workspace and operating with structured logic.</p>
+            
+            <div class="button-group-row" style="margin-top: 40px; display: flex; justify-content: center;">
+                <button class="next-btn show finish-btn" onclick="window.location.href='hub.html'" style="width: 100%; max-width: 320px;">Enter the Hub</button>
+            </div>
+        </main>
+
+        <!-- STATE B: THE REGISTRATION GATEWAY (Visible if anonymous) -->
+        <main class="console-card" id="anonymous-signup-state" style="display: none;">
+            <h2 class="subtitle">Create Your Account</h2>
+            <p class="intro-text" style="text-align: center; margin-bottom: 25px;">Establish your profile inside the master roster to log your baseline configurations and lock in your class progress.</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div style="display: flex; gap: 12px;">
+                    <input type="text" id="first-name-input" class="text-input" placeholder="First Name" oninput="validateSignupForm()" style="margin-top:0;">
+                    <input type="text" id="last-name-input" class="text-input" placeholder="Last Name" oninput="validateSignupForm()" style="margin-top:0;">
+                </div>
+                <input type="email" id="email-input" class="text-input" placeholder="Email Address" oninput="validateSignupForm()" style="margin-top:0;">
+                <input type="password" id="password-input" class="text-input" placeholder="Create Password" oninput="validateSignupForm()" style="margin-top:0;">
+            </div>
+
+            <!-- Error Feedback Console -->
+            <p id="auth-error-msg" style="color: #ff6b6b; font-size: 0.9rem; margin-top: 15px; text-align: center; display: none;"></p>
+            
+            <!-- Dynamic Submission Button -->
+            <button id="signup-submit-btn" class="next-btn finish-btn" onclick="handleSupabaseSignup()">Complete Registration</button>
+            
+            <p style="text-align: center; margin-top: 25px; font-size: 0.9rem; opacity: 0.6;">
+                Already on the roster? <a href="bronze_lesson1.html" style="color: var(--light-blue); text-decoration: underline;">Verify entry here</a>
+            </p>
+        </main>
+
+    </div>
+
+    <footer>Powered by Vanguard Citizen Services</footer>
+
+    <script>
+        /* --- 1. SUPABASE INITIALIZATION ENGINE --- */
+        const supabaseUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
+        const supabaseKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        /* --- 2. EVALUATE AUTH STATE ON LOAD --- */
+        window.addEventListener('DOMContentLoaded', () => {
+            const sessionActive = localStorage.getItem('vanguard_session_status') === 'active';
+            const cachedName = localStorage.getItem('vanguard_citizen_name');
+
+            if (sessionActive && cachedName) {
+                document.getElementById('profile-display-name').innerText = cachedName;
+                document.getElementById('authenticated-profile-state').style.display = 'block';
+            } else {
+                document.getElementById('anonymous-signup-state').style.display = 'block';
+            }
+        });
+
+        /* --- 3. AMBIENT BACKGROUND MATRIX --- */
+        const starfield = document.getElementById('starfield');
+        for (let i = 0; i < 75; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const size = Math.random() * 2 + 1; 
+            const duration = Math.random() * 3 + 2; 
+            const delay = Math.random() * 5;
+            star.style.left = `${x}vw`;
+            star.style.top = `${y}vh`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.setProperty('--duration', `${duration}s`);
+            star.style.animationDelay = `${delay}s`;
+            starfield.appendChild(star);
+        }
+
+        /* --- 4. FORM FIELD VALIDATION MATRIX --- */
+        function validateSignupForm() {
+            const first = document.getElementById('first-name-input').value.trim();
+            const last = document.getElementById('last-name-input').value.trim();
+            const email = document.getElementById('email-input').value.trim();
+            const pass = document.getElementById('password-input').value.trim();
+            const submitBtn = document.getElementById('signup-submit-btn');
+
+            if (first.length > 1 && last.length > 1 && email.includes('@') && pass.length >= 6) {
+                submitBtn.classList.add('show');
+            } else {
+                submitBtn.classList.remove('show');
+            }
+        }
+
+        /* --- 5. SUPABASE AUTH TRANSACTION HANDLING --- */
+        async function handleSupabaseSignup() {
+            const first = document.getElementById('first-name-input').value.trim();
+            const last = document.getElementById('last-name-input').value.trim();
+            const email = document.getElementById('email-input').value.trim();
+            const password = document.getElementById('password-input').value.trim();
+            
+            const errorConsole = document.getElementById('auth-error-msg');
+            const submitBtn = document.getElementById('signup-submit-btn');
+            
+            errorConsole.style.display = "none";
+            submitBtn.innerText = "Securing Path...";
+            submitBtn.style.pointerEvents = "none";
+
+            try {
+                // Pass profile details to user_metadata block to feed the DB trigger function
+                const { data: authData, error: authError } = await _supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            first_name: first,
+                            last_name: last,
+                            initial_focus: 'unspecified'
+                        }
+                    }
+                });
+
+                if (authError) throw authError;
+
+                // Establish clean cache variables in global browser application storage
+                localStorage.setItem('vanguard_session_status', 'active');
+                localStorage.setItem('vanguard_citizen_name', `${first} ${last}`);
+
+                // Smoothly trigger page refresh to evaluate the updated session layout parameters
+                document.body.style.transition = 'opacity 0.4s ease';
+                document.body.style.opacity = '0';
+                setTimeout(() => {
+                    window.location.reload();
+                }, 400);
+
+            } catch (error) {
+                errorConsole.innerText = error.message || "An external synchronization error occurred.";
+                errorConsole.style.display = "block";
+                submitBtn.innerText = "Complete Registration";
+                submitBtn.style.pointerEvents = "auto";
+            }
+        }
+    </script>
+</body>
+</html>
