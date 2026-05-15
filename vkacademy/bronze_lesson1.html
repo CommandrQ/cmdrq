@@ -62,7 +62,7 @@
             <button id="btn-slide-2" class="next-btn" onclick="goToSlide(3, 50)">See How It Works</button>
         </main>
 
-        <!-- SLIDE 3: REAL WORLD USES (SIMPLIFIED & HUMANIZED) -->
+        <!-- SLIDE 3: REAL WORLD USES -->
         <main class="console-card slide" id="slide-3">
             <h2 class="subtitle">How It Works in Real Life</h2>
             <p class="intro-text">Let's step away from ancient history for a second. When a big problem hits, our first instinct is usually to panic and just try to work harder. That is exactly how burnout happens.</p>
@@ -75,12 +75,13 @@
             <button id="btn-slide-3" class="next-btn" onclick="goToSlide(4, 75)">Look Closer At It</button>
         </main>
 
-        <!-- SLIDE 4: THE CALIBRATION -->
+        <!-- SLIDE 4: THE CALIBRATION (HUMANIZED & INTELLIGENT IDK FILTER) -->
         <main class="console-card slide" id="slide-4">
             <h2 class="subtitle">Isolating the Break</h2>
-            <p class="intro-text">Look closely at what you just typed: <span class="highlight-text" id="user-env-recall">your situation</span>.</p>
-            <p class="intro-text">When that situation feels heavy, your brain tricks you into thinking your <em>entire life</em> is falling apart. That is a logical error.</p>
-            <p class="intro-text">By using Ordo, you can look at that chaos and map it. Usually, the whole project isn't ruined—you just have a single piece out of alignment. Once you realize exactly where the leak is, the overwhelm vanishes, and confidence returns.</p>
+            <p class="intro-text">Take a look at what you just wrote down: <span class="highlight-text" id="user-env-recall">your situation</span>.</p>
+            <p class="intro-text">When things feel that messy, it is completely normal to look at the cloud of stress and feel like your <em>entire life</em> is spinning out of control. We've all been there.</p>
+            <p class="intro-text">But Ordo teaches us to slow down and take a closer look. Most of the time, everything isn't actually ruined. You usually just have one single piece out of alignment that needs a little attention.</p>
+            <p class="intro-text">Once you clear away the noise and spot exactly what is actually wrong, that giant wave of anxiety starts to lift, and you get your grip back.</p>
             
             <button class="next-btn show" onclick="goToSlide(5, 100)">Take the First Step</button>
         </main>
@@ -106,7 +107,6 @@
         /* --- 1. AMBIENT BACKGROUND ENGINE --- */
         const starfield = document.getElementById('starfield');
         
-        // Generate Stars
         for (let i = 0; i < 75; i++) {
             const star = document.createElement('div');
             star.classList.add('star');
@@ -125,7 +125,6 @@
             starfield.appendChild(star);
         }
 
-        // Generate Occasional Comets
         function sparkComet() {
             const comet = document.createElement('div');
             comet.classList.add('comet');
@@ -149,23 +148,36 @@
 
         /* --- 2. LESSON PROGRESSION ENGINE --- */
         function goToSlide(slideId, progressTarget) {
-            // Update UI Progress Bar
             document.getElementById('progress-bar').style.width = `${progressTarget}%`;
             document.getElementById('progress-percentage').innerText = `${progressTarget}%`;
             
-            // Dynamic text injection for Slide 4
+            // Dynamic text validation logic for Slide 4
             if (slideId === 4) {
-                const envName = document.getElementById('chaos-env-input').value.trim();
-                document.getElementById('user-env-recall').innerText = `"${envName}"`;
+                const rawInput = document.getElementById('chaos-env-input').value.trim();
+                
+                // Clean input for comparison (lowercase, strip weird spaces and punctuation)
+                const cleanInput = rawInput.toLowerCase().replace(/[^a-z ]/g, '').replace(/\s+/g, ' ');
+                
+                // Catch common blank expressions
+                const unsurePhrases = [
+                    'i dont know', 'idk', 'i do not know', 'not sure', 
+                    'nothing', 'no idea', 'none', 'dont know', 'cant tell'
+                ];
+                
+                if (unsurePhrases.includes(cleanInput) || rawInput.length < 2) {
+                    // Smooth alternative phrase for uncertain users
+                    document.getElementById('user-env-recall').innerText = "that feeling of not knowing where to begin";
+                } else {
+                    // Standard insertion path
+                    document.getElementById('user-env-recall').innerText = `"${rawInput}"`;
+                }
             }
 
-            // Slide Transitions
             document.querySelectorAll('.slide').forEach(slide => {
                 slide.classList.remove('active');
             });
             document.getElementById(`slide-${slideId}`).classList.add('active');
             
-            // Smooth scroll back to top of the card
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -176,11 +188,7 @@
                 box.classList.remove('active');
             });
             event.currentTarget.classList.add('active');
-            
-            // Reveal button with animation
             document.getElementById('btn-slide-2').classList.add('show');
-            
-            // Store choice locally
             localStorage.setItem('ordo_intro_default_type', selection);
         }
 
@@ -188,8 +196,7 @@
             const val = document.getElementById('chaos-env-input').value.trim();
             const nextBtn = document.getElementById('btn-slide-3');
             
-            // Only reveal the button if they actually typed something
-            if (val.length >= 4) {
+            if (val.length >= 2) { // Dropped threshold slightly to catch quick entries like "idk"
                 nextBtn.classList.add('show');
             } else {
                 nextBtn.classList.remove('show');
@@ -197,11 +204,10 @@
         }
 
         function finishLesson() {
-            // Cinematic exit
             document.body.style.transition = 'opacity 0.6s ease';
             document.body.style.opacity = '0';
             setTimeout(() => {
-                window.location.href = 'hub.html'; // Target destination
+                window.location.href = 'hub.html'; 
             }, 600);
         }
     </script>
