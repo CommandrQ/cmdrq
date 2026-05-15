@@ -3,164 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ordo | Citizen Profile</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Supabase Official CDN Integration -->
+    <title>Profile | Vanguard Citizen</title>
+    <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --light-purple: #e0c3fc;
+            --light-blue: #8ecae6;
+            --deep-space: #0f0c29;
+            --glass-bg: rgba(15, 15, 25, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        body {
+            background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #7597de 100%);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100dvh; 
+        }
+
+        /* --- Background Matrix Animation --- */
+        #boot-screen { position: fixed; inset: 0; background: black; z-index: 1000; pointer-events: none; animation: fadeOut 1.5s forwards; }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+        #starfield { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        .stars { position: absolute; width: 2px; height: 2px; background: transparent; 
+                  box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 25vw 90vh #fff, 60vw 80vh #fff, 45vw 15vh #fff;
+                  animation: moveStars 150s linear infinite; }
+        @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
+
+        /* --- Structural Layout Container --- */
+        .settings-container {
+            width: 90%;
+            max-width: 450px;
+            z-index: 10;
+            padding: 40px 0 10px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin: auto 0; 
+        }
+
+        .commander-title { 
+            font-size: clamp(2rem, 6vw, 2.8rem); font-weight: bold; 
+            background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: sheen 3s linear infinite;
+            margin-bottom: 25px;
+        }
+        @keyframes sheen { to { background-position: 200% center; } }
+
+        .settings-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 40px 30px 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            width: 100%;
+            margin-bottom: 20px; 
+        }
+
+        h2 { color: var(--light-blue); margin-bottom: 25px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 3px; }
+
+        /* --- Active Profile Rendering Layout --- */
+        .user-info { margin-bottom: 30px; }
+        .user-label { color: var(--light-purple); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+        .citizen-greeting { font-size: 1.4rem; font-weight: normal; color: white; margin-bottom: 20px; line-height: 1.4; }
+        .citizen-greeting strong { color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
+        .citizen-id { font-size: 2.2rem; font-weight: bold; color: white; letter-spacing: 2px; text-shadow: 0 0 15px rgba(142, 202, 230, 0.6); font-family: monospace, serif; }
+        .user-email { font-size: 0.85rem; color: rgba(255, 255, 255, 0.4); margin-top: 12px; }
+
+        /* --- UI Form Elements --- */
+        input { 
+            width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; 
+            font-family: inherit; text-align: center; font-size: 1rem; transition: border-color 0.3s;
+        }
+        input:focus { outline: none; border-color: var(--light-blue); background: rgba(0,0,0,0.4); }
+
+        .name-row {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .btn {
+            width: 100%; padding: 14px; border-radius: 50px; border: 1px solid var(--light-blue); 
+            background: transparent; color: var(--light-blue); font-weight: bold; 
+            cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.8rem;
+            margin-bottom: 15px; text-decoration: none; display: inline-block; letter-spacing: 1px;
+        }
+        .btn:hover { background: var(--light-blue); color: var(--deep-space); box-shadow: 0 0 15px var(--light-blue); }
+        
+        .btn-danger { border-color: #ff6b6b; color: #ff6b6b; margin-bottom: 0; }
+        .btn-danger:hover { background: #ff6b6b; color: white; box-shadow: 0 0 15px #ff6b6b; }
+
+        .hidden { display: none !important; }
+
+        footer { 
+            z-index: 10; padding: 20px 20px 30px; text-align: center; color: white; 
+            font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase; 
+            animation: pulse 4s ease-in-out infinite; width: 100%; 
+            margin-top: auto; 
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+    </style>
 </head>
 <body>
 
-    <!-- Cinematic Fade In -->
     <div id="boot-screen"></div>
-    
-    <!-- Dynamic Sky Matrix -->
-    <div id="starfield"></div>
+    <div id="starfield"><div class="stars"></div></div>
 
-    <div class="container">
-        
-        <!-- STATE A: THE WELCOME PANEL (Visible if authenticated) -->
-        <main class="console-card" id="authenticated-profile-state" style="display: none;">
-            <h2 class="subtitle">Sovereignty Confirmed</h2>
-            <p class="intro-text" style="font-size: 1.5rem; text-align: center; margin: 30px 0; color: white;">
-                Hello, <span class="highlight-text" id="profile-display-name">Citizen</span>.
-            </p>
-            <p class="intro-text" style="text-align: center; opacity: 0.8;">Your internal baseline calibration data remains active. Continue guarding your workspace and operating with structured logic.</p>
-            
-            <div class="button-group-row" style="margin-top: 40px; display: flex; justify-content: center;">
-                <button class="next-btn show finish-btn" onclick="window.location.href='hub.html'" style="width: 100%; max-width: 320px;">Enter the Hub</button>
-            </div>
-        </main>
+    <div class="settings-container">
+        <h1 class="commander-title">Citizen Profile</h1>
 
-        <!-- STATE B: THE REGISTRATION GATEWAY (Visible if anonymous) -->
-        <main class="console-card" id="anonymous-signup-state" style="display: none;">
-            <h2 class="subtitle">Create Your Account</h2>
-            <p class="intro-text" style="text-align: center; margin-bottom: 25px;">Establish your profile inside the master roster to log your baseline configurations and lock in your class progress.</p>
+        <main class="settings-card">
             
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div style="display: flex; gap: 12px;">
-                    <input type="text" id="first-name-input" class="text-input" placeholder="First Name" oninput="validateSignupForm()" style="margin-top:0;">
-                    <input type="text" id="last-name-input" class="text-input" placeholder="Last Name" oninput="validateSignupForm()" style="margin-top:0;">
+            <!-- Registration Gateway Interface -->
+            <div id="auth-form" class="hidden">
+                <h2>Create Profile</h2>
+                <div class="name-row">
+                    <input type="text" id="signup-first" placeholder="First Name">
+                    <input type="text" id="signup-last" placeholder="Last Name">
                 </div>
-                <input type="email" id="email-input" class="text-input" placeholder="Email Address" oninput="validateSignupForm()" style="margin-top:0;">
-                <input type="password" id="password-input" class="text-input" placeholder="Create Password" oninput="validateSignupForm()" style="margin-top:0;">
+                <input type="email" id="signup-email" placeholder="Email Address">
+                <input type="password" id="signup-pass" placeholder="Access Code (6+ Chars)">
+                <button class="btn" style="margin-bottom: 0;" onclick="handleSignup()">Register Account</button>
             </div>
 
-            <!-- Error Feedback Console -->
-            <p id="auth-error-msg" style="color: #ff6b6b; font-size: 0.9rem; margin-top: 15px; text-align: center; display: none;"></p>
-            
-            <!-- Dynamic Submission Button -->
-            <button id="signup-submit-btn" class="next-btn finish-btn" onclick="handleSupabaseSignup()">Complete Registration</button>
-            
-            <p style="text-align: center; margin-top: 25px; font-size: 0.9rem; opacity: 0.6;">
-                Already on the roster? <a href="bronze_lesson1.html" style="color: var(--light-blue); text-decoration: underline;">Verify entry here</a>
-            </p>
+            <!-- Active Authenticated Dashboard Interface -->
+            <div id="user-profile" class="hidden">
+                <h2>Identity Verified</h2>
+                <div class="user-info">
+                    <div id="display-greeting" class="citizen-greeting">Hello, Scholar.</div>
+                    
+                    <div class="user-label">Citizenship Deployment Number</div>
+                    <div id="display-id" class="citizen-id">--------</div>
+                    
+                    <div id="display-email" class="user-email">...</div>
+                </div>
+                <button class="btn" style="margin-bottom: 0;" onclick="handleLogout()">Secure Logout</button>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 30px 0;">
+
+            <h2>Maintenance</h2>
+            <button class="btn btn-danger" onclick="wipeCache()">Wipe Local Cache</button>
+
         </main>
 
+        <a href="hub.html" class="btn" style="width: auto; padding: 12px 40px; margin-bottom: 0;">Return to Hub</a>
     </div>
 
     <footer>Powered by Vanguard Citizen Services</footer>
 
     <script>
-        /* --- 1. SUPABASE INITIALIZATION ENGINE --- */
-        const supabaseUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
-        const supabaseKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        /* --- 1. CONFIGURATION SYSTEM INITIALIZATION --- */
+        const sbUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
+        const sbKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
+        const supabaseClient = supabase.createClient(sbUrl, sbKey);
 
-        /* --- 2. EVALUATE AUTH STATE ON LOAD --- */
-        window.addEventListener('DOMContentLoaded', () => {
-            const sessionActive = localStorage.getItem('vanguard_session_status') === 'active';
-            const cachedName = localStorage.getItem('vanguard_citizen_name');
-
-            if (sessionActive && cachedName) {
-                document.getElementById('profile-display-name').innerText = cachedName;
-                document.getElementById('authenticated-profile-state').style.display = 'block';
-            } else {
-                document.getElementById('anonymous-signup-state').style.display = 'block';
-            }
-        });
-
-        /* --- 3. AMBIENT BACKGROUND MATRIX --- */
-        const starfield = document.getElementById('starfield');
-        for (let i = 0; i < 75; i++) {
-            const star = document.createElement('div');
-            star.classList.add('star');
-            const x = Math.random() * 100;
-            const y = Math.random() * 100;
-            const size = Math.random() * 2 + 1; 
-            const duration = Math.random() * 3 + 2; 
-            const delay = Math.random() * 5;
-            star.style.left = `${x}vw`;
-            star.style.top = `${y}vh`;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            star.style.setProperty('--duration', `${duration}s`);
-            star.style.animationDelay = `${delay}s`;
-            starfield.appendChild(star);
-        }
-
-        /* --- 4. FORM FIELD VALIDATION MATRIX --- */
-        function validateSignupForm() {
-            const first = document.getElementById('first-name-input').value.trim();
-            const last = document.getElementById('last-name-input').value.trim();
-            const email = document.getElementById('email-input').value.trim();
-            const pass = document.getElementById('password-input').value.trim();
-            const submitBtn = document.getElementById('signup-submit-btn');
-
-            if (first.length > 1 && last.length > 1 && email.includes('@') && pass.length >= 6) {
-                submitBtn.classList.add('show');
-            } else {
-                submitBtn.classList.remove('show');
-            }
-        }
-
-        /* --- 5. SUPABASE AUTH TRANSACTION HANDLING --- */
-        async function handleSupabaseSignup() {
-            const first = document.getElementById('first-name-input').value.trim();
-            const last = document.getElementById('last-name-input').value.trim();
-            const email = document.getElementById('email-input').value.trim();
-            const password = document.getElementById('password-input').value.trim();
-            
-            const errorConsole = document.getElementById('auth-error-msg');
-            const submitBtn = document.getElementById('signup-submit-btn');
-            
-            errorConsole.style.display = "none";
-            submitBtn.innerText = "Securing Path...";
-            submitBtn.style.pointerEvents = "none";
-
+        /* --- 2. SESSION EVALUATION FLOW --- */
+        async function checkSession() {
             try {
-                // Pass profile details to user_metadata block to feed the DB trigger function
-                const { data: authData, error: authError } = await _supabase.auth.signUp({
-                    email: email,
-                    password: password,
-                    options: {
-                        data: {
-                            first_name: first,
-                            last_name: last,
-                            initial_focus: 'unspecified'
+                const { data: { user } } = await supabaseClient.auth.getUser();
+                
+                if (user) {
+                    document.getElementById('user-profile').classList.remove('hidden');
+                    document.getElementById('auth-form').classList.add('hidden');
+                    document.getElementById('display-email').innerText = user.email;
+                    
+                    // Direct dynamic extraction from master_roster schema
+                    const { data, error } = await supabaseClient
+                        .from('master_roster')
+                        .select('first_name, last_name, citizenship_number')
+                        .eq('id', user.id) 
+                        .single();
+
+                    if (data) {
+                        const fullName = `${data.first_name} ${data.last_name}`;
+                        document.getElementById('display-greeting').innerHTML = `Hello, <strong>${fullName}</strong>.`;
+                        
+                        if (data.citizenship_number) {
+                            document.getElementById('display-id').innerText = data.citizenship_number;
+                        } else {
+                            document.getElementById('display-id').innerText = "PROCESSING";
                         }
+                        
+                        // Keep internal state cache optimized for localized lesson sync
+                        localStorage.setItem('vanguard_session_status', 'active');
+                        localStorage.setItem('vanguard_citizen_name', fullName);
+                    } else {
+                        document.getElementById('display-greeting').innerText = "Hello, Vanguard Scholar.";
+                        document.getElementById('display-id').innerText = "PENDING";
                     }
-                });
+                } else {
+                    document.getElementById('auth-form').classList.remove('hidden');
+                    document.getElementById('user-profile').classList.add('hidden');
+                }
+            } catch (err) {
+                console.error("Critical identity tracking error:", err);
+                document.getElementById('auth-form').classList.remove('hidden');
+                document.getElementById('user-profile').classList.add('hidden');
+            }
+        }
 
-                if (authError) throw authError;
+        /* --- 3. ONBOARDING TRANSACTION DISPATCHER --- */
+        async function handleSignup() {
+            const first = document.getElementById('signup-first').value.trim();
+            const last = document.getElementById('signup-last').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const pass = document.getElementById('signup-pass').value.trim();
 
-                // Establish clean cache variables in global browser application storage
+            if (!first || !last || !email || pass.length < 6) {
+                alert("Please fully construct your fields. Password requires at least 6 characters.");
+                return;
+            }
+
+            const { data, error } = await supabaseClient.auth.signUp({
+                email: email,
+                password: pass,
+                options: {
+                    data: {
+                        first_name: first,
+                        last_name: last,
+                        initial_focus: 'unspecified'
+                    }
+                }
+            });
+            
+            if (error) {
+                alert("Profile Registration Denied: " + error.message);
+            } else {
                 localStorage.setItem('vanguard_session_status', 'active');
                 localStorage.setItem('vanguard_citizen_name', `${first} ${last}`);
-
-                // Smoothly trigger page refresh to evaluate the updated session layout parameters
+                
+                // Trigger a clean animation layout update
                 document.body.style.transition = 'opacity 0.4s ease';
                 document.body.style.opacity = '0';
                 setTimeout(() => {
-                    window.location.reload();
+                    location.reload();
                 }, 400);
-
-            } catch (error) {
-                errorConsole.innerText = error.message || "An external synchronization error occurred.";
-                errorConsole.style.display = "block";
-                submitBtn.innerText = "Complete Registration";
-                submitBtn.style.pointerEvents = "auto";
             }
         }
+
+        /* --- 4. SECURE LOGOUT TERMINATION --- */
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            localStorage.removeItem('vanguard_session_status');
+            localStorage.removeItem('vanguard_citizen_name');
+            localStorage.removeItem('ordo_bronze_tier_complete');
+            location.reload();
+        }
+
+        /* --- 5. DATA SYSTEM SANITIZATION SYSTEM --- */
+        function wipeCache() {
+            if (confirm("This action clears localized session caches. Your backend ledger remain intact. Proceed?")) {
+                localStorage.clear();
+                sessionStorage.clear();
+                alert("Cache successfully flushed.");
+                location.reload();
+            }
+        }
+
+        window.onload = checkSession;
     </script>
 </body>
 </html>
