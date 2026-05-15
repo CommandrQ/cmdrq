@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ordo | Lesson 1</title>
+    <title>Ordo | Lesson 1: Introduction</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Cinematic Fade In -->
     <div id="boot-screen"></div>
+    
+    <!-- Dynamic Sky Matrix -->
     <div id="starfield"></div>
 
-    <!-- Progress Tracker -->
+    <!-- Persistent Progress Tracker -->
     <div class="progress-container">
         <div class="progress-text">Lesson Progress: <span id="progress-percentage">0%</span></div>
         <div class="progress-track">
@@ -21,69 +24,78 @@
 
     <div class="container">
         
-        <!-- SLIDE 1: THE ALARM (RELATABILITY) -->
+        <!-- SLIDE 1: WHAT IS ORDO? -->
         <main class="console-card slide active" id="slide-1">
-            <h2 class="subtitle">The 1% Warning</h2>
-            <p class="intro-text">Imagine your phone screen flashes a **1% Battery** warning. What do you do? You don't get angry at the phone. You don't try to force it to run heavy games. You look for a charger.</p>
-            <p class="intro-text">Yet, when your own body and mind flash a warning light, you do the exact opposite. You tell yourself: <em>"Just push through it. Keep running."</em></p>
-            <p class="intro-text">Burnout isn't a sign that you are weak. It's just your system shutting down because you ignored the warning lights.</p>
+            <h2 class="subtitle">The Missing Manual</h2>
+            <p class="intro-text">We aren't given a manual on how to handle life when everything hits us at once. When a massive problem lands on your desk, your natural instinct is to panic, overthink, or force your way through it until you break.</p>
+            <p class="intro-text"><strong>Ordo</strong> is a Latin word that simply means <em>Order</em> or <em>Arrangement</em>. It is not a religion, and it is not a complex academic theory. </p>
+            <p class="intro-text">It is a practical, three-part mindset designed to stop your brain from spinning out of control by organizing chaos into clean, workable parts.</p>
             
-            <button class="next-btn show" onclick="goToSlide(2, 25)">Understand</button>
+            <button class="next-btn show" onclick="goToSlide(2, 25)">Where It Comes From</button>
         </main>
 
-        <!-- SLIDE 2: THE CORES (WHAT THEY NEED) -->
+        <!-- SLIDE 2: THE SIMPLE ORIGINS -->
         <main class="console-card slide" id="slide-2">
-            <h2 class="subtitle">Rule 1: Respect Yourself</h2>
-            <p class="intro-text">Under the Ordo mindset, respecting yourself doesn't mean spa days or buying things. It means something much harder: **Ruthless Self-Honesty**.</p>
-            <p class="intro-text">It means looking in the mirror and admitting your true capacity. If you only have 20% left to give today, trying to pretend you have 100% isn't brave. It's a lie.</p>
-            <p class="prompt-text">To unlock the armor, we have to clear the noise. Choose the statement that hits closest to home right now:</p>
+            <h2 class="subtitle">Three Ancient Secrets</h2>
+            <p class="intro-text">Ordo bridges three timeless frameworks into one single engine. It extracts the absolute best parts of human history and makes them functional for today:</p>
+            <p class="intro-text"><span class="highlight-text">1. The Mind (Stoicism):</span> Strips away emotional drama. Focuses purely on objective facts and what you can actually control.</p>
+            <p class="intro-text"><span class="highlight-text">2. The Body (Zoroastrianism):</span> Translates your good intentions into immediate, high-quality physical action. Doing a sloppy job is a violation of order.</p>
+            <p class="intro-text"><span class="highlight-text">3. The Soul (Buddhism):</span> Protects your internal peace, reads the "vibe" of the people around you, and values community over isolated pride.</p>
+            
+            <p class="prompt-text">When you are highly stressed, which of these do you naturally default to?</p>
             
             <div class="options-container">
-                <div class="option-box" onclick="activateSlide2Button('overwhelmed')">
+                <div class="option-box" onclick="activateSlide2Button('mind')">
                     <div class="radio-dot"></div>
-                    <span class="option-text">I am carrying too many things that aren't my job.</span>
+                    <span class="option-text">The Mind: I retreat into my head and over-analyze.</span>
                 </div>
-                <div class="option-box" onclick="activateSlide2Button('afraid')">
+                <div class="option-box" onclick="activateSlide2Button('body')">
                     <div class="radio-dot"></div>
-                    <span class="option-text">I am afraid of letting people down if I say no.</span>
+                    <span class="option-text">The Body: I frantically work or build to stay busy.</span>
+                </div>
+                <div class="option-box" onclick="activateSlide2Button('soul')">
+                    <div class="radio-dot"></div>
+                    <span class="option-text">The Soul: I look for people to talk to, or I isolate.</span>
                 </div>
             </div>
             
-            <button id="btn-slide-2" class="next-btn" onclick="goToSlide(3, 50)">Acknowledge Truth</button>
+            <button id="btn-slide-2" class="next-btn" onclick="goToSlide(3, 50)">See How It Works</button>
         </main>
 
-        <!-- SLIDE 3: THE INTERACTION (THE ENGAGEMENT) -->
+        <!-- SLIDE 3: REAL WORLD USES -->
         <main class="console-card slide" id="slide-3">
-            <h2 class="subtitle">Name the Heavy Thing</h2>
-            <p class="intro-text">Anxiety likes to hide in a big, messy cloud. When a problem stays vague, it stays terrifying. The moment you use logic to name it exactly, it loses half its power.</p>
-            <p class="prompt-text">What is the single heaviest project, task, or conversation hanging over your head this week? Write it down below (Keep it short, just 1 sentence):</p>
+            <h2 class="subtitle">Ordo in the Real World</h2>
+            <p class="intro-text">In daily life, high-performers use this exact diagnostic split to handle major crashes without burning out. </p>
+            <p class="intro-text">Imagine a company launching a massive product and failing. A normal team spirals into finger-pointing and exhaustion. An <strong>Ordo practitioner</strong> checks the three leakages instead:</p>
+            <p class="intro-text">Is the strategy factually wrong <em>(Mind Issue)</em>? Is the team physically exhausted or lacking resources <em>(Body Issue)</em>? Or is the communication untrustworthy and heavy <em>(Soul Issue)</em>?</p>
             
-            <input type="text" id="heavy-thing-input" class="text-input" placeholder="e.g., The unrealistic deadline on the marketing project..." oninput="validateSlide3Input()">
+            <p class="prompt-text">Type the name of a recent project, job, or personal situation that felt completely chaotic to you:</p>
+            <input type="text" id="chaos-env-input" class="text-input" placeholder="e.g., My current workplace transition..." oninput="validateSlide3Input()">
             
-            <button id="btn-slide-3" class="next-btn" onclick="goToSlide(4, 75)">Bring to Light</button>
+            <button id="btn-slide-3" class="next-btn" onclick="goToSlide(4, 75)">Analyze the Chaos</button>
         </main>
 
-        <!-- SLIDE 4: THE WHY -->
+        <!-- SLIDE 4: THE CALIBRATION -->
         <main class="console-card slide" id="slide-4">
-            <h2 class="subtitle">Why We Do This</h2>
-            <p class="intro-text">Why did we just make you write down <span class="highlight-text" id="user-heavy-recall">that heavy thing</span>? Because look at it carefully.</p>
-            <p class="intro-text">That task is external to you. It is a puzzle to be solved, not an identity. You have been treating it like a life-or-death situation, allowing your internal peace to shatter over an outside event.</p>
-            <p class="intro-text">By practicing **Self-Honesty**, your mind draws a line between <em>Who You Are</em> and <em>What You Are Doing</em>. That line is your suit of armor.</p>
+            <h2 class="subtitle">Isolating the Break</h2>
+            <p class="intro-text">Look closely at what you just typed: <span class="highlight-text" id="user-env-recall">your situation</span>.</p>
+            <p class="intro-text">When that situation feels heavy, your brain tricks you into thinking your <em>entire life</em> is falling apart. That is a logical error.</p>
+            <p class="intro-text">By using Ordo, you can look at that chaos and map it. Usually, the whole project isn't ruined—you just have a single piece out of alignment. Once you realize exactly where the leak is, the overwhelm vanishes, and confidence returns.</p>
             
-            <button class="next-btn show" onclick="goToSlide(5, 100)">Equip Armor</button>
+            <button class="next-btn show" onclick="goToSlide(5, 100)">Take the First Step</button>
         </main>
 
-        <!-- SLIDE 5: THE MICRO-EXPERIMENT (COMPLETION) -->
+        <!-- SLIDE 5: THE CONCLUSION & EXPERIMENT -->
         <main class="console-card slide" id="slide-5">
-            <h2 class="subtitle">Armor Equipped</h2>
-            <p class="intro-text">You have completed your first micro-calibration. You have stepped off the treadmill for just a moment to look at the facts. You have restored a small piece of **Ordo** to your mind.</p>
+            <h2 class="subtitle">The Core Foundational Code</h2>
+            <p class="intro-text">You have successfully completed your introduction to Ordo. You now understand that you have three distinct tools to face any challenge: clear strategy (Mind), clean action (Body), and an honest connection to the vibe around you (Soul).</p>
             
             <div class="experiment-box">
                 <span class="experiment-tag">BRONZE EXPERIMENT</span>
-                <p class="experiment-text">For the next 24 hours, whenever you feel that tightness in your chest, repeat your inner voice baseline: <strong>"This is a task outside of me. I am only responsible for my next logical step."</strong></p>
+                <p class="experiment-text">For the next 24 hours, whenever a small problem tries to stress you out, do not react immediately. Ask your inner voice: <strong>"Is this a problem with the plan, a problem with the effort, or a problem with the vibe?"</strong> Watch how fast the drama disappears.</p>
             </div>
             
-            <button class="next-btn show finish-btn" onclick="finishLesson()">Complete Lesson 1</button>
+            <button class="next-btn show finish-btn" onclick="finishLesson()">Complete Introduction</button>
         </main>
 
     </div>
@@ -91,11 +103,11 @@
     <footer>Powered by Vanguard Citizen Services</footer>
 
     <script>
-        // Setup background stars identically to introduction file
+        /* --- 1. AMBIENT BACKGROUND ENGINE --- */
         const starfield = document.getElementById('starfield');
-        const starCount = 75;
-
-        for (let i = 0; i < starCount; i++) {
+        
+        // Generate Stars
+        for (let i = 0; i < 75; i++) {
             const star = document.createElement('div');
             star.classList.add('star');
             const x = Math.random() * 100;
@@ -113,40 +125,71 @@
             starfield.appendChild(star);
         }
 
-        // Slide Navigation & Progress Bar Logic
+        // Generate Occasional Comets
+        function sparkComet() {
+            const comet = document.createElement('div');
+            comet.classList.add('comet');
+            const startX = Math.random() * 40 + 60; 
+            const startY = Math.random() * 30; 
+            comet.style.right = `${100 - startX}vw`;
+            comet.style.top = `${startY}vh`;
+            starfield.appendChild(comet);
+            setTimeout(() => { comet.remove(); }, 1500);
+        }
+
+        function queueNextComet() {
+            const nextInterval = Math.random() * 4000 + 4000;
+            setTimeout(() => {
+                sparkComet();
+                queueNextComet();
+            }, nextInterval);
+        }
+        queueNextComet();
+
+
+        /* --- 2. LESSON PROGRESSION ENGINE --- */
         function goToSlide(slideId, progressTarget) {
-            // Update Progress UI elements
+            // Update UI Progress Bar
             document.getElementById('progress-bar').style.width = `${progressTarget}%`;
             document.getElementById('progress-percentage').innerText = `${progressTarget}%`;
             
-            // Recall user dynamic typing to output on slide 4
+            // Dynamic text injection for Slide 4
             if (slideId === 4) {
-                const heavyThing = document.getElementById('heavy-thing-input').value;
-                document.getElementById('user-heavy-recall').innerText = `"${heavyThing}"`;
+                const envName = document.getElementById('chaos-env-input').value.trim();
+                document.getElementById('user-env-recall').innerText = `"${envName}"`;
             }
 
-            // Simple slide switching transition sequence
+            // Slide Transitions
             document.querySelectorAll('.slide').forEach(slide => {
                 slide.classList.remove('active');
             });
             document.getElementById(`slide-${slideId}`).classList.add('active');
+            
+            // Smooth scroll back to top of the card
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Interaction Check Validation Rules
+
+        /* --- 3. INTERACTION & VALIDATION --- */
         function activateSlide2Button(selection) {
             document.querySelectorAll('#slide-2 .option-box').forEach(box => {
                 box.classList.remove('active');
             });
             event.currentTarget.classList.add('active');
+            
+            // Reveal button with animation
             document.getElementById('btn-slide-2').classList.add('show');
-            localStorage.setItem('ordo_bronze_l1_trap', selection);
+            
+            // Store choice locally
+            localStorage.setItem('ordo_intro_default_type', selection);
         }
 
         function validateSlide3Input() {
-            const val = document.getElementById('heavy-thing-input').value.trim();
+            const val = document.getElementById('chaos-env-input').value.trim();
             const nextBtn = document.getElementById('btn-slide-3');
-            if (val.length >= 5) {
+            
+            // Only reveal the button if they actually typed something
+            if (val.length >= 4) {
                 nextBtn.classList.add('show');
             } else {
                 nextBtn.classList.remove('show');
@@ -154,12 +197,12 @@
         }
 
         function finishLesson() {
-            document.body.style.transition = 'opacity 0.5s ease';
+            // Cinematic exit
+            document.body.style.transition = 'opacity 0.6s ease';
             document.body.style.opacity = '0';
             setTimeout(() => {
-                // Return to main dashboard or unlock next file step
-                window.location.href = 'hub.html'; 
-            }, 500);
+                window.location.href = 'hub.html'; // Target destination
+            }, 600);
         }
     </script>
 </body>
