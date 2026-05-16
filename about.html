@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>About | Commander Q</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>About | Vanguard Command</title>
     <style>
         :root {
             --light-purple: #e0c3fc;
             --light-blue: #8ecae6;
             --deep-space: #0f0c29;
-            --glass-bg: rgba(15, 15, 25, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(15, 15, 25, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.15);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,7 +18,6 @@
         html, body {
             width: 100%;
             height: 100%;
-            /* Fix: Allow natural scrolling */
             overflow-x: hidden;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
@@ -33,112 +31,156 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100dvh; 
         }
 
+        /* --- Background Matrix Animation --- */
         #boot-screen { position: fixed; inset: 0; background: black; z-index: 1000; pointer-events: none; animation: fadeOut 1.5s forwards; }
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
         #starfield { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
         .stars { position: absolute; width: 2px; height: 2px; background: transparent; 
-                  box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 25vw 90vh #fff;
+                  box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 25vw 90vh #fff, 60vw 80vh #fff, 45vw 15vh #fff;
                   animation: moveStars 150s linear infinite; }
         @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
 
-        .container {
+        /* --- Layout Container --- */
+        .about-container {
             width: 90%;
-            max-width: 700px;
-            padding: 60px 0 20px; /* Desktop Padding */
+            max-width: 550px;
             z-index: 10;
+            padding: 40px 0 20px; 
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin: auto 0; 
         }
 
-        .commander-title {
-            font-size: clamp(2rem, 5vw, 2.5rem);
-            font-weight: bold;
+        .commander-title { 
+            font-size: clamp(2rem, 6vw, 2.8rem); font-weight: bold; 
             background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
-            background-size: 200% auto;
-            color: #8ecae6;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: sheen 3s linear infinite;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
-
         @keyframes sheen { to { background-position: 200% center; } }
 
-        .bio-console {
+        .about-card {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 40px;
+            border-radius: 28px;
+            padding: 40px 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             width: 100%;
+            margin-bottom: 25px; 
+            text-align: left;
         }
 
-        .avatar {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            border: 2px solid var(--light-blue);
-            margin: 0 auto 30px;
-            display: block;
-            object-fit: cover;
-            animation: float 4s ease-in-out infinite;
+        h2 { color: var(--light-blue); margin-bottom: 20px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 3px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; }
+        
+        p { font-size: 0.95rem; line-height: 1.6; color: rgba(255, 255, 255, 0.85); margin-bottom: 20px; }
+        p strong { color: white; }
+
+        /* --- Transmission Quote Box --- */
+        .transmission-box {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid var(--light-purple);
+            padding: 15px 20px;
+            margin: 25px 0;
+            border-radius: 0 12px 12px 0;
         }
+        .transmission-box p { margin-bottom: 0; font-style: italic; color: var(--light-purple); }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        .back-nav {
-            margin: 30px 0;
-            text-decoration: none;
+        /* --- Framework Highlights --- */
+        .tenet-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+        .tenet-item {
+            margin-bottom: 15px;
+            padding-left: 15px;
+            position: relative;
+        }
+        .tenet-item::before {
+            content: "▪";
+            position: absolute;
+            left: 0;
             color: var(--light-blue);
+        }
+        .tenet-title {
             font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.85rem;
-            padding: 12px 24px;
-            border: 1px solid var(--glass-border);
-            border-radius: 50px;
-        }
-
-        footer {
-            padding: 40px 20px;
-            text-align: center;
             color: white;
-            font-size: 0.7rem;
-            letter-spacing: 1.5px;
-            animation: pulse 4s ease-in-out infinite;
+            display: block;
+            margin-bottom: 4px;
         }
 
-        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.9; } }
-
-        /* --- MOBILE FIXES --- */
-        @media (max-width: 600px) {
-            .container { padding: 20px 0 10px; } /* Reduced top padding */
-            .commander-title { margin-bottom: 15px; font-size: 1.8rem; }
-            .bio-console { padding: 25px; border-radius: 15px; }
-            .avatar { width: 90px; height: 90px; margin-bottom: 20px; }
+        .btn {
+            width: 100%; padding: 14px; border-radius: 50px; border: 1px solid var(--light-blue); 
+            background: transparent; color: var(--light-blue); font-weight: bold; 
+            cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.8rem;
+            text-decoration: none; display: inline-block; letter-spacing: 1px;
+            text-align: center;
         }
+        .btn:hover { background: var(--light-blue); color: var(--deep-space); box-shadow: 0 0 15px var(--light-blue); }
+
+        footer { 
+            z-index: 10; padding: 20px 20px 30px; text-align: center; color: white; 
+            font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase; 
+            animation: pulse 4s ease-in-out infinite; width: 100%; 
+            margin-top: auto; 
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
     </style>
 </head>
 <body>
+
     <div id="boot-screen"></div>
     <div id="starfield"><div class="stars"></div></div>
-    <div class="container">
-        <h1 class="commander-title">Commander Q</h1>
-        <main class="bio-console">
-            <img src="images/commanderqhs.png" alt="Commander Q" class="avatar">
-            <h2 style="color: var(--light-blue); margin-bottom: 15px; font-size: 1.2rem;">Mission Objective</h2>
-            <p style="margin-bottom: 15px; color: #e0e0e0;">Hello! I'm <span style="color:var(--light-purple); font-weight:bold;">Commander Q</span>. I spend my time navigating the vast digital space, building lean interfaces and exploring new technologies.</p>
-            <p style="margin-bottom: 15px; color: #e0e0e0;">I believe that technology should feel as magical as a starry night, but as simple as a conversation.</p>
-            <p style="color: #e0e0e0;">When I'm not at the command console, you can find me dreaming in <span style="color: var(--light-purple);">shades of purple and blue</span>, sipping tea, and planning the next big cosmic jump.</p>
+
+    <div class="about-container">
+        <h1 class="commander-title">The Directive</h1>
+
+        <main class="about-card">
+            
+            <h2>Incoming Transmission</h2>
+            <div class="transmission-box">
+                <p>"The world does not suffer from a shortage of information. It suffers from a catastrophic leak of structure. We are drowning in the unparsed text of our own chaotic lives, expecting external templates to save us. They won't."</p>
+            </div>
+            
+            <p>I am <strong>Commander Q</strong>, Lead Visionary for the Vanguard Knights. My assignment is simple: build tools, architectures, and cognitive shields for individuals who refuse to let background thinking loops govern their potential.</p>
+            
+            <p>At the center of everything we deploy is the <strong>Ordo Mindset</strong>. This is not an abstract philosophy or an academic lecture. It is a highly operational triage system extracted from the apex frameworks of human history and streamlined for real-world application.</p>
+
+            <h2>The Three Pillars</h2>
+            <p>When chaos breaks your baseline schedule, searching for a step-by-step checklist is a design failure. Instead, we train citizens to isolate disruptions through three objective architectural layers:</p>
+            
+            <ul class="tenet-list">
+                <li class="tenet-item">
+                    <span class="tenet-title">I. The Mind (Stoic Logic)</span>
+                    Strips emotional hyperbole away from the problem. We map exactly what is true, what is false, and identify the thin boundary of what remains entirely within our control.
+                </li>
+                <li class="tenet-item">
+                    <span class="tenet-title">II. The Body (Physical Alignment)</span>
+                    Translates conceptual strategy into hyper-focused physical execution. An unparsed plan is just noise; order demands clean, calculated effort devoid of hesitation.
+                </li>
+                <li class="tenet-item">
+                    <span class="tenet-title">III. The Soul (Energetic Boundaries)</span>
+                    Guards internal peace, monitors environmental metrics, and evaluates the hidden structural tension in your workspace and interactions.
+                </li>
+            </ul>
+
+            <h2 style="margin-top: 30px;">Vanguard Knights Projects</h2>
+            <p>The Vanguard Knights operate as a decentralized collective of builders, engineers, and visionaries. We build alternative systems—ranging from internal calibration decks to global citizen roster protocols—designed to return complete internal sovereignty to the individual.</p>
+            <p>You are not here to look at a map. You are here to learn how to operate the flashlight. Keep your baseline clear, verify your roster parameters, and master your structure.</p>
+
         </main>
-        <a href="hub.html" class="back-nav">Back to Hub</a>
+
+        <a href="hub.html" class="btn" style="width: auto; padding: 12px 40px;">Return to Hub</a>
     </div>
+
     <footer>Powered by Vanguard Citizen Services</footer>
+
 </body>
 </html>
