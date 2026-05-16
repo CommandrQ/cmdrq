@@ -8,11 +8,18 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
+            /* 80s/90s Color Palette */
             --light-purple: #e0c3fc;
             --light-blue: #8ecae6;
             --deep-space: #0f0c29;
+            --neon-cyan: #2bd1ff;
+            /* Solid Gradient Purple to Blue for Buttons */
+            --btn-gradient: linear-gradient(135deg, #7b2ff7 0%, #2bd1ff 100%);
             --glass-bg: rgba(15, 15, 25, 0.7);
             --glass-border: rgba(255, 255, 255, 0.1);
+            
+            /* Persistent Custom Pointer Asset */
+            cursor: url('images/pointer.png'), auto;
         }
 
         * {
@@ -22,20 +29,26 @@
         }
 
         body {
-            background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #7597de 100%);
+            background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #05050a 100%);
             background-attachment: fixed;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Premium SF Pro Font Stack */
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             color: white;
-            /* Use dvh to account for mobile browser UI bars */
             min-height: 100vh;
-            min-height: 100dvh; 
+            min-height: 100dvh; /* Mobile browser UI safeguard */
             display: flex;
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
+            /* Inherit cursor across interactive states */
+            cursor: url('images/pointer.png'), auto;
         }
 
-        /* --- Fade in from Black --- */
+        a, button {
+            cursor: url('images/pointer.png'), pointer;
+        }
+
+        /* --- Boot Screen Fade --- */
         #boot-screen {
             position: fixed;
             top: 0;
@@ -53,7 +66,7 @@
             to { opacity: 0; }
         }
 
-        /* --- Starfield --- */
+        /* --- Background Starfield --- */
         #starfield {
             position: fixed;
             top: 0;
@@ -78,101 +91,166 @@
             to { transform: translateY(-2000px); }
         }
 
-        /* --- Header & Title --- */
-        header {
-            text-align: center;
-            padding: 40px 20px 10px;
-            z-index: 10;
+        /* --- ANIMATED WAVEFORMS (Desktop Only Side HUDs) --- */
+        .hud-sidebar {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100px;
+            height: 260px;
+            display: none;
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 15px;
+            border: 1px solid rgba(142, 202, 230, 0.2);
+            background: rgba(15, 12, 41, 0.4);
+            backdrop-filter: blur(5px);
+            border-radius: 8px;
         }
 
+        @media (min-width: 1100px) {
+            .hud-sidebar { display: flex; }
+            .left-hud { left: 4vw; }
+            .right-hud { right: 4vw; }
+        }
+
+        .wave-bar {
+            width: 6px;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 8px var(--neon-cyan);
+            border-radius: 3px;
+            animation: wave-pulse 1.4s infinite ease-in-out;
+        }
+
+        @keyframes wave-pulse {
+            0%, 100% { height: 15%; opacity: 0.3; }
+            50% { height: 90%; opacity: 1; }
+        }
+
+        /* --- CENTERED BIO CONTAINER --- */
+        .bio-container {
+            width: 90%;
+            max-width: 450px; /* Locked desktop width for true Link in Bio feel */
+            text-align: center;
+            z-index: 10;
+            padding: 50px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Profile Photo Setup */
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(142, 202, 230, 0.5);
+            margin-bottom: 20px;
+            object-fit: cover;
+        }
+
+        /* Shimmering Commander Title (Every 3 seconds loop) */
         .commander-title {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: bold;
-            background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, #8ecae6 0%, #fff 50%, #8ecae6 100%);
             background-size: 200% auto;
             color: #8ecae6;
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: sheen 3s linear infinite;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         @keyframes sheen {
-            to { background-position: 200% center; }
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
         }
 
         .status-text {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--light-purple);
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            opacity: 0.7;
+            opacity: 0.8;
+            font-weight: 600;
+            margin-bottom: 15px;
         }
 
-        /* --- The Hub Grid --- */
-        #menu-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            width: 95%;
-            max-width: 1000px;
-            padding: 20px 10px 40px; /* Increased bottom padding */
-            z-index: 10;
-            flex-grow: 1; /* Allows grid to take up space and push footer down */
+        .mini-intro {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.75);
+            margin-bottom: 35px;
+            line-height: 1.5;
+            padding: 0 10px;
         }
 
-        @media (min-width: 800px) {
-            #menu-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 20px;
-            }
+        /* --- VERTICAL LINK STACK --- */
+        #menu-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            margin-bottom: 50px;
         }
 
-        /* --- Dark Glass Cards --- */
+        /* Core Card Styling */
         .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 25px 10px;
+            background: var(--btn-gradient);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            padding: 18px 20px;
             text-align: center;
             text-decoration: none;
-            color: var(--light-blue);
-            font-weight: 500;
-            transition: all 0.3s ease;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 80px;
-            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(123, 47, 247, 0.2);
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--light-blue);
-            background: rgba(142, 202, 230, 0.15);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(43, 209, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.5);
         }
 
-        /* --- Pulsing White Footer --- */
+        /* Priority Layout Style Accentuation for Top Link */
+        .card-primary {
+            border: 2px solid white;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(43, 209, 255, 0.6); }
+        }
+
+        /* --- Pulsing Footer --- */
         footer {
-            z-index: 10;
             width: 100%;
-            padding: 30px 20px;
+            padding: 20px;
             text-align: center;
             color: white;
             font-size: 0.7rem;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             text-transform: uppercase;
+            opacity: 0.5;
             animation: pulse 4s ease-in-out infinite;
+            margin-top: auto;
         }
 
         @keyframes pulse {
             0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.9; }
+            50% { opacity: 0.8; }
         }
     </style>
 </head>
@@ -184,30 +262,56 @@
         <div class="stars"></div>
     </div>
 
-    <header>
-        <h1 class="commander-title">Commander Q</h1>
-        <p class="status-text">Hub Active</p>
-    </header>
+    <!-- Animated Left HUD -->
+    <div class="hud-sidebar left-hud">
+        <div class="wave-bar" style="animation-delay: -0.2s"></div>
+        <div class="wave-bar" style="animation-delay: -0.5s"></div>
+        <div class="wave-bar" style="animation-delay: -0.1s"></div>
+        <div class="wave-bar" style="animation-delay: -0.3s"></div>
+    </div>
 
-    <main id="menu-grid">
-        <!-- JS will inject links here -->
-    </main>
+    <!-- Animated Right HUD -->
+    <div class="hud-sidebar right-hud">
+        <div class="wave-bar" style="animation-delay: -0.4s"></div>
+        <div class="wave-bar" style="animation-delay: 0.0s"></div>
+        <div class="wave-bar" style="animation-delay: -0.6s"></div>
+        <div class="wave-bar" style="animation-delay: -0.2s"></div>
+    </div>
 
-    <footer>
-        Powered by Vanguard Citizen Services
-    </footer>
+    <!-- Main Link In Bio Column Frame -->
+    <div class="bio-container">
+        
+        <header>
+            <img src="images/commanderqhs.png" alt="Commander Q" class="profile-photo">
+            <h1 class="commander-title">Commander Q</h1>
+            <p class="status-text">Hub Active</p>
+            <p class="mini-intro">Exploring the boundaries of technology, design, and sound. Access the central nodes below to navigate the digital ecosystem.</p>
+        </header>
+
+        <!-- Re-engineered Stack Container -->
+        <main id="menu-stack">
+            <!-- JavaScript dynamically renders active links here -->
+        </main>
+
+        <footer>
+            Powered by Vanguard Citizen Services
+        </footer>
+        
+    </div>
 
     <script>
+        // CONFIGURATION PANEL: Easy on/off simple toggles via the 'active' parameter
         const HUB_LINKS = [
-            { title: "About Me", url: "about.html" },
-            { title: "Inso:An Introduction Class", url: "vkacademy/intro.html" },
-            { title: "Journal", url: "journal/journal.html" },
-            { title: "Dreamscape Drift",  url: "dreamscapedrift/dreamscape.html" },
-            { title: "Music Player",  url: "musicplayer/musicplayer.html" },
-            { title: "Social Media",  url: "https://www.tiktok.com/@commandr_q" },
-            { title: "Profile",  url: "profile.html" }
+            { title: "Inso: An Introduction Class", url: "vkacademy/intro.html", active: true, isPrimary: true },
+            { title: "About Me", url: "about.html", active: true, isPrimary: false },
+            { title: "Journal", url: "journal/journal.html", active: true, isPrimary: false },
+            { title: "Dreamscape Drift", url: "dreamscapedrift/dreamscape.html", active: true, isPrimary: false },
+            { title: "Music Player", url: "musicplayer/musicplayer.html", active: true, isPrimary: false },
+            { title: "Social Media", url: "https://www.tiktok.com/@commandr_q", active: true, isPrimary: false },
+            { title: "Profile", url: "profile.html", active: true, isPrimary: false }
         ];
 
+        // Supabase Initialization Block (Preserved)
         const sbUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
         const sbKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
         
@@ -215,21 +319,27 @@
             var supabaseClient = supabase.createClient(sbUrl, sbKey);
         }
 
+        // Processing Logic for Link in Bio Stack Engine
         function initHub() {
-            const grid = document.getElementById('menu-grid');
+            const stackContainer = document.getElementById('menu-stack');
             
             HUB_LINKS.forEach(item => {
-                const card = document.createElement('a');
-                card.href = item.url;
-                card.className = 'card';
-                card.innerText = item.title;
+                // Render Only if active toggle parameter matches true state
+                if (item.active) {
+                    const card = document.createElement('a');
+                    card.href = item.url;
+                    
+                    // Assign class depending on hierarchy importance flag
+                    card.className = item.isPrimary ? 'card card-primary' : 'card';
+                    card.innerText = item.title;
 
-                if (item.url.startsWith('http')) {
-                    card.target = "_blank";
-                    card.rel = "noopener noreferrer";
+                    if (item.url.startsWith('http')) {
+                        card.target = "_blank";
+                        card.rel = "noopener noreferrer";
+                    }
+
+                    stackContainer.appendChild(card);
                 }
-
-                grid.appendChild(card);
             });
         }
 
