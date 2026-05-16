@@ -285,8 +285,8 @@
         <header>
             <img src="images/commanderqhs.png" alt="Commander Q" class="profile-photo">
             <h1 class="commander-title">Commander Q</h1>
-            <p class="status-text">Hub Active</p>
-            <p class="mini-intro">The grid is live. Choose below to unlock my latest drops and  projects!</p>
+            <p class="status-text" id="population-tracker">Fort Toward Population: <span id="pop-count">Syncing...</span></p>
+            <p class="mini-intro">The grid is live. Choose below to unlock my latest drops and projects!</p>
         </header>
 
         <!-- Re-engineered Stack Container -->
@@ -320,6 +320,26 @@
             var supabaseClient = supabase.createClient(sbUrl, sbKey);
         }
 
+        // Fort Toward Population Tracker Logic linked to master_roster
+        async function fetchPopulation() {
+            const popCount = document.getElementById('pop-count');
+            try {
+                // Queries the master_roster table for the exact number of rows
+                const { count, error } = await supabaseClient
+                    .from('master_roster')
+                    .select('*', { count: 'exact', head: true });
+                
+                if (error) throw error;
+                
+                // Formats the output with commas (e.g., 1,234)
+                popCount.innerText = count !== null ? count.toLocaleString() : "0";
+                
+            } catch (error) {
+                console.error("Failed to sync tracker:", error);
+                popCount.innerText = "Offline";
+            }
+        }
+
         // Processing Logic for Link in Bio Stack Engine
         function initHub() {
             const stackContainer = document.getElementById('menu-stack');
@@ -344,7 +364,11 @@
             });
         }
 
-        window.addEventListener('DOMContentLoaded', initHub);
+        // Load both the Hub Links and the Population Tracker on boot
+        window.addEventListener('DOMContentLoaded', () => {
+            initHub();
+            fetchPopulation();
+        });
     </script>
 </body>
 </html>
