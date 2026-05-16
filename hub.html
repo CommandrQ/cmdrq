@@ -102,6 +102,44 @@
             margin-bottom: 25px; 
         }
 
+        /* --- Profile Photo Framework --- */
+        .profile-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .profile-container img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--glass-border);
+            filter: drop-shadow(0 0 12px rgba(142, 202, 230, 0.3));
+        }
+
+        /* --- Social Glyphs Center Panel --- */
+        .social-matrix {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 22px;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+        .social-glyph {
+            color: var(--light-blue);
+            font-size: 1.4rem;
+            transition: transform 0.3s ease, color 0.3s ease, filter 0.3s ease;
+            text-decoration: none;
+        }
+        .social-glyph:hover {
+            color: var(--light-purple);
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 8px var(--light-purple));
+        }
+
         .greeting {
             font-size: 1.25rem;
             color: white;
@@ -136,27 +174,6 @@
         .btn-accent { border-color: var(--light-purple); color: var(--light-purple); }
         .btn-accent:hover { background: var(--light-purple); color: var(--deep-space); box-shadow: 0 0 15px var(--light-purple); }
 
-        /* --- Social Glyphs Center Panel --- */
-        .social-matrix {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 24px;
-            margin: 20px 0 30px 0;
-            width: 100%;
-        }
-        .social-glyph {
-            color: var(--light-blue);
-            font-size: 1.6rem;
-            transition: transform 0.3s ease, color 0.3s ease, filter 0.3s ease;
-            text-decoration: none;
-        }
-        .social-glyph:hover {
-            color: var(--light-purple);
-            transform: scale(1.15);
-            filter: drop-shadow(0 0 8px var(--light-purple));
-        }
-
         footer { 
             z-index: 10; padding: 20px 20px 30px; text-align: center; color: white; 
             font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase; 
@@ -182,21 +199,26 @@
 
         <main class="hub-card">
             
+            <!-- Perfectly Centered Profile Photo Element -->
+            <div class="profile-container">
+                <img src="images/commanderqhs.png" alt="Commander Q Profile">
+            </div>
+
+            <!-- Centered Clickable Social Media Glyphs Sitting Directly Under Photo -->
+            <div class="social-matrix">
+                <a href="#" target="_blank" class="social-glyph" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" target="_blank" class="social-glyph" title="X"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" target="_blank" class="social-glyph" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" target="_blank" class="social-glyph" title="Discord"><i class="fa-brands fa-discord"></i></a>
+            </div>
+            
             <div id="user-greeting" class="greeting">Welcome back, Scholar.</div>
             <p>This is your sanctuary dashboard away from all the noise. Choose your next move below and let us keep building your structural focus.</p>
 
-            <h2>Drops and Projects</h2>
-            <div class="menu-grid">
+            <h2>Training Tracks</h2>
+            <div class="menu-grid" style="margin-bottom: 30px;">
                 <a href="lessons/bronze_lesson1.html" class="btn btn-accent">Begin Alignment (Lesson 1)</a>
                 <a href="lessons/bronze_lesson5.html" class="btn">Review Final Sequence</a>
-            </div>
-
-            <!-- Centered Clickable Social Media Glyphs Placement Block -->
-            <div class="social-matrix">
-                <a href="#" target="_blank" class="social-glyph" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                <a href="#" target="_blank" class="social-glyph" title="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
-                <a href="#" target="_blank" class="social-glyph" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#" target="_blank" class="social-glyph" title="Discord"><i class="fa-brands fa-discord"></i></a>
             </div>
 
             <h2>Personal Parameters</h2>
@@ -222,7 +244,6 @@
         });
 
         async function initializeHubDashboard() {
-            // Check current identity profile context
             const cachedName = localStorage.getItem('vanguard_citizen_name');
             const sessionActive = localStorage.getItem('vanguard_session_status') === 'active';
             
@@ -232,14 +253,12 @@
                 document.getElementById('user-greeting').innerText = "Welcome back, Visitor.";
             }
 
-            // Fire live row counting engine query
             await fetchLiveCitizenCount();
         }
 
         /* --- 3. LIVE DATABASE ROSTER COUNT ENGINE --- */
         async function fetchLiveCitizenCount() {
             try {
-                // Request count total directly from master_roster database ledger
                 const { count, error } = await supabaseClient
                     .from('master_roster')
                     .select('*', { count: 'exact', head: true });
@@ -253,7 +272,6 @@
                 }
             } catch (err) {
                 console.warn("Database sync bypassed:", err);
-                // Graceful generic safe fallback
                 document.getElementById('citizen-count').innerText = "1"; 
             }
         }
