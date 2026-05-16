@@ -57,6 +57,14 @@
             align-items: center;
             text-align: center;
             margin: auto 0; 
+            transition: max-width 0.5s ease;
+        }
+
+        /* Responsive Desktop Widescreen Optimization Trigger */
+        @media (min-width: 768px) {
+            .player-container {
+                max-width: 720px; 
+            }
         }
 
         .commander-title { 
@@ -83,6 +91,41 @@
         h2 { color: var(--light-blue); margin-bottom: 20px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 3px; }
         p { font-size: 0.95rem; line-height: 1.6; color: rgba(255, 255, 255, 0.8); margin-bottom: 25px; }
 
+        /* --- Core YouTube Frame Viewport --- */
+        .video-viewport {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            background: rgba(0,0,0,0.4);
+            margin-bottom: 15px;
+            aspect-ratio: 16 / 9;
+        }
+
+        /* --- Live Track Metadata Display Panel --- */
+        .track-info-box {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .track-title {
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+        .track-author {
+            font-size: 0.8rem;
+            color: var(--light-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
         /* --- Audio Visualizer Matrix --- */
         .visualizer-container {
             display: flex;
@@ -101,7 +144,6 @@
             transition: height 0.1s ease;
         }
         
-        /* Interactive animation state toggles */
         .dancing .v-bar:nth-child(1) { animation: bounceBar 0.6s ease-in-out infinite alternate 0.1s; }
         .dancing .v-bar:nth-child(2) { animation: bounceBar 0.4s ease-in-out infinite alternate 0.3s; }
         .dancing .v-bar:nth-child(3) { animation: bounceBar 0.7s ease-in-out infinite alternate 0.0s; }
@@ -114,17 +156,6 @@
         @keyframes bounceBar {
             0% { height: 8px; }
             100% { height: 45px; filter: drop-shadow(0 0 5px var(--light-blue)); }
-        }
-
-        /* --- Core YouTube Frame Viewport --- */
-        .video-viewport {
-            width: 100%;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            background: rgba(0,0,0,0.4);
-            margin-bottom: 25px;
-            aspect-ratio: 16 / 9;
         }
 
         /* --- Control Mechanics Layout --- */
@@ -180,13 +211,19 @@
         <h1 class="commander-title">Sound Station</h1>
 
         <main class="settings-card">
-            <h2>Commander Q Mixes</h2>
+            <h2>Vanguard Remixes</h2>
             
             <p>Turn up the volume and lock into the zone. This station streams the official remixes directly from the hideout archive. It updates automatically whenever new beats drop.</p>
 
-            <!-- Embedded Aspect Window Box -->
+            <!-- Embedded Viewport Window -->
             <div class="video-viewport">
                 <div id="embed-target"></div>
+            </div>
+
+            <!-- Dynamic Live Video Information Block Component -->
+            <div class="track-info-box">
+                <div id="current-track-title" class="track-title">Waiting to play</div>
+                <div class="track-author">Vanguard Records</div>
             </div>
 
             <!-- Dynamic Audio Reactive Bars -->
@@ -201,7 +238,7 @@
                 <div class="v-bar"></div>
             </div>
 
-            <!-- Enhanced Custom Control Mechanism Grid -->
+            <!-- Custom Control Mechanism Layout Grid -->
             <div class="controls-row">
                 <button class="btn control-sub-btn" onclick="triggerPrevTrack()">Back</button>
                 <button id="master-toggle-btn" class="btn control-sub-btn play-master-btn" onclick="triggerPlayToggle()">Play</button>
@@ -235,7 +272,7 @@
                     listType: 'playlist',
                     list: 'PLwX0pb3GErenzxXjayWA-U4A_GKKnMsgP',
                     autoplay: 0,
-                    controls: 1,
+                    controls: 0, // CRITICAL FIX: Hides native youtube player control elements
                     modestbranding: 1,
                     rel: 0,
                     showinfo: 0
@@ -246,19 +283,30 @@
             });
         }
 
-        /* --- 3. HARMONIZE INTERACTIVE VISUAL STATES --- */
+        /* --- 3. HARMONIZE INTERACTIVE VISUAL AND DATA STATES --- */
         function handlePlayerStateChange(event) {
             // YT.PlayerState.PLAYING corresponds to value 1
             if (event.data === 1) {
                 visualizer.classList.add('dancing');
                 playButton.innerText = "Pause";
+                updateLiveTrackMetadata();
             } else {
                 visualizer.classList.remove('dancing');
                 playButton.innerText = "Play";
             }
         }
 
-        /* --- 4. CORE CONTROLLER INTERACTION ACTIONS --- */
+        /* --- 4. EXTRACT LIVE METADATA FROM THE PLAYLIST STREAM --- */
+        function updateLiveTrackMetadata() {
+            if (audioPlayer && typeof audioPlayer.getVideoData === 'function') {
+                const videoData = audioPlayer.getVideoData();
+                if (videoData && videoData.title) {
+                    document.getElementById('current-track-title').innerText = videoData.title;
+                }
+            }
+        }
+
+        /* --- 5. CORE CONTROLLER INTERACTION ACTIONS --- */
         function triggerPlayToggle() {
             if (!audioPlayer) return;
             
