@@ -2,254 +2,282 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vanguard Audio Uplink</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sound Station | The Hideout</title>
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* CATEGORY: STYLES */
         :root {
-            --glow-color: #8ecae6;
-            --glass: rgba(15, 15, 25, 0.9);
-            --border: rgba(255, 255, 255, 0.1);
+            --light-purple: #e0c3fc;
+            --light-blue: #8ecae6;
+            --deep-space: #0f0c29;
+            --glass-bg: rgba(15, 15, 25, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.15);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         body {
-            background: #0f0c29;
+            background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #7597de 100%);
+            background-attachment: fixed;
             font-family: 'Segoe UI', Tahoma, sans-serif;
             color: white;
-            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100dvh; 
+        }
+
+        /* --- Background Matrix Animation --- */
+        #boot-screen { position: fixed; inset: 0; background: black; z-index: 1000; pointer-events: none; animation: fadeOut 1.5s forwards; }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+        #starfield { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        .stars { position: absolute; width: 2px; height: 2px; background: transparent; 
+                  box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 25vw 90vh #fff, 60vw 80vh #fff, 45vw 15vh #fff;
+                  animation: moveStars 150s linear infinite; }
+        @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
+
+        /* --- Layout Container --- */
+        .player-container {
+            width: 90%;
+            max-width: 450px;
+            z-index: 10;
+            padding: 40px 0 10px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin: auto 0; 
+        }
+
+        .commander-title { 
+            font-size: clamp(2rem, 6vw, 2.8rem); font-weight: bold; 
+            background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: sheen 3s linear infinite;
+            margin-bottom: 25px;
+        }
+        @keyframes sheen { to { background-position: 200% center; } }
+
+        .settings-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 40px 30px 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            width: 100%;
+            margin-bottom: 20px; 
+        }
+
+        h2 { color: var(--light-blue); margin-bottom: 20px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 3px; }
+        p { font-size: 0.95rem; line-height: 1.6; color: rgba(255, 255, 255, 0.8); margin-bottom: 25px; }
+
+        /* --- Audio Visualizer Matrix --- */
+        .visualizer-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 5px;
+            height: 50px;
+            margin: 25px auto;
+            width: 80%;
+        }
+        .v-bar {
+            width: 6px;
+            height: 8px;
+            background: linear-gradient(180deg, var(--light-purple) 0%, var(--light-blue) 100%);
+            border-radius: 3px;
+            transition: height 0.1s ease;
+        }
+        
+        /* Interactive animation state toggles */
+        .dancing .v-bar:nth-child(1) { animation: bounceBar 0.6s ease-in-out infinite alternate 0.1s; }
+        .dancing .v-bar:nth-child(2) { animation: bounceBar 0.4s ease-in-out infinite alternate 0.3s; }
+        .dancing .v-bar:nth-child(3) { animation: bounceBar 0.7s ease-in-out infinite alternate 0.0s; }
+        .dancing .v-bar:nth-child(4) { animation: bounceBar 0.5s ease-in-out infinite alternate 0.4s; }
+        .dancing .v-bar:nth-child(5) { animation: bounceBar 0.8s ease-in-out infinite alternate 0.2s; }
+        .dancing .v-bar:nth-child(6) { animation: bounceBar 0.3s ease-in-out infinite alternate 0.5s; }
+        .dancing .v-bar:nth-child(7) { animation: bounceBar 0.6s ease-in-out infinite alternate 0.1s; }
+        .dancing .v-bar:nth-child(8) { animation: bounceBar 0.5s ease-in-out infinite alternate 0.3s; }
+
+        @keyframes bounceBar {
+            0% { height: 8px; }
+            100% { height: 45px; filter: drop-shadow(0 0 5px var(--light-blue)); }
+        }
+
+        /* --- Core YouTube Frame Viewport --- */
+        .video-viewport {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            background: rgba(0,0,0,0.4);
+            margin-bottom: 25px;
+            aspect-ratio: 16 / 9;
+        }
+
+        /* --- Control Mechanics Layout --- */
+        .controls-row {
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            gap: 15px;
+            margin-top: 20px;
         }
 
-        /* CATEGORY: BACKGROUND */
-        #starfield { position: fixed; inset: 0; z-index: -1; }
-        .stars { 
-            position: absolute; width: 2px; height: 2px; background: white; 
-            box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 25vw 90vh #fff, 55vw 50vh #fff;
-            animation: moveStars 150s linear infinite; 
-        }
-        @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
-
-        /* CATEGORY: MENU UI */
-        .menu-deck {
-            width: 90%;
-            max-width: 400px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 40px;
+        .btn {
+            width: 100%; padding: 14px; border-radius: 50px; border: 1px solid var(--light-blue); 
+            background: transparent; color: var(--light-blue); font-weight: bold; 
+            cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.8rem;
+            margin-bottom: 15px; text-decoration: none; display: inline-block; letter-spacing: 1px;
             text-align: center;
-            z-index: 10;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
-
-        .menu-deck h1 { 
-            font-size: 1.2rem; 
-            letter-spacing: 4px; 
-            text-transform: uppercase; 
-            margin-bottom: 30px; 
-            color: #8ecae6; 
-            text-shadow: 0 0 10px rgba(142, 202, 230, 0.5);
-        }
-
-        .station-list { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px; 
-            max-height: 400px; 
-            overflow-y: auto;
-            padding: 5px;
-        }
-
-        .station-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            padding: 18px;
-            border-radius: 15px;
-            color: white;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .station-btn:hover {
-            background: rgba(142, 202, 230, 0.15);
-            border-color: #8ecae6;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        /* CATEGORY: MODAL & RADIATING GLOW */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.92);
-            backdrop-filter: blur(15px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-        }
-        .modal-overlay.active { display: flex; }
-
-        .modal-content {
-            width: 95%;
-            max-width: 700px;
-            background: #000;
-            border: 2px solid var(--glow-color);
-            border-radius: 20px;
-            padding: 15px;
-            position: relative;
-            animation: glowRadiate 3s infinite ease-in-out;
-        }
-
-        @keyframes glowRadiate {
-            0% { box-shadow: 0 0 20px var(--glow-color), inset 0 0 10px var(--glow-color); }
-            50% { box-shadow: 0 0 60px var(--glow-color), inset 0 0 20px var(--glow-color); }
-            100% { box-shadow: 0 0 20px var(--glow-color), inset 0 0 10px var(--glow-color); }
-        }
-
-        .video-container {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background: #000;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(0,0,0,1);
-        }
-        iframe { width: 100%; height: 100%; border: none; }
-
-        .modal-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 15px; 
-            padding: 5px 10px 0; 
-        }
+        .btn:hover { background: var(--light-blue); color: var(--deep-space); box-shadow: 0 0 15px var(--light-blue); }
         
-        .modal-header h2 { 
-            font-size: 0.9rem; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            color: var(--glow-color); 
+        .control-sub-btn {
+            width: auto;
+            min-width: 90px;
+            padding: 12px 18px;
+            margin-bottom: 0;
+            font-size: 0.75rem;
         }
-        
-        .close-btn {
-            background: var(--glow-color);
-            border: none;
-            color: #0f0c29;
-            padding: 8px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: 0.3s;
+        .play-master-btn {
+            border-color: var(--light-purple);
+            color: var(--light-purple);
+            min-width: 120px;
         }
-        .close-btn:hover { transform: scale(1.05); filter: brightness(1.2); }
+        .play-master-btn:hover {
+            background: var(--light-purple);
+            box-shadow: 0 0 15px var(--light-purple);
+        }
 
-        .return-link { display: inline-block; margin-top: 30px; font-size: 0.7rem; opacity: 0.4; color: white; text-decoration: none; transition: 0.3s; }
-        .return-link:hover { opacity: 1; color: #8ecae6; }
+        footer { 
+            z-index: 10; padding: 20px 20px 30px; text-align: center; color: white; 
+            font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase; 
+            animation: pulse 4s ease-in-out infinite; width: 100%; 
+            margin-top: auto; 
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
     </style>
 </head>
 <body>
 
+    <div id="boot-screen"></div>
     <div id="starfield"><div class="stars"></div></div>
 
-    <div class="menu-deck">
-        <h1>Frequency Menu</h1>
-        <div class="station-list" id="station-list"></div>
-        <a href="../hub.html" class="return-link">RETURN TO HUB</a>
+    <div class="player-container">
+        <h1 class="commander-title">Sound Station</h1>
+
+        <main class="settings-card">
+            <h2>Commander Q Mixes</h2>
+            
+            <p>Turn up the volume and lock into the zone. This station streams the official remixes directly from the hideout archive. It updates automatically whenever new beats drop.</p>
+
+            <!-- Embedded Aspect Window Box -->
+            <div class="video-viewport">
+                <div id="embed-target"></div>
+            </div>
+
+            <!-- Dynamic Audio Reactive Bars -->
+            <div id="visualizer-matrix" class="visualizer-container">
+                <div class="v-bar"></div>
+                <div class="v-bar"></div>
+                <div class="v-bar"></div>
+                <div class="v-bar"></div>
+                <div class="v-bar"></div>
+                <div class="v-bar"></div>
+                <div class="v-bar"></div>
+                <div class="v-bar"></div>
+            </div>
+
+            <!-- Enhanced Custom Control Mechanism Grid -->
+            <div class="controls-row">
+                <button class="btn control-sub-btn" onclick="triggerPrevTrack()">Back</button>
+                <button id="master-toggle-btn" class="btn control-sub-btn play-master-btn" onclick="triggerPlayToggle()">Play</button>
+                <button class="btn control-sub-btn" onclick="triggerNextTrack()">Next</button>
+            </div>
+
+        </main>
+
+        <a href="hub.html" class="btn" style="width: auto; padding: 12px 40px; margin-bottom: 0;">Return to Hub</a>
     </div>
 
-    <div class="modal-overlay" id="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modal-title">Signal Online</h2>
-                <button class="close-btn" onclick="closeModal()">Terminate Uplink</button>
-            </div>
-            <div class="video-container">
-                <div id="yt-player"></div>
-            </div>
-        </div>
-    </div>
+    <footer>Powered by Vanguard Citizen Services</footer>
 
     <script>
-        /* CATEGORY: DATA ENGINE */
-        const STATIONS = [
-            { 
-                name: "Commander Q Mixes", 
-                id: "PLwX0pb3GErenzxXjayWA-U4A_GKKnMsgP", 
-                color: "#CF9FFF" 
-            }
-        ];
-
-        /* CATEGORY: CORE LOGIC */
-        let player;
+        /* --- 1. LOAD EXTERNAL ASYNCHRONOUS YOUTUBE API ASSETS --- */
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
-        document.body.appendChild(tag);
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
+        let audioPlayer;
+        const visualizer = document.getElementById('visualizer-matrix');
+        const playButton = document.getElementById('master-toggle-btn');
+
+        /* --- 2. INITIALIZE ARTIFACT FRAME WORKBOOK ONCE API LIFTS --- */
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('yt-player', {
+            audioPlayer = new YT.Player('embed-target', {
                 height: '100%',
                 width: '100%',
-                playerVars: { 
-                    'listType': 'playlist', 
-                    'modestbranding': 1, 
-                    'autoplay': 1,
-                    'rel': 0 
+                playerVars: {
+                    listType: 'playlist',
+                    list: 'PLwX0pb3GErenzxXjayWA-U4A_GKKnMsgP',
+                    autoplay: 0,
+                    controls: 1,
+                    modestbranding: 1,
+                    rel: 0,
+                    showinfo: 0
+                },
+                events: {
+                    'onStateChange': handlePlayerStateChange
                 }
             });
-            renderMenu();
         }
 
-        function renderMenu() {
-            const list = document.getElementById('station-list');
-            list.innerHTML = "";
-            STATIONS.forEach((s, i) => {
-                const btn = document.createElement('button');
-                btn.className = 'station-btn';
-                btn.innerText = s.name;
-                btn.onclick = () => openUplink(i);
-                list.appendChild(btn);
-            });
-        }
-
-        function openUplink(index) {
-            const s = STATIONS[index];
-            const modal = document.getElementById('modal');
-            
-            document.documentElement.style.setProperty('--glow-color', s.color);
-            document.getElementById('modal-title').innerText = s.name + " // Active";
-
-            modal.classList.add('active');
-
-            player.loadPlaylist({
-                list: s.id,
-                listType: 'playlist',
-                index: 0
-            });
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('modal');
-            modal.classList.remove('active');
-            if (player && typeof player.stopVideo === 'function') {
-                player.stopVideo();
+        /* --- 3. HARMONIZE INTERACTIVE VISUAL STATES --- */
+        function handlePlayerStateChange(event) {
+            // YT.PlayerState.PLAYING corresponds to value 1
+            if (event.data === 1) {
+                visualizer.classList.add('dancing');
+                playButton.innerText = "Pause";
+            } else {
+                visualizer.classList.remove('dancing');
+                playButton.innerText = "Play";
             }
         }
 
-        window.onclick = (e) => {
-            const modal = document.getElementById('modal');
-            if (e.target == modal) closeModal();
+        /* --- 4. CORE CONTROLLER INTERACTION ACTIONS --- */
+        function triggerPlayToggle() {
+            if (!audioPlayer) return;
+            
+            const currentState = audioPlayer.getPlayerState();
+            if (currentState === 1) {
+                audioPlayer.pauseVideo();
+            } else {
+                audioPlayer.playVideo();
+            }
+        }
+
+        function triggerNextTrack() {
+            if (!audioPlayer) return;
+            audioPlayer.nextVideo();
+        }
+
+        function triggerPrevTrack() {
+            if (!audioPlayer) return;
+            audioPlayer.previousVideo();
         }
     </script>
 </body>
