@@ -146,7 +146,6 @@
 
         <main class="settings-card">
             
-            <!-- Dual Action Interactive Authentication Gateway -->
             <div id="auth-form" class="hidden">
                 <h2 id="auth-title">Create Profile</h2>
                 
@@ -160,11 +159,9 @@
                 
                 <button id="auth-submit-btn" class="btn" style="margin-bottom: 0;" onclick="handleAuthAction()">Register Account</button>
                 
-                <!-- Authentication Mode Link Toggle -->
                 <span id="auth-toggle-btn" class="toggle-link" onclick="toggleAuthMode()">Already have an account? Log in here</span>
             </div>
 
-            <!-- Active Authenticated Dashboard Interface -->
             <div id="user-profile" class="hidden">
                 <h2>Identity Verified</h2>
                 <div class="user-info">
@@ -191,14 +188,12 @@
     <footer>Powered by Vanguard Citizen Services</footer>
 
     <script>
-        /* --- 1. CONFIGURATION SYSTEM INITIALIZATION --- */
         const sbUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
         const sbKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
         const supabaseClient = supabase.createClient(sbUrl, sbKey);
         
         let isSignUpMode = true;
 
-        /* --- 2. SESSION EVALUATION FLOW --- */
         async function checkSession() {
             try {
                 const { data: { user } } = await supabaseClient.auth.getUser();
@@ -208,12 +203,12 @@
                     document.getElementById('auth-form').classList.add('hidden');
                     document.getElementById('display-email').innerText = user.email;
                     
-                    // Direct dynamic extraction from master_roster schema
+                    // maybeSingle prevents total crashes if the row takes a second to save
                     const { data, error } = await supabaseClient
                         .from('master_roster')
                         .select('first_name, last_name, citizenship_number')
                         .eq('id', user.id) 
-                        .single();
+                        .maybeSingle();
 
                     if (data) {
                         const fullName = `${data.first_name} ${data.last_name}`;
@@ -242,7 +237,6 @@
             }
         }
 
-        /* --- 3. INTERFACE MODE TOGGLE INTERCEPTOR --- */
         function toggleAuthMode() {
             isSignUpMode = !isSignUpMode;
             
@@ -272,7 +266,6 @@
             }
         }
 
-        /* --- 4. AUTHENTICATION DEPLOYMENT DISPATCHERS --- */
         async function handleLogin() {
             const email = document.getElementById('signup-email').value.trim();
             const pass = document.getElementById('signup-pass').value.trim();
@@ -330,7 +323,6 @@
             }
         }
 
-        /* --- 5. SECURE SYSTEM TERMINATIONS --- */
         async function handleLogout() {
             await supabaseClient.auth.signOut();
             localStorage.removeItem('vanguard_session_status');
