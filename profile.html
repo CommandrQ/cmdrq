@@ -115,6 +115,16 @@
         .btn-danger { border-color: #ff6b6b; color: #ff6b6b; margin-bottom: 0; }
         .btn-danger:hover { background: #ff6b6b; color: white; box-shadow: 0 0 15px #ff6b6b; }
 
+        .toggle-link {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: var(--light-blue);
+            cursor: pointer;
+            text-decoration: underline;
+            opacity: 0.8;
+            display: inline-block;
+        }
+
         .hidden { display: none !important; }
 
         footer { 
@@ -136,16 +146,22 @@
 
         <main class="settings-card">
             
-            <!-- Registration Gateway Interface -->
+            <!-- Dual Action Interactive Authentication Gateway -->
             <div id="auth-form" class="hidden">
-                <h2>Create Profile</h2>
-                <div class="name-row">
+                <h2 id="auth-title">Create Profile</h2>
+                
+                <div class="name-row" id="signup-name-row">
                     <input type="text" id="signup-first" placeholder="First Name">
                     <input type="text" id="signup-last" placeholder="Last Name">
                 </div>
+                
                 <input type="email" id="signup-email" placeholder="Email Address">
                 <input type="password" id="signup-pass" placeholder="Password">
-                <button class="btn" style="margin-bottom: 0;" onclick="handleSignup()">Register Account</button>
+                
+                <button id="auth-submit-btn" class="btn" style="margin-bottom: 0;" onclick="handleAuthAction()">Register Account</button>
+                
+                <!-- Authentication Mode Link Toggle -->
+                <span id="auth-toggle-btn" class="toggle-link" onclick="toggleAuthMode()">Already have an account? Log in here</span>
             </div>
 
             <!-- Active Authenticated Dashboard Interface -->
@@ -179,6 +195,8 @@
         const sbUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
         const sbKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
         const supabaseClient = supabase.createClient(sbUrl, sbKey);
+        
+        let isSignUpMode = true;
 
         /* --- 2. SESSION EVALUATION FLOW --- */
         async function checkSession() {
@@ -207,7 +225,6 @@
                             document.getElementById('display-id').innerText = "PROCESSING";
                         }
                         
-                        // Keep internal state cache optimized for localized lesson sync
                         localStorage.setItem('vanguard_session_status', 'active');
                         localStorage.setItem('vanguard_citizen_name', fullName);
                     } else {
@@ -225,7 +242,59 @@
             }
         }
 
-        /* --- 3. ONBOARDING TRANSACTION DISPATCHER --- */
+        /* --- 3. INTERFACE MODE TOGGLE INTERCEPTOR --- */
+        function toggleAuthMode() {
+            isSignUpMode = !isSignUpMode;
+            
+            const title = document.getElementById('auth-title');
+            const nameRow = document.getElementById('signup-name-row');
+            const submitBtn = document.getElementById('auth-submit-btn');
+            const toggleLink = document.getElementById('auth-toggle-btn');
+
+            if (isSignUpMode) {
+                title.innerText = "Create Profile";
+                nameRow.classList.remove('hidden');
+                submitBtn.innerText = "Register Account";
+                toggleLink.innerText = "Already have an account? Log in here";
+            } else {
+                title.innerText = "Secure Entry";
+                nameRow.classList.add('hidden');
+                submitBtn.innerText = "Login";
+                toggleLink.innerText = "Need an account? Register here";
+            }
+        }
+
+        function handleAuthAction() {
+            if (isSignUpMode) {
+                handleSignup();
+            } else {
+                handleLogin();
+            }
+        }
+
+        /* --- 4. AUTHENTICATION DEPLOYMENT DISPATCHERS --- */
+        async function handleLogin() {
+            const email = document.getElementById('signup-email').value.trim();
+            const pass = document.getElementById('signup-pass').value.trim();
+
+            if (!email || !pass) {
+                alert("Please fully supply your credentials.");
+                return;
+            }
+
+            const { error } = await supabaseClient.auth.signInWithPassword({ email, password: pass });
+            
+            if (error) {
+                alert("Login Failed: " + error.message);
+            } else {
+                localStorage.setItem('vanguard_session_status', 'active');
+                
+                document.body.style.transition = 'opacity 0.4s ease';
+                document.body.style.opacity = '0';
+                setTimeout(() => { location.reload(); }, 400);
+            }
+        }
+
         async function handleSignup() {
             const first = document.getElementById('signup-first').value.trim();
             const last = document.getElementById('signup-last').value.trim();
@@ -255,16 +324,13 @@
                 localStorage.setItem('vanguard_session_status', 'active');
                 localStorage.setItem('vanguard_citizen_name', `${first} ${last}`);
                 
-                // Trigger a clean animation layout update
                 document.body.style.transition = 'opacity 0.4s ease';
                 document.body.style.opacity = '0';
-                setTimeout(() => {
-                    location.reload();
-                }, 400);
+                setTimeout(() => { location.reload(); }, 400);
             }
         }
 
-        /* --- 4. SECURE LOGOUT TERMINATION --- */
+        /* --- 5. SECURE SYSTEM TERMINATIONS --- */
         async function handleLogout() {
             await supabaseClient.auth.signOut();
             localStorage.removeItem('vanguard_session_status');
@@ -273,9 +339,8 @@
             location.reload();
         }
 
-        /* --- 5. DATA SYSTEM SANITIZATION SYSTEM --- */
         function wipeCache() {
-            if (confirm("This action clears localized session caches. Your backend ledger remain intact. Proceed?")) {
+            if (confirm("This action clears localized session caches. Your backend ledger remains intact. Proceed?")) {
                 localStorage.clear();
                 sessionStorage.clear();
                 alert("Cache successfully flushed.");
