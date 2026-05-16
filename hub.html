@@ -2,374 +2,261 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commander Q | Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hub | The Hideout</title>
     <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Font Awesome for Social Media Glyphs -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* 80s/90s Color Palette */
             --light-purple: #e0c3fc;
             --light-blue: #8ecae6;
             --deep-space: #0f0c29;
-            --neon-cyan: #2bd1ff;
-            /* Solid Gradient Purple to Blue for Buttons */
-            --btn-gradient: linear-gradient(135deg, #7b2ff7 0%, #2bd1ff 100%);
-            --glass-bg: rgba(15, 15, 25, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            
-            /* Persistent Custom Pointer Asset */
-            cursor: url('images/pointer.png'), auto;
+            --glass-bg: rgba(15, 15, 25, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.15);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         body {
-            background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #05050a 100%);
+            background: linear-gradient(180deg, #1a1a2e 0%, #2b1055 70%, #7597de 100%);
             background-attachment: fixed;
-            /* Premium SF Pro Font Stack */
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             color: white;
-            min-height: 100vh;
-            min-height: 100dvh; /* Mobile browser UI safeguard */
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-x: hidden;
-            /* Inherit cursor across interactive states */
-            cursor: url('images/pointer.png'), auto;
+            min-height: 100dvh; 
         }
 
-        a, button {
-            cursor: url('images/pointer.png'), pointer;
-        }
+        /* --- Background Matrix Animation --- */
+        #boot-screen { position: fixed; inset: 0; background: black; z-index: 1000; pointer-events: none; animation: fadeOut 1.5s forwards; }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
-        /* --- Boot Screen Fade --- */
-        #boot-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
-            z-index: 1000;
-            pointer-events: none;
-            animation: fadeOut 1.5s forwards ease-in-out;
-        }
+        #starfield { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        .stars { position: absolute; width: 2px; height: 2px; background: transparent; 
+                  box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 25vw 90vh #fff, 60vw 80vh #fff, 45vw 15vh #fff;
+                  animation: moveStars 150s linear infinite; }
+        @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
 
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-
-        /* --- Background Starfield --- */
-        #starfield {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .stars {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: transparent;
-            box-shadow: 10vw 20vh #fff, 35vw 45vh #fff, 80vw 10vh #fff, 95vw 80vh #fff, 
-                        25vw 90vh #fff, 55vw 50vh #fff, 75vw 30vh #fff, 15vw 15vh #fff;
-            animation: moveStars 150s linear infinite;
-        }
-
-        @keyframes moveStars {
-            from { transform: translateY(0); }
-            to { transform: translateY(-2000px); }
-        }
-
-        /* --- ANIMATED WAVEFORMS (Desktop Only Side HUDs) --- */
-        .hud-sidebar {
-            position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 100px;
-            height: 260px;
-            display: none;
-            flex-direction: row;
-            align-items: flex-end;
-            justify-content: space-around;
-            padding: 15px;
-            border: 1px solid rgba(142, 202, 230, 0.2);
-            background: rgba(15, 12, 41, 0.4);
-            backdrop-filter: blur(5px);
-            border-radius: 8px;
-        }
-
-        @media (min-width: 1100px) {
-            .hud-sidebar { display: flex; }
-            .left-hud { left: 4vw; }
-            .right-hud { right: 4vw; }
-        }
-
-        .wave-bar {
-            width: 6px;
-            background: var(--neon-cyan);
-            box-shadow: 0 0 8px var(--neon-cyan);
-            border-radius: 3px;
-            animation: wave-pulse 1.4s infinite ease-in-out;
-        }
-
-        @keyframes wave-pulse {
-            0%, 100% { height: 15%; opacity: 0.3; }
-            50% { height: 90%; opacity: 1; }
-        }
-
-        /* --- CENTERED BIO CONTAINER --- */
-        .bio-container {
+        /* --- Layout Container --- */
+        .hub-container {
             width: 90%;
-            max-width: 450px; /* Locked desktop width for true Link in Bio feel */
-            text-align: center;
+            max-width: 500px;
             z-index: 10;
-            padding: 50px 0;
+            padding: 40px 0 20px; 
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
+            margin: auto 0; 
         }
 
-        /* Profile Photo Setup */
-        .profile-photo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 3px solid var(--neon-cyan);
-            box-shadow: 0 0 20px rgba(142, 202, 230, 0.5);
-            margin-bottom: 20px;
-            object-fit: cover;
-        }
-
-        /* Shimmering Commander Title (Every 3 seconds loop) */
-        .commander-title {
-            font-size: clamp(2rem, 5vw, 2.5rem);
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(90deg, #8ecae6 0%, #fff 50%, #8ecae6 100%);
-            background-size: 200% auto;
-            color: #8ecae6;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .hub-title { 
+            font-size: clamp(2.2rem, 7vw, 3rem); font-weight: bold; 
+            background: linear-gradient(to right, #8ecae6 20%, #fff 40%, #fff 60%, #8ecae6 80%);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: sheen 3s linear infinite;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
+        @keyframes sheen { to { background-position: 200% center; } }
 
-        @keyframes sheen {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
+        /* --- Citizen Counter Header --- */
+        .counter-box {
+            margin-bottom: 25px;
         }
-
-        .status-text {
-            font-size: 0.75rem;
+        .counter-label {
             color: var(--light-purple);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            opacity: 0.8;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .mini-intro {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 35px;
-            line-height: 1.4;
-            padding: 0 10px;
-            font-weight: 500;
-        }
-
-        /* --- VERTICAL LINK STACK --- */
-        #menu-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            width: 100%;
-            margin-bottom: 50px;
-        }
-
-        /* Core Card Styling */
-        .card {
-            background: var(--btn-gradient);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 14px;
-            padding: 18px 20px;
-            text-align: center;
-            text-decoration: none;
-            color: white;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(123, 47, 247, 0.2);
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(43, 209, 255, 0.5);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        /* Priority Layout Style Accentuation for Top Link */
-        .card-primary {
-            border: 2px solid white;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-            animation: pulse-glow 2s infinite ease-in-out;
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
-            50% { box-shadow: 0 0 25px rgba(43, 209, 255, 0.6); }
-        }
-
-        /* --- Pulsing Footer --- */
-        footer {
-            width: 100%;
-            padding: 20px;
-            text-align: center;
-            color: white;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             letter-spacing: 2px;
             text-transform: uppercase;
-            opacity: 0.5;
-            animation: pulse 4s ease-in-out infinite;
-            margin-top: auto;
+            margin-bottom: 5px;
+        }
+        .counter-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(142, 202, 230, 0.4);
+            font-family: monospace, sans-serif;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.8; }
+        .hub-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 35px 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            width: 100%;
+            margin-bottom: 25px; 
         }
+
+        .greeting {
+            font-size: 1.25rem;
+            color: white;
+            margin-bottom: 15px;
+        }
+        .greeting strong {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        p { font-size: 0.95rem; line-height: 1.6; color: rgba(255, 255, 255, 0.75); margin-bottom: 25px; }
+
+        h2 { color: var(--light-blue); margin-bottom: 20px; font-size: 1rem; text-transform: uppercase; letter-spacing: 3px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; text-align: left; }
+
+        /* --- Navigation Grid Layout --- */
+        .menu-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .btn {
+            width: 100%; padding: 15px; border-radius: 50px; border: 1px solid var(--light-blue); 
+            background: transparent; color: var(--light-blue); font-weight: bold; 
+            cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.8rem;
+            text-decoration: none; display: inline-block; letter-spacing: 1px;
+            text-align: center;
+        }
+        .btn:hover { background: var(--light-blue); color: var(--deep-space); box-shadow: 0 0 15px var(--light-blue); }
+        
+        .btn-accent { border-color: var(--light-purple); color: var(--light-purple); }
+        .btn-accent:hover { background: var(--light-purple); color: var(--deep-space); box-shadow: 0 0 15px var(--light-purple); }
+
+        /* --- Social Glyphs Center Panel --- */
+        .social-matrix {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            margin: 20px 0 30px 0;
+            width: 100%;
+        }
+        .social-glyph {
+            color: var(--light-blue);
+            font-size: 1.6rem;
+            transition: transform 0.3s ease, color 0.3s ease, filter 0.3s ease;
+            text-decoration: none;
+        }
+        .social-glyph:hover {
+            color: var(--light-purple);
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 8px var(--light-purple));
+        }
+
+        footer { 
+            z-index: 10; padding: 20px 20px 30px; text-align: center; color: white; 
+            font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase; 
+            animation: pulse 4s ease-in-out infinite; width: 100%; 
+            margin-top: auto; 
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
     </style>
 </head>
 <body>
 
     <div id="boot-screen"></div>
+    <div id="starfield"><div class="stars"></div></div>
 
-    <div id="starfield">
-        <div class="stars"></div>
-    </div>
-
-    <!-- Animated Left HUD -->
-    <div class="hud-sidebar left-hud">
-        <div class="wave-bar" style="animation-delay: -0.2s"></div>
-        <div class="wave-bar" style="animation-delay: -0.5s"></div>
-        <div class="wave-bar" style="animation-delay: -0.1s"></div>
-        <div class="wave-bar" style="animation-delay: -0.3s"></div>
-    </div>
-
-    <!-- Animated Right HUD -->
-    <div class="hud-sidebar right-hud">
-        <div class="wave-bar" style="animation-delay: -0.4s"></div>
-        <div class="wave-bar" style="animation-delay: 0.0s"></div>
-        <div class="wave-bar" style="animation-delay: -0.6s"></div>
-        <div class="wave-bar" style="animation-delay: -0.2s"></div>
-    </div>
-
-    <!-- Main Link In Bio Column Frame -->
-    <div class="bio-container">
+    <div class="hub-container">
+        <h1 class="hub-title">The Command Deck</h1>
         
-        <header>
-            <img src="images/commanderqhs.png" alt="Commander Q" class="profile-photo">
-            <h1 class="commander-title">Commander Q</h1>
-            <p class="status-text" id="population-tracker">Fort Toward Population: <span id="pop-count">Syncing...</span></p>
-            <p class="mini-intro">The grid is live. Choose below to unlock my latest drops and projects!</p>
-        </header>
+        <!-- Live Database Roster Counter Module Component -->
+        <div class="counter-box">
+            <div class="counter-label">Active Citizens</div>
+            <div id="citizen-count" class="counter-number">...</div>
+        </div>
 
-        <!-- Re-engineered Stack Container -->
-        <main id="menu-stack">
-            <!-- JavaScript dynamically renders active links here -->
+        <main class="hub-card">
+            
+            <div id="user-greeting" class="greeting">Welcome back, Scholar.</div>
+            <p>This is your sanctuary dashboard away from all the noise. Choose your next move below and let us keep building your structural focus.</p>
+
+            <h2>Drops and Projects</h2>
+            <div class="menu-grid">
+                <a href="lessons/bronze_lesson1.html" class="btn btn-accent">Begin Alignment (Lesson 1)</a>
+                <a href="lessons/bronze_lesson5.html" class="btn">Review Final Sequence</a>
+            </div>
+
+            <!-- Centered Clickable Social Media Glyphs Placement Block -->
+            <div class="social-matrix">
+                <a href="#" target="_blank" class="social-glyph" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" target="_blank" class="social-glyph" title="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" target="_blank" class="social-glyph" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" target="_blank" class="social-glyph" title="Discord"><i class="fa-brands fa-discord"></i></a>
+            </div>
+
+            <h2>Personal Parameters</h2>
+            <div class="menu-grid">
+                <a href="profile.html" class="btn">View Identity Profile</a>
+                <a href="about.html" class="btn">Read Hideout Directive</a>
+            </div>
+
         </main>
-
-        <footer>
-            Powered by Vanguard Citizen Services
-        </footer>
-        
     </div>
+
+    <footer>Powered by Vanguard Citizen Services</footer>
 
     <script>
-        // CONFIGURATION PANEL: Easy on/off simple toggles via the 'active' parameter
-        const HUB_LINKS = [
-            { title: "Inso: An Introduction Class", url: "vkacademy/intro.html", active: true, isPrimary: true },
-            { title: "About Me", url: "about.html", active: true, isPrimary: false },
-            { title: "Journal", url: "journal/journal.html", active: true, isPrimary: false },
-            { title: "Dreamscape Drift", url: "dreamscapedrift/dreamscape.html", active: true, isPrimary: false },
-            { title: "Music Player", url: "musicplayer/musicplayer.html", active: true, isPrimary: false },
-            { title: "Social Media", url: "https://www.tiktok.com/@commandr_q", active: true, isPrimary: false },
-                        { title: "Support Commander Q", url: "https://square.link/u/E37Gsz7R?src=sheet", active: true, isPrimary: false },
-            { title: "Your Profile", url: "profile.html", active: true, isPrimary: false }
-        ];
-
-        // Supabase Initialization Block (Preserved)
+        /* --- 1. CONFIGURATION SYSTEM INITIALIZATION --- */
         const sbUrl = 'https://dvyjupytbwbrcoyouxpf.supabase.co';
         const sbKey = 'sb_publishable_wjgbPekKmodd5mSDXIeUeg_Wq73GzOk';
-        
-        if (typeof supabaseClient === 'undefined') {
-            var supabaseClient = supabase.createClient(sbUrl, sbKey);
+        const supabaseClient = supabase.createClient(sbUrl, sbKey);
+
+        /* --- 2. LOAD APPLICATION DATA METRICS --- */
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeHubDashboard();
+        });
+
+        async function initializeHubDashboard() {
+            // Check current identity profile context
+            const cachedName = localStorage.getItem('vanguard_citizen_name');
+            const sessionActive = localStorage.getItem('vanguard_session_status') === 'active';
+            
+            if (sessionActive && cachedName) {
+                document.getElementById('user-greeting').innerHTML = `Welcome back, <strong>${cachedName}</strong>.`;
+            } else {
+                document.getElementById('user-greeting').innerText = "Welcome back, Visitor.";
+            }
+
+            // Fire live row counting engine query
+            await fetchLiveCitizenCount();
         }
 
-        // Fort Toward Population Tracker Logic linked to master_roster
-        async function fetchPopulation() {
-            const popCount = document.getElementById('pop-count');
+        /* --- 3. LIVE DATABASE ROSTER COUNT ENGINE --- */
+        async function fetchLiveCitizenCount() {
             try {
-                // Queries the master_roster table for the exact number of rows
+                // Request count total directly from master_roster database ledger
                 const { count, error } = await supabaseClient
                     .from('master_roster')
                     .select('*', { count: 'exact', head: true });
-                
+
                 if (error) throw error;
-                
-                // Formats the output with commas (e.g., 1,234)
-                popCount.innerText = count !== null ? count.toLocaleString() : "0";
-                
-            } catch (error) {
-                console.error("Failed to sync tracker:", error);
-                popCount.innerText = "Offline";
+
+                if (count !== null) {
+                    document.getElementById('citizen-count').innerText = count;
+                } else {
+                    document.getElementById('citizen-count').innerText = "0";
+                }
+            } catch (err) {
+                console.warn("Database sync bypassed:", err);
+                // Graceful generic safe fallback
+                document.getElementById('citizen-count').innerText = "1"; 
             }
         }
-
-        // Processing Logic for Link in Bio Stack Engine
-        function initHub() {
-            const stackContainer = document.getElementById('menu-stack');
-            
-            HUB_LINKS.forEach(item => {
-                // Render Only if active toggle parameter matches true state
-                if (item.active) {
-                    const card = document.createElement('a');
-                    card.href = item.url;
-                    
-                    // Assign class depending on hierarchy importance flag
-                    card.className = item.isPrimary ? 'card card-primary' : 'card';
-                    card.innerText = item.title;
-
-                    if (item.url.startsWith('http')) {
-                        card.target = "_blank";
-                        card.rel = "noopener noreferrer";
-                    }
-
-                    stackContainer.appendChild(card);
-                }
-            });
-        }
-
-        // Load both the Hub Links and the Population Tracker on boot
-        window.addEventListener('DOMContentLoaded', () => {
-            initHub();
-            fetchPopulation();
-        });
     </script>
 </body>
 </html>
