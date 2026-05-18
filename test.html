@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanguard Guidebook Test</title>
+    <style>
+        /* Setup the background and center the book */
+        body {
+            background-color: #1a1a1a;
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            perspective: 1500px; /* Gives the 3D depth effect */
+        }
+
+        /* The overall book container */
+        .book {
+            width: 700px;
+            height: 450px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+
+        /* Common styles for every single page face */
+        .page {
+            width: 350px;
+            height: 450px;
+            background: #f4edd8; /* Aged paper color */
+            position: absolute;
+            top: 0;
+            right: 0;
+            transform-origin: left center; /* Hinges the page on the left edge */
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: inset 3px 0 10px rgba(0,0,0,0.1), 5px 5px 15px rgba(0,0,0,0.3);
+            border-radius: 0 5px 5px 0;
+        }
+
+        /* Specific styles for front and back sides of a flipping sheet */
+        .page-front, .page-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Hides the text when flipped over */
+            padding: 30px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        /* The back side needs to be rotated so it faces the correct way when flipped */
+        .page-back {
+            transform: rotateY(180deg);
+            background: #ebe3cb; 
+            border-radius: 5px 0 0 5px;
+        }
+
+        /* The Static Base Page (The right-hand side page that never moves) */
+        .base-right {
+            width: 350px;
+            height: 450px;
+            background: #f4edd8;
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 30px;
+            box-sizing: border-box;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+            border-radius: 0 5px 5px 0;
+            z-index: 1;
+        }
+
+        /* The Spine shadow effect in the center */
+        .book::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 10px;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.2), rgba(0,0,0,0), rgba(0,0,0,0.2));
+            transform: translateZ(1px);
+            z-index: 10;
+        }
+
+        /* TRIGGER THE FLIP */
+        /* When clicked (active) or hovered, the moving page swings 180 degrees to the left */
+        .book:hover .page-movable, 
+        .book:active .page-movable {
+            transform: rotateY(-180deg);
+            z-index: 5;
+        }
+
+        /* Typography Formatting */
+        h1 {
+            font-size: 24px;
+            color: #8c2d19; /* Vanguard thematic crimson */
+            margin-top: 0;
+            border-bottom: 2px solid #8c2d19;
+            padding-bottom: 5px;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: #444;
+            margin-top: 15px;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .hint {
+            margin-top: auto;
+            font-size: 12px;
+            color: #888;
+            text-align: center;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="book">
+        
+        <!-- STATIC BASE PAGE (Right Side - Page 2) -->
+        <div class="base-right">
+            <h1>The Path of Mind</h1>
+            <h2>Foundational Directives</h2>
+            <p>For thinkers who love puzzles, deep lore, and mastering hidden game mechanics.</p>
+            <p><strong>Task 1:</strong> Seek out the "Weyandt’s Revenge" jumping puzzle in Lion's Arch. These are hidden, physics-based platforming challenges tucked away in the corners of Tyria.</p>
+            <p class="hint">Hover away to turn back</p>
+        </div>
+
+        <!-- MOVABLE PAGE SHEET (Swings Left) -->
+        <div class="page page-movable">
+            
+            <!-- FRONT OF SHEET (Page 1) -->
+            <div class="page-front">
+                <h1>The Vanguard Guide</h1>
+                <h2>Core Directives</h2>
+                <p>Welcome to the comprehensive reference guide. To keep from getting overwhelmed, remember these core constraints:</p>
+                <p><strong>1. Look at the World:</strong> Follow the horizon, not just the mini-map.</p>
+                <p><strong>2. Prioritize Events:</strong> Orange markers mean active content. Drop what you are doing and join in.</p>
+                <p class="hint">Hover or Click to flip page →</p>
+            </div>
+            
+            <!-- BACK OF SHEET (Left Side when opened) -->
+            <div class="page-back">
+                <h1>The Basics</h1>
+                <h2>Inventory Clutter</h2>
+                <p><strong>3. Deposit Materials:</strong> Your bags will fill up instantly with crafting items.</p>
+                <p>Click the small <strong>Gear Icon</strong> in the top right corner of your inventory screen and click <strong>"Deposit All Materials."</strong></p>
+                <p>This instantly clears your bags and sends materials to your account vault from anywhere in the world.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
