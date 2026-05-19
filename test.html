@@ -5,30 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project V - Alert Test</title>
     
-    <!-- iOS Web App Meta Tags to enable standalone app mode -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0070f3">
+    <link rel="manifest" href="data:application/json,{%22name%22:%22Project%20V%22,%22short_name%22:%22ProjectV%22,%22start_url%22:%22test.html%22,%22display%22:%22standalone%22}">
 
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
             background-color: #f4f4f9;
             text-align: center;
-            padding: 20px;
         }
         .card {
             background: white;
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            max-width: 400px;
+            max-width: 350px;
         }
         button {
             background-color: #0070f3;
@@ -39,17 +36,6 @@
             border-radius: 8px;
             cursor: pointer;
             width: 100%;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .instruction-box {
-            display: none;
-            background-color: #fff9db;
-            border: 1px solid #f59f00;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            text-align: left;
-            font-size: 14px;
         }
         #status {
             margin-top: 20px;
@@ -62,70 +48,55 @@
 
     <div class="card">
         <h1>Project V</h1>
-        <h3>Sovereign Alert Test</h3>
-        <p>Testing app-free, lightweight browser alerts for Hardin County updates.</p>
+        <p>Testing sovereign browser alerts.</p>
 
-        <button onclick="sendNotification()">Activate Alerts</button>
+        <button onclick="sendNotification()">Test Alert</button>
 
-        <div id="instruction" class="instruction-box">
-            <strong>iPhone Setup Required:</strong><br>
-            To receive browser alerts on iOS, tap the <strong>Share</strong> button at the bottom of Safari, scroll down, and select <strong>"Add to Home Screen"</strong>. Then, open Project V from your home screen icon to activate.
-        </div>
-
-        <div id="status">Checking system...</div>
+        <div id="status">Initializing...</div>
     </div>
 
     <script>
-        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-        const statusDiv = document.getElementById('status');
-        const instructionBox = document.getElementById('instruction');
+        // Register the external service worker file explicitly
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log("Project V Worker Registered"))
+                .catch(err => console.log("Worker Registration Failed: ", err));
+        }
 
-        // Initial System Check
-        if (isIOS && !isStandalone) {
-            statusDiv.innerText = "Status: Locked by iOS Browser Security.";
-            instructionBox.style.display = "block"; // Show them how to fix it
-        } else if (!("Notification" in window)) {
-            statusDiv.innerText = "Status: Notifications not supported on this browser context.";
-        } else {
-            statusDiv.innerText = "Status: Ready to test. Current Permission: " + Notification.permission;
+        function checkStatus() {
+            const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+            const statusDiv = document.getElementById('status');
+
+            if (isIOS && !isStandalone) {
+                statusDiv.innerText = "iOS Lock: Use Safari 'Add to Home Screen' to unlock.";
+                return false;
+            }
+
+            statusDiv.innerText = "System Ready. Permission: " + (window.Notification ? Notification.permission : "Not Found");
+            return true;
         }
 
         function sendNotification() {
-            if (isIOS && !isStandalone) {
-                alert("Please add this page to your Home Screen first using the Safari Share button.");
-                return;
-            }
+            if (!checkStatus()) return;
 
-            if (!("Notification" in window)) {
-                alert("Notification API is not available.");
-                return;
-            }
-
-            if (Notification.permission === "granted") {
-                triggerActualNotification();
-            } else if (Notification.permission !== "denied") {
-                Notification.requestPermission().then(permission => {
-                    statusDiv.innerText = "Status: Permission " + permission;
-                    if (permission === "granted") {
-                        triggerActualNotification();
-                    }
-                });
-            } else {
-                statusDiv.innerText = "Status: Blocked. Please reset site permissions in your browser settings.";
-            }
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    navigator.serviceWorker.ready.then(registration => {
+                        registration.showNotification("Project V Alert", {
+                            body: "A new local infrastructure hazard has been logged near you.",
+                            vibrate: [200, 100, 200]
+                        });
+                        document.getElementById('status').innerText = "Alert sent!";
+                    });
+                } else {
+                    document.getElementById('status').innerText = "Permission Denied.";
+                }
+            });
         }
 
-        function triggerActualNotification() {
-            const options = {
-                body: "Project V: A new local infrastructure hazard has been logged near you.",
-                vibrate: [200, 100, 200],
-                tag: "project-v-alert"
-            };
-
-            new Notification("Project V Alert", options);
-            statusDiv.innerText = "Status: Alert sent successfully!";
-        }
+        // Keep updating the status text
+        setInterval(checkStatus, 1000);
     </script>
 
 </body>
