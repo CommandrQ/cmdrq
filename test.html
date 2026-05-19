@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project V - Alert Test</title>
+    <title>Project V - Live Data Test</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -11,36 +11,46 @@
 
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: #f4f4f9;
-            text-align: center;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .card {
             background: white;
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            max-width: 350px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        .data-box {
+            background-color: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            border-radius: 4px;
+        }
+        .timestamp {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
         }
         button {
-            background-color: #0070f3;
+            background-color: #4caf50;
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
             cursor: pointer;
             width: 100%;
-        }
-        #status {
-            margin-top: 20px;
-            font-weight: bold;
-            color: #666;
         }
     </style>
 </head>
@@ -48,55 +58,40 @@
 
     <div class="card">
         <h1>Project V</h1>
-        <p>Testing sovereign browser alerts.</p>
+        <h3>Sovereign Content Test</h3>
+        <p>Testing how content updates in the background without notifications.</p>
 
-        <button onclick="sendNotification()">Test Alert</button>
+        <div class="data-box">
+            <strong>Current System Status:</strong>
+            <!-- TEST VALUE: Change the text inside this span to see it update live -->
+            <p id="live-data">TEST RUN #1: System is active and watching Hardin County infrastructure.</p>
+            <div class="timestamp">Last Updated Code: Version 1.0</div>
+        </div>
 
-        <div id="status">Initializing...</div>
+        <button onclick="checkUpdates()">Check For Updates</button>
     </div>
 
     <script>
-        // Register the external service worker file explicitly
+        // Simple Service Worker Registration to keep it running as a PWA
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(() => console.log("Project V Worker Registered"))
-                .catch(err => console.log("Worker Registration Failed: ", err));
+            navigator.serviceWorker.register('sw.js?v=unique_test_1');
         }
 
-        function checkStatus() {
-            const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-            const statusDiv = document.getElementById('status');
-
-            if (isIOS && !isStandalone) {
-                statusDiv.innerText = "iOS Lock: Use Safari 'Add to Home Screen' to unlock.";
-                return false;
-            }
-
-            statusDiv.innerText = "System Ready. Permission: " + (window.Notification ? Notification.permission : "Not Found");
-            return true;
-        }
-
-        function sendNotification() {
-            if (!checkStatus()) return;
-
-            Notification.requestPermission().then(permission => {
-                if (permission === "granted") {
-                    navigator.serviceWorker.ready.then(registration => {
-                        registration.showNotification("Project V Alert", {
-                            body: "A new local infrastructure hazard has been logged near you.",
-                            vibrate: [200, 100, 200]
+        function checkUpdates() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    for(let registration of registrations) {
+                        registration.update().then(() => {
+                            // Clear cache and reload browser view
+                            caches.keys().then(names => {
+                                for (let name of names) caches.delete(name);
+                            });
+                            window.location.reload(true);
                         });
-                        document.getElementById('status').innerText = "Alert sent!";
-                    });
-                } else {
-                    document.getElementById('status').innerText = "Permission Denied.";
-                }
-            });
+                    }
+                });
+            }
         }
-
-        // Keep updating the status text
-        setInterval(checkStatus, 1000);
     </script>
 
 </body>
