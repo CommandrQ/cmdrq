@@ -3,245 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vanguard Guidebook Test</title>
+    <title>Project V - Notification Test</title>
     <style>
-        /* Base Setup */
-        * {
-            box-sizing: border-box;
-        }
-        
         body {
-            background-color: #121212;
-            color: #333;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            justify-content: center;
+            height: 100vh;
             margin: 0;
-            padding: 20px;
-            perspective: 2000px; /* Enhanced perspective for more dramatic depth */
-            overflow-x: hidden;
-        }
-
-        /* ------------------------------------ */
-        /* DESKTOP BOOK LAYOUT (Dual Page)      */
-        /* ------------------------------------ */
-        .book {
-            width: 800px;
-            height: 500px;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.5s;
-        }
-
-        /* Common page layout */
-        .page {
-            width: 400px;
-            height: 500px;
-            background: #f5f0df;
-            position: absolute;
-            top: 0;
-            right: 0;
-            transform-origin: left center; /* Hinges at the center spine */
-            transform-style: preserve-3d;
-            /* Cubic-bezier mimics the physical weight and drag of a real page lifting */
-            transition: transform 1.2s cubic-bezier(0.25, 1, 0.35, 1), box-shadow 1.2s ease;
-            box-shadow: inset 15px 0 20px rgba(0,0,0,0.05), 2px 2px 10px rgba(0,0,0,0.1);
-            border-radius: 0 8px 8px 0;
-        }
-
-        /* Paper texture overlay for realism */
-        .page-front, .page-back, .base-right {
-            background-image: linear-gradient(to right, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 10%);
-        }
-
-        .page-front, .page-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden; /* Hides reverse side during rotation */
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* The reverse side of the turning page */
-        .page-back {
-            transform: rotateY(180deg);
-            background: #ebe4cb; 
-            border-radius: 8px 0 0 8px;
-            box-shadow: inset -15px 0 20px rgba(0,0,0,0.05);
-        }
-
-        /* The permanent right-hand page underneath */
-        .base-right {
-            width: 400px;
-            height: 500px;
-            background: #f5f0df;
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 10px 10px 25px rgba(0,0,0,0.4);
-            border-radius: 0 8px 8px 0;
-            z-index: 1;
-        }
-
-        /* Center Spine Shadow */
-        .book::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            width: 20px;
-            height: 100%;
-            background: linear-gradient(to right, rgba(0,0,0,0.25), rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.25));
-            transform: translateZ(2px);
-            z-index: 10;
-            pointer-events: none;
-            left: calc(50% - 10px);
-        }
-
-        /* REALISTIC FLIP & SLIDE ANIMATION */
-        /* Combined rotation and subtle translation creates a lifting slide over the spine */
-        .book:hover .page-movable,
-        .book:active .page-movable {
-            transform: rotateY(-180deg) translateX(-5px);
-            z-index: 5;
-            box-shadow: 25px 25px 35px rgba(0,0,0,0.3); /* Shadow widens as page lifts */
-        }
-
-        /* Typography Styling */
-        h1 {
-            font-size: 26px;
-            color: #8c2d19;
-            margin-top: 0;
-            border-bottom: 2px solid #8c2d19;
-            padding-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-
-        h2 {
-            font-size: 18px;
-            color: #444;
-            margin-top: 10px;
-        }
-
-        p {
-            font-size: 15px;
-            line-height: 1.6;
-            color: #444;
-        }
-
-        .hint {
-            margin-top: auto;
-            font-size: 13px;
-            color: #888;
+            background-color: #f4f4f9;
             text-align: center;
-            font-style: italic;
+            padding: 20px;
         }
-
-        /* ------------------------------------ */
-        /* MOBILE OPTIMIZATION (Single Page View)*/
-        /* ------------------------------------ */
-        @media (max-width: 850px) {
-            body {
-                perspective: none; /* Disable 3D to prevent edge-clipping on tiny screens */
-                align-items: flex-start;
-                padding-top: 40px;
-            }
-
-            .book {
-                width: 100%;
-                max-width: 360px;
-                height: 520px;
-            }
-
-            /* Spine is hidden on mobile since it's a single page layout */
-            .book::after {
-                display: none;
-            }
-
-            /* Stack elements and turn the motion into a clean slide overlay */
-            .base-right {
-                width: 100%;
-                height: 100%;
-                left: 0;
-                border-radius: 8px;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            }
-
-            .page {
-                width: 100%;
-                height: 100%;
-                left: 0;
-                transform-origin: center center;
-                border-radius: 8px;
-                transition: transform 0.8s cubic-bezier(0.25, 1, 0.35, 1), opacity 0.6s ease;
-            }
-
-            .page-back {
-                display: none; /* Hide reverse side on mobile to keep DOM simple */
-            }
-
-            /* Mobile Trigger: Slides the front page completely off-screen left to reveal page 2 */
-            .book:hover .page-movable,
-            .book:active .page-movable {
-                transform: translateX(-110%) rotate(0deg);
-                opacity: 0;
-            }
-
-            h1 {
-                font-size: 22px;
-            }
-            
-            p {
-                font-size: 14px;
-            }
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        p {
+            color: #666;
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+        button {
+            background-color: #0070f3;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #0051cb;
+        }
+        #status {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #888;
         }
     </style>
 </head>
 <body>
 
-    <div class="book">
-        
-        <!-- UNDERNEATH PAGE (Desktop: Right Side | Mobile: Hidden Base Layer) -->
-        <div class="base-right">
-            <h1>The Path of Mind</h1>
-            <h2>Foundational Tasks</h2>
-            <p>For thinkers who love puzzles, deep lore, and mastering hidden game mechanics.</p>
-            <p><strong>Task 1: Complete a Jumping Puzzle</strong><br>Seek out the "Weyandt’s Revenge" jumping puzzle in Lion's Arch. These are hidden, physics-based platforming challenges tucked away in the world.</p>
-            <p class="hint">Tap away or stop hovering to close</p>
-        </div>
+    <h1>Project V Notification Test</h1>
+    <p>This is a lightweight, app-free test to see if your mobile device can receive sovereign text alerts directly from the browser.</p>
 
-        <!-- MOVING PAGE (Desktop: Flips over Spine | Mobile: Slides Left) -->
-        <div class="page page-movable">
-            
-            <!-- FRONT SIDE -->
-            <div class="page-front">
-                <h1>The Vanguard Guide</h1>
-                <h2>Core Directives</h2>
-                <p>Welcome to the comprehensive reference guide. To keep from getting overwhelmed, remember these core rules:</p>
-                <p><strong>1. Look at the World:</strong> Follow the actual horizon, not just your mini-map tracking icons.</p>
-                <p><strong>2. Prioritize Events:</strong> Orange circles on your map mean active content. Drop what you are doing and join in.</p>
-                <p class="hint">Tap or Hover to slide page →</p>
-            </div>
-            
-            <!-- REVERSE SIDE (Only visible on Desktop mid-flip) -->
-            <div class="page-back">
-                <h1>The Basics</h1>
-                <h2>Inventory Control</h2>
-                <p><strong>3. Deposit Materials:</strong> Your bags will fill up instantly with crafting items.</p>
-                <p>Click the small <strong>Gear Icon</strong> in the top right corner of your inventory screen and click <strong>"Deposit All Materials."</strong></p>
-                <p>This instantly clears your inventory slots and sends materials to your account vault from anywhere in Tyria.</p>
-            </div>
+    <button onclick="sendNotification()">Trigger Alert</button>
 
-        </div>
+    <div id="status">Status: Waiting for interaction...</div>
 
-    </div>
+    <script>
+        // Check if the browser supports notifications
+        if (!("Notification" in window)) {
+            document.getElementById('status').innerText = "Status: This browser does not support notifications.";
+        } else {
+            document.getElementById('status').innerText = "Status: Browser supported. Current Permission: " + Notification.permission;
+        }
+
+        function sendNotification() {
+            // Step 1: Request permission if not already granted
+            if (Notification.permission === "granted") {
+                triggerActualNotification();
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(permission => {
+                    document.getElementById('status').innerText = "Status: Permission " + permission;
+                    if (permission === "granted") {
+                        triggerActualNotification();
+                    }
+                });
+            } else {
+                document.getElementById('status').innerText = "Status: Notifications blocked in browser settings.";
+            }
+        }
+
+        function triggerActualNotification() {
+            const options = {
+                body: "Project V: A new local infrastructure hazard has been logged near you.",
+                icon: "https://via.placeholder.com/128", // Replace with your Project V logo URL
+                vibrate: [200, 100, 200], // Vibrate pattern for Android devices
+                tag: "project-v-alert" // Prevents duplicate notifications
+            };
+
+            // Send the notification
+            new Notification("Project V Alert", options);
+            document.getElementById('status').innerText = "Status: Notification sent!";
+        }
+    </script>
 
 </body>
 </html>
